@@ -1,0 +1,4 @@
+{% import _h.template('manager/_macro_items.html') as mc %}
+{% for item in list %}
+{{ mc.item_vendite_extra_ecommerce_ue(_h, item) }}
+{% endfor %}

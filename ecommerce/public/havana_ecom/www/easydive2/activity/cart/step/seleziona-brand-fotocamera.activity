@@ -1,0 +1,9 @@
+{
+	"on:begin": [
+		"cart/step/list-brand-fotocamera"
+	],
+	"on:view": {
+		"template": "cart/step/seleziona_brand_fotocamera",
+		"extra": false
+	}
+}

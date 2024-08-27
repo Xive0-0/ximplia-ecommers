@@ -1,0 +1,13 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeaderToolbar(_h, 'immagini: ' ~ item.get('nome'), true) }}
+	{{ mc.navButton(_h, 'nuova', 'new', 'click', 'h-action-upload-file', '{"url": "' ~ _h.url('manager/myarea/articolo/immagine/upload') ~ '", "params": [{"name": "id_articolo", "value":' ~ item.id ~ '}], "fileType": ["jpg","png","gif","jpeg"], "onComplete": {"reload": "#immagini-content"}}') }}
+	{{ mc.navButton(_h, 'sostituisci', 'disk', 'click', 'h-action-upload-file', '{"select": {"from":"#immagini-content", "check": 1, "errorMessage": "Selezionare immagine da sostituire"}, "url": "' ~ _h.url('manager/myarea/articolo/immagine/replace') ~ '", "params": [{"name": "id_articolo", "value":' ~ item.id ~ '}], "fileType": ["jpg","png","gif","jpeg"], "onComplete": {"reload": ["#immagini-content", "#h-layout-center-content"]}}') }}
+	{{ mc.navButton(_h, 'dati immagine', 'update', 'click', 'h-action-selected-open-window', '{"select": {"from":"#immagini-content", "check": 1, "errorMessage": "Selezionare un immagine"}, "window": {"type": "layer", "url": "' ~ _h.url('manager/myarea/articolo/immagine/edit') ~ '", "width": 500, "height": 400, "overlay": true, "params": {"id":' ~ item.id ~ '}}}') }}
+	{{ mc.navButton(_h, 'elimina', 'delete', 'click', 'h-action-selected-execute', '{"select": {"from":"#immagini-content", "check": 0, "errorMessage": "Selezionare almeno un immagine"}, "confirm": "Eliminare la voce selezionata?", "params": {"id_articolo":' ~ item.id ~ '}, "url": "' ~ _h.url('manager/myarea/articolo/immagine/delete') ~ '", "reload": ["#immagini-content", "#h-layout-center-content"]}') }}
+	{{ mc.navSeparatore() }}
+	{{ mc.navButton(_h, 'come principale', 'confirm', 'click', 'h-action-selected-execute', '{"select": {"from":"#immagini-content", "check": 1, "errorMessage": "Selezionare un immagine"}, "params": {"id_articolo":' ~ item.id ~ ', "type": 1}, "url": "' ~ _h.url('manager/myarea/articolo/immagine/set-type') ~ '", "reload": ["#immagini-content", "#h-layout-center-content"]}') }}
+	{{ mc.navButton(_h, 'come secondaria', 'fascetta', 'click', 'h-action-selected-execute', '{"select": {"from":"#immagini-content", "check": 1, "errorMessage": "Selezionare un immagine"}, "params": {"id_articolo":' ~ item.id ~ ', "type": 2}, "url": "' ~ _h.url('manager/myarea/articolo/immagine/set-type') ~ '", "reload": ["#immagini-content", "#h-layout-center-content"]}') }}
+{{ mc.slideBoxHeaderToolbarEnd() }}
+
+{{ mc.box_footer(_h, 'immagini', 'articolo/immagine', list, '{"id": ' ~ item.id ~ '}') }}

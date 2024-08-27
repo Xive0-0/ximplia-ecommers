@@ -1,0 +1,8 @@
+{
+	"input": [
+		{"name": "id", "required": true, "type": "int"}
+	],
+	"on:": [
+		"manager/myarea/easydivepoint/upload"
+	]
+}

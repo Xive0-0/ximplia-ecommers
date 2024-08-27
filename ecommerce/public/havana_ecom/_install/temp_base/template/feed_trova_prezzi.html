@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Products>
+	{% set mapAttributo = _h.context('mapAttributo') %}
+	{% for item in list %}
+	<Offer>
+		<Name><![CDATA[{{item.get('nome')}}]]></Name>
+		{% if item.azienda.id > 0 and item.azienda.get('visualizza_in_condivisione') %}
+		<Brand><![CDATA[{{item.azienda.get('nome')}}]]></Brand>
+		{% endif %}
+		<Description>{{item.getWithClean('descrizione')|escape}}</Description>
+		<Categories><![CDATA[{% for cat in item.get('id_categoria')|reverse %}{% if loop.index0 > 0%};{% endif %}{{ mapAttributo.get(cat).get('nome') }}{% endfor %}]]></Categories>
+		<OriginalPrice>{{ item.prezzoOriginale('simple', true) }}</OriginalPrice>
+		<Price>{{ item.prezzo('simple', true) }}</Price>
+		<Code>{{ item.id }}</Code>
+		<Stock>disponibile</Stock>
+		<link>{{ _h.webAppUrl }}{{ item.url }}</link>
+		{% set listImg = item.geto('immagini').get('list') %}
+		{% if listImg|length > 0 %}
+			{% set num = '' %}
+			{% for img in listImg %}
+			<Image{{ num }}>{{ _h.webAppUrl }}{{ item.imageSrc(_h.config('template').web.feed_item_image_dim, img.src) }}</Image{{ num }}>	
+			{% set num = loop.index %}
+			{% endfor %}
+		{% endif %}
+	</Offer>
+	{% endfor %}
+</Products>

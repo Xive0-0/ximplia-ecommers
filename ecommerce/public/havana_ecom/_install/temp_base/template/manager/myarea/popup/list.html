@@ -1,0 +1,22 @@
+{% import _h.template('manager/_macro_items.html') as mci %}
+<table class="h-list item-autoload-total h-fixed-header-table h-list-slingle-selection" cellpadding="0" cellspacing="0" border="0" data-total="{{ result.total }}">
+<thead>
+<tr class="h-list-header">
+	<th style="width: 10px; padding: 0; overflow: hidden;">&nbsp;</th>
+	<th style="width: 20px;">&nbsp;</th>
+	<th style="width: 50px;" data-order="ordine" data-order-type="{{ result.order_type_ordine }}">P.</th>
+	<th style="width: 150px;" data-order="tipo" data-order-type="{{ result.order_type_tipo }}">Tipo</th>
+	<th style="width: 150px;" data-order="tipo_apertura" data-order-type="{{ result.order_type_tipo_apertura }}">Apertura</th>
+	<th style="width: 100px;" data-order="visibilita_device" data-order-type="{{ result.order_type_tipo_visibilita_device }}">Device</th>
+	<th style="width: 150px;" data-order="posizione" data-order-type="{{ result.order_type_posizione }}">Posizione</th>
+	<th>Nome</th>
+	<th style="width: 150px;" data-order="tipo_entita" data-order-type="{{ result.order_type_tipo }}">Tipo ris.</th>
+	<th style="width: 100px;">Visibilità</th>
+</tr>
+</thead>
+<tbody>
+{% for item in result.list %}		
+	{{ mci.item_popup(_h, item) }}
+{% endfor %}
+</tbody>
+</table>

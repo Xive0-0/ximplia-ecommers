@@ -1,0 +1,37 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% set fattura = item.dettaglio.fattura %}
+{{ mc.slideBoxHeader(_h, 'Crea Fattura/Ricevuta PDF') }}
+<input type="hidden" name="id" value="{{ item.id }}">
+<p class="field-line">
+Crea fattura/ricevuta PDF per ordine: <strong>{{ item.get('codice') }}</strong>
+</p>
+{% if item.get('fattura') != null %}
+<p class="field-line">
+Fattura/ricevuta già creata per l'ordine selezionato: <strong>{{ item.get('fattura') }}</strong><br>
+salvando sarà aggiornato il documento attuale
+</p>
+{% endif %}
+<p class="field-line field-300">
+	<label>Riferimento DDT:</label>
+	<input type="text" name="ddt" class="field" value="{{ fattura.ddt }}">
+</p>
+<p class="field-line field-300">
+	<label>Corriere:</label>
+	<select name="corriere" class="">
+		<option value=""></option>
+	{% set elenco_corrieri = _h.context('checkout_util').elencoCorrieri %}
+	{% for c in elenco_corrieri %}
+		<option value="{{ c.id }}" {% if fattura.corriere == c.id %}selected="true"{% endif %}>{{ c.label }}</option>
+	{% endfor %}
+	</select>
+</p>
+<p class="field-line field-300">
+	<label>Forza numero fattura/ricevuta:</label>
+	<input type="text" name="numero_fattura" class="field valida-alphanumchar valida-digitnickname" value="{{ item.get('fattura') }}" maxlength="20">
+</p>
+<p class="field-line field-200">
+	<label>Forza data fattura/ricevuta:</label>
+	<input type="text" name="data_fattura" class="field valida-datasimple input-datepicker" value="{{ item.getDate('data_fattura') }}" maxlength="10">
+</p>
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/ordini/documenti/ex-genera-fattura'), '"reload": ["#h-layout-center-content", "#dettaglio-content"]') }}

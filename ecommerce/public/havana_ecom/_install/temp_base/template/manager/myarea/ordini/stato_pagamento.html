@@ -1,0 +1,14 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Stato pagamento') }}
+<input type="hidden" name="id" value="{{ _h.input('id') }}">
+<div class="tree-level-onlyone">
+{{ mc.checkbox('', -1, 'stato', 'Non pagato', -1) }}
+{{ mc.checkbox('', 1, 'stato', 'Bonifico bancario comunicato CRO', 1) }}
+{{ mc.checkbox('', 3, 'stato', 'Pagato', 3) }}
+</div>
+<p class="field-line field-400">
+	<label>Eventuale comunicazione al cliente:</label>
+	<textarea name="testo" class="field"></textarea>
+</p>
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/ordini/ex-stato-pagamento'), '"reload": ["#h-layout-center-content", "#dettaglio-content"]') }}

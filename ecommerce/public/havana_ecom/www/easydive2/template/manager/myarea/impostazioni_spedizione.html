@@ -1,0 +1,17 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% set lang = _h.input('lang', _h.config('default_language', 'it')) %}
+
+{{ mc.slideBoxHeader(_h, 'Impostazioni spedizione') }}
+
+{{ mc.checkbox(_h.settings.get('spedizione_sda_standard'), 1, 'spedizione_sda_standard', 'SDA standard') }}
+{{ mc.checkbox(_h.settings.get('spedizione_gls_standard'), 1, 'spedizione_gls_standard', 'GLS standard') }}
+{{ mc.checkbox(_h.settings.get('spedizione_gls_express'), 1, 'spedizione_gls_express', 'GLS express') }}
+{{ mc.checkbox(_h.settings.get('spedizione_dhl_standard'), 1, 'spedizione_dhl_standard', 'DHL standard') }}
+{{ mc.checkbox(_h.settings.get('spedizione_dhl_express'), 1, 'spedizione_dhl_express', 'DHL express') }}
+{{ mc.checkbox(_h.settings.get('spedizione_fedex_standard'), 1, 'spedizione_fedex_standard', 'Fedex standard') }}
+{{ mc.checkbox(_h.settings.get('spedizione_fedex_express'), 1, 'spedizione_fedex_express', 'Fedex express') }}
+{{ mc.checkbox(_h.settings.get('spedizione_ups_standard'), 1, 'spedizione_ups_standard', 'UPS standard') }}
+{{ mc.checkbox(_h.settings.get('spedizione_ups_express'), 1, 'spedizione_ups_express', 'UPS express') }}
+
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/ex-impostazioni-spedizione'), '"none": true') }}	

@@ -1,0 +1,50 @@
+{% import _h.template('manager/_macro.html') as mc %}
+{% set lang = _h.input('lang', _h.config('default_language', 'it')) %}
+
+{% if item == null %}
+	{% set title = 'Nuovo File' %}
+{% else %}
+	{% set title = 'Modifica File' %}
+{% endif %}
+{{ mc.slideBoxHeader(_h, title) }}
+<input type="hidden" name="id" value="{{ item.id }}">
+<input type="hidden" name="lang" value="{{ lang }}">
+	<p class="field-line field-400">
+		<label>{{ mc.labelLang(lang) }} Titolo<span>*</span>:</label>
+		<input type="text" name="titolo" class="field valida-required" value="{{ item.get('titolo') }}" maxlength="250">
+	</p>
+	<p class="field-line field-100">
+		<label>Peso/posizione<span>*</span>:</label>
+		<input type="text" name="ordine" class="field valida-required valida-digitnumber" value="{% if item %}{{ item.get('ordine') }}{% else %}0{% endif %}">
+	</p>
+	<p class="field-line field-line-textarea field-400 edit-lang">
+		<label>{{ mc.labelLang(lang) }} Descrizione:</label>
+		<textarea name="descrizione" class="field">{{ item.get('descrizione') }}</textarea>
+	</p>
+	{% if (item == null and list_file == null) or (item and item.get('link_id_file') == 0) %}
+	<div class="field-line field-line-file">
+		<input type="hidden" name="file" class="field-file valida-required" value="{{ item.get('file_nome') }}">
+		<input type="hidden" name="file_name" class="field-file-name">
+		<label>{{ mc.labelLang(lang) }} File<span>*</span></label>
+		<div class="field-anteprima">
+		{{ item.get('file_nome') }}
+		</div>
+		<div class="field-button">
+			<a class="h-bar-button h-bar-button-blu h-action-upload-file" data-action='{"url": "{{ _h.url('manager/myarea/upload-temp-file') }}"}'>carica file</a>
+			<a class="h-bar-button h-bar-button-gray h-action-upload-file-reset">Cancella</a>
+		</div>
+		<div class="clear"></div>
+	</div>
+	{% else %}
+	<div class="field-line field-line field-350">
+		<label>{{ mc.labelLang(lang) }} Link a file <span>*</span>:</label>
+		<select name="link_id_file" class="field valida-required">
+		<option></option>
+		{% for f in list_file %}
+			<option value="{{ f.id }}"{% if item.get('link_id_file') == f.id %} selected="true"{% endif %}>[{{ f.get('codice') }}] {{ f.get('nome') }}</option>
+		{% endfor %}
+		</select>
+	</div>
+	{% endif %}
+{{ mc.labelCampiObbligatori() }}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/filecliente/ex-edit')) }}	

@@ -1,0 +1,295 @@
+.account-toolbar {
+	margin-bottom: 25px;
+}
+.account-toolbar:after {
+	content: "";
+    display: table;
+    line-height: 0;
+	clear: both;
+}
+.account-toolbar a {
+	border: 1px solid transparent;
+	display: inline-block;
+	height: 40px;
+	line-height: 40px;
+	background-repeat: no-repeat;
+	background-position: 0 center;
+	padding-left: 20px;
+	padding-right: 3px;
+}
+.btn-add {
+	background-image: url('../img/ico-add.png');
+}
+.btn-update {
+	background-image: url('../img/ico-update.png');
+}
+.btn-delete {
+	background-image: url('../img/ico-delete.png');
+}
+.btn-default {
+	background-image: url('../img/ico-default.png');
+}
+
+.subtitle {
+	text-transform: uppercase;
+	margin-top: 0;
+}
+
+.table-list {
+	width: 100%;
+	border-top: 1px solid #dddcdc;
+	border-left: 1px solid #dddcdc;
+}
+
+.table-list th,
+.table-list td {
+	background: #fff;
+	padding: 10px 15px;
+	border-right: 1px solid #dddcdc;
+	border-bottom: 1px solid #dddcdc;
+}
+.table-list th {
+	font-size: 12px;
+	text-transform: uppercase;
+}
+.table-list .action-bar-default {
+	width: 30px;
+	padding: 10px 7px;
+}
+.table-list .action-bar-text a {
+	font-size: 11px;
+}
+.table-list .action-bar-text {
+	width: 100px;
+	padding: 10px 7px;
+}
+.table-list .action-bar-base {
+	width: 60px;
+	padding: 10px 7px;
+}
+.table-list .action-bar a {
+	float: left;
+	width: 16px;
+	height: 40px;
+	line-height: 40px;
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+.table-list .action-bar  a {
+	margin: 0 5px;
+}
+.table-list .action-bar-default a {
+	opacity: 0.25;
+}
+.table-list .action-bar-default .selected,
+.table-list .action-bar-default a:hover {
+	opacity: 1;
+}
+.action-bar .action-loading {
+	background: none;
+}
+.action-bar .action-loading:before {
+	content: url('../img/loading.gif');
+}
+.details strong{
+	display: block;
+}
+.details small{
+	display: block;
+	font-size: 11px;
+	margin-top: 4px;
+}
+
+.ordine-codice {
+	width: 90px;
+}
+.ordine-data {
+	width: 120px;
+}
+.ordine-stato {
+	width: 60px;
+}
+.ordine-spedizione {
+	width: 100px;
+}
+.ordine-pagamento {
+}
+.ordine-azioni {
+	width: 100px;
+}
+.table-list-my em,
+.table-list-ordine em{
+	font-size: 12px;
+}
+.table-list-my .line,
+.table-list-ordine .line {
+	margin-top: 7px;
+}
+.table-list-my.line:first-child,
+.table-list-ordine .line:first-child {
+	margin-top: 0;
+}
+.ordine-azioni a {
+	display: block;
+	line-height: 24px;
+}
+
+.dettaglio-ordine .riepilogo {
+	margin-bottom: 50px;
+}
+
+.dettaglio-ordine .item-carrello:after,
+.dettaglio-ordine .riepilogo:after {
+    clear: both;
+    content: '';
+    display: table;
+    line-height: 0;
+}
+
+.dettaglio-ordine .riepilogo .item-faq strong {
+	display: block;
+	margin-bottom: 4px;
+}
+.dettaglio-ordine .riepilogo .item-faq {
+	margin-bottom: 20px;
+}
+
+.dettaglio-ordine .thanks {
+	margin: 0 100px;
+}
+
+.dettaglio-ordine .codice {
+	font-size: 18px;
+}
+.dettaglio-ordine .line {
+	margin-bottom: 30px;
+}
+.dettaglio-ordine .font-big {
+	font-size: 16px;
+	line-height: 22px;
+}
+.dettaglio-ordine .rientro {
+	margin-left: 30px;
+}
+
+.dettaglio-ordine .col-info {
+	float: left;
+	width: 250px;
+	margin-right: 50px;
+}
+.dettaglio-ordine .col-dettaglio {
+	float: left;
+	width: 600px;
+}
+
+.dettaglio-ordine .item-carrello {
+	margin-bottom: 20px;
+	padding-bottom: 10px;
+	border-bottom: 1px dashed #dddcdc;
+}
+.dettaglio-ordine .item-carrello img {
+	float: left;
+	margin-right: 10px;
+}
+.dettaglio-ordine .item-carrello-details {
+	float: left;
+	margin-right: 10px;
+	width: 430px;
+}
+.dettaglio-ordine .item-carrello-price {
+	float: left;
+	width: 100px;
+}
+.dettaglio-ordine .item-carrello-details strong {
+	display: block;
+}
+.dettaglio-ordine .item-carrello-details span {
+	display: block;
+}
+.dettaglio-ordine .item-carrello-info {
+	margin-top: 10px;
+	font-size: 12px;
+}
+.dettaglio-ordine .item-carrello-info em {
+	display: inline-block;
+	width: 35px;
+}
+.dettaglio-ordine .item-carrello-price .price-old{
+	font-size: 12px; 
+	display: inline-block;
+}
+.dettaglio-ordine .item-carrello-price .price {
+	display: inline-block;
+}
+.dettaglio-ordine .item-carrello-price {
+	text-align: right;
+}
+.dettaglio-ordine .item-carrello-price-total strong {
+	display: block;
+	margin-top: 5px;
+}
+
+.dettaglio-ordine .line-label {
+	line-height: 30px;
+	height: 30px;
+}
+.dettaglio-ordine .line-label span{
+	display: inline-block;
+	width: 80px;
+	text-align: right;
+}
+.dettaglio-ordine .line-label em{
+	text-align: right;
+	display: inline-block;
+	width: 140px;
+}
+.dettaglio-ordine .line-label-total {
+	text-transform: uppercase;
+	font-weight: bold;
+	border-top: 1px solid #dddcdc
+}
+
+.table-list-log {
+	width: 100%;
+}
+.table-list-log td,
+.table-list-log {
+	border: none;
+}
+.log-from-separator td {
+	font-size: 1px;
+	border: none;
+	height: 20px;
+	padding: 0;
+}
+.table-list-log td.log-from {
+	padding: 0;
+	width: 60px;
+	text-align: center;
+}
+.table-list-log td.log-from-0 {
+	border-right: 3px solid #000;
+}
+.table-list-log td.log-from-1 {
+	border-right: 3px solid #999;
+}
+.table-list-log td.log-from-1 svg {
+	fill: #999;
+}
+.log-from svg {
+	width: 24px;
+}
+.log-from span {
+	font-size: 9px;
+	color: #999;
+	line-height: 10px;
+	display: block;
+}
+.list-log-form .field {
+	background: #fff;
+}
+.list-log-form {
+	margin-bottom: 20px;
+	padding: 10px;
+	background: #f4f4f4;
+}

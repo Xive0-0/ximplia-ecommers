@@ -1,0 +1,9 @@
+{% set _lblc = _h.labels.get('checkout') %}
+
+<div class="checkout-main clear">
+<div class="html clear">{{ testo.getWithMerge('testo') }}</div>
+</div>
+
+<div class="checkout-footer clear">
+<a href="{{ _h.config('url_home_store', '/')}}" title="{{ _lblc.btn_continua_shopping }}" class="button-prev">{{ _lblc.btn_continua_shopping }}</a>
+</div>

@@ -1,0 +1,9 @@
+{
+	"on:begin": [
+		{"name": "cart/step/list-attributo", "params": {"tipo": "cellulare"}}
+	],
+	"on:view": {
+		"template": "cart/step/seleziona_cellulare",
+		"extra": false
+	}
+}

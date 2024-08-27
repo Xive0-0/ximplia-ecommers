@@ -1,0 +1,12 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Aggiungi ticket / log') }}
+<input type="hidden" name="id" value="{{ _h.input('id') }}">
+<p class="field-line field-400">
+	<label>Testo<span>*</span>:</label>
+	<textarea name="testo" class="field valida-required"></textarea>
+</p>
+<div class="field-line field-400">
+	<div class="h-checkbox-wrapper"><span class="h-checkbox" data-value="1"><input type="hidden" name="stato_log" value="" /></span> <strong>Segnala come segnalazione / ticket da gestire</strong></div>
+</div>
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/ordini/log/ex-edit'), '"reload": ["#h-layout-center-content", "#log-content"]') }}

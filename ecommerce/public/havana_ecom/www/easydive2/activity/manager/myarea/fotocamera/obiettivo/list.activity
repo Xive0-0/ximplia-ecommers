@@ -1,0 +1,9 @@
+{
+	"on:": [
+		"manager/myarea/fotocamera/obiettivo/list"
+	],
+	"on:view": {
+		"template": "manager/myarea/fotocamera/obiettivo/list",
+		"extra": false
+	}
+}

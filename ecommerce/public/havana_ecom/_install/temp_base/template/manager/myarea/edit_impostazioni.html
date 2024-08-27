@@ -1,0 +1,794 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Impostazioni sito') }}
+
+{% macro campo(_h, key, label, required) %}
+	<div class="clear field-line field-200 field-line-left">
+		{% if _h.settings.get('form_campo_' ~ key, '') == '' %} 
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% else %}
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="form_campo_{{ key }}" value="{{ value }}" /></span> <strong>Campo "{{ label }}"</strong></div>
+	</div>
+	{% if required %}
+	<div class="field-line field-200 field-line-left">
+		{% if _h.settings.get('form_campo_required_' ~ key, '') == '' %} 
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% else %}
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="form_campo_required_{{ key }}" value="{{ value }}" /></span> <strong>obbligatorio</strong></div>
+	</div>
+	{% endif %}
+{% endmacro %}
+
+{% macro campo_message_center(_h, template, label) %}
+	<div class="clear field-line field-200 field-line-left field-line-text" style="width: 200px; padding-top: 3px; margin-right: 0">
+		{{ label }}
+	</div>
+	<div class="field-line field-100 field-line-left" data-type-check="email">
+		{% if _h.settings.get('template_' ~ template ~ '_with_email', '') == '' %} 
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% else %}
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="template_{{ template }}_with_email" value="{{ value }}" /></span> <strong style="width: 70%">E-Mail</strong></div>
+	</div>
+	<div class="field-line field-100 field-line-left" data-type-check="sms">
+		{% if _h.settings.get('template_' ~ template ~ '_with_sms', '') == '' %} 
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% else %}
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="template_{{ template }}_with_sms" value="{{ value }}" /></span> <strong style="width: 70%">SMS</strong></div>
+	</div>
+	<div class="field-line field-100 field-line-left" data-type-check="wapp">
+		{% if _h.settings.get('template_' ~ template ~ '_with_wapp', '') == '' %} 
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% else %}
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="template_{{ template }}_with_wapp" value="{{ value }}" /></span> <strong style="width: 70%">WhatsApp</strong></div>
+	</div>
+	<div class="field-line field-100 field-line-left" data-type-check="push">
+		{% if _h.settings.get('template_' ~ template ~ '_with_push', '') == '' %} 
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% else %}
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="template_{{ template }}_with_push" value="{{ value }}" /></span> <strong style="width: 70%">Push</strong></div>
+	</div>
+	<div class="clear"></div>
+{% endmacro %}
+
+{% macro iubendaKey(_h, suffix) %}
+	{% if suffix %}
+		{% set suffix = '_' ~ suffix %}
+	{% endif %}
+	<p class="field-line field-400">
+		<label>Privacy ID <em>(codice assegnato da Iubenda)</em>:</label>
+		<input type="text" name="iubenda_privacy_id{{ suffix }}" class="field" value="{{ _h.settings.get('iubenda_privacy_id' ~ suffix) }}" maxlength="10">
+	</p>
+	<p class="field-line field-400">
+		<label>Cookie ID <em>(codice assegnato da Iubenda)</em>:</label>
+		<input type="text" name="iubenda_cookie_id{{ suffix }}" class="field" value="{{ _h.settings.get('iubenda_cookie_id' ~ suffix) }}" maxlength="10">
+	</p>
+{% endmacro%}
+
+{% macro googleKey(_h, suffix) %}
+	{% if suffix %}
+		{% set suffix = '_' ~ suffix|replace({'.': '_'}) %}
+	{% endif %}
+	<p class="field-line field-400">
+		<label>Google site verification:</label>
+		<input type="text" name="google_site_verification{{ suffix }}" class="field" value="{{ _h.settings.get('google_site_verification' ~ suffix) }}">
+	</p>
+	<p class="field-line field-400">
+		<label>Google ADS verification:</label>
+		<textarea name="google_ads_verification{{ suffix }}" class="field">{{ _h.settings.get('google_ads_verification' ~ suffix) }}</textarea>
+	</p>
+	<p class="field-line field-400">
+		<label>Google analytics key:</label>
+		<input type="text" name="google_analytics_key{{ suffix }}" class="field" value="{{ _h.settings.get('google_analytics_key' ~ suffix) }}">
+	</p>
+	<div class="field-line field-400">
+		{% if _h.settings.get('google_analytics_monitor_user_id' ~ suffix, '') == '' %} 
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% else %}
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="google_analytics_monitor_user_id{{ suffix }}" value="{{ value }}" /></span> <strong>Abilita tracciamento ID utenti loggati in google analytics</strong></div>
+	</div>
+	<div class="field-line field-400">
+		{% if _h.settings.get('google_analytics_anonymize_ip' ~ suffix, '') == '' %} 
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% else %}
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="google_analytics_anonymize_ip{{ suffix }}" value="{{ value }}" /></span> <strong>Anonimizza i dati raccolti in google analytics</strong></div>
+	</div>
+	<p class="field-line field-400">
+		<label>Google tag manager:</label>
+		<input type="text" name="google_tag_manager{{ suffix }}" class="field" value="{{ _h.settings.get('google_tag_manager' ~ suffix) }}">
+	</p>
+	<p class="field-line field-400">
+		<label>Google site tag:</label>
+		<input type="text" name="google_site_tag{{ suffix }}" class="field" value="{{ _h.settings.get('google_site_tag' ~ suffix) }}">
+	</p>
+	<p class="field-line field-400">
+		<label>Google site map key:</label>
+		<input type="text" name="google_site_map_key{{ suffix }}" class="field" value="{{ _h.settings.get('google_site_map_key' ~ suffix) }}">
+	</p>
+	<p class="field-line field-400">
+		<label>Google reCaptcha Client key:</label>
+		<input type="text" name="google_recaptcha_client_key{{ suffix }}" class="field" value="{{ _h.settings.get('google_recaptcha_client_key' ~ suffix) }}">
+	</p>
+	<p class="field-line field-400">
+		<label>Google reCaptcha Secret key:</label>
+		<input type="text" name="google_recaptcha_secret_key{{ suffix }}" class="field" value="{{ _h.settings.get('google_recaptcha_secret_key' ~ suffix) }}">
+	</p>
+	<p class="field-line field-400">
+		<label>Facebook site verification:</label>
+		<input type="text" name="facebook_site_verification{{ suffix }}" class="field" value="{{ _h.settings.get('facebook_site_verification' ~ suffix) }}">
+	</p>
+	<p class="field-line field-400">
+		<label>Facebook pixel key (ID pixel):</label>
+		<input type="text" name="facebook_pixel{{ suffix }}" class="field" value="{{ _h.settings.get('facebook_pixel' ~ suffix) }}">
+	</p>
+	<p class="field-line field-400">
+		<label>Pinterest site verification:</label>
+		<input type="text" name="pinterest_site_verification{{ suffix }}" class="field" value="{{ _h.settings.get('pinterest_site_verification' ~ suffix) }}">
+	</p>
+	<p class="field-line field-400">
+		<label>Pinterest tag ID:</label>
+		<input type="text" name="pinterest_tag_id{{ suffix }}" class="field" value="{{ _h.settings.get('pinterest_tag_id' ~ suffix) }}">
+	</p>
+	<p class="field-line field-400">
+		<label>Codice verifica sito (generico):</label>
+		<input type="text" name="generic_site_verification{{ suffix }}" class="field" value="{{ _h.settings.get('generic_site_verification' ~ suffix) }}">
+	</p>
+{% endmacro %}
+
+<div class="h-tab">
+<div data-tab-rif="sito">Sito</div>
+<div data-tab-rif="gdpr">GDPR</div>
+<div data-tab-rif="e_mail">E-Mail</div>
+<div data-tab-rif="registrazione">Registrazione</div>
+<div data-tab-rif="newsletter">Newsletter</div>
+<div data-tab-rif="export_corriere">Corriere</div>
+<div data-tab-rif="integrazione_newsletter">MailUp/MailChimp</div>
+{% if _h.config('message_center', false) %}
+<div data-tab-rif="message_center">Message Center</div>
+{% endif %}
+<div data-tab-rif="punti">Punti</div>
+<div data-tab="sito">
+	{{ mc.checkbox(_h.settings.get('modalita_manutenzione'), 1, 'modalita_manutenzione', 'Sito in modalità manutenzione') }}
+	{% set list_qalita = [] %}
+	{% for i in 1..100 %}
+		{% set list_qalita = list_qalita|merge([{'id': i, 'text': i}]) %}
+	{% endfor %}
+	<div class="hrow">
+		<div style="float: left; width: 30%;">
+			<p class="field-line field-100">
+				<label>Qualità immagini:</label>
+				<select name="system_image_quality" class="field">
+				{{ mc.listComboOptions(list_qalita, _h.settings.get('system_image_quality', '85')) }}
+				</select>
+			</p>
+		</div>
+		<div style="float: left; width: 50%;">
+		{{ mc.checkbox(_h.settings.get('system_image_all_webp'), 1, 'system_image_all_webp', 'Gestione di tutte le immagini in WEBP') }}
+		</div>
+	</div>
+	
+	<div class="hrow">
+		<div style="float: left; width: 50%;">
+		{{ mc.checkbox(_h.settings.get('change_password_guest'), 1, 'change_password_guest', 'Password senza scadenza per utenti del sito') }}
+		</div>
+		<div style="float: left; width: 50%;">
+		{{ mc.checkbox(_h.settings.get('change_password_manager'), 1, 'change_password_manager', 'Password senza scadenza per manager') }}
+		</div>
+	</div>
+	<div class="hrow">
+		<div style="float: left; width: 50%;">
+		{{ mc.checkbox(_h.settings.get('gestione_ordini_fornitore'), 1, 'gestione_ordini_fornitore', 'Abilita gestione ordini a fornitore') }}
+		</div>
+		<div style="float: left; width: 50%;">
+		{% if _h.config('gestione_magazzino', false) %}
+		{{ mc.checkbox(_h.settings.get('gestione_ordini_fornitore_scala_quantita'), 1, 'gestione_ordini_fornitore_scala_quantita', 'Alla ricezione materiale da fornitore aggiorna quantità magazzino in articolo') }}
+		{% endif %}
+		</div>
+	</div>
+	
+	<div class="field-line field-400">
+		{% if _h.settings.get('google_tag_manager_come_cookie_tecnici', '') == '' %} 
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% else %}
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="google_tag_manager_come_cookie_tecnici" value="{{ value }}" /></span> <strong>Considera come cookie tecnici Tag Manager</strong></div>
+	</div>
+	<div class="field-line field-400">
+		{% if _h.settings.get('google_analytics_come_cookie_tecnici', '') == '' %} 
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% else %}
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="google_analytics_come_cookie_tecnici" value="{{ value }}" /></span> <strong>Considera come cookie tecnici Google Analytics</strong></div>
+	</div>
+	
+	<p class="field-line field-400">
+		<label>CookieBot ID</label>
+		<input type="text" name="cookiebot_id" class="field" value="{{ _h.settings.get('cookiebot_id') }}">
+	</p>
+	
+	{% if _h.config('domains_mapping_languages') %}
+		{% for url,lang in _h.config('domains_mapping_languages') %}
+		<fieldset class="fieldset-box">
+			<div class="field-text-line"><strong>Impostazioni per dominio {{ url }}</strong></div>
+			{% if lang == _h.config('default_language', 'it') %}
+				{% set url = '' %}
+			{% endif %}
+			{{ _self.googleKey(_h, url) }}
+		</fieldset>
+		{% endfor %}
+	{% else %}
+		{{ _self.googleKey(_h) }}
+	{% endif %}
+
+	<fieldset class="fieldset-box">
+		<div class="field-text-line"><strong>Abilitazione google reCaptcha</strong></div>
+		{{ mc.checkbox(_h.settings.get('google_recaptcha_login'), 1, 'google_recaptcha_login', 'Login area riservata') }}
+		{{ mc.checkbox(_h.settings.get('google_recaptcha_registrazione'), 1, 'google_recaptcha_registrazione', 'Registrazione al sito') }}
+		{{ mc.checkbox(_h.settings.get('google_recaptcha_newsletter'), 1, 'google_recaptcha_newsletter', 'Registrazione alla newsletter') }}
+		{{ mc.checkbox(_h.settings.get('google_recaptcha_recupero_password'), 1, 'google_recaptcha_recupero_password', 'Recupero password') }}
+		{{ mc.checkbox(_h.settings.get('google_recaptcha_modifica_dati'), 1, 'google_recaptcha_modifica_dati', 'Utente modifica dati personali') }}
+		{{ mc.checkbox(_h.settings.get('google_recaptcha_ordine'), 1, 'google_recaptcha_ordine', 'Utente gestione ordine') }}
+		{{ mc.checkbox(_h.settings.get('google_recaptcha_checkout_start'), 1, 'google_recaptcha_checkout_start', 'Avvio fase di checkout') }}
+		{{ mc.checkbox(_h.settings.get('google_recaptcha_checkout_end'), 1, 'google_recaptcha_checkout_end', 'Completamento fase di checkout (prima del pagamento)') }}
+		{{ mc.checkbox(_h.settings.get('google_recaptcha_scrivi'), 1, 'google_recaptcha_scrivi', 'Scrivi al supporto clienti / portale') }}
+		{{ mc.checkbox(_h.settings.get('google_recaptcha_manager_login'), 1, 'google_recaptcha_manager_login', 'Login al manager') }}
+	</fieldset>
+
+	{% if _h.config('enabled_languages') and _h.config('enabled_languages')|length > 1 %}
+		<fieldset class="fieldset-box">
+			<div class="field-text-line"><strong>Lingue abilitate</strong></div>
+				<div class="field-text-line">Lingua di default sito <em>(non disabilitabile)</em>: <strong>{{ _h.config('default_language', 'it')|upper }}</strong></div>
+			{% for lang in _h.config('enabled_languages') %}
+				{% if lang != _h.config('default_language', 'it') %}
+				{{ mc.checkbox(_h.settings.get('abilita_sito_lingua_' ~ lang), 1, 'abilita_sito_lingua_' ~ lang, 'Abilita sito in lingua ' ~ (lang|upper)) }}
+				{% endif %}
+			{% endfor %}
+		</fieldset>
+	{% endif %}
+	
+	<p class="field-line field-400">
+		<label>Trova prezzi key:</label>
+		<input type="text" name="trova_prezzi_key" class="field" value="{{ _h.settings.get('trova_prezzi_key') }}">
+	</p>
+	<p class="field-line field-400">
+		<label>Nome campo per tracciamento provenienza ordini:</label>
+		<input type="text" name="sorgente_traking_ordini_key" class="field" value="{{ _h.settings.get('sorgente_traking_ordini_key') }}" maxlength="50">
+	</p>
+	<p class="field-line field-400">
+		<label>Pagina default in gestione articoli:</label>
+		<select name="default_gestione_articoli_manager" class="field">
+			{{ mc.listComboOptions([{'id': '', 'text': 'Classica'},{'id': '1', 'text': 'Editing stile excel'}], _h.settings.get('default_gestione_articoli_manager')) }}
+		</select>
+	</p>
+	{% if _h.config('gestione_ticket_cliente', false) %}
+	{{ mc.checkbox(_h.settings.get('gestione_ticket_cliente_abilitato_risposta'), 1, 'gestione_ticket_cliente_abilitato_risposta', 'Tutti i clienti sono abiliati a rispondere nei ticket') }}
+	{% endif %}
+	
+	<p class="field-line field-400">
+		<label>Sondaggio in pagina my area utente:</label>
+		<select name="sondaggio_my_area" class="field">
+		<option value=""></option>
+		{% for item in listSondaggio %}
+		<option value="{{ item.id }}" {% if _h.settings.get('sondaggio_thank_you_page') == item.id %} selected="true"{% endif %}>{{ item.get('nome') }}</option>
+		{% endfor %}
+		</select>
+	</p>
+	
+	{{ mc.labelCampiObbligatori() }}
+</div>
+<div data-tab="gdpr">
+	{{ mc.checkbox(_h.settings.get('cancellazione_automatica_account_non_attivi'), 1, 'cancellazione_automatica_account_non_attivi', 'Cancellazione automatica account inattivi o non confermati entro 2 giorni') }}
+	<p class="field-line field-400">
+		<label>Numero mesi cancellazione automatica account inattivo (inserire 0 per tempo infinito):</label>
+		<input type="text" name="check_mesi_cancellazione_account_inattivo" class="field valida-digitnumber" value="{{ _h.settings.get('check_mesi_cancellazione_account_inattivo', 24) }}" maxlength="3">
+	</p>
+	<p class="field-line field-400">
+		<label>Numero mesi scadenza password clienti (inserire 0 per tempo infinito):</label>
+		<input type="text" name="check_mesi_scadenza_password_clienti" class="field valida-digitnumber" value="{{ _h.settings.get('check_mesi_scadenza_password_clienti', 0) }}" maxlength="3">
+	</p>
+	<p class="field-line field-400">
+		<label>Numero giorni durata sessione:</label>
+		<input type="text" name="giorni_durata_sessione_utenti" class="field valida-digitnumber" value="{{ _h.settings.get('giorni_durata_sessione_utenti', 100) }}" maxlength="3">
+	</p>
+	{{ mc.checkbox(_h.settings.get('testo_privacy_checkout_senza_registrazione'), 1, 'testo_privacy_checkout_senza_registrazione', 'Richiedi accettazione privacy se utente acquista senza registrazione') }}
+	{{ mc.checkbox(_h.settings.get('accettazione_privacy_inserimento_dati'), 1, 'accettazione_privacy_inserimento_dati', 'Richiedi accettazione privacy in fase inserimento dati spedizione ordine senza login') }}
+	{{ mc.checkbox(_h.settings.get('testo_privacy_visibile_in_box'), 1, 'testo_privacy_visibile_in_box', 'Testo termini e privacy visibile all\'interno di box') }}
+	{{ mc.checkbox(_h.settings.get('disabilita_iscrizione_newsletter'), 1, 'disabilita_iscrizione_newsletter', 'Disabilita iscrizione newsletter in fase di iscrizione e in checkout') }}
+	{{ mc.checkbox(_h.settings.get('gestione_marketing_privacy'), 1, 'gestione_marketing_privacy', 'Abilita gestione marketing privacy') }}
+	{{ mc.checkbox(_h.settings.get('gestione_profile_privacy'), 1, 'gestione_profile_privacy', 'Abilita gestione profile privacy') }}
+	{{ mc.checkbox(_h.settings.get('accettazione_nuovi_termini_privacy_login'), 1, 'accettazione_nuovi_termini_privacy_login', 'Al login accettazione termini privacy in caso di modifica') }}
+	{{ mc.checkbox(_h.settings.get('cancellazione_account_manuale'), 1, 'cancellazione_account_manuale', 'Cancellazione account gestita manualmente (il sistema invia e-mail notifica ad amministratore sistema il quale dovrà provvedere manualmente alla cancellazione)') }}
+	{{ mc.checkbox(_h.settings.get('traccia_ip_log_gdpr'), 1, 'traccia_ip_log_gdpr', 'Traccia IP nei log') }}
+
+	<fieldset class="fieldset-box">
+		<div class="field-text-line"><strong>Utilizza Iubenda per Privacy policy e Cookie policy</strong></div>
+		{{ mc.checkbox(_h.settings.get('iubenda_site_id_script'), 1, 'iubenda_site_id_script', 'Script Iubenda inserita a mano') }}
+		<p class="field-line field-400">
+			<label>Site ID <em>(codice assegnato da Iubenda)</em>:</label>
+			<input type="text" name="iubenda_site_id" class="field" value="{{ _h.settings.get('iubenda_site_id') }}" maxlength="10">
+		</p>		
+		<p class="field-line field-400">
+			<label>Consent solution API Key <em>(codice assegnato da Iubenda)</em>:</label>
+			<input type="text" name="iubenda_consent_solution_api_key" class="field" value="{{ _h.settings.get('iubenda_consent_solution_api_key') }}" maxlength="50">
+		</p>
+		{% if _h.config('enabled_languages') %}
+			{% for lang in _h.config('enabled_languages') %}
+			<fieldset class="fieldset-box">
+				<div class="field-text-line"><strong>Impostazioni per lingua {{ lang|upper }}</strong></div>
+				{% if lang == _h.config('default_language', 'it') %}
+					{% set lang = '' %}
+				{% endif %}
+				{{ _self.iubendaKey(_h, lang) }}
+			</fieldset>
+			{% endfor %}
+		{% else %}
+			{{ _self.iubendaKey(_h) }}
+		{% endif %}
+	</fieldset>
+</div>
+<div data-tab="e_mail">
+	<p class="field-line field-400">
+		<label>Nome mittente notifiche clienti:</label>
+		<input type="text" name="notifica_nome_mittente_cliente" class="field" value="{{ _h.settings.get('notifica_nome_mittente_cliente') }}" maxlength="100">
+	</p>
+	<p class="field-line field-400">
+		<label>E-Mail mittente notifiche clienti:</label>
+		<input type="text" name="notifica_e_mail_mittente_cliente" class="field valida-email" value="{{ _h.settings.get('notifica_e_mail_mittente_cliente') }}" maxlength="100">
+	</p>
+	<p class="field-line field-400">
+		<label>Nome mittente notifiche interne:</label>
+		<input type="text" name="notifica_nome_mittente_interna" class="field" value="{{ _h.settings.get('notifica_nome_mittente_interna') }}" maxlength="100">
+	</p>
+	<p class="field-line field-400">
+		<label>E-Mail mittente notifiche interne:</label>
+		<input type="text" name="notifica_e_mail_mittente_interna" class="field valida-email" value="{{ _h.settings.get('notifica_e_mail_mittente_interna') }}" maxlength="100">
+	</p>
+</div>
+<div data-tab="registrazione">
+	{{ mc.checkbox(_h.settings.get('account_password_strong'), 1, 'account_password_strong', 'Utilizza password strong (minimo 8 caratteri, almeno una minuscola, ameno una maiuscola, almeno un unmero, almeno un carattere speciale') }}
+	{{ mc.checkbox(_h.settings.get('disabilita_registrazione_tramite_social'), 1, 'disabilita_registrazione_tramite_social', 'disabilita registrazione social') }}
+	{{ mc.checkbox(_h.settings.get('registrazione_iscrizione_diretta_no_link_conferma'), 1, 'registrazione_iscrizione_diretta_no_link_conferma', 'Registrazione immediata, senza link di conferma inviato via e-mail (sconsigliato per GDPR)') }}
+	{{ mc.checkbox(_h.settings.get('registrazione_conferma_to_myarea'), 1, 'registrazione_conferma_to_myarea', 'Alla conferma registrazione (click su link) accedi direttamente all\'area personale') }}
+	{{ _self.campo(_h, 'registrazione_conferma_password', 'conferma password') }}
+	{{ _self.campo(_h, 'registrazione_nome', 'nome', true) }}
+	{{ _self.campo(_h, 'registrazione_cognome', 'cognome', true) }}
+	{{ _self.campo(_h, 'registrazione_data_nascita', 'data nascita', true) }}
+	{{ _self.campo(_h, 'registrazione_anno_nascita', 'anno nascita', true) }}
+	{{ _self.campo(_h, 'registrazione_sesso', 'sesso', true) }}
+</div>
+<div data-tab="newsletter">
+
+	{{ mc.checkbox(_h.settings.get('newsletter_visualizza_popup'), 1, 'newsletter_visualizza_popup', 'Visualizza popup iscrizione') }}
+	{{ mc.checkbox(_h.settings.get('newsletter_iscrizione_diretta_no_link_conferma'), 1, 'newsletter_iscrizione_diretta_no_link_conferma', 'Registrazione immediata, senza link di conferma inviato via e-mail (sconsigliato per GDPR)') }}
+	{{ _self.campo(_h, 'newsletter_nome', 'nome', true) }}
+	{{ _self.campo(_h, 'newsletter_cognome', 'cognome', true) }}
+	{{ _self.campo(_h, 'newsletter_data_nascita', 'data nascita', true) }}
+	{{ _self.campo(_h, 'newsletter_anno_nascita', 'anno nascita', true) }}
+	{{ _self.campo(_h, 'newsletter_sesso', 'sesso', true) }}
+</div>
+<div data-tab="punti">
+	{{ mc.checkbox(_h.settings.get('punti_gestione_attiva'), 1, 'punti_gestione_attiva', 'Abilita la gestione dei punti') }}
+	{{ mc.checkbox(_h.settings.get('punti_calcolo_solo_totale_ordine'), 1, 'punti_calcolo_solo_totale_ordine', 'Calcola punti solo sul totale pagato per ordine') }}
+	{{ mc.checkbox(_h.settings.get('punti_calcola_se_non_presente_sconto'), 1, 'punti_calcola_se_non_presente_sconto', 'Non cumulabili in caso di utilizzo codici sconto') }}
+	{{ mc.checkbox(_h.settings.get('punti_escludi_spese_extra'), 1, 'punti_escludi_spese_extra', 'Escludi dal calcolo spese di spedizione e pagamento') }}
+	{{ mc.checkbox(_h.settings.get('punti_utilizza_come_pagamento_se_non_presente_sconto'), 1, 'punti_utilizza_come_pagamento_se_non_presente_sconto', 'In caso di utilizzo sconto non è possibile pagare con i punti') }}
+	{{ mc.checkbox(_h.settings.get('punti_utilizza_come_pagamento_se_cliente_no_sconto'), 1, 'punti_utilizza_come_pagamento_se_cliente_no_sconto', 'In caso di cliente con sconto specifico non è possibile pagare con i punti') }}
+	{{ mc.checkbox(_h.settings.get('punti_utilizza_come_pagamento_se_cliente_no_b2b'), 1, 'punti_utilizza_come_pagamento_se_cliente_no_b2b', 'In caso di cliente B2B non è possibile pagare con i punti') }}
+	{{ mc.checkbox(_h.settings.get('punti_addebito_utilizzo_solo_conferma_pagamento'), 1, 'punti_addebito_utilizzo_solo_conferma_pagamento', 'Addebita i punti utilizzati in fase di pagamento solo se ordine è classificato come pagato') }}
+	<div class="field-line field-200">
+		<label>Valore in EURO per assegnare 1 punto:</label>
+		<input type="text" name="punti_valore_assegna_1_punto" class="field valida-euro" value="{{ _h.util.euro(_h.settings.get('punti_valore_assegna_1_punto', 0)) }}">
+	</div>
+	<div class="field-line field-200">
+		<label>Valore in CENTESIMI di 1 punto:</label>
+		<input type="text" name="punti_valore_1_punto" class="field valida-int" value="{{ _h.settings.get('punti_valore_1_punto', 0) }}">
+	</div>
+	<div class="field-line field-200">
+		<label>In fase di acquisto importo massimo pagabile con i punti (in percentuale sull'ordine):</label>
+		<input type="text" name="punti_percentuale_utilizzo_punti_pagamento" class="field valida-euro" value="{{ _h.settings.get('punti_percentuale_utilizzo_punti_pagamento', 100) }}">
+	</div>
+	<div class="field-line field-200">
+		<label>Validità dei punti:</label>
+		<select name="punti_validita" class="field">
+			{{ mc.listComboOptions([{'id': '', 'text': ''},{'id': '1', 'text': 'Illimitato'},{'id': '2', 'text': '1 mese'},{'id': '3', 'text': '3 mesi'},{'id': '4', 'text': '6 mesi'},{'id': '5', 'text': '12 mesi'},{'id': '6', 'text': '24 mesi'},{'id': '7', 'text': 'Fine anno solare'}], _h.settings.get('punti_validita')) }}
+		</select>
+	</div>
+	<fieldset class="fieldset-box">
+		<div class="field-line-text">
+			<strong>Promozione generale sul carrello</strong>
+		</div>
+		<div class="field-line field-line-left field-80">
+			<label>Data dal:</label>
+			<input type="text" name="punti_promozione_carrello_data_dal" class="field valida-datasimple input-datepicker" maxlength="10" value="{{ _h.settings.get('punti_promozione_carrello_data_dal') }}">
+		</div>
+		<div class="field-line field-line-left field-80">
+			<label>Data al:</label>
+			<input type="text" name="punti_promozione_carrello_data_al" class="field valida-datasimple input-datepicker" maxlength="10" value="{{ _h.settings.get('punti_promozione_carrello_data_al') }}">
+		</div>
+		<div class="field-line field-line-left field-100">
+			<label>Moltiplicatore punti:</label>
+			<input type="text" name="punti_promozione_carrello_moltiplicatore" class="field valida-int" maxlength="5" value="{{ _h.settings.get('punti_promozione_carrello_moltiplicatore', 0) }}">
+		</div>
+		<div class="field-line field-line-left field-100">
+			<label>Acquisto minimo EURO:</label>
+			<input type="text" name="punti_promozione_carrello_acquisto_minimo" class="field valida-euro" maxlength="10" value="{{ _h.util.euro(_h.settings.get('punti_promozione_carrello_acquisto_minimo', 0)) }}">
+		</div>
+		<div class="field-line field-line-left field-100">
+			<label>Num. min. articoli:</label>
+			<input type="text" name="punti_promozione_carrello_minimo_articoli" class="field valida-int" maxlength="5" value="{{ _h.settings.get('punti_promozione_carrello_minimo_articoli', 0) }}">
+		</div>
+		<div class="clear"></div>
+	</fieldset>
+	<fieldset class="fieldset-box">
+		<div class="field-line-text">
+			<strong>Promozione su primo acquisto</strong>
+		</div>
+		<div class="field-line field-line-left field-80">
+			<label>Data dal:</label>
+			<input type="text" name="punti_promozione_primo_acquisto_data_dal" class="field valida-datasimple input-datepicker" maxlength="10" value="{{ _h.settings.get('punti_promozione_primo_acquisto_data_dal') }}">
+		</div>
+		<div class="field-line field-line-left field-80">
+			<label>Data al:</label>
+			<input type="text" name="punti_promozione_primo_acquisto_data_al" class="field valida-datasimple input-datepicker" maxlength="10" value="{{ _h.settings.get('punti_promozione_primo_acquisto_data_al') }}">
+		</div>
+		<div class="field-line field-line-left field-100">
+			<label>Moltiplicatore punti:</label>
+			<input type="text" name="punti_promozione_primo_acquisto_moltiplicatore" class="field valida-int" maxlength="5" value="{{ _h.settings.get('punti_promozione_primo_acquisto_moltiplicatore', 0) }}">
+		</div>
+		<div class="field-line field-line-left field-100">
+			<label>Acquisto minimo EURO:</label>
+			<input type="text" name="punti_promozione_primo_acquisto_acquisto_minimo" class="field valida-euro" maxlength="10" value="{{ _h.util.euro(_h.settings.get('punti_promozione_primo_acquisto_acquisto_minimo', 0)) }}">
+		</div>
+		<div class="field-line field-line-left field-100">
+			<label>Num. min. articoli:</label>
+			<input type="text" name="punti_promozione_primo_acquisto_minimo_articoli" class="field valida-int" maxlength="5" value="{{ _h.settings.get('punti_promozione_primo_acquisto_minimo_articoli', 0) }}">
+		</div>
+		<div class="clear"></div>
+	</fieldset>
+	<fieldset class="fieldset-box">
+		<div class="field-line-text">
+			<strong>Promozione generale sul singolo articolo</strong>
+		</div>
+		<div class="field-line field-line-left field-80">
+			<label>Data dal:</label>
+			<input type="text" name="punti_promozione_data_dal" class="field valida-datasimple input-datepicker" maxlength="10" value="{{ _h.settings.get('punti_promozione_data_dal') }}">
+		</div>
+		<div class="field-line field-line-left field-80">
+			<label>Data al:</label>
+			<input type="text" name="punti_promozione_data_al" class="field valida-datasimple input-datepicker" maxlength="10" value="{{ _h.settings.get('punti_promozione_data_al') }}">
+		</div>
+		<div class="field-line field-line-left field-100">
+			<label>Moltiplicatore punti:</label>
+			<input type="text" name="punti_promozione_moltiplicatore" class="field valida-int" maxlength="5" value="{{ _h.settings.get('punti_promozione_moltiplicatore', 0) }}">
+		</div>
+		<div class="field-line field-line-left field-100">
+			<label>Valore minimo articolo EURO:</label>
+			<input type="text" name="punti_promozione_valore_minimo" class="field valida-euro" maxlength="10" value="{{ _h.util.euro(_h.settings.get('punti_promozione_valore_minimo', 0)) }}">
+		</div>
+		<div class="clear"></div>
+	</fieldset>
+	<fieldset class="fieldset-box">
+		<div class="field-line-text">
+			<strong>Promozione per utente</strong>
+		</div>
+		<div class="field-line field-line-left field-100">
+			<label>Punti per registrazione:</label>
+			<input type="text" name="punti_utente_registrazione" class="field valida-int" maxlength="5" value="{{ _h.settings.get('punti_utente_registrazione', 0) }}">
+		</div>
+		<div class="field-line field-line-left field-100">
+			<label>Punti compleanno:</label>
+			<input type="text" name="punti_utente_compleanno" class="field valida-int" maxlength="5" value="{{ _h.settings.get('punti_utente_compleanno', 0) }}">
+		</div>
+		<div class="field-line field-line-left field-100">
+			<label>Punti presenta un amico:</label>
+			<input type="text" name="punti_utente_presenta_amico" class="field valida-int" maxlength="5" value="{{ _h.settings.get('punti_utente_presenta_amico', 0) }}">
+		</div>
+		<div class="clear"></div>
+	</fieldset>
+</div>
+<div data-tab="message_center">
+	<div class="field-line field-400">
+		<label>E-Mail notifica ordini (se più e-mail separare con una virgola):</label>
+		<input type="text" name="notifica_e_mail_ordini" class="field" value="{{ _h.settings.get('notifica_e_mail_ordini') }}">
+	</div>
+	<div class="field-line field-400">
+		<label>E-Mail in copia nascosta notifica ordini:</label>
+		<input type="text" name="notifica_e_mail_ordini_ccn" class="field valida-email" value="{{ _h.settings.get('notifica_e_mail_ordini_ccn') }}">
+	</div>
+	<div class="field-line field-400">
+		<label>Telefono notifica ordini (se più numeri separare con una virgola):</label>
+		<input type="text" name="notifica_telefono_ordini" class="field" value="{{ _h.settings.get('notifica_telefono_ordini') }}">
+	</div>
+	<div class="field-line field-400">
+		<label>E-Mail notifica supporto clienti (se più e-mail separare con una virgola):</label>
+		<input type="text" name="notifica_e_mail_supporto_clienti" class="field" value="{{ _h.settings.get('notifica_e_mail_supporto_clienti') }}">
+	</div>
+	<div class="field-line field-400">
+		<label>Telefono notifica supporto clienti (se più numeri separare con una virgola):</label>
+		<input type="text" name="notifica_telefono_supporto_clienti" class="field" value="{{ _h.settings.get('notifica_telefono_supporto_clienti') }}">
+	</div>
+	<div class="field-line field-400">
+		<label>E-Mail notifica alert (se più e-mail separare con una virgola):</label>
+		<input type="text" name="notifica_e_mail_alert" class="field" value="{{ _h.settings.get('notifica_e_mail_alert') }}">
+	</div>
+	<div class="field-line field-400">
+		<label>Telefono notifica alert (se più numeri separare con una virgola):</label>
+		<input type="text" name="notifica_telefono_alert" class="field" value="{{ _h.settings.get('notifica_telefono_alert') }}">
+	</div>
+	<div class="field-line field-400">
+		<label>E-Mail notifica promemoria (se più e-mail separare con una virgola):</label>
+		<input type="text" name="notifica_e_mail_promemoria" class="field" value="{{ _h.settings.get('notifica_e_mail_promemoria') }}">
+	</div>
+	<div class="field-line field-400">
+		<label>Telefono notifica promemoria (se più numeri separare con una virgola):</label>
+		<input type="text" name="notifica_telefono_promemoria" class="field" value="{{ _h.settings.get('notifica_telefono_promemoria') }}">
+	</div>
+	{{ mc.checkbox(_h.settings.get('ordine_bonifico_notifica_sms_wapp_push_solo_pagato'), 1, 'ordine_bonifico_notifica_sms_wapp_push_solo_pagato', 'Notifica SMS, WhatsApp e Push per ordine con bonifico solo a conferma pagamento') }}
+
+	<div class="wrapper-seleziona-tutto-template">
+		<div class="clear field-line field-200 field-line-left field-line-text" style="width: 200px; padding-top: 3px; margin-right: 0;">&nbsp;</div>
+		<div class="field-line field-100 field-line-left">
+			<div class="h-checkbox-wrapper"><span class="h-checkbox" data-type-check-all="email" data-value="1"><input type="hidden" name="template__tutti__with_email" value="" /></span> <strong style="width: 70%">Tutti</strong></div>
+		</div>
+		<div class="field-line field-100 field-line-left">
+			<div class="h-checkbox-wrapper"><span class="h-checkbox" data-type-check-all="sms" data-value="1"><input type="hidden" name="template__tutti__with_sms" value="" /></span> <strong style="width: 70%">Tutti</strong></div>
+		</div>
+		<div class="field-line field-100 field-line-left">
+			<div class="h-checkbox-wrapper"><span class="h-checkbox" data-type-check-all="wapp" data-value="1"><input type="hidden" name="template__tutti__with_wapp" value="" /></span> <strong style="width: 70%">Tutti</strong></div>
+		</div>
+		<div class="field-line field-100 field-line-left">
+			<div class="h-checkbox-wrapper"><span class="h-checkbox" data-type-check-all="push" data-value="1"><input type="hidden" name="template__tutti__with_push" value="" /></span> <strong style="width: 70%">Tutti</strong></div>
+		</div>
+		<div class="clear"></div>
+		<div class="seleziona-tutto-template-list">
+		{{ _self.campo_message_center(_h, 'ordine', 'Notifica ordine (riepilogo)') }}
+		{{ _self.campo_message_center(_h, 'ordine_preventivo', 'Notifica preventivo (riepilogo)') }}
+		{{ _self.campo_message_center(_h, 'ordine_richiedi_integrazione', 'Richiedi integrazione economica ordine') }}
+		{{ _self.campo_message_center(_h, 'ordine_fattura', 'Invio fattura/ricevuta ordine') }}
+		{{ _self.campo_message_center(_h, 'ordine_messaggio', 'Messaggio a cliente su ordine') }}
+		{{ _self.campo_message_center(_h, 'ordine_pagamento', 'Promemoria pagamento ordine') }}
+		{{ _self.campo_message_center(_h, 'ordine_stato_spedizione', 'Stato spedizione ordine') }}
+		{{ _self.campo_message_center(_h, 'ordine_stato_pagamento', 'Stato pagamento ordine') }}
+		{{ _self.campo_message_center(_h, 'ordine_completa_pagamento', 'Link completa pagamento ordine') }}
+		{{ _self.campo_message_center(_h, 'ordine_non_pagato', 'Azione ordine non pagato') }}
+		{{ _self.campo_message_center(_h, 'ordine_azione', 'Azione ordine pagato') }}
+		{{ _self.campo_message_center(_h, 'ordine_voucher', 'Ordine voucher') }}
+		{{ _self.campo_message_center(_h, 'ordine_download', 'Ordine link download contenuto digitale') }}
+		{{ _self.campo_message_center(_h, 'messaggio_a_cliente', 'Comunicazione a cliente') }}
+		{{ _self.campo_message_center(_h, 'ordine_rimborso', 'Ordine invio rimborso') }}
+		{{ _self.campo_message_center(_h, 'ordine_gift_card', 'Ordine invio gift card riepilogo') }}
+		{{ _self.campo_message_center(_h, 'ordine_gift_card_destinatario', 'Ordine invio gift card al destinatario effettivo') }}
+		{{ _self.campo_message_center(_h, 'codice_sconto_cashback', 'Ordine sconto casjback') }}
+		{{ _self.campo_message_center(_h, 'avvisa_prodotto_disponibile', 'Notifica prodotto disponibile a cliente') }}
+		{{ _self.campo_message_center(_h, 'ordine_abbandonato', 'Azione carrello abbandonato') }}
+		{{ _self.campo_message_center(_h, 'carrello_messaggio', 'Messaggio a cliente da carrello abbandonato') }}
+		{{ _self.campo_message_center(_h, 'messaggio_cliente', 'Notifica interna messaggio da cliente') }}
+		{{ _self.campo_message_center(_h, 'e_mail_predefinita', 'E-Mail predefinita (da impostaizoni)') }}
+		{{ _self.campo_message_center(_h, 'conferma_iscrizione_da_agente', 'Conferma iscrizione da agente') }}
+		{{ _self.campo_message_center(_h, 'notifica_reset_password_da_sistema', 'Reset password da sistema') }}
+		{{ _self.campo_message_center(_h, 'notifica_reset_password_da_sistema_agente', 'Reset password da agente') }}
+		{{ _self.campo_message_center(_h, 'link_conferma_elimina_account', 'Link conferma elimina account cliente') }}
+		{{ _self.campo_message_center(_h, 'compleanno_cliente', 'Auguri compleanno cliente con codice sconto') }}
+		{{ _self.campo_message_center(_h, 'compleanno_cliente_punti', 'Auguri compleanno cliente con invio punti') }}
+		{{ _self.campo_message_center(_h, 'password_modificata', 'Notifica password modificata cliente') }}
+		{{ _self.campo_message_center(_h, 'registrazione_utente', 'Notifica interna registrazione cliente') }}
+		{{ _self.campo_message_center(_h, 'link_conferma_email', 'Link conferma recapito cliente') }}
+		{{ _self.campo_message_center(_h, 'link_termini_accettati', 'Elenco termini accettati da parte del cliente') }}
+		{{ _self.campo_message_center(_h, 'conferma_modifica_email', 'Conferma modifica recapito cliente') }}
+		{{ _self.campo_message_center(_h, 'conferma_registrazione', 'Conferma registrazione cliente') }}
+		{{ _self.campo_message_center(_h, 'conferma_registrazione_attivazione', 'Conferma attivazione cliente') }}
+		{{ _self.campo_message_center(_h, 'conferma_elimina_account', 'Conferma elimina account cliente') }}
+		{{ _self.campo_message_center(_h, 'otp_registrazione', 'OTP registrazione cliente') }}
+		{{ _self.campo_message_center(_h, 'otp_recupero_password', 'OTP recupero password cliente') }}
+		{{ _self.campo_message_center(_h, 'link_recupero_password', 'Link recupero password cliente') }}
+		{{ _self.campo_message_center(_h, 'landing_page', 'Comunicazione a utente iscritto landing page') }}
+		{{ _self.campo_message_center(_h, 'richiesta_cancellazione_account', 'Richiesta cancellazione account cliente') }}
+		{{ _self.campo_message_center(_h, 'alert_magazzino', 'Notifica interna alert magazzino') }}
+		{{ _self.campo_message_center(_h, 'pagina_report', 'Notifica interna report iscrizioni pagina') }}
+		{{ _self.campo_message_center(_h, 'landing_page_report', 'Notifica interna report iscrizioni landing') }}
+		{{ _self.campo_message_center(_h, 'ordine_conferma_pagamento', 'Notifica interna pagamento ricevuto per ordine da provider') }}
+		</div>
+	</div>
+</div>
+<div data-tab="integrazione_newsletter">
+	<p class="field-line field-400">
+		<label>Integrazione con:</label>
+		<select name="integrazione_newsletter_tipo" class="field">
+			{{ mc.listComboOptions([{'id': '', 'text': ''},{'id': '1', 'text': 'Mailup'},{'id': '2', 'text': 'Mailchimp'}], _h.settings.get('integrazione_newsletter_tipo')) }}
+		</select>
+	</p>
+	<p class="field-line field-400">
+		<label>Username (o server):</label>
+		<input type="text" name="integrazione_newsletter_username" class="field" value="{{ _h.settings.get('integrazione_newsletter_username') }}" maxlength="100">
+	</p>
+	<p class="field-line field-400">
+		<label>Password (o key):</label>
+		<input type="text" name="integrazione_newsletter_password" class="field" value="{{ _h.settings.get('integrazione_newsletter_password') }}" maxlength="100">
+	</p>
+	<p class="field-line field-400">
+		<label>Client ID (solo mailup):</label>
+		<input type="text" name="integrazione_newsletter_client_id" class="field" value="{{ _h.settings.get('integrazione_newsletter_client_id') }}" maxlength="100">
+	</p>
+	<p class="field-line field-400">
+		<label>Client Seecret (solo mailup):</label>
+		<input type="text" name="integrazione_newsletter_client_secret" class="field" value="{{ _h.settings.get('integrazione_newsletter_client_secret') }}" maxlength="100">
+	</p>
+	<p class="field-line field-400">
+		<label>Associa al gruppo, o gruppi abilitati (indicare codice o riferimento univoco del gruppo, se più gruppi separare con virgola):</label>
+		<input type="text" name="integrazione_newsletter_gruppo" class="field valida-listvalue" value="{{ _h.settings.get('integrazione_newsletter_gruppo') }}" maxlength="100">
+	</p>
+	<p class="field-line field-400">
+		<label>Gruppo default (indicare codice o riferimento univoco del gruppo, se più gruppi separare con virgola):</label>
+		<input type="text" name="integrazione_newsletter_gruppo_default" class="field valida-listvalue" value="{{ _h.settings.get('integrazione_newsletter_gruppo_default') }}" maxlength="100">
+	</p>
+</div>
+<div data-tab="export_corriere">
+	<fieldset class="fieldset-box">
+		<div class="field-text-line"><strong>QAPLA</strong></div>
+		{{ mc.checkbox(_h.settings.get('qapla_abilitato'), 1, 'qapla_abilitato', 'Abilita integrazione con Qapla') }}
+		{{ mc.checkbox(_h.settings.get('qapla_sandbox'), 1, 'qapla_sandbox', 'Abilita modalità sandbox') }}
+		{{ mc.checkbox(_h.settings.get('qapla_invia_cambio_stato'), 1, 'qapla_invia_cambio_stato', 'Invia al cambio stato ordine (pronto / in spedizione)') }}
+		<p class="field-line field-400">
+			<label>API base url:</label>
+			<input type="text" name="qapla_api_base_url" class="field" value="{{ _h.settings.get('qapla_api_base_url') }}" maxlength="100">
+		</p>
+		<p class="field-line field-400">
+			<label>API Key:</label>
+			<input type="text" name="qapla_api_key" class="field" value="{{ _h.settings.get('qapla_api_key') }}" maxlength="100">
+		</p>
+		<div class="clear"></div>
+	</fieldset>
+	
+	<p class="field-line field-300">
+		<label>Corriere default:</label>
+		<select name="corriere_default">
+			<option value=""></option>
+		{% set elenco_corrieri = _h.context('checkout_util').elencoCorrieri %}
+		{% for c in elenco_corrieri %}
+			<option value="{{ c.label }}"{% if c.label == _h.settings.get('corriere_default') %}selected{% endif %}>{{ c.label }}</option>
+		{% endfor %}
+		</select>
+	</p>
+	<fieldset class="fieldset-box">
+		<div class="field-text-line"><strong>BRT</strong></div>
+		<p class="field-line field-200 field-line-left">
+			<label>Codice cliente BRT (VABCCM):</label>
+			<input type="text" name="export_indirizzi_brt_codice_cliente" class="field" value="{{ _h.settings.get('export_indirizzi_brt_codice_cliente') }}" maxlength="25">
+		</p>
+		<p class="field-line field-200 field-line-left">
+			<label>Codice linea BRT (VABLNP):</label>
+			<input type="text" name="export_indirizzi_brt_linea_partenza" class="field" value="{{ _h.settings.get('export_indirizzi_brt_linea_partenza') }}" maxlength="25">
+		</p>
+		<div class="clear"></div>
+	</fieldset>
+	<fieldset class="fieldset-box">
+		<div class="field-text-line"><strong>GLS</strong></div>
+		<p class="field-line field-200 field-line-left">
+			<label>Sigla sede:</label>
+			<input type="text" name="gls_sigla_sede" class="field" value="{{ _h.settings.get('gls_sigla_sede') }}" maxlength="10">
+		</p>
+		<p class="field-line field-200 field-line-left">
+			<label>Codice cliente:</label>
+			<input type="text" name="gls_codice_cliente" class="field" value="{{ _h.settings.get('gls_codice_cliente') }}" maxlength="25">
+		</p>
+		<p class="field-line field-200 field-line-left">
+			<label>Password cliente:</label>
+			<input type="text" name="gls_password_cliente" class="field" value="{{ _h.settings.get('gls_password_cliente') }}" maxlength="50">
+		</p>
+		<p class="field-line field-200 field-line-left">
+			<label>Codice contratto:</label>
+			<input type="text" name="gls_codice_contratto" class="field" value="{{ _h.settings.get('gls_codice_contratto') }}" maxlength="25">
+		</p>
+		<p class="field-line field-200 field-line-left">
+			<label>Categoria merceologica:</label>
+			<input type="text" name="gls_categoria_merceologica" class="field" value="{{ _h.settings.get('gls_categoria_merceologica') }}" maxlength="25">
+		</p>
+		<p class="field-line field-200 field-line-left">
+			<label>Peso indicativo collo (default 0.3):</label>
+			<input type="text" name="gls_peso_kg_collo" class="field" value="{{ _h.settings.get('gls_peso_kg_collo', '0.3') }}" maxlength="5">
+		</p>
+		<p class="field-line field-200 field-line-left">
+			<label>Riferimento termini per spese:</label>
+			<input type="text" name="gls_incoterm" class="field" value="{{ _h.settings.get('gls_incoterm') }}" maxlength="25">
+		</p>
+		<p class="field-line field-200 field-line-left">
+			<label>Codice nazione origine (default 380):</label>
+			<input type="text" name="gls_nazione_origine" class="field" value="{{ _h.settings.get('gls_nazione_origine', 380) }}" maxlength="10">
+		</p>
+		<div class="clear"></div>
+		{{ mc.checkbox(_h.settings.get('gls_chiusura_work_day_auto'), 1, 'gls_chiusura_work_day_auto', 'Chiusura work day automatica') }}
+
+	</fieldset>
+	<fieldset class="fieldset-box">
+		<div class="field-text-line"><strong>TNT per sincro tramite FTP</strong></div>
+		<p class="field-line field-400">
+			<label>Host:</label>
+			<input type="text" name="export_ftp_corriere_tnt_host" class="field" value="{{ _h.settings.get('export_ftp_corriere_tnt_host') }}" maxlength="50">
+		</p>
+		<p class="field-line field-200 field-line-left">
+			<label>Username:</label>
+			<input type="text" name="export_ftp_corriere_tnt_username" class="field" value="{{ _h.settings.get('export_ftp_corriere_tnt_username') }}" maxlength="25">
+		</p>
+		<p class="field-line field-200 field-line-left">
+			<label>Password:</label>
+			<input type="text" name="export_ftp_corriere_tnt_password" class="field" value="{{ _h.settings.get('export_ftp_corriere_tnt_password') }}" maxlength="25">
+		</p>
+		<div class="clear"></div>
+	</fieldset>
+	<fieldset class="fieldset-box">
+		<div class="field-text-line"><strong>Dati mittente spedizione</strong></div>
+		<p class="field-line field-400">
+			<label>Mittente titolo/chiave:</label>
+			<input type="text" name="export_indirizzi_mittente_titolo" class="field" value="{{ _h.settings.get('export_indirizzi_mittente_titolo') }}" maxlength="50">
+		</p>
+		<p class="field-line field-400">
+			<label>Mittente/riferimento:</label>
+			<input type="text" name="export_indirizzi_mittente" class="field" value="{{ _h.settings.get('export_indirizzi_mittente') }}" maxlength="50">
+		</p>
+		<p class="field-line field-400">
+			<label>Nome:</label>
+			<input type="text" name="export_indirizzi_mittente_nome" class="field" value="{{ _h.settings.get('export_indirizzi_mittente_nome') }}" maxlength="50">
+		</p>
+		<p class="field-line field-400">
+			<label>Via e numero civico:</label>
+			<input type="text" name="export_indirizzi_mittente_via" class="field" value="{{ _h.settings.get('export_indirizzi_mittente_via') }}" maxlength="100">
+		</p>
+		<p class="field-line field-100 field-line-left">
+			<label>CAP:</label>
+			<input type="text" name="export_indirizzi_mittente_cap" class="field" value="{{ _h.settings.get('export_indirizzi_mittente_cap') }}" maxlength="5">
+		</p>
+		<p class="field-line field-300 field-line-left">
+			<label>Comune:</label>
+			<input type="text" name="export_indirizzi_mittente_comune" class="field" value="{{ _h.settings.get('export_indirizzi_mittente_comune') }}" maxlength="100">
+		</p>
+		<div class="clear"></div>
+		<p class="field-line field-400">
+			<label>Provincia:</label>
+			<input type="text" name="export_indirizzi_mittente_provincia" class="field" value="{{ _h.settings.get('export_indirizzi_mittente_provincia') }}" maxlength="50">
+		</p>
+		<p class="field-line field-400">
+			<label>Nome prodotto generico riportato in spedizione:</label>
+			<input type="text" name="export_indirizzi_mittente_prodotto" class="field" value="{{ _h.settings.get('export_indirizzi_mittente_prodotto') }}" maxlength="50">
+		</p>
+	</fieldset>
+</div>
+</div>
+
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/ex-edit-impostazioni')) }}

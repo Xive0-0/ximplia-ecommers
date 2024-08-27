@@ -1,0 +1,9 @@
+{
+	"input": [
+		{"name": "nome", "required": true}
+	],
+	"on:": [
+		"manager/myarea/ambassador/ex-edit",
+		{"name":"manager/myarea/ambassador/load", "check": "({input}[[id]]!=null)", "params": {"template": true, "def_lang": true}}
+	]
+}

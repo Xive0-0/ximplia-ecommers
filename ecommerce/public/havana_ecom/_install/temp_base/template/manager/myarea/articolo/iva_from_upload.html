@@ -1,0 +1,34 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% set lang = _h.input('lang', _h.config('default_language', 'it')) %}
+
+{{ mc.slideBoxHeader(_h, 'Modifica IVA da file') }}
+<p class="field-line-label">
+	Modifica dei IVA da file: <strong>.xls, .xlsx</strong>
+</p>
+<div class="field-line-label" style="margin-top: 10px;">
+	La prima riga del file viene considerata come intestazioni, i nomi delle colonne (anche non in ordine) da utilizzare:
+	<ul style="margin-top: 10px; margin-left: 20px;">
+		<li><strong>HID</strong>, questo campo se valorizzato è il primo che viene tenuto in considerazione come riferimento all'articolo</li>
+		<li><strong>CODICE</strong>, questo campo se valorizzato è il secondo dopo HID per riferimento all'articolo</li>
+		<li><strong>CODICE FORNITORE</strong>, questo campo se valorizzato è il terzo dopo CODICE per riferimento all'articolo</li>
+		{% for item in listPaeseUe %}
+		<li><strong>IVA {{ item.codice_iso|upper }}</strong>, codice IVA per {{ item.nome }}</li>
+		{% endfor %}
+	</ul>
+</div>
+
+<fieldset class="fieldset-box">
+	<div class="field-line field-line-file" data-file="">
+		<input type="hidden" name="file_data" class="field-file valida-required" value="">
+		<input type="hidden" name="file_data_name" class="field-file-name">
+		<label>File (.xls, .xlsx) <span>*</span></label>
+		<div class="field-anteprima"></div>
+		<div class="field-button">
+			<a class="h-bar-button h-bar-button-blu h-action-upload-file" data-action='{"url": "{{ _h.url('manager/myarea/upload-temp-file') }}", "fileType": ["xls","xlsx"]}'>carica file</a>
+			<a class="h-bar-button h-bar-button-gray h-action-upload-file-reset">Cancella</a>
+		</div>
+		<div class="clear"></div>
+	</div>
+</fieldset>
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/articolo/ex-iva-from-upload'), '"none": true') }}	

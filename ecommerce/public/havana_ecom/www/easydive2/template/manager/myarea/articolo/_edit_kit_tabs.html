@@ -1,0 +1,52 @@
+<div data-tab-rif="descrizione">Descrizione</div>
+<div data-tab-rif="obiettivo">Obiettivo</div>
+<div data-tab-rif="relazioni_articoli">Articoli nel kit</div>
+<div data-tab-rif="kit_per_articolo">Per articolo</div>
+<div data-tab="relazioni_articoli">	
+	<p class="field-line field-400">
+		<label>Cerca e aggiungi articolo:</label>
+		<input type="hidden" name="relazione_id" value="">
+		<input type="text" name="relazione_nome" class="field autocomplete" value="" data-action='{"url": "{{ _h.url('manager/myarea/articolo/list-autocomplete') }}", "add_item_to": "#elenco_articoli_kit", "add_item_id": "id_articolo_kit"}'>
+	</p>
+	<br><br>
+	Articoli nel Kit selezionati:
+	<div id="elenco_articoli_kit">
+	
+	{% for elem in listArticoliKit %}
+		<div class="autocomplete-content-value-block hrow remove-current-element-wrapper">
+			<input type="hidden" name="id_articolo_kit[]" value="{{ elem.id }}">
+			<em class="action-remove-current-element"></em>
+			<div class="autocomplete-content-value-details"><strong>{{ elem.codice }}</strong>
+			<span>{{ elem.get('nome') }}</span>
+			</div>
+		</div>
+	{% endfor %}
+	</div>
+</div>
+<div data-tab="descrizione">
+	<div class="field-line field-400">
+		<label>Codice riferimento fotocamera per abbinamento:</label>
+		<input name="codice_abbinamento_fotocamera" class="field valida-int" value="{{ item.get('codice_abbinamento_fotocamera') }}">
+	</div>
+
+	<div class="field-line field-400">
+		{% if item.get('consigliato', '') != '' %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% else %}
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="consigliato" value="{{ value }}" /></span> <strong>Articolo consigliato Easydive</strong></div>
+	</div>
+	<div class="field-line field-400">
+		<label>Testo descrittivo del prodotto all'interno del configuratore:</label>
+		<input name="step_acquisto_testo" class="field" value="{{ item.get('step_acquisto_testo') }}">
+	</div>
+</div>
+<div data-tab="obiettivo">
+{{ mc.dynamicMultipleSelect(_h, 'Obiettivo', listObiettivo, item, 'id_obiettivo', 'obiettivo') }}
+</div>
+<div data-tab="kit_per_articolo">
+{{ mc.dynamicMultipleSelect(_h, 'Per articolo', listKit, item, 'id_kit', 'kit') }}
+</div>

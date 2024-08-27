@@ -1,0 +1,29 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Prezzi spedizione') }}
+
+<p class="field-line field-200">
+	<label>Corriere<span>*</span>:</label>
+	<select name="corriere" class="field valida-required">
+		<option></option>
+		{% for key,label in listCorrieri %}
+		<option value="{{ key }}">{{ label }}</option>
+		{% endfor %}
+	</select>
+</p>
+<br>
+<p class="field-line-text"><strong>NOTA:</strong> I prezzi devono partire dalla colonna D, la prima riga viene considerata di intestazione<p>
+<fieldset class="fieldset-box">
+	<div class="field-line field-line-file" data-file="">
+		<input type="hidden" name="file_data" class="field-file valida-required" value="">
+		<input type="hidden" name="file_data_name" class="field-file-name">
+		<label>File (.xls, .xlsx, .csv) <span>*</span></label>
+		<div class="field-anteprima"></div>
+		<div class="field-button">
+			<a class="h-bar-button h-bar-button-blu h-action-upload-file" data-action='{"url": "{{ _h.url('manager/myarea/upload-temp-file') }}", "fileType": ["xls","xlsx","csv"]}'>carica file</a>
+			<a class="h-bar-button h-bar-button-gray h-action-upload-file-reset">Cancella</a>
+		</div>
+		<div class="clear"></div>
+	</div>
+</fieldset>
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/nazione/ex-prezzi-from-upload'), '"none": true') }}	

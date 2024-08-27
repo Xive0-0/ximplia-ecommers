@@ -1,0 +1,6 @@
+{
+	"batch": true,
+	"on:begin": [
+		"batch/my-batch"
+	]
+}

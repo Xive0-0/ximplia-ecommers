@@ -1,0 +1,12 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Aggiungi / Rimuovi punti') }}
+
+<input type="hidden" name="id_cliente" value="{{ _h.input('id_cliente') }}">
+<p class="field-line field-250">
+	<label>Punti (senza segno per aggiungere, - per togliere)<span>*</span>:</label>
+	<input type="text" name="punti" class="field valida-required valida-digitintn valida-intn" value="" maxlength="10">
+</p>
+
+{{ mc.labelCampiObbligatori() }}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/cliente/punti/ex-edit'), '"reload": "#punti-content"') }}	

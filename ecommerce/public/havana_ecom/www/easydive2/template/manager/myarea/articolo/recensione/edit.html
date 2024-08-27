@@ -1,0 +1,44 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Video') }}
+{% if item %}
+	<input type="hidden" name="id_articolo" value="{{ item.get('id_articolo') }}">
+	<input type="hidden" name="id" value="{{ item.id }}">
+{% else %}
+	<input type="hidden" name="id_articolo" value="{{ _h.input('id_articolo') }}">
+{% endif %}
+<p class="field-line field-100">
+	<label>Lingua<span>*</span>:</label>
+	<select name="lang" class="field valida-required">
+	{% for l in listLang %}
+	<option value="{{ l }}" {% if l == item.get('lang') %}selected="true"{% endif %}>{{ l|upper }}</option>
+	{% endfor %}
+	</select>
+</p>
+
+<p class="field-line field-400">
+	<label>Nome/Titolo<span>*</span>:</label>
+	<input type="text" name="nome" class="field valida-required" value="{{ item.get('nome') }}" maxlength="100">
+</p>
+<p class="field-line field-400">
+	<label>Voto<span>*</span>:</label>
+	<input type="text" name="voto" class="field valida-required" value="{{ item.get('voto') }}" maxlength="100">
+</p>
+<p class="field-line field-400">
+	<label>Data<span>*</span>:</label>
+	<input type="text" name="data" class="field valida-required" value="{{ item.get('data') }}" maxlength="100">
+</p>
+<div class="field-line field-400">
+	<label>Testo<span>*</span>:</label>
+	<textarea name="testo" class="visual-editor valida-required">{{ item.get('testo') }}</textarea>
+</div>
+<p class="field-line field-400">
+	<label>URL recensione<span>*</span>:</label>
+	<input type="text" name="url" class="field valida-required valida-url" value="{{ item.get('url') }}">
+</p>
+<p class="field-line field-400">
+	<label>URL immagine/avatar:</label>
+	<input type="text" name="url_immagine" class="field valida-url" value="{{ item.get('url_immagine') }}">
+</p>
+{{ mc.labelCampiObbligatori() }}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/articolo/recensione/ex-edit'), '"reload": "#recensione-content"') }}	

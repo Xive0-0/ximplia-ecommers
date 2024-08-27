@@ -1,0 +1,11 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Costo imballaggio') }}
+<input type="hidden" name="id" value="{{ item.id }}">
+
+<div class="field-line field-400">
+	<label>Nome<span>*</span>:</label>
+	<input name="nome" class="field valida-required" value="{{ item.get('nome') }}">
+</div>
+{{ mc.labelCampiObbligatori() }}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/fornitore/ex-edit'), '"reload": "#fornitore-articolo-content"') }}	

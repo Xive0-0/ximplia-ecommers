@@ -1,0 +1,57 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Modifica dati immagine') }}
+<input type="hidden" name="id_entita" value="{{ item.get('id_entita') }}">
+<input type="hidden" name="id" value="{{ item.id }}">
+
+<div class="h-tab">
+<div data-tab-rif="base">Dati</div>
+{% for l in listLang %}
+<div data-tab-rif="{{ l }}">{{ l|upper }}</div>
+{% endfor %}
+
+<div data-tab="base">
+
+	<p class="field-line field-line-left field-100">
+		<label>Peso/posizione<span>*</span>:</label>
+		<input type="text" name="ordine" class="field valida-required valida-digitnumber" value="{{ item.get('ordine', 0) }}">
+	</p>
+	<p class="field-line field-line-left field-200">
+		<label>Codice:</label>
+		<input type="text" name="codice" class="field" value="{{ item.get('codice') }}" maxlength="50">
+	</p>
+	<div class="clear"></div>
+	<p class="field-line field-400">
+		<label>Nome immagine<span>*</span>:</label>
+		<input type="text" name="name" class="field valida-required valida-imagename" value="{{ item.get('name') }}" maxlength="50">
+	</p>
+	<p class="field-line field-400">
+		<label>Alt title default:</label>
+		<input type="text" name="alt" class="field" value="{{ item.get('alt') }}">
+	</p>	
+	<p class="field-line field-400">
+		<label>Gruppo:</label>
+		<select name="id_gruppo_immagine" class="field">
+		<option value=""></option>
+		{% for g in listGruppo %}	
+			<option value="{{ g.id }}" {% if item.get('id_gruppo_immagine') == g.id %}selected="true"{% endif %}>{{ g.get('nome') }}</option>
+		{% endfor %}
+		</select>
+	</p>
+	{{ mc.labelCampiObbligatori() }}
+</div>
+{% for l in listLang %}
+<div data-tab="{{ l }}">
+	{{ mc.contenutiInLingua(l) }}
+	<p class="field-line field-400">
+		<label>Alt title:</label>
+		<input type="text" name="alt_{{ l }}" class="field" value="{{ item.get('alt_' ~ l) }}">
+	</p>	
+	<p class="field-line field-400">
+		<label>Descrizione:</label>
+		<textarea name="descrizione_{{ l }}" class="field">{{ item.get('descrizione_' ~ l) }}</textarea>
+	</p>
+</div>
+{% endfor %}
+</div>
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/galleryimmagini/ex-edit'), '"reload": "#immagini-content"') }}	

@@ -1,0 +1,310 @@
+[2024-06-20 08:42:25] start: 2024-06-20 08:42:15
+end: 2024-06-20 08:42:25
+durata: 10
+url: /
+get:Array
+(
+    [_request] => 
+    [_activity] => 
+)
+
+post:Array
+(
+)
+
+[2024-06-20 14:37:53] start: 2024-06-20 14:37:37
+end: 2024-06-20 14:37:53
+durata: 16
+url: /
+get:Array
+(
+    [_request] => 
+    [_activity] => 
+)
+
+post:Array
+(
+)
+
+[2024-06-24 14:23:03] start: 2024-06-24 14:22:49
+end: 2024-06-24 14:23:03
+durata: 14
+url: /
+get:Array
+(
+    [_request] => 
+    [_activity] => 
+)
+
+post:Array
+(
+)
+
+[2024-06-27 12:58:01] start: 2024-06-27 12:57:49
+end: 2024-06-27 12:58:01
+durata: 12
+url: /
+get:Array
+(
+    [_request] => 
+    [_activity] => 
+)
+
+post:Array
+(
+)
+
+[2024-07-03 09:39:29] start: 2024-07-03 09:39:15
+end: 2024-07-03 09:39:29
+durata: 14
+url: /
+get:Array
+(
+    [_request] => 
+    [_activity] => 
+)
+
+post:Array
+(
+)
+
+[2024-07-04 07:23:45] start: 2024-07-04 07:23:31
+end: 2024-07-04 07:23:45
+durata: 14
+url: /
+get:Array
+(
+    [_request] => 
+    [_activity] => 
+)
+
+post:Array
+(
+)
+
+[2024-07-04 14:23:18] start: 2024-07-04 14:23:06
+end: 2024-07-04 14:23:18
+durata: 12
+url: /
+get:Array
+(
+    [_request] => 
+    [_activity] => 
+)
+
+post:Array
+(
+)
+
+[2024-07-05 12:28:54] start: 2024-07-05 12:28:43
+end: 2024-07-05 12:28:54
+durata: 11
+url: /
+get:Array
+(
+    [_request] => 
+    [_activity] => 
+)
+
+post:Array
+(
+)
+
+[2024-07-08 07:32:16] start: 2024-07-08 07:32:05
+end: 2024-07-08 07:32:16
+durata: 11
+url: /
+get:Array
+(
+    [_request] => 
+    [_activity] => 
+)
+
+post:Array
+(
+)
+
+[2024-07-08 08:08:47] start: 2024-07-08 08:08:36
+end: 2024-07-08 08:08:47
+durata: 11
+url: /www/assets/website/img/tempimg/Screenshot%202024-06-12%20150447.png
+get:Array
+(
+    [_request] => www/assets/website/img/tempimg/Screenshot 2024-06-12 150447.png
+    [_activity] => www/assets/website/img/tempimg/Screenshot 2024-06-12 150447.png
+)
+
+post:Array
+(
+)
+
+[2024-07-10 07:24:26] start: 2024-07-10 07:24:16
+end: 2024-07-10 07:24:26
+durata: 10
+url: /
+get:Array
+(
+    [_request] => 
+    [_activity] => 
+)
+
+post:Array
+(
+)
+
+[2024-07-15 08:47:23] start: 2024-07-15 08:47:10
+end: 2024-07-15 08:47:23
+durata: 13
+url: /
+get:Array
+(
+    [_request] => 
+    [_activity] => 
+)
+
+post:Array
+(
+)
+
+[2024-07-29 09:15:43] start: 2024-07-29 09:15:28
+end: 2024-07-29 09:15:43
+durata: 15
+url: /
+get:Array
+(
+    [_request] => 
+    [_activity] => 
+)
+
+post:Array
+(
+)
+
+[2024-07-29 10:06:21] start: 2024-07-29 09:41:39
+end: 2024-07-29 10:06:21
+durata: 1482
+url: /manager/myarea/update-url-mapping.php?_hjson=0
+get:Array
+(
+    [_request] => manager/myarea/update-url-mapping.php
+    [_hjson] => 0
+    [_activity] => manager/myarea/update-url-mapping.php
+)
+
+post:Array
+(
+)
+
+[2024-07-30 10:37:46] start: 2024-07-30 10:37:36
+end: 2024-07-30 10:37:46
+durata: 10
+url: /
+get:Array
+(
+    [_request] => 
+    [_activity] => 
+)
+
+post:Array
+(
+)
+
+[2024-07-31 07:54:47] start: 2024-07-31 07:54:36
+end: 2024-07-31 07:54:47
+durata: 11
+url: /
+get:Array
+(
+    [_request] => 
+    [_activity] => 
+)
+
+post:Array
+(
+)
+
+[2024-07-31 09:08:04] start: 2024-07-31 08:55:37
+end: 2024-07-31 09:08:04
+durata: 747
+url: /manager/myarea/update-url-mapping.php?_hjson=0
+get:Array
+(
+    [_request] => manager/myarea/update-url-mapping.php
+    [_hjson] => 0
+    [_activity] => manager/myarea/update-url-mapping.php
+)
+
+post:Array
+(
+)
+
+[2024-07-31 13:07:18] start: 2024-07-31 13:07:01
+end: 2024-07-31 13:07:18
+durata: 17
+url: /outlet/leo-ii-standard.1.html
+get:Array
+(
+    [_request] => outlet/leo-ii-standard.1.html
+    [_activity] => outlet/leo-ii-standard.1.html
+)
+
+post:Array
+(
+)
+
+[2024-08-02 08:37:30] start: 2024-08-02 08:37:20
+end: 2024-08-02 08:37:30
+durata: 10
+url: /
+get:Array
+(
+    [_request] => 
+    [_activity] => 
+)
+
+post:Array
+(
+)
+
+[2024-08-05 13:19:05] start: 2024-08-05 13:18:48
+end: 2024-08-05 13:19:05
+durata: 17
+url: /
+get:Array
+(
+    [_request] => 
+    [_activity] => 
+)
+
+post:Array
+(
+)
+
+[2024-08-07 07:28:09] start: 2024-08-07 07:27:31
+end: 2024-08-07 07:28:09
+durata: 38
+url: /
+get:Array
+(
+    [_request] => 
+    [_activity] => 
+)
+
+post:Array
+(
+)
+
+[2024-08-08 07:35:41] start: 2024-08-08 07:35:30
+end: 2024-08-08 07:35:41
+durata: 11
+url: /
+get:Array
+(
+    [_request] => 
+    [_activity] => 
+)
+
+post:Array
+(
+)
+

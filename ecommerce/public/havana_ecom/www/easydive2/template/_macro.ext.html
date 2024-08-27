@@ -1,0 +1,667 @@
+{% macro menu_lingua(_h, item_urlLang, mobile) %}
+	<a class="btn-lingua"></a>
+	{% if mobile == true %}
+		<ul class="mobile-lang">
+	{% else %}
+		<ul class="header-dropdown">
+	{% endif %}
+	{% if item_urlLang %}
+		{% set lang_it = item_urlLang['it'] %}
+		{% set lang_es = item_urlLang['es'] %}
+		{% set lang_de = item_urlLang['de'] %}
+		{% set lang_en = item_urlLang['en'] %}
+		{% set lang_fr = item_urlLang['fr'] %}
+	{% else %}
+		{% set lang_it = '/' %}
+		{% set lang_es = '/es' %}
+		{% set lang_de = '/de' %}
+		{% set lang_en = '/en' %}
+		{% set lang_fr = '/fr' %}
+	{% endif %}
+	<li><a {% if _h.lang == 'it' %}class="selected"{% endif %} href="{{ lang_it }}" title="Italiano">IT</a></li>
+	<li><a {% if _h.lang == 'es' %}class="selected"{% endif %} href="{{ lang_es }}" title="Español">ES</a></li>
+	<li><a {% if _h.lang == 'de' %}class="selected"{% endif %} href="{{ lang_de }}" title="Deutsch">DE</a></li>
+	<li><a {% if _h.lang == 'en' %}class="selected"{% endif %} href="{{ lang_en }}" title="English">EN</a></li>
+	<li><a {% if _h.lang == 'fr' %}class="selected"{% endif %} href="{{ lang_fr }}" title="Français">FR</a></li>
+	</ul>
+{% endmacro %}
+
+
+{% macro banner_header(listBanner, title_breadcrumbs) %}
+	{% if listBanner|length > 0 %}
+			</div>
+		</div>
+		<div class="breadcrumbs-banner" style="background-image: url('{{ listBanner[0].imageUrl('2000x175') }}')">
+			<div class="breadcrumbs clear">
+				{{ _self.breadcrumbs_home(_h) }}
+				{{ _self.breadcrumbs_separatore() }}
+				<a>{{ title_breadcrumbs }}</a>
+			</div>
+		</div>
+		<div id="middle" class="web content">
+			<div class="inner-middle content">
+	{% else %}
+	<div class="breadcrumbs clear">
+		{{ _self.breadcrumbs_home(_h) }}
+		{{ _self.breadcrumbs_separatore() }}
+		<a>{{ title_breadcrumbs }}</a>
+	</div>
+	{% endif %}
+{% endmacro %}
+
+<!--banner iniziale  del sito  (stive) -->
+{% macro banner(index, banner, dim, css, image_pos, dim_mobile) %}
+
+	{% if banner|length > 0 %}
+		{% if not(image_pos) %}
+			{% set image_pos = 'left' %}
+		{% endif %}
+		{% set banner = banner[index] %}
+		{% if banner %}
+		<div class="banner clear banner-{{ css }}">
+			<div class="banner-inner">
+				{% if image_pos == 'left' %}
+				<div class="banner-image banner-image-mobile-show">
+					{% if dim_mobile %}
+					<img alt="{{ banner.get('titolo', 'easydive') }}" src="{{ banner.imageUrl(dim) }}" class="banner-image-base">
+					<img alt="{{ banner.get('titolo', 'easydive') }}" src="{{ banner.imageUrl(dim_mobile) }}" class="banner-image-mobile">
+					{% else %}
+					<img alt="{{ banner.get('titolo', 'easydive') }}" src="{{ banner.imageUrl(dim) }}">
+					{% endif %}
+				</div>
+				{% else %}
+				<div class="banner-image banner-image-mobile banner-image-mobile-show">
+					<img alt="{{ banner.get('titolo', 'easydive') }}" src="{{ banner.imageUrl(dim) }}">
+				</div>
+				{% endif %}
+				<div class="banner-testo">
+				<div class="banner-testo-inner">
+				{% if banner.get('titolo') %}
+					<h1>{{ banner.get('titolo') }}</h1>
+				{% endif %}
+
+				{% if banner.get('sottotitolo') %}
+					<h3>{{ banner.get('sottotitolo') }}</h3>
+				{% endif %}
+				{% if banner.get('descrizione') %}<!--banner 2 del sito perche easydive-->
+					<p>{{ banner.get('descrizione') }}</p>
+				{% endif %}
+				{% if banner.get('bottone') %}
+					<a class="btn btn-white" href="{{ banner.url }}">
+						<label class="btn-text">{{ banner.get('bottone') }}</label>
+						<span class="btn-icon">
+						  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 16">
+							  <path class="cls-1" d="M11.29.29c-.39.39-.39,1.02,0,1.41l5.29,5.29H1c-.55,0-1,.45-1,1,0,.55.45,1,1,1h15.59s-5.29,5.29-5.29,5.29c-.39.39-.39,1.02,0,1.41.39.39,1.02.39,1.41,0l7-7s.01-.02.02-.03c.08-.09.15-.18.2-.29,0,0,0,0,0,0,.05-.12.07-.24.07-.37,0,0,0,0,0-.01h0c0-.13-.03-.26-.07-.38-.05-.12-.12-.23-.22-.33L12.71.29c-.39-.39-1.02-.39-1.41,0Z"/>
+						  </svg>
+						</span>
+					</a>
+				{% endif %}
+				</div>
+				</div>
+				{% if image_pos == 'right' %}
+				<div class="banner-image">
+					<img alt="{{ banner.get('titolo', 'easydive') }}" src="{{ banner.imageUrl(dim) }}">
+				</div>
+				{% endif %}
+			</div>
+		</div>
+		{% endif %}
+	{% endif %}
+{% endmacro %}
+
+{% macro newsletter(_h) %}
+	{% from '_macro_base.html' import _newsletter %}
+	{{ _newsletter(_h) }}
+{% endmacro %}
+
+{% macro item_articolo_carrello_thanks(_h, elem) %}
+	{% set _lblw = _h.labels.get('website') %}
+	{% from '_macro_base.html' import _item_articolo_carrello_thanks %}
+	{{ _item_articolo_carrello_thanks(_h, elem, '100x100', true, true) }}
+			{% for a in elem.attr %}
+				{% if a.type == 'fotocamera' %}
+				<div class="label-simple"><em>{{ _lblw.fotocamera }}:</em> {{ a.pers }}</div>
+				{% elseif a.type == 'cellulare' %}
+				<div class="label-simple"><em>{{ _lblw.cellulare }}:</em> {{ a.pers }}</div>
+				{% elseif a.type == 'obiettivo' %}
+				<div class="label-simple"><em>{{ _lblw.obiettivo }}:</em> {{ a.pers }}</div>
+				{% endif %}
+			{% endfor %}
+		</div>
+	</div>
+</div>
+{% endmacro %}
+
+{% macro item_articolo_carrello_list(_h, elem) %}
+	{% set _lblw = _h.labels.get('website') %}
+	{% from '_macro_base.html' import _item_articolo_carrello_list %}
+	{{ _item_articolo_carrello_list(_h, elem, '100x100', true) }}
+		<!--{% for a in elem.attr %}
+			{% if a.type == 'fotocamera' %}
+			<div class="attributo"><em>{{ _lblw.fotocamera }}:</em> {{ a.pers }}</div>
+			{% elseif a.type == 'cellulare' %}
+			<div class="attributo"><em>{{ _lblw.cellulare }}:</em> {{ a.pers }}</div>
+			{% elseif a.type == 'obiettivo' %}
+			<div class="attributo"><em>{{ _lblw.obiettivo }}:</em> {{ a.pers }}</div>
+			{% endif %}
+		{% endfor %}-->
+</div>
+{% endmacro %}
+
+{% macro item_articolo_carrello_riepilogo(_h, elem) %}
+	{% set _lblw = _h.labels.get('website') %}
+	{% from '_macro_base.html' import _item_articolo_carrello_riepilogo %}
+	{{ _item_articolo_carrello_riepilogo(_h, elem, '100x100', true) }}
+			{% for a in elem.attr %}
+				{% if a.type == 'fotocamera' %}
+				<div class="label-simple"><em>{{ _lblw.fotocamera }}:</em> {{ a.pers }}</div>
+				{% elseif a.type == 'cellulare' %}
+				<div class="label-simple"><em>{{ _lblw.cellulare }}:</em> {{ a.pers }}</div>
+				{% elseif a.type == 'obiettivo' %}
+				<div class="label-simple"><em>{{ _lblw.obiettivo }}:</em> {{ a.pers }}</div>
+				{% endif %}
+			{% endfor %}
+</div>
+{% endmacro %}
+
+{% macro item_articolo_carrello(_h, elem) %}
+	{% set _lblw = _h.labels.get('website') %}
+	{% from '_macro_base.html' import _item_articolo_carrello %}
+	{{ _item_articolo_carrello(_h, elem, '100x100', true) }}
+			{% for a in elem.attr %}
+				{% if a.type == 'fotocamera' %}
+				<div class="label-simple"><em>{{ _lblw.fotocamera }}:</em> {{ a.pers }}</div>
+				{% elseif a.type == 'cellulare' %}
+				<div class="label-simple"><em>{{ _lblw.cellulare }}:</em> {{ a.pers }}</div>
+				{% elseif a.type == 'obiettivo' %}
+				<div class="label-simple"><em>{{ _lblw.obiettivo }}:</em> {{ a.pers }}</div>
+				{% endif %}
+			{% endfor %}
+		</div>
+	</div>
+{% endmacro %}
+
+{% macro item_articolo_checkout(_h, item) %}
+	{% set _lblw = _h.labels.get('website') %}
+	<div class="item item-autoload item-buy-wrapper">
+		<div class="item-inner item-buy-acquisto">
+			{% if item.isSconto %}
+			<span class="block-sale">
+				<span class="on-sale">-{{ item.sconto }}%</span>
+			</span>
+			{% endif %}
+			<div class="item-img">
+				<img src="/assets/void_image.png" class="placeholder" alt="Easydive" >
+				<img class="item-img-orig" src="{{ item.imageUrl('300x300') }}" alt="{{ item.imageAlt(item.get('nome')) }}" onload="image_articolo_loaded(this)" style="display: none;">
+			</div>
+			<div class="item-dettaglio">
+				<h3 class="item-name">
+					{{ item.get('nome') }}
+					{% if item.get('nome_simbolico') %}
+					<small>{{ item.get('nome_simbolico') }}</small>
+					{% endif %}
+				</h3>
+				<div class="item-action">
+					<input type="hidden" name="quantita" value="1" class="item-input-quantita">
+					<a class="item-buy button-buy" data-id="{{ item.id }}" href="javascript:void(0)" title="{{ _lbl.btn_acquista }} {{ item.get('nome') }}">
+						<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+							 viewBox="0 0 485.196 485.196"
+							 xml:space="preserve">
+								<polygon points="85.736,45.479 0,45.479 0,75.806 65.892,75.806 172.035,318.405 424.543,318.405 424.543,288.084
+									191.875,288.084 		"/>
+								<path d="M151.628,106.131l60.654,151.631h212.261l60.653-151.631H151.628z M404.05,227.435h-171.23l-36.396-90.978H440.42
+									L404.05,227.435z"/>
+								<path d="M227.443,348.737c-25.127,0-45.488,20.372-45.488,45.489c0,25.109,20.36,45.49,45.488,45.49
+									c25.109,0,45.476-20.381,45.476-45.49C272.919,369.109,252.552,348.737,227.443,348.737z M227.443,409.386
+									c-8.363,0-15.161-6.81-15.161-15.159c0-8.354,6.797-15.163,15.161-15.163c8.366,0,15.164,6.81,15.164,15.163
+									C242.606,402.576,235.809,409.386,227.443,409.386z"/>
+								<path d="M379.058,348.737c-25.113,0-45.49,20.372-45.49,45.489c0,25.109,20.377,45.49,45.49,45.49s45.485-20.381,45.485-45.49
+									C424.543,369.109,404.171,348.737,379.058,348.737z M379.058,409.386c-8.35,0-15.158-6.81-15.158-15.159
+									c0-8.354,6.809-15.163,15.158-15.163c8.345,0,15.163,6.81,15.163,15.163C394.221,402.576,387.412,409.386,379.058,409.386z"/>
+						</svg>
+						{{ _lblw.btn_aggiungi_carrello }}
+					</a>
+				</div>
+				<span class="item-price-wrapper">
+					<span class="item-price-inner">
+					{{ _self.item_price(_h, item) }}
+					</span>
+				</span>
+			</div>
+		</div>
+	</div>
+{% endmacro %}
+
+
+<!--cambiamento card-->
+{% macro item_articolo(_h, item) %}
+	{% set _lblw = _h.labels.get('website') %}
+	{% set _lbl = _h.labels.get('js') %}
+	<div class="item item-autoload item-buy-wrapper">
+		<div class="product-card item-inner item-buy-acquisto border-radius-16">
+			{% if item.isSconto %}
+			<span class="block-sale">
+				<span class="on-sale">-{{ item.sconto }}%</span>
+			</span>
+			{% endif %}
+			<div class="item-promozione" data-promozione="{{ item.countdownPromozione }}">
+				<span>{{ _lblw.tempo_residuo }}:</span>
+				<strong data-countdown="{{ item.countdownPromozione }}"></strong>
+			</div>
+			<a href="{{ item.url }}{% if _h.input('fotocamera_id') %}?fotocamera_id={{ _h.input('fotocamera_id') }}{% endif %}" class="item-img">
+				<img src="/assets/void_image.png" class="placeholder" alt="Easydive" >
+				<img class="item-img-orig" src="{{ item.imageUrl('300x300') }}" alt="{{ item.imageAlt(item.get('nome')) }}" onload="image_articolo_loaded(this)" style="display: none;">
+				<div class="item-buy-on-hover" data-id="{{ item.id }}"><div class="item-buy-on-hover-inner">{{ _lblw.btn_visualizza_dettaglio }}</div></div>
+			</a>
+			{% if item.get('garanzia') %}
+			<div class="garanzia-easydive">
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" fill="none" d="M0 0h24v24H0z"/><g fill-rule="evenodd" clip-rule="evenodd"><path d="M9 17l3-2.94c-.39-.04-.68-.06-1-.06-2.67 0-8 1.34-8 4v2h9l-3-3zm2-5c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4"/><path d="M15.47 20.5L12 17l1.4-1.41 2.07 2.08 5.13-5.17 1.4 1.41z"/></g></svg>
+				{{ item.get('garanzia') }}
+			</div>
+			{% endif %}
+			<div class="item-dettaglio">
+				<h3 class="item-name">
+					{{ item.get('nome') }}
+					{% if item.get('nome_simbolico') %}
+					<small>{{ item.get('nome_simbolico') }}</small>
+					{% endif %}
+				</h3>
+				<span class="item-price-wrapper">
+					<span class="item-price-inner">
+					{{ _self.item_price(_h, item) }}
+					</span>
+				</span>
+				<div class="item-action">
+					{% if _h.session.isAuth and _h.session.profile == 'guest' %}
+						<a class="action-add-preferiti btn-add-preferiti btn-preferiti" data-id="{{ item.id }}" href="javascript:void(0)" title="{{ _lblw.btn_aggiungi_preferiti }} {{ item.get('nome') }}">
+					{% else %}
+						<a class="btn-preferiti" href="{{ _h.url('account/login') }}" title="{{ _lblw.btn_aggiungi_preferiti }} {{ item.get('nome') }}">
+					{% endif %}
+							<svg width="27px" height="25px" viewBox="0 0 27 25" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+								<g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+									<g id="Menu-/-normal" transform="translate(-1419.000000, -57.000000)" stroke="#000000" stroke-width="1.615">
+										<path d="M1432.5,60.7683643 C1433.01666,60.3076942 1433.50373,59.8040601 1434.05648,59.3941114 C1435.48149,58.3372554 1437.07279,57.8459734 1438.82184,58.0495156 C1441.4714,58.357723 1443.35597,59.8146817 1444.38865,62.3351798 C1445.35798,64.7009476 1445.12474,67.0498281 1444.04083,69.3251924 C1443.19091,71.1094536 1442.02211,72.6645733 1440.70061,74.1005871 C1438.3155,76.6922742 1435.65045,78.9409649 1432.76087,80.9121795 C1432.58704,81.030808 1432.43857,81.0280034 1432.26446,80.9113441 C1429.12116,78.8050314 1426.27729,76.3348371 1423.75955,73.4744457 C1422.52578,72.0727435 1421.44285,70.5595138 1420.7324,68.7960781 C1420.25224,67.6043031 1419.97769,66.3707574 1420.00142,65.0722883 C1420.05056,62.383753 1421.76033,59.5687722 1424.04669,58.6186699 C1426.6185,57.5497601 1429.07902,57.8524777 1431.291,59.6319055 C1431.73101,59.9858815 1432.11939,60.4077647 1432.5,60.7683643 Z" id="Stroke-1"></path>
+									</g>
+								</g>
+							</svg>
+						</a>
+
+					{% if item.isAttributoTemplate() or item.get('tipo_custodia', '') != '' or not(item.isAcquistabile()) %}
+						<a class="button-buy" href="{{ item.url }}{% if _h.input('fotocamera_id') %}?fotocamera_id={{ _h.input('fotocamera_id') }}{% endif %}" title="{{ _lbl.btn_configura_acquista }} {{ item.get('nome') }}">
+							<label>{{ _lbl.btn_configura_acquista }}</label>
+					{% else %}
+						<input type="hidden" name="quantita" value="1" class="item-input-quantita">
+						<a class="item-buy button-buy" data-id="{{ item.id }}" href="javascript:void(0)" title="{{ _lbl.btn_acquista }} {{ item.get('nome') }}">
+
+							<label>{{ _lbl.btn_acquista }}</label>
+					{% endif %}
+							<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+								 viewBox="0 0 485.196 485.196"
+								 xml:space="preserve">
+									<polygon points="85.736,45.479 0,45.479 0,75.806 65.892,75.806 172.035,318.405 424.543,318.405 424.543,288.084 
+										191.875,288.084 		"/>
+									<path d="M151.628,106.131l60.654,151.631h212.261l60.653-151.631H151.628z M404.05,227.435h-171.23l-36.396-90.978H440.42
+										L404.05,227.435z"/>
+									<path d="M227.443,348.737c-25.127,0-45.488,20.372-45.488,45.489c0,25.109,20.36,45.49,45.488,45.49
+										c25.109,0,45.476-20.381,45.476-45.49C272.919,369.109,252.552,348.737,227.443,348.737z M227.443,409.386
+										c-8.363,0-15.161-6.81-15.161-15.159c0-8.354,6.797-15.163,15.161-15.163c8.366,0,15.164,6.81,15.164,15.163
+										C242.606,402.576,235.809,409.386,227.443,409.386z"/>
+									<path d="M379.058,348.737c-25.113,0-45.49,20.372-45.49,45.489c0,25.109,20.377,45.49,45.49,45.49s45.485-20.381,45.485-45.49
+										C424.543,369.109,404.171,348.737,379.058,348.737z M379.058,409.386c-8.35,0-15.158-6.81-15.158-15.159
+										c0-8.354,6.809-15.163,15.158-15.163c8.345,0,15.163,6.81,15.163,15.163C394.221,402.576,387.412,409.386,379.058,409.386z"/>
+							</svg>
+						</a>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endmacro %}
+
+<!--nuove card  (stive)-->
+{% macro item_articolo_anteprima(_h, item) %}
+	{% set _lblw = _h.labels.get('website') %}
+	<div class="listino-card">
+        <div class="card">
+          <img src="{{ item.imageUrl('300x300') }}" alt="{{ item.imageAlt(item.get('nome')) }}" onload="image_articolo_loaded(this)" />
+          <strong>{{ item.imageAlt(item.get('nome')) }}</strong>
+        </div>
+	</div>
+{% endmacro %}
+
+
+<!--stive  modifica banner-->
+<!--trovare il modo di prendere le stringe da menager -->
+{% macro banner_immersione(_h, item) %}
+{% set _lblw = _h.labels.get('website') %}
+<div class="banner_big_card">
+	<div class="content">
+	  <p>Illuminatori</p>
+	  <h1>TUTTA LA LUCE DI CUI HAI BISOGNO</h1>
+	  <p>
+		Hai bisogno di luce per esplorare e documentare gli abissi. Una luce
+		potente, densa e profonda. Gli abissi non sono più così bui con i
+		nostri illuminatori. Illumini in modo diffuso la scena per
+		valorizzare al meglio i colori.
+	  </p>
+	  <button class="button_big_card">APPROFONDISCI</button> <!--Non prende le label-->
+	</div>
+  </div>
+  <div class="right-column">
+	<div class="banner_big_mid">
+	  <div class="content">
+		<p>Sphera 360°</p>
+		<h1>CATTURA IMMAGINI E VIDEO IN ALTA DEFINIZIONE A 360°</h1>
+		<p>Controllo totale con l'APP anche in immersione.</p>
+	  </div>
+	</div>
+	<div class="container">
+	  <div class="card_immersione">
+
+		<img class="item-img-orig" src="{{ item.imageUrl('300x300') }}" alt="{{ item.imageAlt(item.get('nome')) }}" onload="image_articolo_loaded(this)" style="display: none;">
+	  </div>
+	  <div class="card_immersione">
+
+		  	<img class="item-img-orig" src="{{ item.imageUrl('300x300') }}" alt="{{ item.imageAlt(item.get('nome')) }}" onload="image_articolo_loaded(this)" style="display: none;">
+	  </div>
+  </div>
+  </div>
+</div>
+
+
+{% endmacro %}
+
+<!--stive  modifica banner-->
+
+{% macro banner_puzzle_grande(_lblw, list) %}
+	{% set _lblw = _h.labels.get('website') %}
+	{% if list|length > 0 %}
+		{% for item in list %}
+			<div class="banner_big_card border-radius-16 txt-white" style="background: #ebebeb url('{{ item.imageUrl('1100x1100') }}') center center/cover no-repeat">
+				<div class="banner_card_content ">
+					{% if item.get('titolo') %}
+						<h3>{{ item.get('sottotitolo') }}</h3>
+						<h2>{{ item.get('titolo') }}</h2>
+					{% endif %}
+					{% if item.get('descrizione') %}
+						<div class="desc">{{ item.get('descrizione') }}</div>
+					{% endif %}
+					{% if item.get('bottone') %}
+						<a href="{{ item.url }}" title="{{ item.get('titolo') }}" class="btn{% if item.imageUrl('1100x1100') %} btn-white{% else %} btn-black{% endif %}">
+							<label class="btn-text">{{ item.get('bottone') }}</label>
+							<span class="btn-icon">
+							  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 16">
+								  <path class="cls-1"
+										d="M11.29.29c-.39.39-.39,1.02,0,1.41l5.29,5.29H1c-.55,0-1,.45-1,1,0,.55.45,1,1,1h15.59s-5.29,5.29-5.29,5.29c-.39.39-.39,1.02,0,1.41.39.39,1.02.39,1.41,0l7-7s.01-.02.02-.03c.08-.09.15-.18.2-.29,0,0,0,0,0,0,.05-.12.07-.24.07-.37,0,0,0,0,0-.01h0c0-.13-.03-.26-.07-.38-.05-.12-.12-.23-.22-.33L12.71.29c-.39-.39-1.02-.39-1.41,0Z"/>
+							  </svg>
+							</span>
+						</a>
+					{% endif %}
+				</div>
+			</div>
+		{% endfor %}
+	{% endif %}
+{% endmacro %}
+
+{% macro banner_puzzle_medio(_lblw, list) %}
+	{% set _lblw = _h.labels.get('website') %}
+	{% if list|length > 0 %}
+		{% for item in list %}
+			<div class="banner_card_big_mid border-radius-16 txt-white" style="background: #202020 url('{{ item.imageUrl('1100x550') }}') center center/cover no-repeat">
+				<div class="banner_card_content">
+					{% if item.get('titolo') %}
+					<h3>{{ item.get('sottotitolo') }}</h3>
+					<h2>{{ item.get('titolo') }}</h2>
+					{% endif %}
+					{% if item.get('descrizione') %}
+						<div class="desc">{{ item.get('descrizione') }}</div>
+					{% endif %}
+					{% if item.get('bottone') %}
+						<a href="{{ item.url }}" title="{{ item.get('titolo') }}" class="btn btn-white">
+							<label class="btn-text">{{ item.get('bottone') }}</label>
+							<span class="btn-icon">
+						  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 16">
+							  <path class="cls-1"
+									d="M11.29.29c-.39.39-.39,1.02,0,1.41l5.29,5.29H1c-.55,0-1,.45-1,1,0,.55.45,1,1,1h15.59s-5.29,5.29-5.29,5.29c-.39.39-.39,1.02,0,1.41.39.39,1.02.39,1.41,0l7-7s.01-.02.02-.03c.08-.09.15-.18.2-.29,0,0,0,0,0,0,.05-.12.07-.24.07-.37,0,0,0,0,0-.01h0c0-.13-.03-.26-.07-.38-.05-.12-.12-.23-.22-.33L12.71.29c-.39-.39-1.02-.39-1.41,0Z"/>
+						  </svg>
+						</span>
+						</a>
+					{% endif %}
+				</div>
+			</div>
+		{% endfor %}
+	{% endif %}
+{% endmacro %}
+
+{% macro banner_puzzle_piccolo(_lblw, list) %}
+	{% set _lblw = _h.labels.get('website') %}
+	{% if list|length > 0 %}
+		{% for item in list %}
+			<div class="col-md-6">
+				<div class="border-radius-16 banner_card_small">
+					<img class="item-img-orig" src="{{ item.imageUrl('550x550') }}" alt="{{ item.imageAlt(item.get('nome')) }}">
+				</div>
+			</div>
+		{% endfor %}
+	{% endif %}
+{% endmacro %}
+
+{% macro banner_dna_grande(_lblw, list) %}
+	{% set _lblw = _h.labels.get('website') %}
+	{% if list|length > 0 %}
+		{% for item in list %}
+			<div class="banner_big_card border-radius-16 txt-black" style="background: #ebebeb">
+				<div class="banner_card_content">
+					{% if item.get('titolo') %}
+						<h3>{{ item.get('sottotitolo') }}</h3>
+						<h2>{{ item.get('titolo') }}</h2>
+					{% endif %}
+					{% if item.get('descrizione') %}
+						<div class="desc">{{ item.get('descrizione') }}</div>
+					{% endif %}
+					{% if item.get('bottone') %}
+						<a href="{{ item.url }}" title="{{ item.get('titolo') }}" class="btn btn-black">
+							<label class="btn-text">{{ item.get('bottone') }}</label>
+							<span class="btn-icon">
+							  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 16">
+								  <path class="cls-1"
+										d="M11.29.29c-.39.39-.39,1.02,0,1.41l5.29,5.29H1c-.55,0-1,.45-1,1,0,.55.45,1,1,1h15.59s-5.29,5.29-5.29,5.29c-.39.39-.39,1.02,0,1.41.39.39,1.02.39,1.41,0l7-7s.01-.02.02-.03c.08-.09.15-.18.2-.29,0,0,0,0,0,0,.05-.12.07-.24.07-.37,0,0,0,0,0-.01h0c0-.13-.03-.26-.07-.38-.05-.12-.12-.23-.22-.33L12.71.29c-.39-.39-1.02-.39-1.41,0Z"/>
+							  </svg>
+							</span>
+						</a>
+					{% endif %}
+				</div>
+			</div>
+		{% endfor %}
+	{% endif %}
+{% endmacro %}
+
+{% macro banner_dna_medio(_lblw, list) %}
+	{% set _lblw = _h.labels.get('website') %}
+	{% if list|length > 0 %}
+		{% for item in list %}
+			<div class="banner_card_big_mid border-radius-16 txt-white" style="background: #202020 url('{{ item.imageUrl('1100x550') }}') center center/cover no-repeat">
+				<div class="banner_card_content">
+					{% if item.get('titolo') %}
+						<h3>{{ item.get('sottotitolo') }}</h3>
+						<h2>{{ item.get('titolo') }}</h2>
+					{% endif %}
+					{% if item.get('descrizione') %}
+						<div class="desc">{{ item.get('descrizione') }}</div>
+					{% endif %}
+					{% if item.get('bottone') %}
+						<a href="{{ item.url }}" title="{{ item.get('titolo') }}" class="btn btn-white">
+							<label class="btn-text">{{ item.get('bottone') }}</label>
+							<span class="btn-icon">
+							  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 16">
+								  <path class="cls-1"
+										d="M11.29.29c-.39.39-.39,1.02,0,1.41l5.29,5.29H1c-.55,0-1,.45-1,1,0,.55.45,1,1,1h15.59s-5.29,5.29-5.29,5.29c-.39.39-.39,1.02,0,1.41.39.39,1.02.39,1.41,0l7-7s.01-.02.02-.03c.08-.09.15-.18.2-.29,0,0,0,0,0,0,.05-.12.07-.24.07-.37,0,0,0,0,0-.01h0c0-.13-.03-.26-.07-.38-.05-.12-.12-.23-.22-.33L12.71.29c-.39-.39-1.02-.39-1.41,0Z"/>
+							  </svg>
+							</span>
+						</a>
+					{% endif %}
+				</div>
+			</div>
+		{% endfor %}
+	{% endif %}
+{% endmacro %}
+
+{% macro banner_dna_numeri(_lblw, list) %}
+	{% set _lblw = _h.labels.get('website') %}
+	{% if list|length > 0 %}
+		{% for item in list %}
+			<div class="col-md-6">
+				<div class="banner_card_small background-black txt-white border-radius-16 p-2 p-md-4">
+					<h3>{{ item.get('titolo') }}</h3>
+					<strong class="number">{{ item.get('sottotitolo') }}</strong>
+					{% if item.get('descrizione') %}
+						<div class="desc">{{ item.get('descrizione') }}</div>
+					{% endif %}
+				</div>
+			</div>
+		{% endfor %}
+	{% endif %}
+{% endmacro %}
+
+{% macro banner_item(_h, item)%}
+  {% set _lblw = _h.labels.get('website') %}
+  <div class="sub-card sub-first-card">
+	<h4>Ambassador e testimonial</h4>
+	<h2>Nella nostra storia<br> le
+		persone sono le<br> protagoniste</h2>
+	<p>
+	  Testo dell'immagine Nella nostra storia le persone sono le
+	  protagoniste Condividiamo la stessa visione grazie a obiettivi<br>comuni.
+	  Collaboriamo con i migliori subacquei, italiani <br>e nel mondo, veri
+	  talenti che ispirano noi e i nostri<br> clienti. Tante storie e percorsi
+	  diversi, che hanno in <br>comune il desiderio di esplorare e documentare
+	  gli <br>abissi.
+	</p>
+	<button>Approfondisci</button>
+  </div>
+
+  <!-- Nuovo div -->
+  <div class="sub-card-div-second-third">
+	<div class="sub-card  sub-second-card">
+		<div class="sub-card-text">
+			<h5>lorem ipsum</h5>
+			<h2>Ambassador</h2>
+			<p>
+			Collaboriamo con i migliori subacquei, italiani e nel mondo, veri
+			talenti che ispirano noi e i nostri clienti. Tante storie e percorsi
+			diversi, che hanno in comune il desiderio di esplorare e documentare
+			gli abissi.
+			</p>
+		</div>
+	</div>
+	<div class="sub-card sub-third-card">
+		<div class="sub-card-text">
+			<h5>lorem ipsum</h5>
+			<h2>Testimonial</h2>
+			<p>
+			Talenti che ispirano noi e i nostri clienti. Tante storie e percorsi
+			diversi, che hanno in comune il desiderio di esplorare e documentare
+			gli abissi.
+			</p>
+		</div>
+	</div>
+  </div>
+{% endmacro %}
+
+{% macro item_price(_h, item, hide_item_buy) %}
+	{% set _lblw = _h.labels.get('website') %}
+	<span class="price-wrapper">
+		<span class="price item-buy-price">{{ item.prezzo('e', false) }} <small>{{ _lblw.iva_esclusa }}</small></span>
+		<span class="price-old">
+		{% if item.isSconto %}
+			{{ item.prezzoOriginale('e', false) }} <small>{{ _lblw.iva_esclusa }}</small>
+		{% endif %}
+		</span>
+	</span>
+	<span class="price-no-iva-wrapper">
+		<span class="price-no-iva">{{ item.prezzo('e', true) }} {{ _lblw.iva_inclusa }}</span>
+		<span class="price-old-no-iva">
+		{% if item.isSconto %}
+			{{ item.prezzoOriginale('e', true) }} {{ _lblw.iva_inclusa }}
+		{% endif %}
+		</span>
+	</span>
+{% endmacro %}
+
+{% macro breadcrumbs_home(_h) %}
+<a href="/{% if _h.lang != 'it'%}{{_h.lang}}{% endif %}" class="home" title="shop">home</a>
+{% endmacro %}
+
+{% macro breadcrumbs_separatore(_h) %}
+<span>/</span>
+{% endmacro %}
+
+
+{% macro item_blog(_h, item) %}
+	{% set _lblw = _h.labels.get('website') %}
+	<a href="{{ item.url }}" class="item-blog item-autoload">
+		<div class="item-blog-inner">
+			<img src="{{ item.imageUrl('430x260') }}" alt="{{ item.get('titolo') }}">
+			<div class="item-blog-titolo">
+			{% if item.get('data_evento_al') %}
+			<p >{% if item.get('data_evento_al') %}{{ _lblw.dal }}{% else %}{{ _lblw.il }}{% endif %} {{ item.get('data_evento_dal') }}{% if item.get('data_evento_al') %} {{ _lblw.al }} {{ item.get('data_evento_al') }}{% endif %}</p>
+			{% elseif item.get('descrizione_breve') %}
+			<p class=" item-blog-text-p">{{ item.get('descrizione_breve') }}</p>
+			{% endif %}
+		
+			</div>	
+		</div>
+	</a>
+{% endmacro %}
+
+{% macro item_ambassador(_h, item, mapNazione) %}
+	{% set _lblw = _h.labels.get('website') %}
+	<a href="{{ item.url }}" class="item-ambassador" title="{{ item.get('nome') }}">
+		<div class="item-blog-inner">
+			<img src="{{ item.imageUrl('430x260') }}" alt="{{ item.get('nome') }}">
+			{% set nazione = mapNazione[item.get('nazione')] %}
+			<h3 style="background-image: url('/assets/website/img/bandiere/{{ nazione.get('codice_iso')|lower }}.png'); ">{{ item.get('nome') }}</h3>
+		</div>
+	</a>
+{% endmacro %}
+
+{% macro banner_blog(_h, item, mapNazione)%}
+		<div>
+			<a href="{{ item.url }}" class="item-blog-evidenza item-autoload">
+				<div class="item-blog-inner">
+					<h3>{{ item.get('titolo') }}</h3>
+					<img src="{{ item.imageUrl('430x260') }}" alt="{{ item.get('titolo') }}">
+					<div class="item-blog-titolo">
+					{% if item.get('data_evento_al') %}
+					<p >{% if item.get('data_evento_al') %}{{ _lblw.dal }}{% else %}{{ _lblw.il }}{% endif %} {{ item.get('data_evento_dal') }}{% if item.get('data_evento_al') %} {{ _lblw.al }} {{ item.get('data_evento_al') }}{% endif %}</p>
+					{% elseif item.get('descrizione_breve') %}
+					<p class=" item-blog-text-p">{{ item.get('descrizione_breve') }}</p>
+					{% endif %}
+					<div class="item-blog-details clear">
+						<span>{{ _lblw.leggi_di_piu }}</span>
+					</div>
+					</div>
+					
+				</div>
+			</a>
+		</div>
+{% endmacro %}
+
+{% macro item_easydivepoint(_h, item) %}
+	{% set _lblw = _h.labels.get('website') %}
+	<div class="item-blog item-autoload">
+		<div class="item-blog-inner">
+			<img src="{{ item.imageUrl('430x260') }}" alt="{{ item.get('nome') }}">
+			<div class="item-blog-titolo">
+			<h3>{{ item.get('nome') }}</h3>
+			</div>
+			<div class="item-blog-details clear">
+				<a href="{{ item.url }}" title="{{ item.get('nome') }}">{{ _lblw.leggi_di_piu }}</a>
+			</div>
+		</div>
+	</div>
+{% endmacro %}
+
+{% macro item_articolo_carrello_pagamento(_h, elem) %}
+	{% from '_macro_base.html' import _item_articolo_carrello_pagamento %}
+	{{ _item_articolo_carrello_pagamento(_h, elem, '100x100') }}
+{% endmacro %}

@@ -1,0 +1,14 @@
+{
+	"put": {
+		"view": [
+			{"mymetainfo": true}
+		]
+	},
+	"on:": [
+		"item-blog",
+		{"name": "list-item-blog", "params": {"number": 4, "list": "listBlogUltimi"}},
+		{"name": "item-tipologia-articolo", "params": {"item": "collezione", "type": "categoria_blog", "first_level": false}},
+		{"name": "list-hreflang", "params": {"tipo": "blog"}}
+	],
+	"on:view": "item_blog"
+}

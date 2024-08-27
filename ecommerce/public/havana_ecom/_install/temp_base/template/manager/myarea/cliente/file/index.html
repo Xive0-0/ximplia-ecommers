@@ -1,0 +1,19 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeaderToolbar(_h, 'File e documenti: ' ~ item.get('nome') ~ ' ' ~ item.get('cognome'), true) }}
+	<div class="h-nav-button-wrapper">
+		<a href="javascript:void(0);" class="h-nav-button h-action-popup-menu">
+			<img src="/assets/manager/havana-js/img/icon/ico-new.svg" align="top" />
+			<span>Nuovo</span>
+		</a>
+		<div class="h-popup-content h-popup-menu">
+			<a href="javascript:void(0);" class="h-action-window h-action-close-popup-menu" data-action='{"window": {"type": "layer", "overlay": true, "params": {"id_cliente":{{ item.id }}}, "width": 500, "height": 500, "url": "{{ _h.url('manager/myarea/cliente/file/edit') }}"}}'>File</a>
+			<a href="javascript:void(0);" class="h-action-window h-action-close-popup-menu" data-action='{"window": {"type": "layer", "overlay": true, "params": {"id_cliente":{{ item.id }}}, "width": 500, "height": 500, "url": "{{ _h.url('manager/myarea/cliente/file/edit-link') }}"}}'>Link a file</a>
+		</div>
+	</div>	
+
+	{{ mc.navButtonLang(_h, 'modifica', 'update', 'click', 'h-action-selected-open-window', '{"select": {"from":"#dati-content", "check": 1, "errorMessage": "Selezionare una voce"}, "window": {"type": "layer", "url": "' ~ _h.url('manager/myarea/cliente/file/edit') ~ '", "width": 500, "height": 500, "overlay": true, "params": {"id_cliente":' ~ item.id ~ '}}}') }}
+	{{ mc.navButton(_h, 'elimina', 'delete', 'click', 'h-action-selected-execute', '{"select": {"from":"#dati-content", "check": 0, "errorMessage": "Selezionare almeno una voce"}, "confirm": "Eliminare la voce selezionata?", "params": {"id_cliente":' ~ item.id ~ '}, "url": "' ~ _h.url('manager/myarea/cliente/file/delete') ~ '", "reload": ["#dati-content"]}') }}
+{{ mc.slideBoxHeaderToolbarEnd() }}
+
+{{ mc.box_footer(_h, 'dati', 'cliente/file', list, '{"id": ' ~ item.id ~ '}') }}

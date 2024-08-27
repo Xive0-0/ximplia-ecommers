@@ -1,0 +1,19 @@
+{% set _lbl = _h.labels('email', lang) %}
+{% set _lblc = _h.labels('checkout', lang) %}
+{% import _h.template('_macro.html') as mc %}
+
+<div style="{{ mc.margin() }}">
+	<h2 style="{{ mc.style_h2() }}">{{ _lbl.gift_card_gentile }} {{ destinatario_nome }}</h2>
+	<div style="{{ mc.style_fontBase() }}">{{ _lbl.gift_card_destinatario_descrizione }} <strong>{{ mittente_nome }}</strong></div>
+</div>	
+{% if destinatario_messaggio %}
+<div style="{{ mc.margin() }}">
+	<div style="{{ mc.style_fontBase() }}">{{ destinatario_messaggio }}</div>
+</div>	
+{% endif %}
+<br>
+<p style="{{ mc.style_fontBase() }}">{{ _lblc.valore_gift_card }} <strong style="{{ mc.style_fontTitolo() }};{{ mc.style_link() }};">{{ _h.util.valuta(item.item.valore_gift, currency) }}</strong></p>
+<p style="{{ mc.style_fontBase() }}">{{ _lbl.codice_gift_card }}</p>
+<p style="{{ mc.style_fontTitolo() }};{{ mc.style_link() }};text-align:center"><strong>{{ codice_gift }}</strong></p>
+<br>
+<p style="{{ mc.style_fontBase() }}">{{ _lbl.descrizione_codice_gift_card }}</p>

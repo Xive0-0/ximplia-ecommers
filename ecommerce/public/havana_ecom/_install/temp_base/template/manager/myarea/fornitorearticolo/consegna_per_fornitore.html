@@ -1,0 +1,15 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Consegna per fornitore') }}
+<div class="field-line field-400">
+	<label>Fornitore<span>*</span>:</label>
+	<select name="id_fornitore" class="valida-required field">
+		<option></option>
+	{% for i in listFornitore %}
+		<option value="{{ i.id }}">{{ i.nome }}</option>
+	{% endfor %}	
+	</select> 
+</div>
+
+{{ mc.labelCampiObbligatori() }}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/fornitorearticolo/ex-consegna-per-fornitore'), '"reload": ["#h-layout-center-content"]') }}	

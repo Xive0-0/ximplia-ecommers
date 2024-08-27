@@ -1,0 +1,41 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+<div class="h-layout-content-wrapper h-layout-show-topbar h-layout-show-bottombar">
+	<div class="h-layout-topbar">
+		<div class="h-layout-content-wrapper">
+			Filtra
+		</div>
+	</div>
+	<form>
+	<div class="h-layout-content">
+		<fieldset>
+			<p class="field-line field-200">
+				<label>Cerca per parola chiave:</label>
+				<input type="text" name="query" class="field" maxlength="50">
+			</p>
+			<p class="field-line field-line-left field-80">
+				<label>Inserito dal:</label>
+				<input type="text" name="iscritto_data_dal" class="field valida-datasimple input-datepicker" maxlength="10">
+			</p>
+			<p class="field-line field-80">
+				<label>Inserito al:</label>
+				<input type="text" name="iscritto_data_da" class="field valida-datasimple input-datepicker" maxlength="10">
+			</p>
+
+			<p class="field-line field-line-left field-80">
+				<label>Ultimo accesso dal:</label>
+				<input type="text" name="accesso_data_dal" class="field valida-datasimple input-datepicker" maxlength="10">
+			</p>
+			<p class="field-line field-80">
+				<label>Ultimo accesso al:</label>
+				<input type="text" name="accesso_data_da" class="field valida-datasimple input-datepicker" maxlength="10">
+			</p>
+		</fieldset>
+	</div>
+	<div class="h-layout-bottombar">
+		<div class="h-layout-content-wrapper">
+			<a href="javascript:void(0);" class="h-bar-button h-bar-button-blu h-action-filter" data-action='{"load": "#h-layout-center-content", "reset": "#azzera-filtro"}'>Filtra</a>
+		</div>
+	</div>
+	</form>
+</div>

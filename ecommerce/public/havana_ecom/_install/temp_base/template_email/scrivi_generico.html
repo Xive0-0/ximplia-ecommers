@@ -1,0 +1,14 @@
+{% set _lbl = _h.labels('email', lang) %}
+{% import _h.template('_macro.html') as mc %}
+
+<p style="{{ mc.style_fontBase() }}">{{ oggetto }}</p>
+
+{{ mc.tableHeader() }}
+	{% for field in list_fields %}
+		{% if field.value %}
+			{{ mc.row(field.label, field.value) }}
+		{% endif %}
+	{% endfor %}
+{{ mc.tableFooter() }}
+
+

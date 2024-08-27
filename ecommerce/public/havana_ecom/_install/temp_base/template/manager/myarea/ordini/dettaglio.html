@@ -1,0 +1,121 @@
+{% import _h.template('manager/_macro.html') as mc %}
+{% import _h.template('manager/_my_macro.html') as mymc %}
+
+{% if item %}
+	{{ mc.slideBoxHeaderToolbar(_h, 'ordine: ' ~ item.get('codice'), true) }}
+	{% if _h.session.params.user.accesso >= 5 or (_h.config('gestione_azienda_account_full', false) and _h.session.params.user.accesso == 3) %}
+		{% if not(item.isOrdineCarrelloDaCompletare()) %}
+		{{ mc.navButton(_h, 'stato ordine', 'confirm', 'click', 'h-action-window', '{"type": "layer", "url": "' ~ _h.url('manager/myarea/ordini/stato-ordine') ~ '", "overlay": true, "width": 400, "height": 400, "params": {"id": ' ~ item.id ~ '}}') }}
+		{{ mc.navButton(_h, 'stato pagamento', 'euro', 'click', 'h-action-window', '{"type": "layer", "url": "' ~ _h.url('manager/myarea/ordini/stato-pagamento') ~ '", "overlay": true, "width": 500, "height": 400, "params": {"id": ' ~ item.id ~ '}}') }}
+		{{ mc.navButton(_h, 'stato spedizione', 'car', 'click', 'h-action-window', '{"type": "layer", "url": "' ~ _h.url('manager/myarea/ordini/stato-spedizione') ~ '", "overlay": true, "width": 500, "height": 400, "params": {"id": ' ~ item.id ~ '}}') }}
+		{% endif %}
+		<div class="h-nav-button-wrapper">
+			<a href="javascript:void(0);" class="h-nav-button h-action-popup-menu h-action-alttext" data-alttext="invio e-mail">
+				<img src="/assets/manager/havana-js/img/icon/ico-fascetta.svg" align="top" />
+				<span>Rimborso</span>
+			</a>
+			<div class="h-popup-content h-popup-menu">
+				<a data-action='{"type": "layer", "url": "{{ _h.url('manager/myarea/ordini/rimborso/edit-gift') }}", "overlay": true, "width": 500, "height": 500, "params": {"id": {{ item.id }}}}' class="h-action-window h-action-close-popup-menu" href="javascript:void(0);">Con codice Gift</a>
+				{% if item.get('provider_transaction_payment_code') %}
+					{% if item.get('circuito_pagamento') == 'stripe' %}
+					<a data-action='{"type": "layer", "url": "{{ _h.url('manager/myarea/ordini/rimborso/edit-cc-stripe') }}", "overlay": true, "width": 500, "height": 500, "params": {"id": {{ item.id }}}}' class="h-action-window h-action-close-popup-menu" href="javascript:void(0);">Con carta di credito (Stripe)</a>
+					{% elseif item.get('circuito_pagamento') == 'paypal' %}
+					<a data-action='{"type": "layer", "url": "{{ _h.url('manager/myarea/ordini/rimborso/edit-paypal') }}", "overlay": true, "width": 500, "height": 500, "params": {"id": {{ item.id }}}}' class="h-action-window h-action-close-popup-menu" href="javascript:void(0);">Con PayPal</a>
+					{% endif %}
+				{% endif %}
+			</div>
+		</div>
+		
+		{% if listEMailPredefinite|length == 0 %}
+		{{ mc.navButton(_h, 'scrivi', 'message', 'click', 'h-action-window', '{"type": "layer", "url": "' ~ _h.url('manager/myarea/ordini/scrivi') ~ '", "overlay": true, "width": 550, "height": 600, "params": {"id": ' ~ item.id ~ '}}') }}
+		{% else %}
+		<div class="h-nav-button-wrapper">
+			<a href="javascript:void(0);" class="h-nav-button h-action-popup-menu h-action-alttext" data-alttext="invio e-mail">
+				<img src="/assets/manager/havana-js/img/icon/ico-message.svg" align="top" />
+				<span>Comunicazioni</span>
+			</a>
+			<div class="h-popup-content h-popup-menu">
+				<a data-action='{"type": "layer", "url": "{{ _h.url('manager/myarea/ordini/scrivi') }}", "overlay": true, "width": 500, "height": 300, "params": {"id": {{ item.id }}}}' class="h-action-window h-action-close-popup-menu" href="javascript:void(0);">E-Mail base</a>
+			{% if not(item.isOrdineCarrelloDaCompletare()) %}
+				<a data-action='{"type": "layer", "url": "{{ _h.url('manager/myarea/ordini/invia-fattura') }}", "overlay": true, "width": 500, "height": 300, "params": {"id": {{ item.id }}}}' class="h-action-window h-action-close-popup-menu" href="javascript:void(0);">Invia Fattura/Ricevuta</a>
+			{% endif %}
+			{% for email in listEMailPredefinite %}
+				<a href="javascript:void(0);" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"confirm": "Inviare comunicazione {{ email.get('nome') }}?", "url": "{{ _h.url('manager/myarea/ordini/ex-invia-email-predefinita') }}", "params": {"e_mail": {{ email.id }}, "id": {{ item.id }}}}'>invia comunicazione: {{ email.get('nome') }}</a>
+			{% endfor %}
+			</div>
+		</div>
+		{% endif %}
+		<div class="h-nav-button-wrapper" style="width: 2px; overflow: hidden;"><div class="h-nav-separator"></div></div>
+		
+		<div class="h-nav-button-wrapper">
+			<a href="javascript:void(0);" class="h-nav-button h-action-popup-menu h-action-alttext" data-alttext="invio e-mail">
+				<img src="/assets/manager/havana-js/img/icon/ico-reload.svg" align="top" />
+				<span>Comunicaz. per info</span>
+			</a>
+			<div class="h-popup-content h-popup-menu">
+				{% if item.isOrdineCarrelloDaCompletare() %}
+				<a href="javascript:void(0);" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"confirm": "Inviare comunicazione con il link per completare i dati ed effettuare il pagamento?", "url": "{{ _h.url('manager/myarea/ordini/ex-email-esegui-pagamento') }}", "params": {"id": {{ item.id }}}}'>Invia comunicazione link completa dati e paga</a>
+				<a href="javascript:void(0);" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"confirm": "Convalida ordine?", "url": "{{ _h.url('manager/myarea/ordini/ex-convalida-ordine') }}", "reload": ["#h-layout-center-content", "#dettaglio-content"], "params": {"id": {{ item.id }}}}'>Convalida ordine, rimuovi stato "carrello"</a>
+				{% else %}
+				<a href="javascript:void(0);" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"confirm": "Inviare comunicazione al cliente con riepilogo ordine?", "url": "{{ _h.url('manager/myarea/ordini/ex-invia-email-riepilogo') }}", "params": {"id": {{ item.id }}}}'>Invia comunicazione riepilogo al cliente</a>
+				<a href="javascript:void(0);" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"confirm": "Inviare comunicazione al cliente per il pagamento ordine?", "url": "{{ _h.url('manager/myarea/ordini/ex-invia-email-pagamento') }}", "params": {"id": {{ item.id }}}}'>Invia comunicazione promemoria pagamento</a>
+				<a href="javascript:void(0);" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"confirm": "Inviare comunicazione al cliente con i codici gift card?", "url": "{{ _h.url('manager/myarea/ordini/ex-invia-email-gift-card') }}", "params": {"id": {{ item.id }}}}'>Invia comunicazione Gift Card al cliente</a>
+				{% endif %}
+				<a data-action='{"type": "layer", "url": "{{ _h.url('manager/myarea/ordini/richiedi-integrazione') }}", "overlay": true, "width": 600, "height": 600, "params": {"id": {{ item.id }}}}' class="h-action-window h-action-close-popup-menu" href="javascript:void(0);">Richiedi integrazione economica per ordine</a>
+				{% if _h.config('vendita_articoli_digitali', false) %}
+				<a href="javascript:void(0);" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"confirm": "Inviare comunicazione al cliente con link download contenuti digitali?", "url": "{{ _h.url('manager/myarea/ordini/ex-invia-email-contenuti-digitali') }}", "params": {"id": {{ item.id }}}}'>Invia comunicazione contenuti digitali</a>
+				{% endif %}
+				<a href="javascript:void(0);" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"confirm": "Inviare comunicazione di riepilogo esercente?", "url": "{{ _h.url('manager/myarea/ordini/ex-invia-email-riepilogo-esercente') }}", "params": {"id": {{ item.id }}}}'>Invia comunicazione riepilogo a esercente</a>
+				{% if not(item.isOrdineCarrelloDaCompletare()) %}
+				<a href="javascript:void(0);" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"confirm": "Resettare lo stato spedizione?", "url": "{{ _h.url('manager/myarea/ordini/ex-reset-stato-spedizione') }}", "params": {"id": {{ item.id }}}, "reload": ["#h-layout-center-content", "#dettaglio-content"]}'>Reset stato spedizione</a>
+				{% endif %}
+				{{ mymc.ordine_menu_email_add(_h, item) }}
+			</div>
+		</div>
+		{% if not(item.isOrdineCarrelloDaCompletare()) %}
+			<div class="h-nav-button-wrapper">
+				<a href="javascript:void(0);" class="h-nav-button h-action-popup-menu h-action-alttext" data-alttext="fattura/ricevuta">
+					<img src="/assets/manager/havana-js/img/icon/ico-calcolatrice.svg" align="top" />
+					<span>Fattura / Ricevuta</span>
+				</a>
+				<div class="h-popup-content h-popup-menu">
+					<a href="javascript:void(0);" class="h-action-window h-action-close-popup-menu" data-action='{"type": "layer", "url": "{{ _h.url('manager/myarea/ordini/documenti/genera-fattura') }}", "overlay": true, "width": 400, "height": 450, "params": {"id": {{ item.id }}}}'>Crea fattura/ricevuta</a>
+					<a href="javascript:void(0);" class="h-action-window h-action-close-popup-menu" data-action='{"type": "layer", "url": "{{ _h.url('manager/myarea/ordini/documenti/genera-fattura-proforma') }}", "overlay": true, "width": 400, "height": 450, "params": {"id": {{ item.id }}}}'>Crea fattura proforma</a>
+					<a href="javascript:void(0);" class="h-action-window h-action-close-popup-menu" data-action='{"type": "layer", "url": "{{ _h.url('manager/myarea/ordini/documenti/genera-ddt') }}", "overlay": true, "width": 400, "height": 400, "params": {"id": {{ item.id }}}}'>Crea DDT</a>
+					<a href="javascript:void(0);" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"confirm": "Eliminare la fattura/ricevuta?", "url": "{{ _h.url('manager/myarea/ordini/documenti/delete-fattura') }}", "params": {"id": {{ item.id }}}, "reload": ["#h-layout-center-content", "#dettaglio-content"]}'>Elimina fattura/ricevuta</a>
+					<a href="javascript:void(0);" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"confirm": "Eliminare la fattura profotma?", "url": "{{ _h.url('manager/myarea/ordini/documenti/delete-fattura-proforma') }}", "params": {"id": {{ item.id }}}, "reload": ["#h-layout-center-content", "#dettaglio-content"]}'>Elimina fattura proforma</a>
+					<a href="javascript:void(0);" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"confirm": "Eliminare la DDT?", "url": "{{ _h.url('manager/myarea/ordini/documenti/delete-ddt') }}", "params": {"id": {{ item.id }}}, "reload": ["#h-layout-center-content", "#dettaglio-content"]}'>Elimina DDT</a>
+				</div>
+			</div>
+			{% if _h.config('gestione_magazzino', false) %}
+			<div class="h-nav-button-wrapper">
+				<a href="javascript:void(0);" class="h-nav-button h-action-popup-menu h-action-alttext" data-alttext="magazzino">
+					<img src="/assets/manager/havana-js/img/icon/ico-matrix.svg" align="top" />
+					<span>Magazzino</span>
+				</a>
+				<div class="h-popup-content h-popup-menu">
+					<a href="javascript:void(0)" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"url": "{{ _h.url('manager/myarea/ordini/ex-magazzino-add') }}", "params": {"id": {{ item.id }}}, "confirm": "Incrementare la quantità magazzino in base agli articoli presenti?"}'>Aggiungi quantita in base agli articoli in ordine</a>
+					<a href="javascript:void(0)" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"url": "{{ _h.url('manager/myarea/ordini/ex-magazzino-rem') }}", "params": {"id": {{ item.id }}}, "confirm": "Decrementare la quantità magazzino in base agli articoli presenti?"}'>Rimuovi quantita in base agli articoli in ordine</a>
+				</div>
+			</div>	
+			{% endif %}
+		{% endif %}
+		{{ mc.navButton(_h, 'stampa', 'print', 'click', 'h-action-window', '{"type": "window", "url": "' ~ _h.url('manager/myarea/ordini/stampa/ordine') ~ '", "params": {"id": ' ~ item.id ~ '}}') }}
+		<div class="h-nav-button-wrapper" style="width: 2px; overflow: hidden;"><div class="h-nav-separator"></div></div>
+		{{ mc.navButtonPromemoria(_h, 'cliente_ordini', item.id) }}
+	{%endif %}
+		{{ mc.navButton(_h, 'ticket', 'info', 'click', 'h-action-window', '{"type": "layer", "url": "' ~ _h.url('manager/myarea/ordini/log/index') ~ '", "overlay": true, "width": 800, "height": 500, "params": {"id": ' ~ item.id ~ '}}') }}
+		{% if item.get('id_cliente') > 0 %}
+		{{ mc.navButton(_h, 'info cliente', 'user', 'click', 'h-action-window', '{"type": "layer", "url": "' ~ _h.url('manager/myarea/cliente/dettaglio') ~ '", "overlay": true, "width": 650, "height": 600, "params": {"id": ' ~ item.get('id_cliente') ~ '}}') }}
+		{% endif %}
+		{{ mymc.menuDettaglioOrdineManager(_h, item) }}
+	{{ mc.slideBoxHeaderToolbarEnd() }}
+{% else %}
+	{{ mc.slideBoxHeader(_h, 'ordine', true) }}
+{% endif %}
+
+	<fieldset id="dettaglio-content" data-action='{"url": "{{ _h.url('manager/myarea/ordini/dettaglio-data') }}"}' data-load-params='{"id": {{ item.id }}}'>
+		{% include _h.template('manager/myarea/ordini/dettaglio_data.html') %}	
+	</fieldset>	
+</div>
+</form>

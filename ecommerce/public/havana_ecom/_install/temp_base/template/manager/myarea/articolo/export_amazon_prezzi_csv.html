@@ -1,0 +1,3 @@
+sku;price;minimum-seller-allowed-price;maximum-seller-allowed-price;quantity;fulfillment-channel;handling-time;minimum_order_quantity_minimum;
+{% for item in list %}{{ item.id }};{{ _h.util.euro(item.prezzo()) }};{{ _h.util.euro(item.prezzo()) }};{{ _h.util.euro(item.prezzo()) }};{{ item.get('quantita_magazzino') }};;;1;
+{% endfor %}

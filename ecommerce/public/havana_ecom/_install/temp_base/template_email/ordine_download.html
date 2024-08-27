@@ -1,0 +1,22 @@
+{% set _lbl = _h.labels('email', lang) %}
+{% import _h.template('_macro.html') as mc %}
+
+<div style="{{ mc.margin() }}">
+	<h2 style="{{ mc.style_h2() }}">{{ _lbl.download_file }}</h2>
+	<div style="{{ mc.style_fontBase() }}">{{ _lbl.riferimento_tuo_ordine}}: <strong style="{{ mc.style_fontTitolo() }}">{{ codice }}</strong></div>
+</div>	
+<br>
+	<table width="100%" cellspacing="0" cellpadding="0" border="0">
+	<tbody>
+	<tr>
+	{{ mc.item_articolo(_h, item) }}
+	</tr>
+	</tbody>
+	</table>
+<br><br>
+<p style="{{ mc.style_fontBase() }}">{{ _lbl.descr_completa_download_articolo }} <a href="{{ link }}" style="{{ mc.style_link() }}">{{ _lbl.download_articolo }}</a>, {{ _lbl.descr_oppure_copia_incolla }}</p>
+
+<div style="{{ mc.style_fontBase() }}"><pre>
+{{ link }}
+</pre></div>
+

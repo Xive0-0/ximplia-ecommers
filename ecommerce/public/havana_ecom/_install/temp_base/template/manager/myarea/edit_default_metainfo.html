@@ -1,0 +1,59 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% macro meta(_h, l, tipo, title, required) %}
+<p class="field-line">
+	<strong>Meta info default per {{ title }}</strong>
+</p>
+<p class="field-line field-400">
+	<label>Titolo pagina{% if l == 'it' and required %}<span>*</span>{% endif %}:</label>
+	<input type="text" name="metainfo_{{ tipo }}_title_{{ l }}" class="field{% if l == 'it' and required %} valida-required{% endif %}" value="{{ _h.settings(l).get('metainfo_' ~ tipo ~ '_title') }}">
+</p>
+<p class="field-line field-400">
+	<label>Meta keywords{% if l == 'it' and required %}<span>*</span>{% endif %}:</label>
+	<input type="text" name="metainfo_{{ tipo }}_keywords_{{ l }}" class="field{% if l == 'it' and required %} valida-required{% endif %}" value="{{ _h.settings(l).get('metainfo_' ~ tipo ~ '_keywords') }}">
+</p>
+<p class="field-line field-400">
+	<label>Meta description:</label>
+	<input type="text" name="metainfo_{{ tipo }}_description_{{ l }}" class="field" value="{{ _h.settings(l).get('metainfo_' ~ tipo ~ '_description') }}">
+</p>
+<p class="field-line field-400">
+	<label>OG Titolo:</label>
+	<input type="text" name="metainfo_{{ tipo }}_og_title_{{ l }}" class="field" value="{{ _h.settings(l).get('metainfo_' ~ tipo ~ '_og_title') }}">
+</p>
+<p class="field-line field-400">
+	<label>OG Description:</label>
+	<input type="text" name="metainfo_{{ tipo }}_og_description_{{ l }}" class="field" value="{{ _h.settings(l).get('metainfo_' ~ tipo ~ '_og_description') }}">
+</p>
+<br>
+{% endmacro %}
+
+{{ mc.slideBoxHeader(_h, 'Modifica Meta info default entita') }}
+<div class="h-tab">
+{% for l in listLang %}
+<div data-tab-rif="{{ l }}">{{ l|upper }}</div>
+{% endfor %}
+{% for l in listLang %}
+<div data-tab="{{ l }}">
+{{ mc.contenutiInLingua(l) }}
+{{ _self.meta(_h, l, 'articolo', 'Articolo', true) }}
+{{ _self.meta(_h, l, 'azienda', 'Azienda') }}
+{{ _self.meta(_h, l, 'regione', 'Regione') }}
+{{ _self.meta(_h, l, 'blog', 'Blog') }}
+{{ _self.meta(_h, l, 'redattore_blog', 'Redattore Blog') }}
+{{ _self.meta(_h, l, 'categoria_blog', 'Categoria Blog') }}
+{{ _self.meta(_h, l, 'evento_news', 'Eventi/news') }}
+{{ _self.meta(_h, l, 'categoria_evento_news', 'Categoria Eventi/News') }}
+{% for type in listImp %}
+	{{ _self.meta(_h, l, type.key, type.label, true) }}
+{% endfor %}
+{{ _self.meta(_h, l, 'pagina', 'Pagina', true) }}
+{{ _self.meta(_h, l, 'testo', 'Blocco testo') }}
+{{ _self.meta(_h, l, 'glossario', 'Glossario') }}
+{{ _self.meta(_h, l, 'landing_page', 'Landing page') }}
+
+{{ mc.labelCampiObbligatori() }}
+</div>
+{% endfor %}
+</div>
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/ex-edit-default-metainfo')) }}	
+

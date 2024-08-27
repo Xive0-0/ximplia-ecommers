@@ -1,0 +1,33 @@
+{% set _lblm = _h.labels.get('my') %}
+
+<h2>{{ _lblm.title_indirizzi_spedizione }}</h2>
+<div class="account-toolbar">
+	<a href="{{ _h.url('account/my/indirizzi/edit') }}" title="{{ _lblm.alt_btn_aggiungi_spedizione }}" class="btn-add">{{ _lblm.btn_aggiungi }}</a>
+</div>
+
+<table class="table-list" cellpadding="0" cellspacing="0" border="0">
+{% for item in list %}
+<tr data-id="{{ item.id }}">	
+	<td class="action-bar action-bar-default">
+		<a href="{{ _h.url('account/my/indirizzi/principale') }}" title="{{ _lbl.imposta_default }}" class="action-default btn-default{% if item.get('principale') %} selected{% endif %}"></a>	
+	</td>
+	<td class="details">
+		<strong>{{ item.get('nome') }} {{ item.get('cognome') }}</strong>
+		{% if item.get('presso') %}
+		<small><em>{{ _lblm.presso }}:</em> {{ item.get('presso') }}</small>
+		{% endif %}
+		{% if item.get('nome_campanello') %}
+		<small><em>{{ _lblm.nome_campanello_small }}:</em> {{ item.get('nome_campanello') }}</small>
+		{% endif %}
+		<small>{{ item.get('via') }}, {{ item.get('num_civico') }}</small>
+		<small>{{ item.get('cap') }} {{ item.get('localita') }} ({{ item.get('provincia') }})</small>
+		<small>{{ mapNazione[item.get('nazione')].get('nome') }}</small>	
+		<small><em>{{ _lblm.telefono_small }}:</em>{{ item.get('telefono') }}</small>	
+	</td>
+	<td class="action-bar action-bar-base">
+		<a href="{{ _h.url('account/my/indirizzi/edit') }}?id={{ item.id }}" title="{{ _lblm.btn_modifica }}" class="btn-update"></a>	
+		<a href="{{ _h.url('account/my/indirizzi/delete') }}" title="{{ _lblm.btn_elimina }}" class="action-delete btn-delete"></a>	
+	</td>
+</tr>
+{% endfor %}
+</table>

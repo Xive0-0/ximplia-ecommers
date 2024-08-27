@@ -1,0 +1,74 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% if item == null %}
+	{% set title = 'Nuovo operatore' %}
+	{% set description = 'Inserire i dati del nuovo operatore:' %}
+{% else %}
+	{% set title = 'Modifica operatore' %}
+	{% set description = 'Dati del operatore' %}
+{% endif %}
+{{ mc.slideBoxHeader(_h, title) }}
+<input type="hidden" name="id" value="{{ item.id }}">
+<p class="field-line">{{ description }}</p>
+<div class="field-line field-400">
+	{% set checkbox_css = '' %}
+	{% set checkbox_value = '' %}
+	{% if item.get('abilitato') %} 
+		{% set checkbox_css = ' h-checkbox-checked' %}
+		{% set checkbox_value = 1 %}
+	{% endif %}
+	<div class="h-checkbox-wrapper"><span class="h-checkbox{{ checkbox_css }}" data-value="1"><input type="hidden" name="abilitato" value="{{ checkbox_value }}" /></span> <strong>Abilitato all'accesso</strong></div>
+</div>
+<div class="h-show-if-content">
+	<p class="field-line field-400">
+		<label>Profilo accesso<span>*</span>:</label>
+		<select name="accesso" class="field valida-required h-show-if" data-action='{"map": [{"key": "5", "cont": [".funzioni_operatore"]}]}'>
+			<option value=""></option>
+			{% for elem in listProfiloAccesso %}
+				{% set sel = '' %}
+				{% if elem.id == item.get('accesso') %}
+					{% set sel = 'selected' %}
+				{% endif %}
+				<option value="{{ elem.id }}" {{ sel }}>{{ elem.nome }}</option>
+			{% endfor %}	
+		</select>
+	</p>
+
+	<div class="funzioni_operatore clear">
+		{{ mc.checkbox(item.get('abilitato_prodotti'), 1, 'abilitato_prodotti', 'Gestione prodotti') }}
+		{{ mc.checkbox(item.get('abilitato_ordini'), 1, 'abilitato_ordini', 'Gestione ordini') }}
+		{{ mc.checkbox(item.get('abilitato_clienti'), 1, 'abilitato_clienti', 'Gestione clienti') }}
+		{{ mc.checkbox(item.get('abilitato_contenuti'), 1, 'abilitato_contenuti', 'Gestione contenuti') }}
+		{{ mc.checkbox(item.get('abilitato_statistiche'), 1, 'abilitato_statistiche', 'Consultazione statistiche') }}
+		{{ mc.checkbox(item.get('abilitato_blog'), 1, 'abilitato_blog', 'Gestione blog') }}
+		{{ mc.checkbox(item.get('abilitato_evento_news'), 1, 'abilitato_evento_news', 'Gestione eventi/news') }}
+		{{ mc.checkbox(item.get('abilitato_magazzino'), 1, 'abilitato_magazzino', 'Gestione magazzino') }}
+		{{ mc.checkbox(item.get('abilitato_cassa'), 1, 'abilitato_cassa', 'Gestione cassa') }}
+	</div>
+</div>	
+
+<p class="field-line field-400">
+	<label>E-Mail<span>*</span>:</label>
+	<input type="text" name="e_mail" class="field valida-required valida-email" value="{{ item.get('e_mail') }}" maxlength="100">
+</p>
+{% if item == null %}
+<p class="field-line field-line-left">
+	<label>Password<span>*</span>:</label>
+	<input type="password" name="password" class="field valida-required valida-password" value="" maxlength="30">
+</p>
+<p class="field-line">
+	<label>Conferma password<span>*</span>:</label>
+	<input type="password" name="conferma_password" class="field valida-required valida-password" value="" maxlength="30">
+</p>
+{% endif %}
+<p class="field-line clear field-line-left">
+	<label>Nome<span>*</span>:</label>
+	<input type="text" name="nome" class="field valida-required" value="{{ item.get('nome') }}" maxlength="30">
+</p>
+<p class="field-line">
+	<label>Cognome<span>*</span>:</label>
+	<input type="text" name="cognome" class="field valida-required" value="{{ item.get('cognome') }}" maxlength="30">
+</p>
+{{ mc.labelCampiObbligatori() }}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/operatore/ex-edit'), item) }}	
+

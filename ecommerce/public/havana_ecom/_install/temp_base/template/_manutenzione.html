@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="{{ _h.lang }}" class="{% if _h.session.isAuth and _h.session.profile == 'guest' %}user-auth{% else%}user-no-auth{% endif%}">
+<head>
+	<meta name="robots" content="noindex, nofollow">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+	<link rel="icon" href="{{ _h.res('assets/website/img/favicon.png') }}{{ _build }}" type="image/x-icon" >
+	<meta name="author" content="{{ _h.settings.get('website_meta_author', _h.config('template').web.copy) }}">
+	<meta name="copyright" content="{{ _h.settings.get('website_meta_copy', _h.config('template').web.copy) }}" >
+	<meta name="format-detection" content="telephone=no">
+</head>
+<body>
+	<h1>Sito in manutenzione</h1>
+</body>
+</html>

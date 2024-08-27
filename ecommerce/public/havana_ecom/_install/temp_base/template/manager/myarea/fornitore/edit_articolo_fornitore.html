@@ -1,0 +1,45 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Ordina articolo a fornitore') }}
+<input type="hidden" name="id_articolo" value="{{ articolo.id }}">
+<input type="hidden" name="ordine_id" value="{{ ordine_id }}">
+<input type="hidden" name="articolo_tmp_id" value="{{ articolo_tmp_id }}">
+<div class="field-line-text">
+	<div>Articolo: <strong>{{ articolo.nome }}</strong></div>
+	{% if articolo.codice %}
+	<div>Codice: <strong>{{ articolo.codice }}</strong></div>
+	{% endif %}
+	{% if articolo.codice_fornitore %}
+	<div>Codice fornitore: <strong>{{ articolo.codice_fornitore }}</strong></div>
+	{% endif %}
+	{% if _h.config('gestione_magazzino', false) %}
+	<div>magazzino: <strong>{{ articolo.magazzino }}</strong></div>
+	{% endif %}
+	<div style="color: #ed4747;">in arrivo: <strong>{{ articolo.in_arrivo }}</strong></div>
+</div>
+<div class="field-line field-400">
+	<label>Fornitore<span>*</span>:</label>
+	<select name="id_fornitore" class="valida-required field h-action-aggiorna-on-change" data-field-on-change="codice_fornitore">
+		<option></option>
+	{% for i in listFornitore %}
+		<option value="{{ i.id }}" data-valore="{{ mapCodice.get(i.id) }}">{{ i.nome }}</option>
+	{% endfor %}	
+	</select> 
+</div>
+<div class="hrow">
+	<div class="field-line field-line-left field-100">
+		<label>Quantità<span>*</span>:</label>
+		<input type="text" name="quantita" class="field valida-digitnumber valida-required" value="" maxlength="4">
+	</div>
+	<div class="field-line field-line-left field-250">
+		<label>Codice fornitore:</label>
+		<input type="text" name="codice_fornitore" class="field" value="" maxlength="50">
+	</div>
+</div>
+
+{{ mc.labelCampiObbligatori() }}
+{% if pagina_fornitori %}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/fornitore/ex-edit-articolo-fornitore'), '"reload": ["#h-layout-center-content", "#dettaglio-content"]') }}	
+{% else %}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/fornitore/ex-edit-articolo-fornitore'), '"reload": ["#dettaglio-content"]') }}	
+{% endif %}

@@ -1,0 +1,17 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Nuova relazione') }}
+<input type="hidden" name="id" value="{{ _h.input('relazione_id') }}">
+<input type="hidden" name="type" value="{{ _h.input('type') }}">
+<p class="field-line field-400">
+	<label>Con articolo<span>*</span>:</label>
+	<input type="hidden" name="relazione_id" value="" class="valida-required">
+	<input type="text" name="relazione_nome" class="field autocomplete" value="" data-action='{"url": "{{ _h.url('manager/myarea/articolo/list-autocomplete') }}", "params": {"relation": "{{ _h.input('type') }}", "id": {{ _h.input('relazione_id') }}}}'>
+</p>	
+<p class="field-line field-100">
+	<label>Peso/posizione<span>*</span>:</label>
+	<input type="text" name="ordine" class="field valida-required valida-digitnumber" value="0">
+</p>
+
+{{ mc.labelCampiObbligatori() }}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/articolo/relazione/ex-edit-new'), '"reload": "#relazione-content"') }}	

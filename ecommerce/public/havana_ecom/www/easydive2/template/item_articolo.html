@@ -1,0 +1,782 @@
+{% import _h.template('_macro.html') as mc %}
+{% set _lblw = _h.labels.get('website') %}
+
+{% macro contatti(_h, item_base) %}
+
+{% set _lblw = _h.labels.get('website') %}
+<div class="contatti">				
+<form id="pagina" class="clear hide-no-scroll">	
+	<input type="hidden" name="codice_articolo" value="{{ item_base.codice }}">
+	<div class="recapiti-box">
+		<ul class="recapiti">
+			<li><img alt="phone" src="/assets/website/img/ico-phone-red.svg"> +39 0544 962923<br>
+				<em>{{ _lblw.telefono_orari }}</em>
+			</li>
+			<li><a href="https://api.whatsapp.com/send?phone=393389994219"><img alt="whatsapp" src="/assets/website/img/ico-whatsapp-green.svg"> +39 338 9994219<br>
+					<em>{{ _lblw.whatsapp }}</em>
+				</a>
+			</li>
+			<li><a href="skype:Easydive.it?call"><img alt="skype" src="/assets/website/img/ico-skype-blue.svg"> Easydive.it<br>
+					<em>{{ _lblw.skype }}</em>
+				</a>
+			</li>
+		</ul>
+	</div>
+	<div class="fields-box">
+		<div class="field-text">
+			<p><strong>{{ _lblw.scrivi_allo_staff }}</strong></p>
+		</div>
+		<div class="form-error-message"></div>
+		<div class="field-line-50-50">
+			<div class="field-line">
+				<div class="field">
+					<label>{{ _lblw.il_tuo_nome }} <span>*</span></label>
+					<input type="text" name="nome" class="valida-required" maxlength="50">
+				</div>
+			</div>
+			<div class="field-line">
+				<div class="field">
+					<label>{{ _lblw.la_tua_email }} <span>*</span></label>
+					<input type="text" name="e_mail" class="valida-required valida-email" maxlength="100">
+				</div>
+			</div>
+		</div>
+		<div class="field-line field-line-textarea">
+			<div class="field">
+				<label>{{ _lblw.testo_richiesta }} <span>*</span></label>
+				<textarea name="testo" class="valida-required"></textarea>
+			</div>
+		</div>
+		<div class="row justify-content-between align-items-start">
+			<div class="col-md-8 row justify-content-start">
+				<div class="field-line-checkbox field-text-obbligatori" style="padding: 0;">
+					<div>
+						{{ _lblw.dichiarazione_letto_informativa }} <a href="{{ mapPagine.privacy.url }}" title="{{ _lblw.informativa_privacy }}" target="_blank">{{ _lblw.informativa_privacy }}</a>.
+					</div>
+					<div>
+						<span class="checkbox" data-value="1"><input type="hidden" name="accetto_privacy" value=""></span>
+						<span class="checkbox-label"><span>{{ _lblw.acconsento }}</span></span>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-4 row justify-content-end field-button field-button-left">
+				<a class="btn btn-black submit-form" href="javascript:void(0)" title="{{ _lblw.btn_invia_richiesta }}" data-action='{"url": "{{ _h.url('ex-scrivi-servizio-clienti') }}", "onComplete": {"type": "show", "show": "#conferma_pagina", "hide": "#pagina"}}'><span>{{ _lblw.btn_invia_richiesta }}</span></a>
+			</div>
+		</div>
+	</div>
+</form>
+
+<div id="conferma_pagina" class="hide-block">
+	<div class="hide-block-title">{{ _lblw.title_grazie_richiesta }}</div>
+	<p>{{ _lblw.descr_grazie_richiesta }}</p>
+</div>
+</div>
+{% endmacro %}
+
+<div class="breadcrumbs text-start clear">
+	{{ mc.breadcrumbs_home(_h) }}
+	{{ mc.breadcrumbs_separatore() }}
+	{% set item_obiettivo_categoria = '' %}
+	{% set item_obiettivo = false %}
+	{% for c in listCollezioneTree %}
+		{% if c.id == 125 %}
+			{% set item_obiettivo = true %}
+		{% endif %}
+		{% if loop.index == listCollezioneTree|length %}
+			{% set item_obiettivo_categoria = c.url %}
+		{% endif %}
+	<a href="{{ c.url }}" title="{{ c.get('nome') }}">{{ c.get('nome') }}</a>
+	{{ mc.breadcrumbs_separatore() }}
+	{% endfor %}
+	<a>{{ item_base.get('nome') }}</a>
+</div>
+<div class="item-page margin-mobile">
+
+	<div class="item-buy-wrapper ">
+		{% if item_base.azienda.get('codice') == 'easydive' or item_base.azienda.get('codice') == 'carbonarm' %}
+			<div class="made-in-italy-wrapper">
+				<h2 class="item-buy-name text-start pb-2 pb-xl-3">{{ item.get('nome') }}</h2>
+			</div>
+		{% else %}
+			<h2 class="item-buy-name text-start px-2 px-xl-3 pb-2 pb-xl-3">{{ item.get('nome') }}</h2>
+		{% endif %}
+
+		<div class="block-item-variante clear" data-id-variante="{{ item.id }}">
+			<div class="item-img-slider"></div>
+			<div class="item-img-coll col-md-5 col-lg-4 mb-3 mb-md-0">
+				<div class="item-img-coll-inner">
+					<div class="card image-card">
+						<div class="item-img">
+							{% if item.isSconto %}
+								<span class="block-sale">
+							<span class="on-sale">-{{ item.sconto }}%</span>
+						</span>
+							{% endif %}
+							<div class="item-promozione" data-promozione="{{ item.countdownPromozione }}">
+								<span>{{ _lblw.tempo_residio }}:</span>
+								<strong data-countdown="{{ item.countdownPromozione }}"></strong>
+							</div>
+
+							{% if item.get('codice_3d_img') %}
+								<div class="action-3d" data-codice="{{ item.get('codice_3d_img') }}">
+									<img src="/assets/website/img/icona-3d.png">
+								</div>
+							{% endif %}
+							<div class="item-img-inner">
+								<div class="item-img-list-slider">
+									{% set index = 1 %}
+									{% set item_image = item %}
+									{% set listImages = item.geto('immagini').get('list') %}
+									{% if listImages|length == 0 %}
+										{% set listImages = item_base.geto('immagini').get('list') %}
+										{% set item_image = item_base %}
+									{% endif %}
+									{% if listImages|length == 0 %}
+										<img src="/assets/void_image.png" alt="Easydive" class="placeholder-img">
+									{% else %}
+										{% for img in listImages %}
+											{% if img.name matches '/^extra*/' %}
+											{% else %}
+												<div class="item-img-wrapper" id="image{{ index }}">
+													<img src="/assets/void_image.png" alt="Easydive" class="placeholder-img placeholder{{ index }}">
+													<div class="item-img-zoom">
+														<img {% if index == 1%}class="item-img-buy" src="{{ item_image.imageUrl('1200x1200') }}"{% else%}src="/images/1200x1200/{{ img.src }}"{% endif %} alt="{{ img.alt(item_base.get('nome')) }}" onload="image_articolo_loaded(this, '.placeholder{{ index }}')" style="display: none;">
+													</div>
+												</div>
+											{% endif %}
+											{% set index = index + 1 %}
+										{% endfor %}
+									{% endif %}
+								</div>
+							</div>
+						</div>
+						{% set listImages = item.geto('immagini').get('list') %}
+						{% if listImages|length == 0 %}
+							{% set listImages = item_base.geto('immagini').get('list') %}
+						{% endif %}
+						{% if listImages|length > 0 %}
+							<div class="item-thumbs clear">
+								{% set index = 1 %}
+								{% for img in listImages %}
+									{% if img.name matches '/^extra*/' %}
+									{% else %}
+										<div class="item-thumb{% if index == 1 %} selected{% endif %}" data-ref="#image{{ index }}">
+											<img src="/images/300x300/{{ img.src }}" alt="{{ item_base.get('nome') }}">
+											{% set index = index + 1 %}
+										</div>
+									{% endif %}
+								{% endfor %}
+							</div>
+						{% endif %}
+					</div>
+
+					<div class="chi-si-affida-easydive">
+
+						<div class="clear bollino-list">
+							<h5>{{ _lblw.si_affidano_a_easydive }}</h5>
+							<div class="bollino">
+								<span><img src="/assets/website/img/ico-marina.svg"></span>
+								<strong>{{ _lblw.si_affida_marina }}</strong>
+							</div>
+							<div class="bollino">
+								<span><img src="/assets/website/img/ico-polizia.svg"></span>
+								<strong>{{ _lblw.si_affida_polizia }}</strong>
+							</div>
+							<div class="bollino">
+								<span><img src="/assets/website/img/ico-fuoco.svg"></span>
+								<strong>{{ _lblw.si_affida_fuoco }}</strong>
+							</div>
+							<div class="bollino">
+								<span><img src="/assets/website/img/ico-carabinieri.svg"></span>
+								<strong>{{ _lblw.si_affida_carabinieri }}</strong>
+							</div>
+							<div class="bollino">
+								<span><img src="/assets/website/img/ico-universita.svg"></span>
+								<strong>{{ _lblw.si_affida_universita }}</strong>
+							</div>
+						</div>
+
+						<div class="clear bollino-list">
+							<div class="bollino">
+								<span><img src="/assets/website/img/ico-italia.svg"></span>
+								<strong>Made in italy</strong>
+							</div>
+							<div class="bollino">
+								<span><img src="/assets/website/img/plastic-free3.svg"></span>
+								<strong>Respect the Ocean</strong>
+							</div>
+							<div class="bollino">
+								<span><img src="/assets/website/img/ico-consegna.svg"></span>
+								<strong>{{ _lblw.consegna_express_mondo }}</strong>
+							</div>
+						</div>
+
+						{% if item_base.get('patent') or item_base.get('lifetime')
+							or item_base.get('universal_housing') or item_base.get('waterproof') %}
+						<div class="clear bollino-list">
+							{% if item_base.get('patent') %}
+								<div class="bollino">
+									<span><img src="/assets/website/img/ico-patented.svg"></span>
+									<strong>{{ _lblw.patent }}</strong>
+								</div>
+							{% endif %}
+							{% if item_base.get('lifetime') %}
+								<div class="bollino">
+									<span><img src="/assets/website/img/ico-lifetime.svg"></span>
+									<strong>{{ _lblw.lifetime }}</strong>
+								</div>
+							{% endif %}
+							{% if item_base.get('universal_housing') %}
+								<div class="bollino">
+									<span><img src="/assets/website/img/ico-universal-housing2.svg"></span>
+									<strong>{{ _lblw.universal_housing }}</strong>
+								</div>
+							{% endif %}
+							{% if item_base.get('waterproof') %}
+								<div class="bollino">
+									<span><img src="/assets/website/img/ico-waterproof1.svg"></span>
+									<strong>{{ _lblw.waterproof }}</strong>
+								</div>
+							{% endif %}
+						</div>
+						{% endif %}
+
+						{% if _h.requestActivity != 'index' %}
+							<div class="clear bollino-list">
+								<script src="https://apps.elfsight.com/p/platform.js" defer></script>
+								<div class="elfsight-app-11e860e8-c280-436b-aa68-1b35d67b01cb"></div>
+							</div>
+						{% endif %}
+
+					</div>
+				</div>
+			</div>
+			<div class="item-details col-md-7 col-lg-8">
+				<div class="item-details-inner item-buy-acquisto">
+				<div class="background-grey border-radius-16 pt-2 pt-xl-4 mb-4">
+
+					{% if item_base.get('descrizione_breve') %}
+						<div class="html desc px-2 px-xl-3">
+							{{ item_base.get('descrizione_breve') }}
+
+							{% if item_obiettivo %}
+								<a class="btn btn-alert" href="{{ item_obiettivo_categoria }}?co=co"><strong>{{ _lblw.btn_configura_obiettivo }}</strong></a>
+							{% endif %}
+						</div>
+					{% endif %}
+					{% if listArticoloVariante|length <= 1 and not(item.get('esaurito')) %}
+					<div class="show-on-mobile item-acquista">
+						{% if item_base.get('tipo_custodia', '') == '' %}
+							<a class="item-buy button-red button" data-id="{{ item.id }}" href="javascript:void(0)">{{ _lblw.btn_aggiungi_carrello }}</a>
+						{% else %}
+							<a class="item-button-acquista btn btn-black"  data-layer-black="true" data-id="{{ item.id }}" data-load-content=".item-acquista-window" href="javascript:void(0)">
+								<svg id="Livello_2" data-name="Livello 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+									<defs>
+										<style>
+											.cls-1 {
+												fill: #fff;
+												stroke-width: 0px;
+											}
+										</style>
+									</defs>
+									<path class="cls-1" d="M15.2,1.6H7.05c-.33-.93-1.21-1.6-2.25-1.6s-1.92.67-2.25,1.6H.8c-.44,0-.8.36-.8.8s.36.8.8.8h1.75c.33.93,1.21,1.6,2.25,1.6s1.92-.67,2.25-1.6h8.15c.44,0,.8-.36.8-.8s-.36-.8-.8-.8ZM4,2.4c0-.44.36-.8.8-.8s.8.36.8.8-.36.8-.8.8-.8-.36-.8-.8Z"/>
+									<path class="cls-1" d="M15.2,7.2h-1.75c-.33-.93-1.21-1.6-2.25-1.6s-1.92.67-2.25,1.6H.8c-.44,0-.8.36-.8.8s.36.8.8.8h8.15c.33.93,1.21,1.6,2.25,1.6s1.92-.67,2.25-1.6h1.75c.44,0,.8-.36.8-.8s-.36-.8-.8-.8ZM10.4,8c0-.44.36-.8.8-.8s.8.36.8.8-.36.8-.8.8-.8-.36-.8-.8Z"/>
+									<path class="cls-1" d="M15.2,12.8H7.05c-.33-.93-1.21-1.6-2.25-1.6s-1.92.67-2.25,1.6H.8c-.44,0-.8.36-.8.8s.36.8.8.8h1.75c.33.93,1.21,1.6,2.25,1.6s1.92-.67,2.25-1.6h8.15c.44,0,.8-.36.8-.8s-.36-.8-.8-.8ZM4,13.6c0-.44.36-.8.8-.8s.8.36.8.8-.36.8-.8.8-.8-.36-.8-.8Z"/>
+								</svg>
+								{{ _lblw.btn_configura_custodia }}
+							</a>
+						{% endif %}
+					</div>
+					{% endif %}
+
+					<div class="item-price clear px-2 px-xl-3">
+						<div class="item-price-wrapper">
+							{{ mc.item_price(_h, item) }}
+						</div>
+					</div>
+					{% if _h.lang != 'it' %}
+					<div class="item-informativa-iva">
+					{{ _lblw.informativa_iva }}
+					</div>
+					{% endif %}
+
+					<div class="item-paypal px-2 px-xl-3"
+						data-pp-message=""
+						data-pp-style-layout="text"
+						data-pp-style-logo-type="block"
+						data-pp-style-text-color="black"
+						data-pp-amount="{{ item.prezzo(2) }}">
+					</div>
+
+					<div class="item-promozione" data-promozione="{{ item.countdownPromozione }}">
+						<span>{{ _lblw.tempo_residio }}:</span>
+						<strong data-countdown="{{ item.countdownPromozione }}"></strong>
+					</div>
+					<div class="row w-100 justify-content-start align-items-center mx-auto px-2 px-xl-3">
+						{% if item.get('esaurito') %}
+							<div class="item-acquista d-flex justify-content-start">
+								<a class="button button-red" href="{{ _h.xurl('account/avvisa-prodotto-disponibile') }}?id={{ item.id }}">{{ _lblw.avvisami_quando_disponibile }}</a>
+							</div>
+						{% else %}
+							{% if item_base.get('tipo_custodia', '') == '' %}
+								{% if listArticoloVariante|length > 1 %}
+									<div class="item-varianti item-select-list-dynamic clear">
+										<label>{{ _lblw.seleziona_variante_articolo }}:</label>
+										<ul class="select-list-base">
+											{% for art in listArticoloVariante %}
+												<li class="cambia-variante{% if art.id == item.id %} current{% endif %}" data-id="{{ art.id }}"><a href="javascript:void(0)">
+														<span class="codice">{{ art.get('nome') }}</span>
+													</a>
+												</li>
+											{% endfor %}
+										</ul>
+									</div>
+								{% endif %}
+
+								{{ mc.item_attributo_template(_h, item, listAttributoTemplate, '100x100') }}
+
+								<div class="col-3 p-0 col-md-2 col-xxl-1 item-quantita-wrapper d-flex justify-content-start">
+									{% if item.get('esaurito') %}
+										<span class="item-esaurito">{{ _lblw.esaurito }}</span>
+									{% else %}
+										{% if item_base.get('tipo_custodia', '') == '' %}
+											<select name="quantita" class="item-input-quantita">
+												{% for i in 1..10 %}
+													<option value="{{ i }}">{{ i }}</option>
+												{% endfor %}
+											</select>
+										{% else %}
+											<input type="hidden" value="1" class="item-input-quantita">
+										{% endif %}
+									{% endif %}
+								</div>
+								<div class="col-9 col-md-10 item-acquista d-flex justify-content-start">
+									<a class="item-buy button-red button" data-id="{{ item.id }}" href="javascript:void(0)">{{ _lblw.btn_aggiungi_carrello }}</a>
+								</div>
+							{% else %}
+								<div class="item-acquista d-flex justify-content-start">
+									<a class="item-button-acquista btn btn-black"  data-layer-black="true" data-id="{{ item.id }}" data-load-content=".item-acquista-window" href="javascript:void(0)">
+										<svg id="Livello_2" data-name="Livello 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
+											<defs>
+												<style>
+													.cls-1 {
+														fill: #fff;
+														stroke-width: 0px;
+													}
+												</style>
+											</defs>
+											<path class="cls-1" d="M15.2,1.6H7.05c-.33-.93-1.21-1.6-2.25-1.6s-1.92.67-2.25,1.6H.8c-.44,0-.8.36-.8.8s.36.8.8.8h1.75c.33.93,1.21,1.6,2.25,1.6s1.92-.67,2.25-1.6h8.15c.44,0,.8-.36.8-.8s-.36-.8-.8-.8ZM4,2.4c0-.44.36-.8.8-.8s.8.36.8.8-.36.8-.8.8-.8-.36-.8-.8Z"/>
+											<path class="cls-1" d="M15.2,7.2h-1.75c-.33-.93-1.21-1.6-2.25-1.6s-1.92.67-2.25,1.6H.8c-.44,0-.8.36-.8.8s.36.8.8.8h8.15c.33.93,1.21,1.6,2.25,1.6s1.92-.67,2.25-1.6h1.75c.44,0,.8-.36.8-.8s-.36-.8-.8-.8ZM10.4,8c0-.44.36-.8.8-.8s.8.36.8.8-.36.8-.8.8-.8-.36-.8-.8Z"/>
+											<path class="cls-1" d="M15.2,12.8H7.05c-.33-.93-1.21-1.6-2.25-1.6s-1.92.67-2.25,1.6H.8c-.44,0-.8.36-.8.8s.36.8.8.8h1.75c.33.93,1.21,1.6,2.25,1.6s1.92-.67,2.25-1.6h8.15c.44,0,.8-.36.8-.8s-.36-.8-.8-.8ZM4,13.6c0-.44.36-.8.8-.8s.8.36.8.8-.36.8-.8.8-.8-.36-.8-.8Z"/>
+										</svg>
+										{{ _lblw.btn_configura_custodia }}
+									</a>
+								</div>
+							{% endif %}
+						{% endif %}
+					</div>
+					<div class="row justify-content-start align-items-center p-2 p-xl-3">
+						<div class="col-xl-6 col-xxl-4 py-2 py-xl-4 item-preferiti {% if is_articolo_preferito %}item-is-preferito{% endif %}">
+							{% if _h.session.isAuth and _h.session.profile == 'guest' %}
+								<a class="action-add-preferiti btn-add-preferiti" data-id="{{ item_base.id }}" href="javascript:void(0)" title="{{ _lblw.btn_aggiungi_preferiti }} {{ item_base.get('nome') }}">
+									<svg width="27px" height="25px" viewBox="0 0 27 25" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+										<g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+											<g id="Menu-/-normal" transform="translate(-1419.000000, -57.000000)" stroke="#000000" stroke-width="1.615">
+												<path d="M1432.5,60.7683643 C1433.01666,60.3076942 1433.50373,59.8040601 1434.05648,59.3941114 C1435.48149,58.3372554 1437.07279,57.8459734 1438.82184,58.0495156 C1441.4714,58.357723 1443.35597,59.8146817 1444.38865,62.3351798 C1445.35798,64.7009476 1445.12474,67.0498281 1444.04083,69.3251924 C1443.19091,71.1094536 1442.02211,72.6645733 1440.70061,74.1005871 C1438.3155,76.6922742 1435.65045,78.9409649 1432.76087,80.9121795 C1432.58704,81.030808 1432.43857,81.0280034 1432.26446,80.9113441 C1429.12116,78.8050314 1426.27729,76.3348371 1423.75955,73.4744457 C1422.52578,72.0727435 1421.44285,70.5595138 1420.7324,68.7960781 C1420.25224,67.6043031 1419.97769,66.3707574 1420.00142,65.0722883 C1420.05056,62.383753 1421.76033,59.5687722 1424.04669,58.6186699 C1426.6185,57.5497601 1429.07902,57.8524777 1431.291,59.6319055 C1431.73101,59.9858815 1432.11939,60.4077647 1432.5,60.7683643 Z" id="Stroke-1"></path>
+											</g>
+										</g>
+									</svg>
+									<span>{{ _lblw.btn_aggiungi_preferiti }}</span>
+								</a>
+								<a class="action-rem-preferiti btn-rem-preferiti" data-id="{{ item_base.id }}" href="javascript:void(0)" title="{{ _lblw.btn_rimuovi_preferiti }} {{ item_base.get('nome') }}">
+									<svg width="27px" height="25px" viewBox="0 0 27 25" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+										<g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+											<g id="Menu-/-normal" transform="translate(-1419.000000, -57.000000)" stroke="#000000" stroke-width="1.615">
+												<path d="M1432.5,60.7683643 C1433.01666,60.3076942 1433.50373,59.8040601 1434.05648,59.3941114 C1435.48149,58.3372554 1437.07279,57.8459734 1438.82184,58.0495156 C1441.4714,58.357723 1443.35597,59.8146817 1444.38865,62.3351798 C1445.35798,64.7009476 1445.12474,67.0498281 1444.04083,69.3251924 C1443.19091,71.1094536 1442.02211,72.6645733 1440.70061,74.1005871 C1438.3155,76.6922742 1435.65045,78.9409649 1432.76087,80.9121795 C1432.58704,81.030808 1432.43857,81.0280034 1432.26446,80.9113441 C1429.12116,78.8050314 1426.27729,76.3348371 1423.75955,73.4744457 C1422.52578,72.0727435 1421.44285,70.5595138 1420.7324,68.7960781 C1420.25224,67.6043031 1419.97769,66.3707574 1420.00142,65.0722883 C1420.05056,62.383753 1421.76033,59.5687722 1424.04669,58.6186699 C1426.6185,57.5497601 1429.07902,57.8524777 1431.291,59.6319055 C1431.73101,59.9858815 1432.11939,60.4077647 1432.5,60.7683643 Z" id="Stroke-1"></path>
+											</g>
+										</g>
+									</svg>
+									<span>{{ _lblw.btn_rimuovi_preferiti }}</span>
+								</a>
+							{% else %}
+								<a href="{{ _h.url('account/login') }}" title="{{ _lblw.btn_aggiungi_preferiti }} {{ item_base.get('nome') }}">
+									<svg width="27px" height="25px" viewBox="0 0 27 25" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+										<g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+											<g id="Menu-/-normal" transform="translate(-1419.000000, -57.000000)" stroke="#000000" stroke-width="1.615">
+												<path d="M1432.5,60.7683643 C1433.01666,60.3076942 1433.50373,59.8040601 1434.05648,59.3941114 C1435.48149,58.3372554 1437.07279,57.8459734 1438.82184,58.0495156 C1441.4714,58.357723 1443.35597,59.8146817 1444.38865,62.3351798 C1445.35798,64.7009476 1445.12474,67.0498281 1444.04083,69.3251924 C1443.19091,71.1094536 1442.02211,72.6645733 1440.70061,74.1005871 C1438.3155,76.6922742 1435.65045,78.9409649 1432.76087,80.9121795 C1432.58704,81.030808 1432.43857,81.0280034 1432.26446,80.9113441 C1429.12116,78.8050314 1426.27729,76.3348371 1423.75955,73.4744457 C1422.52578,72.0727435 1421.44285,70.5595138 1420.7324,68.7960781 C1420.25224,67.6043031 1419.97769,66.3707574 1420.00142,65.0722883 C1420.05056,62.383753 1421.76033,59.5687722 1424.04669,58.6186699 C1426.6185,57.5497601 1429.07902,57.8524777 1431.291,59.6319055 C1431.73101,59.9858815 1432.11939,60.4077647 1432.5,60.7683643 Z" id="Stroke-1"></path>
+											</g>
+										</g>
+									</svg>
+									<span>{{ _lblw.btn_aggiungi_preferiti }}</span>
+								</a>
+							{% endif %}
+						</div>
+						{% if not(_h.context.isApp()) %}
+							<div class="col-xl-6 py-2 py-xl-4 clear">
+								<div class="share">
+									{% set url_immagine = _h.webAppUrl ~ item_base.imageUrl('800x800') %}
+									{% set url_pagina = _h.webAppUrl ~ item_base.url|url_encode %}
+									{% set title_pagina = item_base.get('nome')|url_encode %}
+									<span class="share-label">{{ _lblw.condividi_su }}</span>
+									<ul class="social">
+										<li>
+											<a href="https://www.facebook.com/sharer/sharer.php?u={{ url_pagina }}" target="_blank">
+												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 28"><path d="M14.984.187v4.125h-2.453c-1.922 0-2.281.922-2.281 2.25v2.953h4.578l-.609 4.625H10.25v11.859H5.469V14.14H1.485V9.515h3.984V6.109C5.469 2.156 7.891 0 11.422 0c1.687 0 3.141.125 3.563.187z"/></svg>
+											</a>
+										</li>
+										<li>
+											<a href="https://twitter.com/home?status={{ title_pagina }}%20-%20{{ url_pagina }}" target="_blank">
+												<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 28"><path d="M25.312 6.375a10.85 10.85 0 0 1-2.531 2.609c.016.219.016.438.016.656 0 6.672-5.078 14.359-14.359 14.359-2.859 0-5.516-.828-7.75-2.266.406.047.797.063 1.219.063 2.359 0 4.531-.797 6.266-2.156a5.056 5.056 0 0 1-4.719-3.5c.313.047.625.078.953.078.453 0 .906-.063 1.328-.172a5.048 5.048 0 0 1-4.047-4.953v-.063a5.093 5.093 0 0 0 2.281.641 5.044 5.044 0 0 1-2.25-4.203c0-.938.25-1.797.688-2.547a14.344 14.344 0 0 0 10.406 5.281 5.708 5.708 0 0 1-.125-1.156 5.045 5.045 0 0 1 5.047-5.047 5.03 5.03 0 0 1 3.687 1.594 9.943 9.943 0 0 0 3.203-1.219 5.032 5.032 0 0 1-2.219 2.781c1.016-.109 2-.391 2.906-.781z"/></svg>
+											</a>
+										</li>
+										<li>
+											<a href="https://www.linkedin.com/shareArticle?mini=true&url={{ url_pagina }}&title=&summary=&source=" target="_blank">
+												<svg xmlns="http://www.w3.org/2000/svg" viewBox=" 0 0 24 28"><path d="M5.453 9.766V25.25H.297V9.766h5.156zm.328-4.782c.016 1.484-1.109 2.672-2.906 2.672h-.031C1.11 7.656 0 6.468 0 4.984c0-1.516 1.156-2.672 2.906-2.672 1.766 0 2.859 1.156 2.875 2.672zM24 16.375v8.875h-5.141v-8.281c0-2.078-.75-3.5-2.609-3.5-1.422 0-2.266.953-2.641 1.875-.125.344-.172.797-.172 1.266v8.641H8.296c.063-14.031 0-15.484 0-15.484h5.141v2.25h-.031c.672-1.062 1.891-2.609 4.672-2.609 3.391 0 5.922 2.219 5.922 6.969z"/></svg>
+											</a>
+										</li>
+										<li>
+											<a href="http://pinterest.com/pin/create/button/?url={{ url_pagina }}&media={{ url_immagine }}&description={{ title_pagina }}" target="_blank">
+												<svg xmlns="http://www.w3.org/2000/svg" viewBox=" 0 0 20 28"><path d="M0 9.328C0 3.562 5.281 0 10.625 0 15.531 0 20 3.375 20 8.547c0 4.859-2.484 10.25-8.016 10.25-1.313 0-2.969-.656-3.609-1.875-1.188 4.703-1.094 5.406-3.719 9L4.437 26l-.141-.156c-.094-.984-.234-1.953-.234-2.938 0-3.187 1.469-7.797 2.188-10.891-.391-.797-.5-1.766-.5-2.641 0-1.578 1.094-3.578 2.875-3.578 1.313 0 2.016 1 2.016 2.234 0 2.031-1.375 3.938-1.375 5.906 0 1.344 1.109 2.281 2.406 2.281 3.594 0 4.703-5.187 4.703-7.953 0-3.703-2.625-5.719-6.172-5.719-4.125 0-7.313 2.969-7.313 7.156 0 2.016 1.234 3.047 1.234 3.531 0 .406-.297 1.844-.812 1.844-.078 0-.187-.031-.266-.047-2.234-.672-3.047-3.656-3.047-5.703z"/></svg>
+											</a>
+										</li>
+									</ul>
+								</div>
+							</div>
+						{% endif %}
+					</div>
+
+					<div class="chi-si-affida-easydive hide-on-desktop">
+
+						<div class="clear bollino-list">
+							<h5>{{ _lblw.si_affidano_a_easydive }}</h5>
+							<div class="bollino">
+								<span><img src="/assets/website/img/ico-marina.svg"></span>
+								<strong>{{ _lblw.si_affida_marina }}</strong>
+							</div>
+							<div class="bollino">
+								<span><img src="/assets/website/img/ico-polizia.svg"></span>
+								<strong>{{ _lblw.si_affida_polizia }}</strong>
+							</div>
+							<div class="bollino">
+								<span><img src="/assets/website/img/ico-fuoco.svg"></span>
+								<strong>{{ _lblw.si_affida_fuoco }}</strong>
+							</div>
+							<div class="bollino">
+								<span><img src="/assets/website/img/ico-carabinieri.svg"></span>
+								<strong>{{ _lblw.si_affida_carabinieri }}</strong>
+							</div>
+							<div class="bollino">
+								<span><img src="/assets/website/img/ico-universita.svg"></span>
+								<strong>{{ _lblw.si_affida_universita }}</strong>
+							</div>
+						</div>
+
+						<div class="clear bollino-list">
+							<div class="bollino">
+								<span><img src="/assets/website/img/ico-italia.svg"></span>
+								<strong>Made in italy</strong>
+							</div>
+							<div class="bollino" data-open-url="{{ mapPagine.plastic_free.url }}">
+								<span><img src="/assets/website/img/plastic-free2.gif"></span>
+								<strong>Respect the Ocean</strong>
+							</div>
+							<div class="bollino">
+								<span><img src="/assets/website/img/ico-consegna.svg"></span>
+								<strong>{{ _lblw.consegna_express_mondo }}</strong>
+							</div>
+						</div>
+
+						{% if item_base.get('patent') or item_base.get('lifetime')
+							or item_base.get('universal_housing') or item_base.get('waterproof') %}
+						<div class="clear bollino-list">
+						{% if item_base.get('patent') %}
+							<div class="bollino">
+								<span><img src="/assets/website/img/ico-patented.svg"></span>
+								<strong>{{ _lblw.patent }}</strong>
+							</div>
+						{% endif %}
+						{% if item_base.get('lifetime') %}
+							<div class="bollino">
+								<span><img src="/assets/website/img/ico-lifetime.svg"></span>
+								<strong>{{ _lblw.lifetime }}</strong>
+							</div>
+						{% endif %}
+						{% if item_base.get('universal_housing') %}
+							<div class="bollino">
+								<span><img src="/assets/website/img/ico-universal-housing2.svg"></span>
+								<strong>{{ _lblw.universal_housing }}</strong>
+							</div>
+						{% endif %}
+						{% if item_base.get('waterproof') %}
+							<div class="bollino">
+								<span><img src="/assets/website/img/ico-waterproof1.svg"></span>
+								<strong>{{ _lblw.waterproof }}</strong>
+							</div>
+						{% endif %}
+						</div>
+						{% endif %}
+
+						{% if _h.requestActivity != 'index' %}
+							<div class="clear bollino-list">
+								<script src="https://apps.elfsight.com/p/platform.js" defer></script>
+								<div class="elfsight-app-11e860e8-c280-436b-aa68-1b35d67b01cb"></div>
+							</div>
+						{% endif %}
+
+					</div>
+
+				</div>
+				<div class="tab-mobile">
+					<div class="mt-2 mt-xl-3">
+						<div data-tab-rif="tab1"><strong>{{ _lblw.dettagli }}</strong></div>
+						<div data-tab="tab1" class="background-grey border-radius-16">
+							<div class="descrizione html">
+								{{ item_base.get('descrizione')}}
+							</div>
+						</div>
+					</div>
+					<div class="mt-2 mt-xl-3">
+						<div data-tab-rif="tab2"><strong>{{ _lblw.specifiche_tecniche }}</strong></div>
+						<div data-tab="tab2" class="background-grey border-radius-16">
+							<div class="descrizione html background-white" style="border-top: 0;">
+							{% set scheda_tecnica_testo = true %}
+							{% for key in item_base.getExtraKeys() %}
+								{% set value = item_base.getExtra(key) %}
+								{% if value != null %}
+									{% set scheda_tecnica_testo = false %}
+									<div class="list-caratteristica-item">
+										<div class="list-caratteristica-item-label">{{ item_base.getExtraLabel(key) }}</div>
+										<div class="list-caratteristica-item-value">{{ item_base.getExtra(key) }}</div>
+									</div>
+								{% endif %}
+							{% endfor %}
+							{% if scheda_tecnica_testo %}
+								{{ item_base.get('scheda_tecnica') }}
+							{% endif %}
+							</div>
+						</div>
+					</div>
+					{% if compatibilita_fotocamera|length > 0 or compatibilita_cellulare|length > 0 %}
+					<div class="mt-2 mt-xl-3">
+						<div data-tab-rif="tab3"><strong>{{ _lblw.compatibilita }}</strong></div>
+						<div data-tab="tab3" class="background-grey border-radius-16">
+							<div class="descrizione html">
+								{% for key,elem in compatibilita_fotocamera %}
+									<div class="compatibilita"><strong style="background-image: url({{ elem.base.imageUrl('300x300') }})">{{ elem.base.get('nome') }}</strong> {{ elem.list|join(' | ') }}</div>
+								{% endfor %}
+								{% for key,elem in compatibilita_cellulare %}
+									<div class="compatibilita"><strong style="background-image: url({{ elem.base.imageUrl('300x300') }})">{{ elem.base.get('nome') }}</strong> {{ elem.list|join(' | ') }}</div>
+								{% endfor %}
+							</div>
+						</div>
+					</div>
+					{% endif %}
+					{% if listBundle|length > 0 %}
+					<div class="mt-2 mt-xl-3">
+						<div data-tab-rif="tab5" class="show"><strong>{{ _lblw.composto_da }}</strong></div>
+						<div data-tab="tab5" style="border-top: 0; display: block;" class="background-grey border-radius-16">
+							<div class="descrizione list-bundle">
+								{% for b in listBundle %}
+								<a class="list-bundle-item" href="{{ b.url }}" title="{{ b.get('nome') }}">
+									<div class="list-bundle-item-image"><img src="{{ b.imageUrl('300x300') }}"></div>
+									<div class="list-bundle-item-nome">{{ b.get('nome') }}</div>
+									<div class="list-bundle-item-quantita">{{ b.get('relazione_quantita') }}</div>
+								</a>
+								{% endfor %}
+							</div>
+						</div>
+					</div>
+					{% endif %}
+					{% if item_base.allegati|length > 0 %}
+					<div class="mt-2 mt-xl-3">
+						<div data-tab-rif="tab4"><strong>{{ _lblw.allegati }}</strong></div>
+						<div data-tab="tab4" class="background-grey border-radius-16">
+							<div class="descrizione html list-allegati">
+								{% for a in item_base.allegati %}
+								<div><a href="/download-allegato-articolo?id={{ a.id }}" target="_blank"><span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"/><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM17 13l-5 5-5-5h3V9h4v4h3z"/></svg>{{ a.get('nome') }}</span><em>({{ a.get('file_nome') }})</em></a></div>
+								{% endfor %}
+							</div>
+						</div>
+					</div>
+					{% endif %}
+					<div class="mt-2 mt-xl-3">
+						<div data-tab-rif="contatti"><strong>{{ _lblw.richiedi_informazioni }}</strong></div>
+						<div data-tab="contatti" class="background-grey border-radius-16">
+							<div class="html">
+								{{ _self.contatti(_h, item_base) }}
+							</div>
+						</div>
+					</div>
+				</div>
+				</div>
+			</div>
+
+
+			<div class="clear"></div>
+		</div>
+	</div>
+
+{% set item_image = item %}
+{% set listImagesGallery = item.geto('immagini').get('list') %}
+{% if listImagesGallery|length == 0 %}
+	{% set listImagesGallery = item_base.geto('immagini').get('list') %}
+	{% set item_image = item_base %}
+{% endif %}
+
+{% set immagini_gallery_extra = false %}
+{% if listImagesGallery|length > 0 %}
+	{% for img in listImagesGallery %}
+		{% if img.name matches '/^extra*/' %}
+			{% set immagini_gallery_extra = true %}
+		{% endif %}
+	{% endfor %}
+{% endif %}
+<div class="tab-mobile tab-open-first mb-2 mb-xl-3">
+	{% if immagini_gallery_extra %}
+	<div class="mt-2 mt-xl-3">
+		<div data-tab-rif="gallery"><strong>{{ _lblw.gallery }}</strong></div>
+		<div data-tab="gallery">
+			<div class="item-gallery zoom-image-list">
+			{% for img in listImagesGallery %}
+				{% if img.name matches '/^extra*/' %}
+				<div class="item-gallery-img item-img zoom-image-action">
+					<img src="/assets/void_image.png" alt="Easydive" class="placeholder-img placeholder{{ index }}">
+					<img class="zoom-image" src="/images/1200x1200/{{ img.src }}" onload="image_articolo_loaded(this, '.placeholder{{ index }}')" style="display: none;">
+				</div>
+				{% endif %}
+			{% endfor %}
+			</div>
+		</div>
+	</div>
+	{% endif %}
+
+	{% set listImages = item.immaginiExtra() %}
+	{% if listImages|length > 0 %}
+		<div class="mt-2 mt-xl-3">
+		{% for list in listImages %}
+			<div data-tab-rif="extra_{{loop.index}}"><strong>{{ list.nome }}</strong></div>
+			<div data-tab="extra_{{loop.index}}">
+				<div class="item-gallery zoom-image-list">
+				{% for img in list.list %}
+					<div class="item-gallery-img item-img zoom-image-action">
+						<img src="/assets/void_image.png" alt="Easydive" class="placeholder-img placeholder{{ index }}">
+						<img class="zoom-image" src="{{ img.imageUrl('1200x600') }}" onload="image_articolo_loaded(this, '.placeholder{{ index }}')" style="display: none;">
+						{% if img.get('descrizione_' ~ _h.lang) %}
+							<strong>{{ img.get('descrizione_' ~ _h.lang) }}</strong>
+						{% endif %}
+					</div>
+				{% endfor %}
+				</div>
+			</div>
+		{% endfor %}
+		</div>
+	{% endif %}
+	{% if listAccessori|length > 0 %}
+	<div class="mt-2 mt-xl-3">
+		<div data-tab-rif="accessori"><strong>{{ _lblw.accessori }}</strong></div>
+		<div data-tab="accessori">
+			<div class="clear accessori-custodia">
+				<div class="col-box-left background-grey border-radius-16">
+					<ul>
+					{% for accessorio in listAccessori %}
+						{% if accessorio.list|length > 0 %}
+						<li><a data-id="accessori_{{ accessorio.id }}" class="menu-link{% if loop.index == 1%} selected{% endif %}">{{ _lblw[accessorio.nome] }}</a></li>
+						{% endif %}
+					{% endfor %}
+					</ul>
+				</div>
+				<div class="col-box-right-dynamic-details">
+					<div class="col-box-right-dynamic-details-content">
+						{% for accessorio in listAccessori %}
+							{% if accessorio.list|length > 0 %}
+							<div class="items-list clear accessori-custodia-list{% if loop.index == 1%} show{% endif %}" data-id="accessori_{{ accessorio.id }}">
+								{% for item in accessorio.list %}
+								{{ mc.item_articolo(_h, item) }}
+								{% endfor %}
+							</div>
+							{% endif %}
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	{% endif %}
+	{% if item_base.video()|length > 0 %}
+	<div class="mt-2 mt-xl-3">
+		<div data-tab-rif="video"><strong>Video</strong></div>
+		<div data-tab="video">
+			<div class="items-list clear items-correlati-list">
+				<div class="clear list-video">
+					{% for video in item_base.video() %}
+						<div class="item-video">
+							<div class="card-video"><iframe src="{{ video.get('url') }}" width="436" height="245" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>
+							<strong>{{ video.get('nome') }}</strong>
+						</div>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	</div>
+	{% endif %}
+</div>
+</div>
+
+{% if listRecensioni|length > 0 %}
+<div class="margin-mobile">
+	<div class="items-list clear commenti-facebook-wrapper">
+		<div class="list-title">{{ _lblw.dicono_di_noi }}</div>
+		<div class="commenti-facebook">
+			{% for rec in listRecensioni %}
+			<div class="facebook-widget-comments">
+			   <a href="{{ rec.get('url') }}" target="_blank" tabindex="-1">
+				<div class="facebook-widget-comment-header">
+					{% if rec.get('url_immagine') %}
+					<img src="{{ rec.get('url_immagine') }}" align="middle">
+					{% endif %}
+					{{ rec.get('voto') }}
+				</div>
+				<div class="text">
+					{{ rec.get('testo') }} <span class="more">{{ _lblw.altro }}</span>
+				</div>
+				<div class="facebook-widget-comment-footer">
+					{{ rec.get('nome') }}
+				</div>
+			</a>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+</div>
+{% endif %}
+
+{% if item_base.get('tipo_custodia', '') != '' %}
+	{% if item_base.get('tipo_custodia', '') == 'fotocamera' %}
+		{% set url = 'seleziona-brand-fotocamera' %}	
+	{% elseif item_base.get('tipo_custodia', '') == 'smartphone' %}
+		{% set url = 'seleziona-cellulare' %}	
+	{% endif %}
+	<div class="load-content item-acquista-window">
+		<div class="item-acquista-step" data-url="{{ url }}" data-id="{{ item_base.id }}" data-codice="{{ item_base.get('codice') }}" data-name="{{ item_base.get('nome') }}">
+			<div class="step-header-calcolo-prezzo action-details-wrapper expand" data-count="0">
+				<div class="step-header">
+					<div class="step-header-img">
+						<img src="{{ item_base.imageUrl('1200x1200') }}" alt="{{ item_base.get('nome') }}">
+					</div>
+					<div class="step-header-nome">
+						<strong>{{ item_base.get('nome') }}</strong>
+					</div>
+					<div class="step-header-prezzo" data-prezzo="{{ item_base.prezzo('', false) }}">
+						<span>
+							<strong class="prezzo">{{ item_base.prezzo('e', false) }}</strong>
+							<small>{{ _lblw.iva_esclusa }}</small>
+						</span>					
+					</div>
+				</div>
+				<div class="step-header-accessori action-details">
+				</div>
+				<div class="step-header-accessori-expand action-details-kit">{{ _lblw.visualizza_dettaglio_ordine }}</div>
+			</div>
+		</div>
+	</div>
+{% endif %}

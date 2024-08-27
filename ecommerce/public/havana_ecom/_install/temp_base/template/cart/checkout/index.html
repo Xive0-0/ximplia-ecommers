@@ -1,0 +1,19 @@
+<div id="checkout" class="loading" data-current-block="{{ current_block }}">
+
+</div>
+{% set facebook_pixel = false %}
+{% if _h.settings.getByUrl('facebook_pixel', '-') != '-' and _h.settings.getByUrl('facebook_pixel') != '' %}
+	{% if _h.config('cookie_policy') == 'gdpr22' %}
+		{% if _h.cookie('statistiche')  %}
+			{% set facebook_pixel = true %}
+		{% endif %}
+	{% else %}
+		{% set facebook_pixel = true %}
+	{% endif %}
+{% endif %}
+
+{% if facebook_pixel %}
+<script>
+fbq('track', 'InitiateCheckout');
+</script>
+{% endif %}

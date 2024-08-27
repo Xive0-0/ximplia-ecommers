@@ -1,0 +1,120 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% set lang = _h.input('lang', _h.config('default_language', 'it')) %}
+
+{% if item == null %}
+	{% set title = 'Nuova E-Mail Predefinita' %}
+	{% set ordine = 0 %}
+{% else %}
+	{% set title = 'Modifica E-Mail Predefinita' %}
+{% endif %}
+{{ mc.slideBoxHeader(_h, title) }}
+<input type="hidden" name="lang" value="{{ lang }}">
+<input type="hidden" name="id" value="{{ item.id }}">
+{{ mc.contenutiInLingua(lang) }}
+
+<p class="field-line field-400">
+	<label>Tipologia<span>*</span>:</label>
+	<select name="tipo" class="field valida-required">
+	<option></option>
+	{{ mc.listComboOptions([{'id': 'base', 'text': 'E-Mail base / riferita a ordine'},
+		{'id': 'supporto', 'text': 'Risposta supporto clienti'},
+		{'id': 'invito', 'text': 'Invito clienti'},
+		{'id': 'promemoria', 'text': 'Promemoria clienti'},
+		{'id': 'scadenza', 'text': 'Gestione scadenze'}], item.get('tipo')) }}
+	</select>
+</p>
+<div class="field-line">
+	{% set cssClass = '' %}
+	{% set value = '' %}
+	{% if item %} 
+		{% if item.get('articoli_carrello') %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% endif %}
+	{% endif %}
+	<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="articoli_carrello" value="{{ value }}" /></span> <strong>Aggiungi articoli nel carrello (se e-mail riferita ad un ordine)</strong></div>
+</div>
+<p class="field-line field-400">
+	<label>Ordine:</label>
+	<select name="stato_ordine" class="field">
+	<option></option>
+	{{ mc.listComboOptions([{'id': '100', 'text': 'Stato ordine: in lavorazione'},
+		{'id': '101', 'text': 'Stato ordine: attesa articoli'},
+		{'id': '200', 'text': 'Stato ordine: merce disponibile/in spedizione'},
+		{'id': '210', 'text': 'Stato ordine: merce disponibile/in spedizione - per ritiro in sede'},
+		{'id': '201', 'text': 'Stato ordine: consegnato'},
+		{'id': '800', 'text': 'Stato ordine: annullato'},
+		{'id': '801', 'text': 'Stato ordine: rimborsato'},
+		{'id': '20000', 'text': 'Stato spedizione: in magazzino'},
+		{'id': '20001', 'text': 'Stato spedizione: evasione parziale'},
+		{'id': '20002', 'text': 'Stato spedizione: spedito'},
+		{'id': '20003', 'text': 'Stato spedizione: consegnato'},
+		{'id': '21000', 'text': 'Stato pagamento: non pagato'},
+		{'id': '21001', 'text': 'Stato pagamento: bonifico comunicato CRO'},
+		{'id': '21002', 'text': 'Stato pagamento: pagato acconto'},
+		{'id': '21003', 'text': 'Stato pagamento: pagato'},
+		{'id': '21010', 'text': 'Stato pagamento: annullato'}
+	], item.get('stato_ordine')) }}
+	</select>
+</p>
+
+<p class="field-line field-400">
+	<label>Numero giorni check per scadenza (valore negativo in caso di pre-scadenza):</label>
+	<input type="text" name="giorni_check_scadenza" class="field valida-digitintn" value="{{ item.get('giorni_check_scadenza') }}">
+</p>
+<p class="field-line field-400" style="margin-bottom: 10px;">
+	<label>Nome/Etichetta interna per scelta nei menu<span>*</span>:</label>
+	<input type="text" name="nome" class="field valida-required" value="{{ item.get('nome') }}">
+</p>
+
+<div class="message-center-block" data-message-center="email,wapp,sms">
+<div class="message-center-block-expandible" data-type="email">
+	<div class="message-center-block-expandible-title">Impostazioni testo E-Mail</div>
+	<div class="message-center-block-expandible-body">
+		<div class="field-line field-400">
+			<label>Oggetto<span>*</span>:</label>
+			<input type="text" name="oggetto" class="field" value="{{ item.get('oggetto') }}">
+		</div>
+		<div class="field-line field-400">
+			<label>Testo e-mail<span>*</span>:</label>
+			<textarea name="testo" class="visual-editor">{{ item.get('testo') }}</textarea>
+		</div>
+	</div>
+</div>
+<div class="message-center-block-expandible" data-type="wapp">
+	<div class="message-center-block-expandible-title">Impostazioni testo WhatsApp</div>
+	<div class="message-center-block-expandible-body">
+		<div class="field-line field-400 field-line-textarea">
+			<label>Testo messaggio<span>*</span>:</label>
+			<textarea name="testo_wapp" class="field">{{ item.get('testo_wapp') }}</textarea>
+		</div>
+	</div>
+</div>
+<div class="message-center-block-expandible" data-type="sms">
+	<div class="message-center-block-expandible-title">Impostazioni testo SMS</div>
+	<div class="message-center-block-expandible-body">
+		<div class="field-line field-400 field-line-textarea">
+			<label>Testo SMS<span>*</span>:</label>
+			<textarea name="testo_sms" class="field">{{ item.get('testo_sms') }}</textarea>
+		</div>
+	</div>
+</div>
+</div>
+
+<div style="margin-top: 5px;"><em>è possibile inserire all'interno del testo i riferimenti ai campi compilati dall'utente secondo la seguente logica: nome del campo racchiuso tra doppie parentesi graffe. Ad esempio {{ '{{' }}nome_campo{{ '}}' }}</em></div>
+<div style="margin-top: 10px"><em>Campi disponibili in generale: </em> 
+nome, cognome, e_mail, telefono
+</div>
+<div style="margin-top: 10px"><em>Campi disponibili SOLO in reminder scadenze articoli: </em> 
+codice_articolo, nome_articolo, data_scadenza
+</div>
+<div style="margin-top: 10px"><em>Campi disponibili SOLO negli ordini: </em> 
+numero_ordine, data_ordine, totale_ordine <br>
+<div style="margin-top: 10px"><em>Campi disponibili SOLO negli ordini con ritiro in sede: </em> 
+sede_ritiro.nome, sede_ritiro.via, sede_ritiro.num_civico, sede_ritiro.cap, sede_ritiro.localita,
+sede_ritiro.provincia, sede_ritiro.telefono, sede_ritiro.note,
+sede_ritiro.orario_lunedi, sede_ritiro.orario_martedi, sede_ritiro.orario_mercoledi, sede_ritiro.orario_giovedi, sede_ritiro.orario_venerdi, sede_ritiro.orario_sabato, sede_ritiro.orario_domenica
+</div>
+{{ mc.labelCampiObbligatori() }}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/testoemail/ex-edit'), '"reload": "#testo-email-content"') }}	

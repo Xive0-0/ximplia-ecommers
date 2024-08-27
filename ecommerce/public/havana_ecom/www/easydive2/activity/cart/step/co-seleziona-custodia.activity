@@ -1,0 +1,9 @@
+{
+	"on:": [
+		"cart/step/list-custodia"
+	],
+	"on:view": {
+		"template": "cart/step/co_seleziona_custodia",
+		"extra": false
+	}
+}

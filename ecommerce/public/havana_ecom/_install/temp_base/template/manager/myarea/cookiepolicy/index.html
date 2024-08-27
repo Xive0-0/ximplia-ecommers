@@ -1,0 +1,11 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% set entita_tipo = _h.input('table', '') %}
+{% set entita_id = _h.input('id', '') %}
+{{ mc.slideBoxHeaderToolbar(_h, 'Cookie policy', true) }}
+	{{ mc.navButton(_h, 'nuovo', 'new', 'click', 'h-action-selected-open-window', '{"window": {"type": "layer", "overlay": true, "width": 800, "height": 600, "url": "' ~ _h.url('manager/myarea/cookiepolicy/edit') ~ '", "event": "cookie_policy", "params": {"entita_id": "' ~ entita_id ~ '", "entita_tipo": "' ~ entita_tipo ~ '"}}}') }}
+	{{ mc.navButtonUpdate(_h, 'modifica', 'cookiepolicy', '', 'testo-cookiepolicy-content', '"type": "layer", "overlay": true, "width": 800, "height": 600, "event": "cookie_policy",') }}
+	{{ mc.navButton(_h, 'elimina', 'delete', 'click', 'h-action-selected-execute', '{"select": {"from":"#testo-cookiepolicy-content", "check": 1}, "confirm": "Eliminare la voce selezionata?", "url": "' ~ _h.url('manager/myarea/cookiepolicy/delete') ~ '", "reload": "#testo-cookiepolicy-content"}') }}		
+{{ mc.slideBoxHeaderToolbarEnd() }}
+
+{{ mc.box_footer(_h, 'testo-cookiepolicy', 'cookiepolicy', list, '{"id": "' ~ entita_id ~ '", "table": "' ~ entita_tipo ~ '"}') }}

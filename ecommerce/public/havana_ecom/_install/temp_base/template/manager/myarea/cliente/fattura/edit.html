@@ -1,0 +1,82 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Dati fatturazione') }}
+{% if item %}
+<input type="hidden" name="id" value="{{ item.id }}">
+<input type="hidden" name="id_cliente" value="{{ item.get('id_cliente') }}">
+{% else %}
+<input type="hidden" name="id_cliente" value="{{ _h.input('id_cliente') }}">
+{% endif %}
+
+<p class="field-line field-400">
+	<label>Ragione Sociale/Nome e cognome<span>*</span>:</label>
+	<input type="text" name="nome" class="field valida-required" value="{{ item.get('nome') }}" maxlength="100">
+</p>
+<p class="field-line field-line-left field-150">
+	<label>Referente nome:</label>
+	<input type="text" name="referente_nome" class="field" value="{{ item.get('referente_nome') }}" maxlength="50">
+</p>
+<p class="field-line field-150">
+	<label>Referente cognome:</label>
+	<input type="text" name="referente_cognome" class="field" value="{{ item.get('referente_cognome') }}" maxlength="50">
+</p>
+<p class="field-line field-150 field-line-left">
+	<label>P.IVA:</label>
+	<input type="text" name="p_iva" class="field" value="{{ item.get('p_iva') }}" maxlength="20">
+</p>
+<p class="field-line field-150">
+	<label>Codice fiscale:</label>
+	<input type="text" name="codice_fiscale" class="field" value="{{ item.get('codice_fiscale') }}" maxlength="20">
+</p>
+<div class="clear"></div>
+<p class="field-line clear field-line-left field-100">
+	<label>Data nascita:</label>
+	<input type="text" name="data_nascita" class="field valida-datasimple input-datepicker" value="{{ ordine.fattura.data_nascita }}" maxlength="10">
+</p>
+<p class="field-line field-250 field-line-left">
+	<label>Luogo di nascita:</label>
+	<input type="text" name="luogo_nascita" class="field" value="{{ ordine.fattura.luogo_nascita }}" maxlength="100">
+</p>
+<div class="clear"></div>
+<p class="field-line field-250 field-line-left">
+	<label>E-Mail PEC:</label>
+	<input type="text" name="pec" class="field valida-email" value="{{ item.get('pec') }}" maxlength="100">
+</p>
+<p class="field-line field-100">
+	<label>Codice Destinatario SDI:</label>
+	<input type="text" name="sdi" class="field valida-digitalphanum valida-sdi" value="{{ item.get('sdi') }}" maxlength="7">
+</p>
+<p class="clear field-line field-line-left field-250">
+	<label>Via<span>*</span>:</label>
+	<input type="text" name="via" class="field valida-required" value="{{ item.get('via') }}" maxlength="100">
+</p>
+<p class="field-line field-50">
+	<label>Num. civico<span>*</span>:</label>
+	<input type="text" name="num_civico" class="field valida-required" value="{{ item.get('num_civico') }}" maxlength="10">
+</p>
+<p class="clear field-line clear field-line-left field-50">
+	<label>CAP<span>*</span>:</label>
+	<input type="text" name="cap" class="field valida-digitnumber valida-required" value="{{ item.get('cap') }}" maxlength="5">
+</p>
+<p class="field-line field-250">
+	<label>Località<span>*</span>:</label>
+	<input type="text" name="localita" class="field valida-required" value="{{ item.get('localita') }}" maxlength="50">
+</p>
+<p class="clear field-line field-250">
+	<label>Provincia<span>*</span>:</label>
+	<input type="text" name="provincia" class="field valida-required" value="{{ item.get('provincia') }}" maxlength="50">
+</p>
+<p class="clear field-line field-250">
+	<label>Nazione<span>*</span>:</label>
+	<select name="nazione" class="field valida-required">
+		{% for n in list %}
+		<option value="{{ n.id }}" {% if item.get('nazione') == n.id %}selected="true"{% endif %}>{{ n.get('nome') }}</option>
+		{% endfor %}
+	</select>
+</p>
+<p class="field-line field-200">
+	<label>Telefono<span>*</span>:</label>
+	<input type="text" name="telefono" class="field" value="{{ item.get('telefono') }}" maxlength="20">
+</p>
+{{ mc.labelCampiObbligatori() }}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/cliente/fattura/ex-edit'), '"reload": "#dati-content"') }}	

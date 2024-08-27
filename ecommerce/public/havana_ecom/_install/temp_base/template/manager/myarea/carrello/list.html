@@ -1,0 +1,24 @@
+{% import _h.template('manager/_macro_items.html') as mci %}
+<table class="h-list item-autoload-total h-fixed-header-table" cellpadding="0" cellspacing="0" border="0" data-total="{{ result.total }}">
+<thead>
+<tr class="h-list-header">
+	<th style="width: 10px; padding: 0; overflow: hidden;">&nbsp;</th>
+	<th style="width: 20px;">&nbsp;</th>
+	<th style="width: 40px;">Lang</th>
+	<th style="width: 110px;" data-order="data_inserimento" data-order-type="{{ result.order_type_data_inserimento }}">Data ricezione</th>
+	<th style="width: 110px;" data-order="data_accesso" data-order-type="{{ result.order_type_data_accesso }}">Data modifica</th>
+	<th style="width: 110px;" data-order="data_chiuso" data-order-type="{{ result.order_type_data_chiuso }}">Data chiusura</th>
+	<th style="width: 40px;" data-order="chiuso_e_mail" data-order-type="{{ result.order_type_chiuso_e_mail }}">C.E.</th>
+	<th style="width: 110px;" data-order="data_cancellazione" data-order-type="{{ result.order_type_data_cancellazione }}">Data cancel.</th>
+	<th style="width: 70px;" data-order="ultima_azione" data-order-type="{{ result.order_type_ultima_azione }}">Ultima az.</th>
+	<th style="width: 110px;" data-order="data_ultima_azione" data-order-type="{{ result.order_type_data_ultima_azione }}">Data ultima az.</th>
+	<th style="width: 100px;">&nbsp;</th>
+	<th>E-mail</th>
+</tr>
+</thead>
+<tbody>
+{% for item in result.list %}		
+	{{ mci.item_carrello(_h, item) }}
+{% endfor %}
+</tbody>
+</table>

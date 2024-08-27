@@ -1,0 +1,137 @@
+{% import _h.template('_macro.html') as mc %}
+{% set _lblc = _h.labels.get('checkout_preventivo') %}
+{% set _lblf = _h.labels.get('form') %}
+
+<div class="checkout-main clear" data-page="2">
+	<div class="col-box-100">
+
+	<div class="tab-selected">
+		<div class="tab-title"><span>{{ _lblc.title_articoli_nel_carrello }}</span></div>
+		<div class="tab-content clear">
+{% if testo %}
+	<div class="html clear">{{ testo.getWithMerge('testo') }}</div>
+{% endif %}
+		
+		<div class="checkout-title">{{ _lblc.title_articoli_nel_carrello }}</div>
+		<div class="checkout-block block-articoli">
+			<div class="ck-header">
+				<div class="ck-image ck-cell">&nbsp;</div>
+				<div class="ck-articolo ck-cell">{{ _lblc.articolo }}</div>
+				<div class="ck-prezzo-unitario ck-cell">{{ _lblc.prezzo_unitario_small }}</div>
+				<div class="ck-quantita ck-cell">{{ _lblc.quantita_small }}</div>
+				<div class="ck-azioni ck-cell">&nbsp;</div>
+				<div class="ck-prezzo-totale ck-cell">{{ _lblc.prezzo }}</div>
+			</div>
+			{% set iva = true %}
+			{% if cart.add_iva == '' and (_h.session.params.user.prezzo_senza_iva or _h.config('prezzi_senza_iva', false)) %}
+				{% set iva = false %}
+			{% endif %}
+			{% for art in cart.list %}
+			<div class="ck-line ck-line-articolo">
+				{{ mc.item_articolo_carrello(_h, art) }}
+				<div class="ck-prezzo-unitario ck-cell">
+					<div class="price item-buy-price">{{ art.item.prezzo('e', iva) }}</div>			
+					{% if art.item.isSconto %}
+					<div class="sconto">{{ _lblc.sconto }} -{{ art.item.sconto() }}%</div>
+					<div class="price-old">{{ art.item.prezzoOriginale('e', iva) }}</div>
+					{% endif %}	
+					{% if cart.add_iva == '' and (_h.session.params.user.prezzo_senza_iva or _h.config('prezzi_senza_iva', false)) %}
+					<div class="iva">{{ _lblc.prezzo_iva_escl_small }}</div>
+					{% endif %}					
+				</div>
+				<div class="ck-quantita ck-cell">
+					<div class="ck-field-quantita">
+						<input type="text" name="quantita" value="{{ art.qta }}" class="valida-digitnumber" maxlength="3">
+						<a href="javascript:void(0)" class="action-add-qta-1" data-id="{{ art.tmp_id }}" title="{{ _lblc.btn_aggiunti }}">+</a>
+						<a href="javascript:void(0)" class="action-rem-qta-1" data-id="{{ art.tmp_id }}" title="{{ _lblc.btn_rimuovi }}">-</a>
+					</div>
+					<a href="javascript:void(0)" class="action-aggiorna" data-id="{{ art.tmp_id }}" title="{{ _lblc.btn_aggiorna }}">{{ _lblc.btn_aggiorna }}</a>
+				</div>
+				<div class="ck-azioni ck-cell">
+					<a href="javascript:void(0)" class="action-elimina" data-id="{{ art.tmp_id }}" title="{{ _lblc.btn_elimina }}">{{ _lblc.btn_elimina }}</a>
+				</div>
+				<div class="ck-prezzo-totale ck-cell">
+					<span>
+					{% if cart.add_iva == '' and (_h.session.params.user.prezzo_senza_iva or _h.config('prezzi_senza_iva', false)) %}
+					{{ _h.util.valuta(art.total_imponibile, cart.currency) }}
+					<em>+ {{ _lblc.iva }} {{ art.item.iva('%') }}: {{ _h.util.valuta(art.total_iva, cart.currency)}}</em>
+					{% else %}
+					{{ _h.util.valuta(art.total, cart.currency) }}
+					{% endif %}
+					</span>
+				</div>
+			</div>
+			{% endfor %}
+		{% if not(_h.config('gestione_preventivi_semplice', false)) %}
+			{% for art in cart.list_virtuale %}
+			<div class="ck-line ck-line-articolo ck-line-articolo-virtuale" data-id-virtuale="{{ art.tmp_id }}">
+				<div class="ck-image ck-cell">
+					<div class="btn-add-temp-image-to-item">
+					{% if art.item.image %}
+						<img src="/images/prev/{{ _h.config('template').web.temp_image_dim }}/{{ art.item.image }}" style="cursor: pointer">
+					{% else %}
+						<img src="/assets/void_image.png" style="cursor: pointer">
+					{% endif %}
+						<em>{{ _lblc.aggiungi_immagine }}</em>
+					</div>
+				</div>
+				<div class="ck-articolo ck-cell">
+					<div class="ck-articolo-content">
+						<div><input type="text" name="nome" value="{{ art.item.nome }}" class="input" maxlength="100"></div>
+						<div><em>{{ _lblc.note }}</em></div>
+						<div><input type="text" name="note" value="{{ art.item.note }}" class="input" maxlength="250"></div>
+					</div>
+				</div>
+				<div class="ck-prezzo-unitario ck-cell">
+					<div><em>{{ _lblc.prezzo }}</em></div>
+					<div><input type="text" name="prezzo" value="{{ art.item.prezzo }}" class="valida-digiteuro input" maxlength="10"></div>
+					<div><em>{{ _lblc.iva }}</em></div>
+					<div><input type="text" name="iva" value="{{ art.item.iva }}" class="valida-digitnumber input" maxlength="2"></div>
+					{% if cart.add_iva == '' and (_h.session.params.user.prezzo_senza_iva or _h.config('prezzi_senza_iva', false)) %}
+					<div class="iva">{{ _lblc.prezzo_iva_escl_small }}</div>
+					{% endif %}					
+				</div>
+				<div class="ck-quantita ck-cell">
+					<div class="ck-field-quantita">
+						<input type="text" name="quantita" value="{{ art.qta }}" class="valida-digitnumber" maxlength="3">
+					</div>
+				</div>
+				<div class="ck-azioni ck-cell">
+					<a href="javascript:void(0)" class="action-elimina" data-id="{{ art.tmp_id }}" title="{{ _lblc.btn_elimina }}">{{ _lblc.btn_elimina }}</a>
+				</div>
+				<div class="ck-prezzo-totale ck-cell">
+					<span>
+					{% if cart.add_iva == '' and (_h.session.params.user.prezzo_senza_iva or _h.config('prezzi_senza_iva', false)) %}
+					{{ _h.util.valuta(art.total_imponibile, cart.currency) }}
+					<em>+ {{ _lblc.iva }} {{ art.item.iva }}%: {{ _h.util.valuta(art.total_iva, cart.currency)}}</em>
+					{% else %}
+					{{ _h.util.valuta(art.total, cart.currency) }}
+					{% endif %}
+					</span>
+				</div>
+			</div>
+			{% endfor %}
+		{% endif %}
+		</div>
+		{% if not(_h.config('gestione_preventivi_semplice', false)) and _h.session.params.user.speciale %}
+		<div class="checkout-footer-toolbar-2">
+			<a href="javascript:void(0)" title="{{ _lblc.btn_aggiungi_articolo_virtuale }}" class="button-prev action-add-articolo-virtuale">{{ _lblc.btn_aggiungi_articolo_virtuale }}</a>
+			<a href="javascript:void(0)" title="{{ _lblc.btn_aggiorna_dati_articolo_virtuale }}" class="button-prev action-aggiorna-virtuale">{{ _lblc.btn_aggiorna_dati_articolo_virtuale }}</a>
+		</div>
+		{% endif %}
+		<div class="checkout-footer-toolbar">
+			<a href="javascript:void(0)" title="{{ _lblc.btn_procedi_con_acquisto }}" onclick="_ga('send', 'event', 'checkout_preventivo', 'fase2', 'checkout_fase2_riepilogo_procedi')" class="button-next action-submit-2{% if _h.config('gestione_preventivi_semplice', false) %}-thanks{% endif %}">{{ _lblc.btn_procedi_con_acquisto }}</a>
+		</div>
+
+	</div>
+	</div>
+	</div>
+</div>
+
+{% if not(_h.context.isApp()) %}
+<div class="checkout-footer clear">
+<a href="javascript:void(0)" title="{{ _lblc.btn_precedente }}" class="button-prev action-prev-page">{{ _lblc.btn_precedente }}</a>
+<a href="{{ _h.url('/') }}" title="{{ _lblc.btn_continua_shopping }}" class="button-prev">{{ _lblc.btn_continua_shopping }}</a>
+<a href="javascript:void(0)" title="{{ _lblc.btn_vuota_carrello }}" class="button-prev action-vuota-carrello">{{ _lblc.btn_vuota_carrello }}</a>
+</div>
+{% endif %}

@@ -1,0 +1,17 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Aggiungi articolo') }}
+<input type="hidden" name="id_ordine" value="{{ item.id }}">
+<p class="field-line field-400 field-line-left" style="width: 450px;">
+	<label>Aggiungi articolo<span>*</span>:</label>
+	<input type="hidden" name="articolo_id" value="" class="valida-required">
+	<input type="text" name="relazione_nome" class="field autocomplete" value="" data-action='{"callbackSelection": "dettaglio-articolo-aggiungi-ordine",  "params": {"all": 1}, "url": "{{ _h.url('manager/myarea/articolo/list-autocomplete') }}"}'>
+</p>	
+<p class="field-line field-100 field-line-left">
+	<label>Quantità<span>*</span>:</label>
+	<input type="text" name="quantita" class="field valida-digitnumber valida-required" value="1" maxlength="2">
+</p>
+<div class="clear">&nbsp;</div>
+<div class="dettaglio-articolo" data-action='{"url": "{{ _h.url('manager/myarea/articolo/articolo-details') }}"}'></div>
+{{ mc.labelCampiObbligatori() }}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/ordini/ex-add-articolo'), '"reload": ["#h-layout-center-content", "#dettaglio-content"]') }}	

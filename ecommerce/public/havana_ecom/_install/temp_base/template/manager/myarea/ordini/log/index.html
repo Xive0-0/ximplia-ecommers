@@ -1,0 +1,14 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeaderToolbar(_h, 'ordine: ' ~ item.get('codice'), true) }}
+		{{ mc.navButton(_h, 'aggiungi', 'new', 'click', 'h-action-window', '{"type": "layer", "url": "' ~ _h.url('manager/myarea/ordini/log/edit') ~ '", "overlay": true, "width": 500, "height": 300, "params": {"id": ' ~ item.id ~ '}}') }}
+
+{{ mc.slideBoxHeaderToolbarEnd() }}
+	
+	<fieldset id="log-content" data-action='{"url": "{{ _h.url('manager/myarea/ordini/log/list') }}"}' data-load-params='{"id": {{ item.id }}}'>
+		{% include _h.template('manager/myarea/ordini/log/list.html') %}	
+	</fieldset>	
+	
+	</fieldset>		
+</div>
+</form>

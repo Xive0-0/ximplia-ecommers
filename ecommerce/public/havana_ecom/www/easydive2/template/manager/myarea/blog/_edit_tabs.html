@@ -1,0 +1,60 @@
+<div data-tab-rif="dettaglio_evento_fiera">Dettagli evento/fiera</div>
+<div data-tab-rif="video_immagini">Video e immagini</div>
+<div data-tab="video_immagini">
+{{ mc.upload_immagine(_h, 'Immagine brevetto', item.imageAnteprima('r'), 'poster') }}
+{{ mc.upload_immagine(_h, 'Immagine 1', item.imageAnteprima('g1'), 'gallery1') }}
+{{ mc.upload_immagine(_h, 'Immagine 2', item.imageAnteprima('g2'), 'gallery2') }}
+{{ mc.upload_immagine(_h, 'Immagine 3', item.imageAnteprima('g3'), 'gallery3') }}
+<p class="field-line field-400">
+	<label>URL embed video youtube o video 1:</label>
+	<input type="text" name="url_video_1" class="field valida-urlyoutube" value="{{ item.get('url_video_1') }}">
+</p>
+<p class="field-line field-400">
+	<label>URL embed video youtube o video 2:</label>
+	<input type="text" name="url_video_2" class="field valida-urlyoutube" value="{{ item.get('url_video_2') }}">
+</p>
+<p class="field-line field-400">
+	<label>URL embed video youtube o video 3:</label>
+	<input type="text" name="url_video_3" class="field valida-urlyoutube" value="{{ item.get('url_video_3') }}">
+</p>
+<p class="field-line field-400">
+	<label>URL link video generico 1:</label>
+	<input type="text" name="url_video_generico_1" class="field valida-url" value="{{ item.get('url_video_generico_1') }}">
+</p>
+<p class="field-line field-400">
+	<label>URL link video generico 2:</label>
+	<input type="text" name="url_video_generico_2" class="field valida-url" value="{{ item.get('url_video_generico_2') }}">
+</p>
+<p class="field-line field-400">
+	<label>URL link video generico 3:</label>
+	<input type="text" name="url_video_generico_3" class="field valida-url" value="{{ item.get('url_video_generico_3') }}">
+</p>
+</div>
+<div data-tab="dettaglio_evento_fiera">
+	<div class="field-line field-line-left field-150">
+		<label>Data evento/fiera dal o il:</label>
+		<input type="text" name="data_evento_dal" class="field valida-datasimple" value="{{ item.get('data_evento_dal') }}">
+	</div>
+	<div class="field-line field-line-left  field-150">
+		<label>Data al:</label>
+		<input type="text" name="data_evento_al" class="field valida-datasimple" value="{{ item.get('data_evento_al') }}">
+	</div>
+	<div class="clear"></div>
+	{{ mc.upload_immagine(_h, 'Immagine mappa padiglione', item.imageAnteprima('b'), 'banner') }}
+	<div class="field-line field-400">
+		<label>URL sito ufficiale:</label>
+		<input type="text" name="url_sito_ufficiale" class="field valida-url" value="{{ item.get('url_sito_ufficiale') }}">
+	</div>
+	<div class="field-line field-400">
+		<label>URL pagina facebook dedicata Easydive:</label>
+		<input type="text" name="url_pagina_facebook" class="field valida-url" value="{{ item.get('url_pagina_facebook') }}">
+	</div>
+	<p class="field-line field-400 edit-lang">
+		<label>Indirizzo / descrizione luogo / padiglione:</label>
+		<textarea name="indirizzo" class="field">{{ item.get('indirizzo') }}</textarea>
+	</p>
+	<div class="field-line field-400">
+		<label>URL google map indirizzo:</label>
+		<input type="text" name="url_google_maps" class="field valida-url" value="{{ item.get('url_google_maps') }}">
+	</div>
+</div>

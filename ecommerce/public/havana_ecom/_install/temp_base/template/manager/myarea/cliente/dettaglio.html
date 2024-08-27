@@ -1,0 +1,162 @@
+{% import _h.template('manager/_macro.html') as mc %}
+{% import _h.template('manager/_macro_items.html') as mci %}
+
+{{ mc.slideBoxHeaderToolbar(_h, 'Dettaglio Cliente: ' ~ item.get('nome') ~ ' ' ~ item.get('cognome'), true) }}
+	{{ mc.navButton(_h, 'modifica', 'update', 'click', 'h-action-window', '{"type": "layer", "url": "' ~ _h.url('manager/myarea/cliente/edit') ~ '", "overlay": true, "width": 600, "height": 500, "params": {"id": ' ~ item.id ~ '}}') }}
+	{{ mc.navButton(_h, 'indirizzi spedizione', 'home', 'click', 'h-action-window', '{"type": "layer", "url": "' ~ _h.url('manager/myarea/cliente/spedizione/index') ~ '", "overlay": true, "width": 600, "height": 500, "params": {"id": ' ~ item.id ~ '}}') }}
+	{{ mc.navButton(_h, 'dati fattuazione', 'euro', 'click', 'h-action-window', '{"type": "layer", "url": "' ~ _h.url('manager/myarea/cliente/fattura/index') ~ '", "overlay": true, "width": 600, "height": 500, "params": {"id": ' ~ item.id ~ '}}') }}
+
+	{% if listEMailPredefinite|length > 0 %}
+	<div class="h-nav-button-wrapper">
+		<a href="javascript:void(0);" class="h-nav-button h-action-popup-menu h-action-alttext" data-alttext="invio e-mail">
+			<img src="/assets/manager/havana-js/img/icon/ico-message.svg" align="top" />
+			<span>e-mail</span>
+		</a>
+		<div class="h-popup-content h-popup-menu">
+		{% for email in listEMailPredefinite %}
+			<a href="javascript:void(0);" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"confirm": "Inviare e-mail {{ email.get('nome') }}?", "url": "{{ _h.url('manager/myarea/cliente/ex-invia-email-predefinita') }}", "params": {"e_mail": {{ email.id }}, "id": {{ item.id }}}}'>invia e-mail: {{ email.get('nome') }}</a>
+		{% endfor %}
+		</div>
+	</div>
+	{% endif %}
+	
+{{ mc.slideBoxHeaderToolbarEnd() }}
+<fieldset id="dettaglio-content">
+<div class="h-tab">
+
+	<div data-tab-rif="cliente">Cliente</div>
+	<div data-tab-rif="ordini">Ordini</div>
+	<div data-tab-rif="indirizzi_spedizione">Indirizzi Spedizione</div>
+	<div data-tab-rif="dati_fattuazione">Dati Fatturazione</div>
+
+	<div data-tab="cliente">
+		<table class="table-info" border="0" cellpadding="0" cellspacing="0">
+		<tr>
+			<td class="table-info-label" valign="top">E-Mail</td>
+			<td>{{ item.get('e_mail') }}</td>
+		</tr>
+		<tr>
+			<td class="table-info-label" valign="top">Nome</td>
+			<td>{{ item.get('nome') }}</td>
+		</tr>
+		<tr>
+			<td class="table-info-label" valign="top">Cognome</td>
+			<td>{{ item.get('cognome') }}</td>
+		</tr>
+		{% if _h.config('account_password_in_chiaro', false) %}
+		<tr>
+			<td class="table-info-label" valign="top">Password</td>
+			<td>{{ item.get('password_chiaro') }}</td>
+		</tr>
+		{% endif %}
+		</table>
+
+		{% include _h.template('manager/myarea/cliente/_dettaglio.html') %}
+	</div>
+	<div data-tab="ordini">
+		<table class="h-list item-autoload-total h-fixed-header-table h-list-slingle-selection" cellpadding="0" cellspacing="0" border="0">
+		<thead>
+		<tr class="h-list-header">
+			<th style="width: 16px;">&nbsp;</th>
+			<th style="width: 90px;">Codice</th>
+			<th style="width: 60px;">Data ric.</th>
+			<th style="width: 30px;">T.pag.</th>
+			<th style="width: 30px;">S.p.</th>
+			<th style="width: 140px;" >Documenti</th>
+			<th style="width: 60px;" >Importo</th>
+		</tr>
+		</thead>
+		<tbody>
+		{% for ordine in listOrini %}		
+			{{ mci.item_ordine_cliente(_h, ordine) }}
+		{% endfor %}
+		</tbody>
+		</table>
+	</div>
+	<div data-tab="indirizzi_spedizione">
+		{% for elem in listIndirizzi %}
+		<div style="padding: 10px 0 10px 20px; border-bottom: 1px solid #e5e5e5; margin-bottom: 15px;">
+			<table class="table-info" border="0" cellpadding="0" cellspacing="0">
+			<tr>
+				<td class="table-info-label" valign="top">Nominativo</td>
+				<td>{{ elem.get('nome') }} {{ elem.get('cognome') }}</td>
+			</tr>
+			{% if elem.get('presso') %}
+			<tr>
+				<td class="table-info-label" valign="top">c/o presso</td>
+				<td>{{ elem.get('presso') }}</td>
+			</tr>
+			{% endif %}
+			{% if elem.get('nome_campanello') %}
+			<tr>
+				<td class="table-info-label" valign="top">Camnanello</td>
+				<td>{{ elem.get('nome_campanello') }}</td>
+			</tr>
+			{% endif %}
+			<tr>
+				<td class="table-info-label" valign="top">Indirizzo</td>
+				<td>
+					{{ elem.get('via') }}, {{ elem.get('num_civico') }}<br>
+					{{ elem.get('cap') }} {{ elem.get('localita') }} ({{ elem.get('provincia') }})<br>
+					{{ map[elem.get('nazione')].get('nome') }}
+				</td>
+			</tr>
+			{% if elem.get('telefono') %}
+			<tr>
+				<td class="table-info-label" valign="top">Telefono</td>
+				<td>{{ elem.get('telefono') }}</td>
+			</tr>
+			{% endif %}
+			</table>
+		</div>
+		{% endfor %}
+	</div>
+	<div data-tab="dati_fattuazione">
+		{% for elem in listFatturazione %}
+		<div style="padding: 10px 0 10px 20px; border-bottom: 1px solid #e5e5e5; margin-bottom: 15px;">
+			<table class="table-info" border="0" cellpadding="0" cellspacing="0">
+			<tr>
+				<td class="table-info-label" valign="top">Rag. sociale</td>
+				<td>{{ elem.get('nome') }}</td>
+			</tr>
+			{% if elem.get('p_iva') %}
+			<tr>
+				<td class="table-info-label" valign="top">P.IVA</td>
+				<td>{{ elem.get('p_iva')|upper }}</td>
+			</tr>
+			{% endif %}
+			{% if elem.get('codice_fiscale') %}
+			<tr>
+				<td class="table-info-label" valign="top">C.F.</td>
+				<td>{{ elem.get('codice_fiscale')|upper }}</td>
+			</tr>
+			{% endif %}
+			{% if elem.get('data_nascita') %}
+			<tr>
+				<td class="table-info-label" valign="top">Nascita</td>
+				<td>{{ elem.get('data_nascita') }} <em>a</em> {{ elem.get('luogo_nascita') }}</td>
+			</tr>
+			{% endif %}
+			<tr>
+				<td class="table-info-label" valign="top">Indirizzo</td>
+				<td>
+					{{ elem.get('via') }}, {{ elem.get('num_civico') }}<br>
+					{{ elem.get('cap') }} {{ elem.get('localita') }} ({{ elem.get('provincia') }})<br>
+					{{ map[elem.get('nazione')].get('nome') }}
+				</td>
+			</tr>
+			{% if elem.get('telefono') %}
+			<tr>
+				<td class="table-info-label" valign="top">Telefono</td>
+				<td>{{ elem.get('telefono') }}</td>
+			</tr>
+			{% endif %}
+			</table>
+		</div>
+		{% endfor %}
+	</div>
+</div>
+</fieldset>
+
+{{ mc.slideBoxFooter(_h) }}	
+

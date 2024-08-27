@@ -1,0 +1,119 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Azione Carrello Abbandonato') }}
+<div class="h-tab">
+<div data-tab-rif="base">Azione</div>
+<div data-tab-rif="buono_sconto">Buono sconto</div>
+{% for l in listLang %}
+<div data-tab-rif="{{ l }}">{{ l|upper }}</div>
+{% endfor %}
+
+<div data-tab="base">
+<div class="field-line field-200">
+	{% set cssClass = '' %}
+	{% set value = '' %}
+	{% if item %} 
+		{% if item.get('abilitato') %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% endif %}
+	{% endif %}
+	<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="abilitato" value="{{ value }}" /></span> <strong>Abilitato</strong></div>
+</div>
+<p class="field-line field-100">
+	{% if item %}
+	<em>Numero ore dopo:</em> <strong>{{ item.get('id') }}</strong>
+	<input type="hidden" name="id" value="{{ item.get('id') }}">
+	{% else %}
+	<label>Numero ore dopo<span>*</span>:</label>
+	<input type="text" name="id" class="field valira-required valida-digitnumber" value="{{ item.get('id') }}" maxlength="3"> ore
+	{% endif %}
+</p>
+<p class="field-line field-400">
+	<label>Tipo azione:</label>
+	<select name="tipo" class="field">
+		{{ mc.listComboOptions([{'id': 1, 'text': 'invia una e-mail'},{'id': 2, 'text': 'invia buono sconto'},{'id': 3, 'text': 'elimina'}], item.get('tipo')) }}
+	</select>
+</p>
+<div class="field-line field-200">
+	{% if item.get('inserisci_articoli') %} 
+		{% set cssClass = ' h-checkbox-checked' %}
+		{% set value = 1 %}
+	{% else %}
+		{% set cssClass = '' %}
+		{% set value = '' %}
+	{% endif %}
+	<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="inserisci_articoli" value="{{ value }}" /></span> <strong>Inserisci elenco articoli in carrello</strong></div>
+</div>
+{{ mc.labelCampiObbligatori() }}
+</div>
+
+<div data-tab="buono_sconto">
+<p class="field-line field-400">
+	<label>Tipo sconto:</label>
+	<select name="tipo_sconto" class="field">
+		{{ mc.listComboOptions([{'id': 0, 'text': ''},{'id': 1, 'text': 'percentuale sconto solo prodotti NON scontati'},{'id': 2, 'text': 'percentuale sconto su tutto'},{'id': 3, 'text': 'buono valore euro solo su prodotti NON scontati'},{'id': 4, 'text': 'buono valore euro'},{'id': 8, 'text': 'buono valore euro applicato ad ogni singolo prodotto'}], item.get('tipo_sconto')) }}
+	</select>
+</p>	
+<p class="field-line field-100">
+	<label>Prefisso per ogni codice:</label>
+	<input type="text" name="prefisso" class="field" maxlength="10" value="{{ item.get('prefisso') }}">
+</p>
+<p class="field-line field-100">
+	<label>Sconto/valore (% o {{ _h.config('manager_valuta', '&euro;') }}):</label>
+	<input type="text" name="sconto" class="field valida-euro" maxlength="10" value="{{ item.get('sconto') }}">
+</p>
+<p class="field-line field-100">
+	<label>Acquisto minimo (o valore minimo articolo in caso di sconto su valore singolo articolo):</label>
+	<input type="text" name="acquisto_minimo" class="field valida-digitnumber" maxlength="5" value="{{ item.get('acquisto_minimo') }}"> {{ _h.config('manager_valuta', '&euro;') }}
+</p>
+<p class="field-line field-100">
+	<label>Giorni validià buono sconto:</label>
+	<input type="text" name="giorni_validita_buono_sconto" class="field valida-digitnumber" value="{{ item.get('giorni_validita_buono_sconto') }}" maxlength="3"> gg
+</p>
+</div>
+
+{% for l in listLang %}
+<div data-tab="{{ l }}">
+	<div class="message-center-block" data-message-center="{{ _h.util.messageCenter('ordine_abbandonato') }}">
+	<div class="message-center-block-expandible" data-type="email">
+		<div class="message-center-block-expandible-title">Contenuto E-Mail</div>
+		<div class="message-center-block-expandible-body">
+			{{ mc.contenutiInLingua(l) }}
+			<p class="field-line field-400">
+				<label>{{ mc.labelLang(l) }} Oggetto e-mail<span>*</span>:</label>
+				<input type="text" name="oggetto_email_{{ l }}" class="field" value="{{ item.get('oggetto_email_' ~ l) }}">
+			</p>
+			<div class="field-line field-400">
+				<label>{{ mc.labelLang(l) }} Testo e-mail<span>*</span>:</label>
+				<textarea name="testo_email_{{ l }}" class="visual-editor">{{ item.get('testo_email_' ~ l) }}</textarea>
+			</div>
+		</div>
+	</div>
+	<div class="message-center-block-expandible" data-type="wapp">
+		<div class="message-center-block-expandible-title">Contenuto WhatsApp</div>
+		<div class="message-center-block-expandible-body">
+			{{ mc.contenutiInLingua(l) }}
+			<div class="field-line field-400 field-line-textarea">
+				<label>{{ mc.labelLang(l) }} Testo messaggio<span>*</span>:</label>
+				<textarea name="testo_wapp_{{ l }}" class="field">{{ item.get('testo_wapp_' ~ l) }}</textarea>
+			</div>
+		</div>
+	</div>
+	<div class="message-center-block-expandible" data-type="sms">
+		<div class="message-center-block-expandible-title">Contenuto SMS</div>
+		<div class="message-center-block-expandible-body">
+			{{ mc.contenutiInLingua(l) }}
+			<div class="field-line field-400 field-line-textarea">
+				<label>{{ mc.labelLang(l) }} Testo messaggio<span>*</span>:</label>
+				<textarea name="testo_sms_{{ l }}" class="field">{{ item.get('testo_sms_' ~ l) }}</textarea>
+			</div>
+		</div>
+	</div>
+	</div>
+</div>
+{% endfor %}
+</div>
+
+
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/carrello/azione/ex-edit'), '"reload": "#azione-content"') }}	

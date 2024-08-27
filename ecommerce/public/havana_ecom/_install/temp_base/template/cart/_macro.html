@@ -1,0 +1,430 @@
+{% macro checkout3_blockA(_h, cart) %}
+{% endmacro %}
+
+{% macro checkout3_blockB(_h, cart) %}
+{% endmacro %}
+
+{% macro checkout3_blockC(_h, cart) %}
+{% endmacro %}
+
+{% macro checkout3_blockD(_h, cart) %}
+{% endmacro %}
+
+{% macro checkout3_blockE(_h, cart) %}
+{% endmacro %}
+
+{% macro item_articolo_carrello_quantita(_h, art) %}
+	{% set _lblc = _h.labels.get('checkout') %}
+	<div class="ck-quantita ck-cell" data-checkout-aggiorna-id="{{ art.tmp_id }}">
+		<div class="ck-field-quantita">
+			<input type="text" name="quantita" value="{{ art.qta }}" class="valida-digitnumber" maxlength="3">
+			{% if not(art.form) and not(art.item.isIntegrazione()) %}
+			<a href="javascript:void(0)" class="action-add-qta-1" data-id="{{ art.tmp_id }}" title="{{ _lblc.btn_aggiunti }}">+</a>
+			<a href="javascript:void(0)" class="action-rem-qta-1" data-id="{{ art.tmp_id }}" title="{{ _lblc.btn_rimuovi }}">-</a>
+			{% endif %}
+		</div>
+		{% if not(art.item.isIntegrazione()) %}
+		<a href="javascript:void(0)" class="action-aggiorna" data-id="{{ art.tmp_id }}" title="{{ _lblc.btn_aggiorna }}">{{ _lblc.btn_aggiorna }}</a>
+		{% endif %}
+	</div>
+{% endmacro %}
+
+{% macro item_articolo_carrello_azioni(_h, art) %}
+	{% set _lblc = _h.labels.get('checkout') %}
+	<div class="ck-azioni ck-cell">
+		<a href="javascript:void(0)" class="action-elimina" data-id="{{ art.tmp_id }}" title="{{ _lblc.btn_elimina }}">{{ _lblc.btn_elimina }}</a>
+	</div>
+{% endmacro %}
+
+{% macro box_pagamento(_h, key, spesa, tipo_pagamento, label, description, value, img, totale) %}
+{% set _lblc = _h.labels.get('checkout') %}
+{% if _h.settings.get(key, '') != '' and (_h.context('gestione_automatica_pagamenti_abilitati', true) or _h.context(key, false)) %}
+	{% if key == 'checkout_pagamento_oney' %}
+	<div class="ck-line ck-line-pagamento">
+			<div class="ck-checkbox ck-cell">
+				<span class="ck-checkbox-button{% if tipo_pagamento == value %} ck-checkbox-button-selected{% endif %}">
+					<span class="checkbox{% if tipo_pagamento == value %} checkbox-checked{% endif %}" data-value="{{ value }}"><input type="hidden" name="pagamento" value="{% if tipo_pagamento == value %}{{ value }}{% endif %}"></span>
+					<span class="checkbox-label"><span>{{ label }}</span></span>
+				</span>
+			</div>
+			<div class="ck-checkbox-descrizione-1 ck-cell">
+				<div class="oney-plugin">
+					<div class="oney-plugin-logo">
+						<img src="/assets/website/img/checkout-oney{{ _h.settings.get('checkout_pagamento_oney_rate') }}.png" alt="oney">
+					</div>
+					<div class="oney-plugin-details">
+						<div class="oney-plugin-details-slogan">{{ _h.labels.get('checkout').oney_pagamento_sicuro }}</div>
+					</div>
+					<div class="oney-plugin-info">
+						<div class="oney-plugin-info-icon">i</div>
+					</div>
+				</div>				
+			</div>
+			<div class="ck-checkbox-descrizione-2 ck-cell">{{ _lblc.gratis }}</div>
+			<div class="ck-prezzo-totale ck-cell"></div>
+		</div>
+	{% elseif key == 'checkout_pagamento_scalapay' %}
+		<div class="ck-line ck-line-pagamento">
+			<div class="ck-checkbox ck-cell">
+				<span class="ck-checkbox-button{% if tipo_pagamento == value %} ck-checkbox-button-selected{% endif %}">
+					<span class="checkbox{% if tipo_pagamento == value %} checkbox-checked{% endif %}" data-value="{{ value }}"><input type="hidden" name="pagamento" value="{% if tipo_pagamento == value %}{{ value }}{% endif %}"></span>
+					<span class="checkbox-label"><span>{{ label }}</span></span>
+				</span>
+			</div>
+			<div class="ck-checkbox-descrizione-1 ck-cell">
+				<scalapay-widget
+						amount="{{ totale }}"
+						min="{{ _h.settings.get('checkout_pagamento_scalapay_min') }}"
+						max="{{ _h.settings.get('checkout_pagamento_scalapay_max') }}"
+						size="100px"
+						logoSize="100%"
+						priceColor="#145ad1"
+						logoColor="#000000"
+						numberOfPayments="{{ _h.settings.get('checkout_pagamento_scalapay_rate') }}"
+						hideLogo="false"
+						hidePrice="false"
+						locale="{{ _h.lang }}"
+						currencyPosition="after"
+						currencyDisplay="symbol">
+				</scalapay-widget>
+			</div>
+			<div class="ck-checkbox-descrizione-2 ck-cell">{{ _lblc.gratis }}</div>
+			<div class="ck-prezzo-totale ck-cell"></div>
+		</div>
+	{% else %}
+	<div class="ck-line ck-line-pagamento">
+		<div class="ck-checkbox ck-cell">
+			<span class="ck-checkbox-button{% if tipo_pagamento == value %} ck-checkbox-button-selected{% endif %}">
+				<span class="checkbox{% if tipo_pagamento == value %} checkbox-checked{% endif %}" data-value="{{ value }}"><input type="hidden" name="pagamento" value="{% if tipo_pagamento == value %}{{ value }}{% endif %}"></span>
+				<span class="checkbox-label"><span>{{ label }}</span></span>
+			</span>
+		</div>
+		<div class="ck-checkbox-descrizione-1 ck-cell">
+		{% if img %}
+			<span class="ck-cc-descrizione">{{ description }}</span>
+			<img src="/assets/website/img/{{ img }}" alt="{{ label }}">
+		{% else %}
+			{{ description }}
+		{% endif %}
+
+		</div>
+		<div class="ck-checkbox-descrizione-2 ck-cell">
+			{% if spesa > 0 %}
+				{% if key == 'checkout_pagamento_contrassegno' %}
+					{{ _h.util.currentValuta(spesa) }}
+				{% else %}
+					+{{ _h.util.euro(spesa, 2, true) }}%
+				{% endif %}
+			{% else %}
+				{{ _lblc.gratis }}
+			{% endif %}
+		</div>
+		<div class="ck-prezzo-totale ck-cell"></div>
+	</div>
+	{% endif %}
+{% endif %}
+{% endmacro %}
+
+{% macro riepilogo_ordine(_h, ordine) %}
+{% import _h.template('_macro.html') as mc %}
+{% set _lblc = _h.labels.get('checkout') %}
+<div class="riepilogo">
+	<h2>
+		{% if ordine.solo_digitali %}
+		{{ _lblc.title_articoli_intestazione }}
+		{% else %}
+		{{ _lblc.title_articoli_spedizione }}
+		{% endif %}
+	</h2>
+	<div class="col-info">
+		{% if ordine.tipo_spedizione == 2 %}
+		<div class="line">
+			<em class="label">{{ _lblc.title_dove_ritirare_merce }}:</em> 
+			<div class="rientro font-big">
+			{{ ordine.sede_ritiro.nome }}<br>
+			{{ ordine.sede_ritiro.via }}, {{ ordine.sede_ritiro.num_civico }}<br>
+			{{ ordine.sede_ritiro.cap }} {{ ordine.sede_ritiro.localita }} ({{ ordine.sede_ritiro.provincia }})</strong>
+			{% if ordine.sede_ritiro.telefono %}
+			<br><em class="label">{{ _lblc.numero_telefono }}:</em>{{ ordine.sede_ritiro.telefono }}
+			{% endif %}
+			{% if ordine.sede_ritiro.note %}
+			<br><br>{{ ordine.sede_ritiro.note }}
+			{% endif %}
+			{% if ordine.sede_ritiro.orario_lunedi or 
+				ordine.sede_ritiro.orario_martedi or 
+				ordine.sede_ritiro.orario_mercoledi or
+				ordine.sede_ritiro.orario_giovedi or
+				ordine.sede_ritiro.orario_venerdi or
+				ordine.sede_ritiro.orario_sabato or
+				ordine.sede_ritiro.orario_domenica  %}
+			<br><br><div>
+				{{ _lblc.orario_apertura }}:
+				<ul>
+				{% if ordine.sede_ritiro.orario_lunedi %}
+					<li><em class="label">{{ _lblc.orario_lunedi }}:</em> {{ ordine.sede_ritiro.orario_lunedi }}</li>
+				{% endif %}
+				{% if ordine.sede_ritiro.orario_martedi %}
+					<li><em class="label">{{ _lblc.orario_martedi }}:</em> {{ ordine.sede_ritiro.orario_martedi }}</li>
+				{% endif %}
+				{% if ordine.sede_ritiro.orario_mercoledi %}
+					<li><em class="label">{{ _lblc.orario_mercoledi }}:</em> {{ ordine.sede_ritiro.orario_mercoledi }}</li>
+				{% endif %}
+				{% if ordine.sede_ritiro.orario_giovedi %}
+					<li><em class="label">{{ _lblc.orario_giovedi }}:</em> {{ ordine.sede_ritiro.orario_giovedi }}</li>
+				{% endif %}
+				{% if ordine.sede_ritiro.orario_venerdi %}
+					<li><em class="label">{{ _lblc.orario_venerdi }}:</em> {{ ordine.sede_ritiro.orario_venerdi }}</li>
+				{% endif %}
+				{% if ordine.sede_ritiro.orario_sabato %}
+					<li><em class="label">{{ _lblc.orario_sabato }}:</em> {{ ordine.sede_ritiro.orario_sabato }}</li>
+				{% endif %}
+				{% if ordine.sede_ritiro.orario_domenica %}
+					<li><em class="label">{{ _lblc.orario_domenica }}:</em> {{ ordine.sede_ritiro.orario_domenica }}</li>
+				{% endif %}
+				</ul>
+			</div>
+			{% endif %}	
+			</div>
+		</div>
+		{% endif %}
+		{% if ordine.spedizione.nome or ordine.spedizione.cognome %}
+		<div class="line">
+			<em class="label">
+			{% if ordine.tipo_spedizione == 1 and not(ordine.solo_digitali) %}
+				{{ _lblc.indirizzo_spedizione }}:
+			{% else %}
+				{{ _lblc.title_intestazione_ordine }}:
+			{% endif %}</em> 
+			<div class="rientro font-big">
+				{{ ordine.spedizione.nome }} {{ ordine.spedizione.cognome }}<br>
+				{% if ordine.spedizione.presso %}
+				<em class="label">{{ _lblc.presso }}:</em> {{ ordine.spedizione.presso }}<br>
+				{% endif %}
+				{% if ordine.spedizione.nome_campanello %}
+				<em class="label">{{ _lblc.nome_campanello_small }}:</em> {{ ordine.spedizione.nome_campanello }}<br>
+				{% endif %}
+				{{ ordine.spedizione.via }}{% if ordine.spedizione.num_civico %}, {{ ordine.spedizione.num_civico }}{% endif %}<br>
+				{{ ordine.spedizione.cap }} {{ ordine.spedizione.localita }} {% if ordine.spedizione.provincia %}({{ ordine.spedizione.provincia }}){% endif %}<br>
+				{{ ordine.spedizione.nazione }}
+			</div>
+		</div>
+		{% endif %}
+		{% if ordine.tipo_spedizione == 1 and ordine.spedizione_opzione.list|length > 0 %}
+		<div class="line">
+			<em class="label">{{ _lblc.title_opzioni_spedizione }}:</em>
+			<div class="rientro font-big">
+			<ul>
+			{% for op in ordine.spedizione_opzione.list %}
+				<li>{{ op.nome }}</li>
+			{% endfor %}
+			</ul>
+			</div>
+		</div>
+		{% endif %}
+		<div class="line">
+			<em class="label">{% if ordine.tipo_spedizione == 2 or ordine.solo_digitali %}
+			{{ _lblc.notifiche }}:
+			{% else %}
+			{{ _lblc.notifiche_spedizione }}:
+			{% endif %}</em> 
+			<div class="rientro font-big">
+				<div>{{ ordine.e_mail }}</div>
+				<div>{{ ordine.spedizione.telefono }}</div>
+			</div>
+		</div>
+		{% if ordine.spedizione.indicazioni %}
+		<div class="line">
+			<em class="label">{{ _lblc.indicazione_spedizione }}:</em> 
+			<div class="rientro font-big">
+				{{ ordine.spedizione.indicazioni }}
+			</div>
+		</div>
+		{% endif %}
+	</div>
+	<div class="col-dettaglio">
+	<div class="col-dettaglio-content">
+		{{ _self.riepilogo_ordine_elenco_items(_h, ordine) }}
+	</div>
+	</div>
+</div>
+<div class="riepilogo">
+	<h2>{{ _lblc.title_dettagli_pagamento_fatturazione }}</h2>
+	<div class="col-info">
+		<div class="line">
+			<em class="label">{{ _lblc.documento }}:</em> 
+			<div class="rientro font-big">
+				<strong>
+				{% if ordine.richiesta_fatturazione == 1 %}
+					{{ _lblc.fattura }}
+				{% else %}
+					{{ _lblc.ricevuta }}
+				{% endif %}
+				</strong>
+			</div>
+		</div>
+		{% if ordine.fattura.nome %}
+		<div class="line">
+			<em class="label">{{ _lblc.intestato_a }}:</em>
+			<div class="rientro font-big">
+				{{ ordine.fattura.nome }}<br>
+				{% if ordine.fattura.p_iva %}
+					<em class="label">{{ _lblc.p_iva }}</em> {{ ordine.fattura.p_iva }}<br>
+				{% endif %}
+				{% if ordine.fattura.codice_fiscale %}
+					<em class="label">{{ _lblc.codice_fiscale_small }}</em> {{ ordine.fattura.codice_fiscale }}<br>
+				{% endif %}	
+				{% if ordine.fattura.data_nascita %}
+					<em class="label">{{ _lblc.data_nascita }}</em> {{ ordine.fattura.data_nascita }}<br>
+				{% endif %}	
+				{% if ordine.fattura.luogo_nascita %}
+					<em class="label">{{ _lblc.luogo_nascita }}</em> {{ ordine.fattura.luogo_nascita }}<br>
+				{% endif %}
+				{% if ordine.fattura.pec %}
+					<em class="label">{{ _lblc.pec }}</em> {{ ordine.fattura.pec }}<br>
+				{% endif %}
+				{% if ordine.fattura.sdi %}
+					<em class="label">{{ _lblc.sdi }}</em> {{ ordine.fattura.sdi }}<br>
+				{% endif %}
+				{{ ordine.fattura.via }}{% if ordine.fattura.num_civico %}, {{ ordine.fattura.num_civico }}{% endif %}<br>
+				{{ ordine.fattura.cap }} {{ ordine.fattura.localita }} ({{ ordine.fattura.provincia }})<br>
+				{{ ordine.fattura.nazione }}
+			</div>
+		</div>
+		{% endif %}
+	</div>
+	<div class="col-dettaglio">
+	<div class="col-dettaglio-content">
+		<div class="line">
+		{% if ordine.total_ordine > 0 %}
+			<em class="label">{{ _lblc.tipo_pagamento }}:</em>
+			<div class="rientro">
+				{{ _self.pagamento(_h, ordine.tipo_pagamento) }}
+			</div>
+		{% endif %}
+		</div>
+		
+		<div class="line">
+			<em class="label">{{ _lblc.speda_del_tuo_ordine }}:</em>
+			<div class="rientro">
+			{% if iva %}
+				<div class="line-label"><em>{{ _lblc.tot_articoli }}:</em><span>{{ _h.util.valuta(ordine.total_articoli, ordine.currency) }}</span></div>
+			{% else %}
+				<div class="line-label"><em>{{ _lblc.articoli_imponibile }}:</em><span>{{ _h.util.valuta(ordine.total_articoli_imponibile, ordine.currency) }}</span></div>
+				<div class="line-label"><em>{{ _lblc.articoli_iva }}:</em><span>{{ _h.util.valuta(ordine.total_articoli_iva, ordine.currency) }}</span></div>
+			{% endif %}
+				<div class="line-label"><em>{{ _lblc.tot_spedizione }}:</em><span>{{ _h.util.valuta(ordine.total_spedizione + ordine.total_spedizione_opzione, ordine.currency) }}</span></div>
+			{% if ordine.total_pagamento > 0 %}
+				<div class="line-label"><em>{{ _lblc.tot_opz_pagamento }}:</em><span>{{ _h.util.valuta(ordine.total_pagamento, ordine.currency) }}</span></div>
+			{% endif %}
+			{% if iva %}
+				{% if ordine.total_sconto > 0 %}
+				<div class="line-label"><em>{{ _lblc.sconto_gift }}:</em><span>- {{ _h.util.valuta(ordine.total_sconto, ordine.currency) }}</span></div>
+				{% endif %}
+			{% else %}
+				{% if ordine.total_sconto_imponibile > 0 %}
+				<div class="line-label"><em>{{ _lblc.sconto_imponibile }}:</em><span>- {{ _h.util.valuta(ordine.total_sconto_imponibile, ordine.currency) }}</span></div>
+				<div class="line-label"><em>{{ _lblc.sconto_iva }}:</em><span>- {{ _h.util.valuta(ordine.total_sconto_iva, ordine.currency) }}</span></div>
+				{% endif %}
+			{% endif %}
+				<div class="line-label line-label-total"><em>{{ _lblc.totale }}:</em><span>{{ _h.util.valuta(ordine.total_ordine, ordine.currency) }}</span></div>
+			{% if ordine.add_iva != '' %}
+				<div class="line-label">{{ ordine.nazione_esenzione_legge }}</div>
+			{% endif %}
+			</div>
+		</div>
+		
+	</div>
+	</div>
+</div>
+{% endmacro %}
+
+{% macro riepilogo_ordine_elenco_items(_h, ordine) %}
+	{% import _h.template('_macro.html') as mc %}
+	{% set _lblc = _h.labels.get('checkout') %}
+	{% set iva = true %}
+	{% if ordine.add_iva == '' and ordine.prezzo_senza_iva %}
+		{% set iva = false %}
+	{% endif %}
+	
+	{% for art in ordine.list_items %}
+	<div class="item-carrello clear">
+		<div class="item-carrello-articolo">
+			<div class="item-carrello-articolo-inner">
+			{{ mc.item_articolo_carrello_thanks(_h, art) }}
+			</div>
+		</div>
+		<div class="item-carrello-price">
+			<div class="item-carrello-price-details">
+				{% if iva %}
+					{% set prezzo_originale = art.item.prezzo_originale %}
+					{% set prezzo = art.item.prezzo %}
+					{% set total = art.total %}
+				{% else %}
+					{% set prezzo_originale = art.item.prezzo_originale_imponibile %}
+					{% set prezzo = art.item.prezzo_imponibile %}
+					{% set total = art.total_imponibile %}
+				{% endif %}
+				{% if art.item.is_sconto %}
+				<span class="price-old">{{ _h.util.valuta(prezzo_originale, art.item.currency) }}</span>
+				{% endif %}
+				<span class="price item-buy-price">{{ _h.util.valuta(prezzo, art.item.currency) }}</span>			
+			</div>
+			<div class="item-carrello-price-total">x {{ art.qta }}<strong>{{ _h.util.valuta(total, art.item.currency) }}</strong></div>
+			{% if not(iva) %}
+			<div class="item-carrello-price-iva">+{{ _lblc.iva }} {{ art.item.iva }}%: {{ _h.util.valuta(art.total_iva, art.item.currency) }}</div>
+			{% endif %}
+		</div>
+	</div>
+	{% endfor %}
+{% endmacro %}
+
+{% macro pagamento(_h, tipo_pagamento) %}
+	{% set _lblc = _h.labels.get('checkout') %}
+	{% if tipo_pagamento == 1 %}
+	<strong class="font-big">{{ _lblc.tipo_pag_carta_credito }}</strong>
+	{% elseif tipo_pagamento == 2 %}
+	<strong class="font-big">{{ _lblc.tipo_pag_paypal }}</strong>
+	{% elseif tipo_pagamento == 3 %}
+	<strong class="font-big">{{ _lblc.tipo_pag_bonifico }}</strong>
+	<div style="padding: 15px 0">
+		{{ _lblc.descr_bonifico }}
+		<div>
+		<em class="label">{{ _lblc.nome_banca }}:</em> <strong>{{ _h.settings.get('checkout_banca_nome') }}</strong><br>
+		<em class="label">{{ _lblc.conto_intestato_a }}:</em> <strong>{{ _h.settings.get('checkout_banca_intestazione') }}</strong><br>
+		<em class="label">{{ _lblc.iban }}:</em> <strong>{{ _h.settings.get('checkout_banca_iban') }}</strong><br>
+		<em class="label">{{ _lblc.codice_swift_bic }}:</em> <strong>{{ _h.settings.get('checkout_banca_swift') }}</strong>
+		</div>
+		{{ _lblc.descr_bonifico_causale }}
+	</div>
+	{% elseif tipo_pagamento == 4 %}
+	<strong class="font-big">{{ _lblc.tipo_pag_contrassegno }}</strong>
+	{% elseif tipo_pagamento == 5 %}
+	<strong class="font-big">{{ _lblc.tipo_pag_poste_pay }}</strong>
+	<div style="padding: 15px 0">
+		{{ _lblc.descr_ricarica_postepay }}
+		<div>
+		<em class="label">{{ _lblc.carta_intestata_a }}:</em> <strong>{{ _h.settings.get('checkout_postepay_intestatario') }}</strong><br>
+		<em class="label">{{ _lblc.codice }}:</em> <strong>{{ _h.settings.get('checkout_postepay_numero') }}</strong><br>
+		<em class="label">{{ _lblc.codice_fiscale_p_iva }}:</em> <strong>{{ _h.settings.get('checkout_postepay_codice') }}</strong>
+		</div>
+		{{ _lblc.descr_ricezione_ordine }}
+	</div>
+	{% elseif tipo_pagamento == 6 %}
+	<strong class="font-big">{{ _lblc.tipo_pag_ricarica }}</strong>
+	<div style="padding: 15px 0">
+		{{ _lblc.descr_ricarica_telefonica }}
+		<div>
+		<em class="label">{{ _lblc.intestato_a }}:</em> <strong>{{ _h.settings.get('checkout_ricarica_intestatario') }}</strong><br>
+		<em class="label">{{ _lblc.numero_telefono }}:</em> <strong>{{ _h.settings.get('checkout_ricarica_numero') }}</strong><br>
+		</div>
+		{{ _lblc.descr_ricezione_ordine }}
+	</div>
+	{% elseif tipo_pagamento == 7 %}
+	<strong class="font-big">{{ _lblc.tipo_pag_ritiro_sede }}</strong>
+	{% elseif tipo_pagamento == 8 %}
+	<strong class="font-big">{{ _lblc.tipo_pag_come_da_accordi }}</strong>
+	<div style="padding: 15px 0">
+		{{ _lblc.descr_tipo_pag_come_da_accordi }}
+	</div>
+	{% endif %}
+{% endmacro %}

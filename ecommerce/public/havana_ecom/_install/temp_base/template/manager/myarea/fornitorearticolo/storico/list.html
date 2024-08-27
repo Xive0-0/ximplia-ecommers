@@ -1,0 +1,29 @@
+{% import _h.template('manager/_my_macro.html') as mymc %}
+{% set imp = _h.config('template').manager.item.articolo %}
+<table class="h-list item-autoload-total h-fixed-header-table{% if edit_table %} h-edit-table{% endif %}" data-action='{"editTable": {"url": "{{ _h.url('manager/myarea/articolo/ex-edit-value') }}"}}' cellpadding="0" cellspacing="0" border="0" data-total="{{ result.total }}">
+<thead>
+<tr class="h-list-header">
+	<th style="width: 20px;">&nbsp;</th>
+	<th style="width: 200px;" data-order="fa.nome" data-order-type="{{ result.order_type_fa_nome }}">Fornitore</th>
+	<th style="width: 80px;" data-order="ofa.data_inserimento" data-order-type="{{ result.order_type_ofa_data_inserimento }}">Data</th>
+	<th style="width: 80px;" data-order="ofa.qta_ordinata" data-order-type="{{ result.order_type_ofa_qta_ordinata }}">Ordinato</th>
+	<th style="width: 80px;" data-order="ofa.qta_consegnata" data-order-type="{{ result.order_type_ofa_qta_consegnata }}">Consegnato</th>
+	{% if imp.id %}
+	<th style="width: 50px;" data-order="a.id" data-order-type="{{ result.order_type_a_id }}">ID</th>
+	{% endif %}
+	{% if imp.codice %}
+	<th style="width: 100px;" data-order="a.codice" data-order-type="{{ result.order_type_a_codice }}">COD</th>
+	{% endif %}
+	{% if imp.codice_fornitore %}
+	<th style="width: 150px;" data-order="a.codice_fornitore" data-order-type="{{ result.order_type_a_codice_fornitore }}">COD fornitore</th>
+	{% endif %}
+	<th style="width: 60px; text-align: center">&nbsp;</th>
+	<th data-order="al.nome" data-order-type="{{ result.order_type_al_nome }}">Nome</th>
+</tr>
+</thead>
+<tbody>
+{% for item in result.list %}		
+	{{ mymc.item_fornitore_articolo_movimento(_h, item) }}
+{% endfor %}
+</tbody>
+</table>

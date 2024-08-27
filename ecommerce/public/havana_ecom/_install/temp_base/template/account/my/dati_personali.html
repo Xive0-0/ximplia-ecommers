@@ -1,0 +1,23 @@
+{% import _h.template('_macro.html') as mc %}
+{% set _lblm = _h.labels.get('my') %}
+{% set _lblf = _h.labels.get('form') %}
+
+<h2>{{ _lblm.title_dati_personali }}</h2>
+
+<form id="pagina">
+	<div class="field-text">
+		{{ _lblm.descr_dati_personali }}
+	</div>
+	{{ mc.field_registrazione(_h, 'registrazione', item) }}
+	{{ mc.field_registrazione_extra(_h, item) }}
+	<div class="field-text-obbligatori">{{ _lblf.campi_obbligatori }}</div>
+	{{ mc.google_recaptcha(_h, 'modifica_dati') }}
+	<div class="field-button field-button-left">
+		<a class="button-red button submit-form" href="javascript:void(0)" title="{{ _lblf.btn_modifica }}" data-action='{"url": "{{ _h.url('account/my/ex-modifica-dati-personali') }}", "onComplete": {"type": "show", "show": "#conferma_pagina", "hide": "#pagina"}}'><span>{{ _lblf.btn_modifica }}</span></a>
+	</div>
+
+</form>
+
+<div id="conferma_pagina" class="hide-block">
+	<p>{{ _lblm.descr_conf_dati_modificati }}</p>
+</div>

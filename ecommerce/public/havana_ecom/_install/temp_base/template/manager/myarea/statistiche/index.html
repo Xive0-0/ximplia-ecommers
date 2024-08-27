@@ -1,0 +1,50 @@
+{% import _h.template('manager/_macro.html') as mc %}
+{{ mc.index_page_header(_h, 'Statistiche ' ~ statistiche_anno, 'statistiche') }}
+	
+		{% for a in elenco_anni %}
+		<div class="h-nav-button-wrapper ">
+		<a href="{{ _h.url('manager/myarea/statistiche/index') }}?anno={{ a }}" class="h-nav-button h-nav-button-click h-nav-button-label {% if a == anno_corrente %}selected{% endif %}">{{ a }}</a>
+		</div>
+		{% endfor %}
+		
+		</div>
+	</div>	
+</div>
+<div id="h-layout-center" class="h-layout h-layout-middle h-layout-center" data-action='{"show": ["header", "navigation"]}'>
+	<div class="h-layout-content-wrapper" id="h-layout-center-content">
+
+		<div class="statistiche-wrapper">
+			<div class="statistiche block-tab">
+				<div class="block-tab-header block-tab-header-small">
+					<div data-block-tab="tab_1">{{ statistiche.gennaio.label }}</div>
+					<div data-block-tab="tab_2">{{ statistiche.febbraio.label }}</div>
+					<div data-block-tab="tab_3">{{ statistiche.marzo.label }}</div>
+					<div data-block-tab="tab_4">{{ statistiche.aprile.label }}</div>
+					<div data-block-tab="tab_5">{{ statistiche.maggio.label }}</div>
+					<div data-block-tab="tab_6">{{ statistiche.giugno.label }}</div>
+					<div data-block-tab="tab_7">{{ statistiche.luglio.label }}</div>
+					<div data-block-tab="tab_8">{{ statistiche.agosto.label }}</div>
+					<div data-block-tab="tab_9">{{ statistiche.settembre.label }}</div>
+					<div data-block-tab="tab_10">{{ statistiche.ottobre.label }}</div>
+					<div data-block-tab="tab_11">{{ statistiche.novembre.label }}</div>
+					<div data-block-tab="tab_12">{{ statistiche.dicembre.label }}</div>
+					<div data-block-tab="tutto">{{ statistiche.tutto.label }}</div>
+				</div>
+				<div data-block-tab-body="tab_1" class="h-load block-tab-body" data-action='{"url": "{{ _h.url('manager/myarea/statistiche/periodo') }}", "check_is_load": true, "params": {"cache": "{{ statistiche.gennaio.cache }}"}}'></div>
+				<div data-block-tab-body="tab_2" class="h-load block-tab-body" data-action='{"url": "{{ _h.url('manager/myarea/statistiche/periodo') }}", "only_manual": true, "check_is_load": true, "params": {"cache": "{{ statistiche.febbraio.cache }}"}}'></div>
+				<div data-block-tab-body="tab_3" class="h-load block-tab-body" data-action='{"url": "{{ _h.url('manager/myarea/statistiche/periodo') }}", "only_manual": true, "check_is_load": true, "params": {"cache": "{{ statistiche.marzo.cache }}"}}'></div>
+				<div data-block-tab-body="tab_4" class="h-load block-tab-body" data-action='{"url": "{{ _h.url('manager/myarea/statistiche/periodo') }}", "only_manual": true, "check_is_load": true, "params": {"cache": "{{ statistiche.aprile.cache }}"}}'></div>
+				<div data-block-tab-body="tab_5" class="h-load block-tab-body" data-action='{"url": "{{ _h.url('manager/myarea/statistiche/periodo') }}", "only_manual": true, "check_is_load": true, "params": {"cache": "{{ statistiche.maggio.cache }}"}}'></div>
+				<div data-block-tab-body="tab_6" class="h-load block-tab-body" data-action='{"url": "{{ _h.url('manager/myarea/statistiche/periodo') }}", "only_manual": true, "check_is_load": true, "params": {"cache": "{{ statistiche.giugno.cache }}"}}'></div>
+				<div data-block-tab-body="tab_7" class="h-load block-tab-body" data-action='{"url": "{{ _h.url('manager/myarea/statistiche/periodo') }}", "only_manual": true, "check_is_load": true, "params": {"cache": "{{ statistiche.luglio.cache }}"}}'></div>
+				<div data-block-tab-body="tab_8" class="h-load block-tab-body" data-action='{"url": "{{ _h.url('manager/myarea/statistiche/periodo') }}", "only_manual": true, "check_is_load": true, "params": {"cache": "{{ statistiche.agosto.cache }}"}}'></div>
+				<div data-block-tab-body="tab_9" class="h-load block-tab-body" data-action='{"url": "{{ _h.url('manager/myarea/statistiche/periodo') }}", "only_manual": true, "check_is_load": true, "params": {"cache": "{{ statistiche.settembre.cache }}"}}'></div>
+				<div data-block-tab-body="tab_10" class="h-load block-tab-body" data-action='{"url": "{{ _h.url('manager/myarea/statistiche/periodo') }}", "only_manual": true, "check_is_load": true, "params": {"cache": "{{ statistiche.ottobre.cache }}"}}'></div>
+				<div data-block-tab-body="tab_11" class="h-load block-tab-body" data-action='{"url": "{{ _h.url('manager/myarea/statistiche/periodo') }}", "only_manual": true, "check_is_load": true, "params": {"cache": "{{ statistiche.novembre.cache }}"}}'></div>
+				<div data-block-tab-body="tab_12" class="h-load block-tab-body" data-action='{"url": "{{ _h.url('manager/myarea/statistiche/periodo') }}", "only_manual": true, "check_is_load": true, "params": {"cache": "{{ statistiche.dicembre.cache }}"}}'></div>
+				<div data-block-tab-body="tutto" class="h-load block-tab-body" data-action='{"url": "{{ _h.url('manager/myarea/statistiche/periodo') }}", "only_manual": true, "check_is_load": true, "params": {"cache": "{{ statistiche.tutto.cache }}"}}'></div>				
+			</div>
+		</div>
+	
+	</div>
+</div>

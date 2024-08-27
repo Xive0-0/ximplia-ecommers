@@ -1,0 +1,52 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Esporta ordini') }}
+			<div class="field-line-text">Data inserimento</div>
+			<p class="field-line field-line-left field-80">
+				<label>Data dal:</label>
+				<input type="text" name="data_dal" class="field valida-datasimple input-datepicker" maxlength="10">
+			</p>
+			<p class="field-line field-80">
+				<label>Data al:</label>
+				<input type="text" name="data_da" class="field valida-datasimple input-datepicker" maxlength="10">
+			</p>
+			<div class="clear-line"></div>
+			<div class="field-line-text">Data ultimo accesso utente</div>
+			<p class="field-line field-line-left field-80">
+				<label>Data dal:</label>
+				<input type="text" name="data_accesso_dal" class="field valida-datasimple input-datepicker" maxlength="10">
+			</p>
+			<p class="field-line field-80">
+				<label>Data al:</label>
+				<input type="text" name="data_accesso_da" class="field valida-datasimple input-datepicker" maxlength="10">
+			</p>
+			<div class="clear-line"></div>
+			<div class="field-line-text">Data chiusura utente</div>
+			<p class="field-line field-line-left field-80">
+				<label>Data dal:</label>
+				<input type="text" name="data_chiuso_dal" class="field valida-datasimple input-datepicker" maxlength="10">
+			</p>
+			<p class="field-line field-80">
+				<label>Data al:</label>
+				<input type="text" name="data_chiuso_da" class="field valida-datasimple input-datepicker" maxlength="10">
+			</p>
+			<div class="clear-line"></div>
+			<div class="field-line-text">Data cancellazione da parte utente</div>
+			<p class="field-line field-line-left field-80">
+				<label>Data dal:</label>
+				<input type="text" name="data_cancellazione_dal" class="field valida-datasimple input-datepicker" maxlength="10">
+			</p>
+			<p class="field-line field-80">
+				<label>Data al:</label>
+				<input type="text" name="data_cancellazione_da" class="field valida-datasimple input-datepicker" maxlength="10">
+			</p>
+		<fieldset>
+	</div>
+	<div class="h-layout-bottombar">
+		<div class="h-layout-content-wrapper">
+			<a href="javascript:void(0);" class="h-bar-button h-bar-button-gray h-close-box">Annulla</a>
+			<a href="javascript:void(0);" class="h-bar-button h-bar-button-blu h-action-submit" data-action='{"method": "get", "target": "_blank", "url":"{{ _h.url('manager/myarea/carrello/ex-esporta') }}", "onComplete": {"closeWin": true}, "loadinMessage": "generazione in corso..."}'>Esporta</a>
+		</div>
+	</div>
+	</form>
+</div>

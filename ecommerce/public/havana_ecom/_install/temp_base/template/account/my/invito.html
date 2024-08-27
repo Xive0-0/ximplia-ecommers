@@ -1,0 +1,31 @@
+{% set _lblm = _h.labels.get('my') %}
+{% set _lblf = _h.labels.get('form') %}
+<h2>{{ _lblm.title_inserisci_password }}</h2>
+<form id="pagina">
+	<div class="field-text">
+		{{ _lblm.description_inserisci_password }}
+	</div>
+	<div class="field-line-50-50">
+		<div class="field-line">
+			<div class="field">
+				<label>{{ _lblf.field_nuova_password }} <span>*</span></label>
+				<input type="password" name="password" class="valida-required valida-password valida-check-password" maxlength="20">
+			</div>
+		</div>
+		<div class="field-line">
+			<div class="field">
+				<label>{{ _lblf.field_conferma_password }} <span>*</span></label>
+				<input type="password" name="conferma_password" class="valida-required valida-confermapassword" maxlength="20">
+			</div>
+		</div>
+	</div>
+	<div class="field-text-obbligatori">{{ _lblf.campi_obbligatori }}</div>
+	<div class="field-button field-button-left">
+		<a class="button-red button submit-form" href="javascript:void(0)" title="{{ btn }}" data-action='{"url": "{{ _h.url('account/my/ex-modifica-password') }}", "onComplete": {"type": "show", "show": "#conferma_pagina", "hide": "#pagina"}}'><span>{{ _lblf.btn_inserisci }}</span></a>
+	</div>
+
+</form>
+
+<div id="conferma_pagina" class="hide-block">
+	<p>{{ _lblm.descr_conf_password_modificata }}</p>
+</div>

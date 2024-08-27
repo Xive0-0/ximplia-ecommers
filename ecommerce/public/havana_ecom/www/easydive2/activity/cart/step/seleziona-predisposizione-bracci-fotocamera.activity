@@ -1,0 +1,10 @@
+{
+	"on:begin": [
+		{"name": "cart/step/load-item", "params": {"codice": "kit_sc_ft", "item": "item1"}},
+		{"name": "cart/step/load-item", "params": {"codice": "kit_sf_ft", "item": "item2"}}
+	],
+	"on:view": {
+		"template": "cart/step/seleziona_predisposizione_bracci_fotocamera",
+		"extra": false
+	}
+}

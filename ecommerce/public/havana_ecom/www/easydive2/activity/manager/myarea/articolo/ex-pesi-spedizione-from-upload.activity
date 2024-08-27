@@ -1,0 +1,8 @@
+{
+	"input": [
+		{"name": "file_data", "required": true}
+	],
+	"on:": [
+		"manager/myarea/articolo/ex-pesi-spedizione-from-upload"
+	]
+}

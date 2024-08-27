@@ -1,0 +1,88 @@
+{% import _h.template('manager/_macro.html') as mc %}
+<div id="h-layout-navigation" class="h-layout h-layout-navigation-with-toolbar h-nav-white">
+	<div class="h-layout-content-wrapper">
+		{{ mc.navMenu(_h, 'label') }}
+		<div class="h-nav-title" style="margin-right: 50px;">
+		Labels
+		</div>	
+
+{% if _h.input('da_tradurre', '') != '' %}
+{% set da_tradurre = true %}
+{% endif %}
+<div class="h-nav-button-wrapper">
+	<a class="h-nav-button h-action-alttext h-nav-button-white{% if not(da_tradurre) %} selected{% endif %}" data-alttext="tutte le label" href="{{ _h.url('manager/myarea/label/index') }}?lang={{_h.input('lang')}}">
+		<img align="top" src="/assets/manager/havana-js/img/icon/ico-list.svg">
+	</a>
+</div>
+<div class="h-nav-button-wrapper">
+	<a class="h-nav-button h-action-alttext h-nav-button-white{% if da_tradurre %} selected{% endif %}" data-alttext="elenco da tradurre" href="{{ _h.url('manager/myarea/label/index') }}?lang={{_h.input('lang')}}&da_tradurre=1">
+		<img align="top" src="/assets/manager/havana-js/img/icon/ico-lettera-check.svg">
+	</a>
+</div>
+		
+<div class="h-nav-button-wrapper">
+	<a class="h-nav-button h-action-alttext h-nav-button-white" data-alttext="abilita visualizzazione chiavi labels nel sito" href="{{ _h.url('h-labels-on') }}" target="_blank">
+		<img align="top" src="/assets/manager/havana-js/img/icon/ico-confirm.svg">
+	</a>
+</div>
+<div class="h-nav-button-wrapper">
+	<a class="h-nav-button h-action-alttext h-nav-button-white" data-alttext="disabilita visualizzazione chiavi labels nel sito" href="{{ _h.url('h-labels-off') }}" target="_blank">
+		<img align="top" src="/assets/manager/havana-js/img/icon/ico-reset.svg">
+	</a>
+</div>
+{% if listLang|length > 0 %}
+	<div class="h-nav-button-wrapper">
+		<a href="javascript:void(0);" class="h-nav-button h-action-popup-menu">
+			Lingua base
+		</a>
+		<div class="h-popup-content h-popup-menu">
+		{% for l in listLang %}
+			<a href="{{ _h.url('manager/myarea/label/index') }}?lang={{ l }}">{{ l|upper }}</a>
+		{% endfor %}
+		</div>
+	</div>
+{% endif %}
+{{ mc.index_page_header_bot() }}
+
+		<div style="position: absolute; top: 0; bottom: 0; left: 200px; right: 0;">
+		{{ mc.navButtonUpdate(_h, 'modifica', 'label') }}
+		{{ mc.navButton(_h, 'esporta labels', 'disk', 'click', 'h-action-download', '{"url": "' ~ _h.url('manager/myarea/label/export') ~ '"}') }}
+		</div>
+		
+		<div style="position:absolute; top: -34px; right: 5px;" class="h-filter-list-wrapper">
+			<div class="field-line-left field-300" style="margin-right: 0;">
+				<input type="text" name="filter_list" style="height: 27px;" class="field h-action-filter-list" placeholder="cerca" value="" data-action='{"load": "#h-layout-center-content"}'>
+			</div>
+			<a style="margin: 0 0 0 2px; padding: 0;" href="javascript:void(0);" class="h-bar-button h-bar-button-gray h-action-filter-list-azzera">Cerca</a>
+		</div>	
+	
+		</div>
+	</div>	
+</div>
+<div id="h-layout-details-left" class="h-layout h-layout-middle">
+	<div class="h-layout-content-wrapper">
+		<div id="h-layout-details-left-content" class="h-layout-content-wrapper" style="overflow: auto">
+
+<table class="h-list h-list-slingle-selection" cellpadding="0" cellspacing="0" border="0">
+{% for item in listFile %}		
+	<tr data-id="{{ item }}">
+		<td style="width: 20px;"><span class="h-checkbox" data-value="{{ item }}" data-action='{"update": {"elem": "#h-layout-center-content", "paramName": "file"}, "reload": "#h-layout-center-content"}'><input type="hidden" name="id[]" value="" /></span></td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					{{ item }}
+				</div>
+			</div>
+		</td>
+	</tr>
+{% endfor %}
+</table>	
+		
+		</div>
+	</div>
+</div>
+<div id="h-layout-center" class="h-layout h-layout-middle h-layout-center" data-action='{"show": ["header", "details-left", "navigation", "footer"]}'>
+	<div class="h-layout-content-wrapper" id="h-layout-center-content" data-action='{"url": "{{ _h.url('manager/myarea/label/list') }}?lang={{_h.input('lang')}}&da_tradurre={{_h.input('da_tradurre')}}"}'>
+	{% include _h.template('manager/myarea/label/list.html') %}
+	</div>
+</div>

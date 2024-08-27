@@ -1,0 +1,27 @@
+{% import _h.template('_macro.html') as mc %}
+{% set _lblc = _h.labels.get('checkout') %}
+
+{% if list|length > 0 %}
+	{% for elem in list %}
+	<div class="cart-item" data-id="{{ elem.tmp_id }}">
+		<div class="row justify-content-center align-items-center w-100 h-100 p-0 mx-auto">
+			<div class="col-1 text-center p-0 h-100">
+				<a href="javascript:void(0)" title="{{ _lblc.btn_elimina }}" data-id="{{ elem.tmp_id }}"
+				   class="btn btn-delete-cart-item h-100 fill-grey">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 8 8">
+						<path class="cls-1"
+							  d="M5.41,4l2.29-2.29c.39-.39.39-1.02,0-1.41s-1.02-.39-1.41,0l-2.29,2.29L1.71.29C1.32-.1.68-.1.29.29S-.1,1.32.29,1.71l2.29,2.29L.29,6.29c-.39.39-.39,1.02,0,1.41.2.2.45.29.71.29s.51-.1.71-.29l2.29-2.29,2.29,2.29c.2.2.45.29.71.29s.51-.1.71-.29c.39-.39.39-1.02,0-1.41l-2.29-2.29Z"/>
+					</svg>
+				</a>
+			</div>
+			<div class="col-11 p-0 h-100">
+				{{ mc.item_articolo_carrello_list(_h, elem) }}
+			</div>
+		</div>
+	</div>
+	{% endfor %}
+{% else %}
+	<div class="container-cart-void">
+		<div class="cart-void">{{ _lblc.carrello_vuoto }}</div>
+	</div>
+{% endif %}

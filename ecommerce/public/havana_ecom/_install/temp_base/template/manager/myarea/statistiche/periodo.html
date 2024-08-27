@@ -1,0 +1,340 @@
+<div class="chart-statistica-line chart-statistica-line-1 hrow">
+	<div class="chart-statistica h-chart-wrapper">
+		<div class="h-chart" data-action='{"type": "linea", "options": {"title": "Periodo {{ stat.info_periodo.title }}"}}'>
+		[
+			['Tipo', 'Ordini', 'Conclusi', 'Carrelli']
+			{% for val in stat.info_periodo.list %}
+				,['{{ val.label }}', {{ val.totale_ordini }}, {{ val.ordini_conclusi }}, {{ val.carrelli }}]
+			{% endfor %}
+		]
+		</div>
+	</div>
+</div>
+
+<div class="chart-statistica-line chart-statistica-line-3 hrow" style="height: 150px;">
+	<div class="chart-statistica" style="height: 150px;">
+		<table class="h-list h-list-info" cellpadding="0" cellspacing="0" border="0">
+		<tr><td>Num. ordini completati</td><td class="h-list-info-value">{{ stat.info.ordini_completati }}</td></tr>
+		<tr><td>Num. ordini non pagati</td><td class="h-list-info-value">{{ stat.info.ordini_non_pagati }}</td></tr>
+		<tr><td>Num. ordini usato buono sconto</td><td class="h-list-info-value">{{ stat.info.ordini_buono_sconto }}</td></tr>
+		<tr><td>N. ord. senza articoli in sconto</td><td class="h-list-info-value">{{ stat.info.ordine_senza_articoli_sconto }}</td></tr>
+		<tr><td>N. ord. con articoli in sconto</td><td class="h-list-info-value">{{ stat.info.ordine_con_articoli_sconto }}</td></tr>
+		<tr><td>N. ord. solo articoli in sconto</td><td class="h-list-info-value">{{ stat.info.ordine_solo_articoli_sconto }}</td></tr>
+		<tr><td>Utenti con più di 1 ordine</td><td class="h-list-info-value">{{ stat.info.stesso_utente_piu_ordini }}</td></tr>
+		</table>
+	</div>
+	<div class="chart-statistica" style="height: 150px;">
+		<table class="h-list h-list-info" cellpadding="0" cellspacing="0" border="0">
+		<tr><td>Fatturato</td><td class="h-list-info-value">{{ _h.config('manager_valuta', '&euro;') }} {{ stat.info.fatturato }}</td></tr>
+		<tr><td>Importo medio ordine</td><td class="h-list-info-value">{{ _h.config('manager_valuta', '&euro;') }} {{ stat.info.importo_medio_ordine }}</td></tr>
+		<tr><td>Importo massimo ordine</td><td class="h-list-info-value">{{ _h.config('manager_valuta', '&euro;') }} {{ stat.info.importo_massimo_ordine }}</td></tr>
+		<tr><td>Importo minimo ordine</td><td class="h-list-info-value">{{ _h.config('manager_valuta', '&euro;') }} {{ stat.info.importo_minimo_ordine }}</td></tr>
+		<tr><td>Num. totale carrelli</td><td class="h-list-info-value">{{ stat.info.totale_carrelli }}</td></tr>
+		<tr><td>Num. carrelli persi</td><td class="h-list-info-value">{{ stat.info.carrelli_persi }}</td></tr>
+		<tr><td>Num. carrelli recuperati</td><td class="h-list-info-value">{{ stat.info.carrelli_recuperati }}</td></tr>
+		</table>
+	</div>
+	<div class="chart-statistica" style="height: 150px;">
+		<table class="h-list h-list-info" cellpadding="0" cellspacing="0" border="0">
+		<tr><td>Num. articoli acquistati</td><td class="h-list-info-value">{{ stat.info.articoli_acquistati }}</td></tr>
+		<tr><td>Num. articoli medio in ordine</td><td class="h-list-info-value">{{ stat.info.articoli_medio_ordine }}</td></tr>
+		<tr><td>Num. visualiz. schede articolo</td><td class="h-list-info-value">{{ stat.info.articoli_visualizzaizone }}</td></tr>
+		<tr><td>Num. aggiunte articoli carrello</td><td class="h-list-info-value">{{ stat.info.articoli_add_carrello }}</td></tr>
+		<tr><td>Num. rimozioni articoli carrello</td><td class="h-list-info-value">{{ stat.info.articoli_rem_carrello }}</td></tr>
+		<tr><td>Num. iscritti newsletter</td><td class="h-list-info-value">{{ stat.info.iscritti_newsletter }}</td></tr>
+		<tr><td>Num. iscritti sito</td><td class="h-list-info-value">{{ stat.info.iscritti_sito }}</td></tr>
+		</table>
+	</div>
+</div>
+
+<div class="chart-statistica-line chart-statistica-line-1-2 hrow" style="height: 300px;">
+	<div class="chart-statistica h-chart-wrapper" style="height: 300px;">
+		<div class="h-chart" data-action='{"type": "torta", "options": {"title": "Ordini", "width": 260}}'>
+		[
+			['Tipo', 'Dato'],
+			['non completati', {{ stat.ordini.non_completati }}],
+			['completati', {{ stat.ordini.completati }}]
+		]
+		</div>
+		<div class="chart-statistica-label"><span>Totale</span><strong>{{ stat.ordini.totale }}</strong></div>
+		<div class="chart-statistica-label"><span>Completati</span><strong>{{ stat.ordini.completati }}</strong></div>
+		<div class="chart-statistica-label"><span>Non Completati</span><strong>{{ stat.ordini.non_completati }}</strong></div>
+	</div>
+	<div class="chart-statistica h-chart-wrapper" style="height: 300px;">
+		<div class="h-chart" style="height: 300px;" data-action='{"type": "colonna", "format_euro": true, "options": {"title": "Fatturato in {{ _h.config('manager_valuta', 'EURO') }} nel periodo {{ stat.info_periodo.title }}", "legend": "bottom"}}'>
+		[
+			['Tipo', 'Fatturato {{ _h.config('manager_valuta', '&euro;') }}']
+			{% for val in stat.info_periodo.list %}
+				,['{{ val.label }}', {{ val.fatturato_ordini }}]
+			{% endfor %}
+		]
+		</div>
+	</div>
+</div>
+
+<div class="chart-statistica-line chart-statistica-line-3 hrow">
+	<div class="chart-statistica h-chart-wrapper">
+		<div class="h-chart" data-action='{"type": "torta", "options": {"title": "Carrelli", "width": 260}}'>
+		[
+			['Tipo', 'Dato'],
+			['persi', {{ stat.carrelli.persi }}],
+			['recuperati', {{ stat.carrelli.recuperati }}]
+		]
+		</div>
+		<div class="chart-statistica-label"><span>Totale abbandonati</span><strong>{{ stat.carrelli.totale }}</strong></div>
+		<div class="chart-statistica-label"><span>Recuperati</span><strong> {{ stat.carrelli.recuperati }}</strong></div>
+		<div class="chart-statistica-label"><span>Persi</span><strong> {{ stat.carrelli.persi }}</strong></div>
+	</div>
+	<div class="chart-statistica h-chart-wrapper">
+		<div class="h-chart" data-action='{"type": "torta", "options": {"title": "Visione generale", "width": 260, "pieHole": 0.4}}'>
+		[
+			['Tipo', 'Dato'],
+			['ordini', {{ stat.visione_generale.completati }}],
+			['ordini recuperati', {{ stat.visione_generale.ordini_recuperati }}],
+			['persi', {{ stat.visione_generale.persi }}],
+			['non completati', {{ stat.visione_generale.non_completati }}]
+		]
+		</div>
+		<div class="chart-statistica-label"><span>Conv. sugli ordini</span><strong>{{ stat.visione_generale.conversione_ordini }}%</strong></div>
+		<div class="chart-statistica-label"><span>Conv. sul tot. carrelli</span><strong>{{ stat.visione_generale.conversione_carrelli }}%</strong></div>
+	</div>
+	<div class="chart-statistica h-chart-wrapper">
+		<div class="h-chart" data-action='{"type": "torta", "options": {"title": "Pagamento", "width": 260}}'>
+		[
+			['Tipo', 'Dato'],
+			['Carta di credito', {{ stat.pagamento.tipo_1 }}],
+			['PayPal', {{ stat.pagamento.tipo_2 }}],
+			['Bonifico Bancario', {{ stat.pagamento.tipo_3 }}],
+			['Contrassegno', {{ stat.pagamento.tipo_4 }}],
+			['Poste Pay', {{ stat.pagamento.tipo_5 }}],
+			['Ricarica cellulari', {{ stat.pagamento.tipo_6 }}],
+			['Presso la sede', {{ stat.pagamento.tipo_7 }}]
+		]
+		</div>
+	</div>
+</div>
+
+<div class="chart-statistica-line chart-statistica-line-3 hrow">
+	<div class="chart-statistica h-chart-wrapper">
+		<div class="h-chart" data-action='{"type": "torta", "options": {"title": "Ordini/buono sconto", "width": 260}}'>
+		[
+			['Tipo', 'Dato'],
+			['Con buono sconto', {{ stat.ordini_sconto.con_buono_sconto }}],
+			['Senza buono sconto', {{ stat.ordini_sconto.senza_buono_sconto }}]
+		]
+		</div>
+		<div class="chart-statistica-label"><span>Rapporto</span><strong>{{ stat.ordini_sconto.conversione }}%</strong></div>
+	</div>
+	<div class="chart-statistica h-chart-wrapper">
+		<div class="h-chart" data-action='{"type": "torta", "options": {"title": "Numero articoli in ordine completati", "width": 260}}'>
+		[
+			['Tipo', 'Dato'],
+			['1 articolo', {{ stat.articoli_ordini_completato.n_1 }}],
+			['2 articoli', {{ stat.articoli_ordini_completato.n_2 }}],
+			['3 articoli', {{ stat.articoli_ordini_completato.n_3 }}],
+			['4-5 articoli', {{ stat.articoli_ordini_completato.n_4_5 }}],
+			['6-10 articoli', {{ stat.articoli_ordini_completato.n_6_10 }}],
+			['11+ articoli', {{ stat.articoli_ordini_completato.n_11_piu }}]
+		]
+		</div>
+		<div class="chart-statistica-label"><span>Media</span><strong>{{ stat.articoli_ordini_completato.media }}</strong></div>
+	</div>
+	<div class="chart-statistica h-chart-wrapper">
+		<div class="h-chart" data-action='{"type": "torta", "options": {"title": "Ordini articoli scontati", "width": 260}}'>
+		[
+			['Tipo', 'Dato'],
+			['Senza articoli in sconto', {{ stat.ordini_articoli_scontati.senza_articoli_sconto }}],
+			['Con articoli in sconto', {{ stat.ordini_articoli_scontati.con_articoli_sconto }}],
+			['Solo articoli in sconto', {{ stat.ordini_articoli_scontati.solo_articoli_sconto }}]
+		]
+		</div>
+		<div class="chart-statistica-label"><span>Senza sconto</span><strong>{{ stat.ordini_articoli_scontati.senza_articoli_sconto }}</strong></div>
+		<div class="chart-statistica-label"><span>Con sconto</span><strong>{{ stat.ordini_articoli_scontati.con_articoli_sconto }}</strong></div>
+		<div class="chart-statistica-label"><span>Solo con sconto</span><strong>{{ stat.ordini_articoli_scontati.solo_articoli_sconto }}</strong></div>
+	</div>
+</div>
+
+{% macro item_articolo(_h, item, key) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td><a class="link" href="{{ _h.url('item-articolo') }}?id={{ item.id }}" title="apri pagina" target="_blank">#{{ item.id }}</a></td>
+		<td>
+			<div class="h-list-cell-auto-wrapper h-action-alttext" data-alttext="{{ item.codice }}">
+				<div class="h-list-cell-auto">
+					{{ item.codice }}
+				</div>
+			</div>		
+		</td>	
+		<td><img class="image image-articolo" src="{{ item.image }}" style="max-width: 30px"></td>
+		<td>
+			<div class="h-list-cell-auto-wrapper h-action-alttext" data-alttext="{{ item.nome }}">
+				<div class="h-list-cell-auto">
+					{{ item.nome }}
+				</div>
+			</div>
+		</td>
+		<td>{{ item[key] }}</td>	
+	</tr>
+{% endmacro %}
+
+{% macro item_articolo_simple(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td><a class="link" href="{{ _h.url('item-articolo') }}?id={{ item.id }}" title="apri pagina" target="_blank">#{{ item.id }}</a></td>
+		<td>
+			<div class="h-list-cell-auto-wrapper h-action-alttext" data-alttext="{{ item.codice }}">
+				<div class="h-list-cell-auto">
+					{{ item.codice }}
+				</div>
+			</div>		
+		</td>	
+		<td><img class="image image-articolo" src="{{ item.image }}" style="max-width: 30px"></td>
+		<td>
+			<div class="h-list-cell-auto-wrapper h-action-alttext" data-alttext="{{ item.nome }}">
+				<div class="h-list-cell-auto">
+					{{ item.nome }}
+				</div>
+			</div>
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro block_articoli(_h, list, title, key, export) %}
+	<div class="chart-statistica" style="display: block; height: 350px; overflow: hidden;">	
+		<table class="h-list h-list-small" cellpadding="0" cellspacing="0" border="0">
+		<tr class="h-list-header">
+			<td colspan="5" style="background: #f0f0f0">
+				{{ title }}
+				<a style="margin-left: 20px;" href="javascript:void(0);" class="h-nav-button-click h-action-link" data-action='{"url": "/manager/myarea/statistiche/export-{{ export }}.php", "params": [{"key": "dal", "value": "{{ _h.input("dal") }}"}, {"key": "al", "value": "{{ _h.input("al") }}"}]}'>[Esporta dati]</a>
+			</td>
+		</tr>
+		<tr>
+			<th style="width: 30px;">ID</th>
+			<th style="width: 50px;">Codice</th>
+			<th style="width: 30px;">&nbsp;</th>
+			<th>Nome</th>
+			<th style="width: 30px;">{{ key }}</th>
+		</tr>
+		{% for item in list %}		
+			{{ _self.item_articolo(_h, item, key) }}
+		{% endfor %}
+		</table>
+	</div>
+{% endmacro %}
+
+{% macro block_articoli_simple(_h, list, title, export) %}
+	<div class="chart-statistica" style="display: block; height: 350px; overflow: hidden;">	
+		<table class="h-list h-list-small" cellpadding="0" cellspacing="0" border="0">
+		<tr class="h-list-header">
+			<td colspan="4" style="background: #f0f0f0">
+			{{ title }}
+			<a style="margin-left: 20px;" href="javascript:void(0);" class="h-nav-button-click h-action-link" data-action='{"url": "/manager/myarea/statistiche/export-{{ export }}.php", "params": [{"key": "dal", "value": "{{ _h.input("dal") }}"}, {"key": "al", "value": "{{ _h.input("al") }}"}]}'>[Esporta dati]</a>
+			</td>
+		</tr>
+		<tr>
+			<th style="width: 30px;">ID</th>
+			<th style="width: 50px;">Codice</th>
+			<th style="width: 30px;">&nbsp;</th>
+			<th>Nome</th>
+		</tr>
+		{% for item in list %}		
+			{{ _self.item_articolo_simple(_h, item) }}
+		{% endfor %}
+		</table>
+	</div>
+{% endmacro %}
+
+<div class="chart-statistica-line chart-statistica-line-3 hrow">
+	{{ _self.block_articoli(_h, stat.articoli.piu_acquistati, 'Più acquistati', 'qta', 'piu-acquistati') }}
+	{{ _self.block_articoli(_h, stat.articoli.aggiunti_carrello, 'Aggiunti carrello', 'num', 'aggiunti-carrello') }}
+	{{ _self.block_articoli(_h, stat.articoli.visualizzati, 'Visualizzati', 'num', 'visualizzati') }}
+</div>
+
+<div class="chart-statistica-line chart-statistica-line-3 hrow">
+	{{ _self.block_articoli(_h, stat.articoli.articoli_meno_acquistati, 'Meno acquistati', 'qta', 'meno-acqistati') }}
+	{{ _self.block_articoli_simple(_h, stat.articoli.mai_acquistati, 'Mai acquistati', 'mai-acquistati') }}
+	{{ _self.block_articoli_simple(_h, stat.articoli.mai_aggiunti_carrello, 'Mai aggiunti in carrello', 'mai-aggiunti-carrello') }}
+</div>
+
+<div class="chart-statistica-line chart-statistica-line-1 hrow">
+	<div class="chart-statistica h-chart-wrapper">
+		<div class="h-chart" data-action='{"type": "linea", "options": {"title": "Accesso articoli - {{ stat.info_periodo.title }}"}}'>
+		[
+			['Tipo', 'Visualizzazioni schede articolo', 'Agg. carrello', 'Rim. carrello', 'Carrelli', 'Ordini']
+			{% for val in stat.info_periodo.list %}
+				,['{{ val.label }}', {{ val.visualizzazione_schede }}, {{ val.aggiunto_carrello }}, {{ val.rimosso_carrello }}, {{ val.carrelli }}, {{ val.totale_ordini }}]
+			{% endfor %}
+		]
+		</div>
+	</div>
+</div>
+<div class="chart-statistica-line chart-statistica-line-1 hrow chart-statistica-line-giorno">
+	<div class="chart-statistica h-chart-wrapper">
+		<div class="h-chart" data-action='{"type": "barre", "options": {"title": "Settimana"}}'>
+		[
+			['Giorno', 'Ordini completati', 'Ordini non completati', 'Carrelli persi'],
+			['Lunedì', {{ stat.ordini_settimana.lunedi.ordini_completati }}, {{ stat.ordini_settimana.lunedi.ordini_non_completati }}, {{ stat.ordini_settimana.lunedi.carrelli_persi }}],
+			['Martedì', {{ stat.ordini_settimana.martedi.ordini_completati }}, {{ stat.ordini_settimana.martedi.ordini_non_completati }}, {{ stat.ordini_settimana.martedi.carrelli_persi }}],
+			['Mergoledì', {{ stat.ordini_settimana.mercoledi.ordini_completati }}, {{ stat.ordini_settimana.mercoledi.ordini_non_completati }}, {{ stat.ordini_settimana.mercoledi.carrelli_persi }}],
+			['Giovedì', {{ stat.ordini_settimana.giovedi.ordini_completati }}, {{ stat.ordini_settimana.giovedi.ordini_non_completati }}, {{ stat.ordini_settimana.giovedi.carrelli_persi }}],
+			['Venerdì', {{ stat.ordini_settimana.venerdi.ordini_completati }}, {{ stat.ordini_settimana.venerdi.ordini_non_completati }}, {{ stat.ordini_settimana.venerdi.carrelli_persi }}],
+			['Sabato', {{ stat.ordini_settimana.sabato.ordini_completati }}, {{ stat.ordini_settimana.sabato.ordini_non_completati }}, {{ stat.ordini_settimana.sabato.carrelli_persi }}],
+			['Domenica', {{ stat.ordini_settimana.domenica.ordini_completati }}, {{ stat.ordini_settimana.domenica.ordini_non_completati }}, {{ stat.ordini_settimana.domenica.carrelli_persi }}]
+		]
+		</div>
+	</div>
+</div>
+<div class="chart-statistica-line chart-statistica-line-1 hrow chart-statistica-line-orario">
+	<div class="chart-statistica h-chart-wrapper">
+		<div class="h-chart" data-action='{"type": "barre", "options": {"title": "Fasce orario"}}'>
+		[
+			['Fascia orario', 'Ordini completati', 'Ordini non completati', 'Carrelli persi'],
+			['00-02', {{ stat.ordini_fascia_orario.ora_00_02.ordini_completati }}, {{ stat.ordini_fascia_orario.ora_00_02.ordini_non_completati }}, {{ stat.ordini_fascia_orario.ora_00_02.carrelli_persi }}],
+			['02-04', {{ stat.ordini_fascia_orario.ora_02_04.ordini_completati }}, {{ stat.ordini_fascia_orario.ora_02_04.ordini_non_completati }}, {{ stat.ordini_fascia_orario.ora_02_04.carrelli_persi }}],
+			['04-06', {{ stat.ordini_fascia_orario.ora_04_06.ordini_completati }}, {{ stat.ordini_fascia_orario.ora_04_06.ordini_non_completati }}, {{ stat.ordini_fascia_orario.ora_04_06.carrelli_persi }}],
+			['06-08', {{ stat.ordini_fascia_orario.ora_06_08.ordini_completati }}, {{ stat.ordini_fascia_orario.ora_06_08.ordini_non_completati }}, {{ stat.ordini_fascia_orario.ora_06_08.carrelli_persi }}],
+			['08-10', {{ stat.ordini_fascia_orario.ora_08_10.ordini_completati }}, {{ stat.ordini_fascia_orario.ora_08_10.ordini_non_completati }}, {{ stat.ordini_fascia_orario.ora_08_10.carrelli_persi }}],
+			['10-12', {{ stat.ordini_fascia_orario.ora_10_12.ordini_completati }}, {{ stat.ordini_fascia_orario.ora_10_12.ordini_non_completati }}, {{ stat.ordini_fascia_orario.ora_10_12.carrelli_persi }}],
+			['12-14', {{ stat.ordini_fascia_orario.ora_12_14.ordini_completati }}, {{ stat.ordini_fascia_orario.ora_12_14.ordini_non_completati }}, {{ stat.ordini_fascia_orario.ora_12_14.carrelli_persi }}],
+			['14-16', {{ stat.ordini_fascia_orario.ora_14_16.ordini_completati }}, {{ stat.ordini_fascia_orario.ora_14_16.ordini_non_completati }}, {{ stat.ordini_fascia_orario.ora_14_16.carrelli_persi }}],
+			['16-18', {{ stat.ordini_fascia_orario.ora_16_18.ordini_completati }}, {{ stat.ordini_fascia_orario.ora_16_18.ordini_non_completati }}, {{ stat.ordini_fascia_orario.ora_16_18.carrelli_persi }}],
+			['18-20', {{ stat.ordini_fascia_orario.ora_18_20.ordini_completati }}, {{ stat.ordini_fascia_orario.ora_18_20.ordini_non_completati }}, {{ stat.ordini_fascia_orario.ora_18_20.carrelli_persi }}],
+			['20-22', {{ stat.ordini_fascia_orario.ora_20_22.ordini_completati }}, {{ stat.ordini_fascia_orario.ora_20_22.ordini_non_completati }}, {{ stat.ordini_fascia_orario.ora_20_22.carrelli_persi }}],
+			['22-00', {{ stat.ordini_fascia_orario.ora_22_24.ordini_completati }}, {{ stat.ordini_fascia_orario.ora_22_24.ordini_non_completati }}, {{ stat.ordini_fascia_orario.ora_22_24.carrelli_persi }}]
+		]
+		</div>
+	</div>
+</div>
+
+{% if visualizza_precedente %}
+<div class="chart-statistica-line chart-statistica-line-3 hrow">
+	<div class="chart-statistica h-chart-wrapper">
+		<div class="h-chart" data-action='{"type": "torta", "options": {"title": "Confronto ordini completati stesso periodo anno precedente", "width": 260}}'>
+		[
+			['Tipo', 'Dato'],
+			['Periodo corrente', {{ stat.ordini_anno_precedente.corrente }}],
+			['Stesso periodo anno precedente', {{ stat.ordini_anno_precedente.precedente }}]
+		]
+		</div>
+		<div class="chart-statistica-label"><span>Incremento</span><strong>{{ stat.ordini_anno_precedente.incremento }}%</strong></div>
+	</div>
+	<div class="chart-statistica h-chart-wrapper">
+		<div class="h-chart" data-action='{"type": "torta", "options": {"title": "Confronto carrelli persi stesso periodo anno precedente", "width": 260}}'>
+		[
+			['Tipo', 'Dato'],
+			['Periodo corrente', {{ stat.carrelli_persi_anno_precedente.corrente }}],
+			['Stesso periodo anno precedente', {{ stat.carrelli_persi_anno_precedente.precedente }}]
+		]
+		</div>
+		<div class="chart-statistica-label"><span>Incremento</span><strong>{{ stat.carrelli_persi_anno_precedente.incremento }}%</strong></div>
+	</div>
+	<div class="chart-statistica h-chart-wrapper">
+		<div class="h-chart" data-action='{"type": "torta", "options": {"title": "Confronto uso buoni sconto stesso periodo anno precedente", "width": 260}}'>
+		[
+			['Tipo', 'Dato'],
+			['Periodo corrente', {{ stat.buoni_sconto_precedente.corrente }}],
+			['Stesso periodo anno precedente', {{ stat.buoni_sconto_precedente.precedente }}]
+		]
+		</div>
+		<div class="chart-statistica-label"><span>Incremento</span><strong>{{ stat.buoni_sconto_precedente.incremento }}%</strong></div>
+	</div>
+</div>
+{% endif %}

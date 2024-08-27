@@ -1,0 +1,10 @@
+{
+	"on:begin": [
+		{"name": "cart/step/list-kit-bracci", "params": {"tipo": "50", "list": "listBracciLuci"}},
+		{"name": "cart/step/list-kit-bracci", "params": {"tipo": "51", "list": "listBracciFlash"}}
+	],
+	"on:view": {
+		"template": "cart/step/seleziona_kit_bracci",
+		"extra": false
+	}
+}

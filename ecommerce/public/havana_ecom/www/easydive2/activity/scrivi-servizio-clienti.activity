@@ -1,0 +1,11 @@
+{
+	"put": {
+		"view": [
+			{"noindex": true}
+		]
+	},
+	"on:": [
+		{"name": "testo", "params": {"codice": "contatti"}}
+	],
+	"on:view": "scrivi_servizio_clienti"
+}

@@ -1,0 +1,18 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Modifica') }}
+<input type="hidden" name="id" value="{{ item.id }}">
+<p class="field-line field-400">
+	<label>Descrizione<span>*</span>:</label>
+	<input type="text" name="nome" class="field valida-required" value="{{ item.get('nome') }}" maxlength="50">
+</p>
+<p class="field-line field-100">
+	<label>Data scadenza<span>*</span>:</label>
+	<input type="text" name="data_scadenza" class="field valida-required valida-datasimple input-datepicker" value="{{ item.getDate('data_scadenza') }}">
+</p>
+<p class="field-line field-400">
+	<label>Invia e-mail a completamento ordine quando utilizzato buono sconto (se più email separare da virgola o spazio):</label>
+	<input type="text" name="notifica_e_mail" class="field" value="{{ item.get('notifica_e_mail') }}">
+</p>
+{{ mc.labelCampiObbligatori() }}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/buonosconto/ex-edit')) }}	

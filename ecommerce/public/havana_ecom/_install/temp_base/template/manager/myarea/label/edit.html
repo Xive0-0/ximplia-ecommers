@@ -1,0 +1,32 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Modifica Label: ' ~ item.key) }}
+<input type="hidden" name="id" value="{{ item.id }}">
+
+<div class="h-tab">
+
+{% for l in listLang %}
+<div data-tab-rif="{{ l }}">{{ l|upper }}</div>
+{% endfor %}
+
+{% for l in listLang %}
+<div data-tab="{{ l }}">
+<p class="field-line-text">
+	<em>chiave: </em> <strong>{{ item.key }}</strong>
+</p>
+{{ mc.contenutiInLingua(l) }}
+<p class="field-line field-400">
+	<label>{{ mc.labelLang(l) }} Valore:</label>
+	<textarea name="valore_{{ l }}" class="field">{{ item.value[l] }}</textarea>
+</p>
+<em>All'interno delle label lasciare invariati i tag HTML, come ad esempio &lt;strong&gt;<br>e riferimenti di sistema racchiusi tra doppie graffe, ad esempio {{ '{{'}}url{{ '}}'}}</em>
+<div class="field-line field-400">
+	<label>Testo originale:</label>
+	<div style="padding: 5px 8px; border: 1px solid #e5e5e5;">
+	<pre>{{ item.original[l] }}</pre>
+	</div>
+</div>
+</div>
+{% endfor %}
+</div>
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/label/ex-edit'), '"replace_item": "' ~ item.id ~ '"') }}	

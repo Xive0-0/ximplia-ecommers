@@ -1,0 +1,39 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% if item == null %}
+	{% set title = 'Nuovo Redirect' %}
+{% else %}
+	{% set title = 'Modifica Redirect' %}
+{% endif %}
+{{ mc.slideBoxHeader(_h, title) }}
+<input type="hidden" name="id" value="{{ item.id }}">
+<p class="field-line">
+Gli indirizzi devono essere relativi e iniziare con lo slash (/).
+</p>
+<p class="field-line field-line-left field-200">
+	<label>Lang<span>*</span>:</label>
+	<select name="lang" class="field valida-required">
+	{% for l in listLang %}
+	<option value="{{ l }}"{% if l == item.get('lang') %} selected="true"{% endif %}>{{ l|upper }}</option>
+	{% endfor %}
+	</select>
+</p>
+<p class="field-line field-line-left field-200">
+	<label>Codice<span>*</span>:</label>
+	<select name="codice" class="field valida-required">
+	<option value="301"{% if 301 == item.get('codice') %} selected="true"{% endif %}>301</option>
+	<option value="404"{% if 404 == item.get('codice') %} selected="true"{% endif %}>404</option>
+	<option value="410"{% if 410 == item.get('codice') %} selected="true"{% endif %}>410</option>
+	</select>
+</p>
+<div class="clear"></div>
+<p class="field-line field-400">
+	<label>URL from<span>*</span>:</label>
+	<input type="text" name="url_from" class="field valida-required" value="{{ item.get('url_from') }}">
+</p>
+<p class="field-line field-400">
+	<label>URL to<span>*</span>:</label>
+	<input type="text" name="url_to" class="field valida-required" value="{{ item.get('url_to') }}">
+</p>
+{{ mc.labelCampiObbligatori() }}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/redirect/ex-edit')) }}	

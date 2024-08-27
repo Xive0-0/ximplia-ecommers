@@ -1,0 +1,615 @@
+{% if conferma_dati_ordine %}
+	{% if ordine %}
+	
+	{% import _h.template('cart/_macro.html') as cmc %}
+	{% import _h.template('_macro.html') as mc %}
+	{% set _lblc = _h.labels.get('checkout') %}
+	{% set _lblf = _h.labels.get('form') %}
+	
+	{% set ordine = ordine.ordine %}
+	<div class="checkout-main clear">
+		<div class="col-box-100" style="float: none;">
+		<form data-step-pagamento="1">
+			<input type="hidden" name="token" value="{{ token }}">
+			<input type="hidden" name="id_ordine" value="{{ id_ordine }}">
+				
+			<div class="checkout-title">{{ _lblc.title_articoli_nel_carrello }}</div>
+			<div class="checkout-block block-articoli">
+				<div class="ck-header">
+					<div class="ck-image ck-cell">&nbsp;</div>
+					<div class="ck-articolo ck-cell">{{ _lblc.articolo }}</div>
+					<div class="ck-prezzo-unitario ck-cell">{{ _lblc.prezzo_unitario_small }}</div>
+					<div class="ck-quantita ck-cell">{{ _lblc.quantita_small }}</div>
+					<div class="ck-azioni ck-cell">&nbsp;</div>
+					<div class="ck-prezzo-totale ck-cell">{{ _lblc.prezzo }}</div>
+				</div>
+				{% set iva = true %}
+				{% if ordine.add_iva == '' and ordine.prezzo_senza_iva %}
+					{% set iva = false %}
+				{% endif %}
+				
+				{% for art in ordine.list_items %}
+				<div class="ck-line ck-line-articolo">
+					{{ mc.item_articolo_carrello_pagamento(_h, art) }}
+					<div class="ck-prezzo-unitario ck-cell">
+						{% if iva %}
+							{% set prezzo_originale = art.item.prezzo_originale %}
+							{% set prezzo = art.item.prezzo %}
+							{% set total = art.total %}
+						{% else %}
+							{% set prezzo_originale = art.item.prezzo_originale_imponibile %}
+							{% set prezzo = art.item.prezzo_imponibile %}
+							{% set total = art.total_imponibile %}
+						{% endif %}
+						{% if art.item.is_sconto %}
+						<span class="price-old">{{ _h.util.valuta(prezzo_originale, ordine.currency) }}</span>
+						{% endif %}
+						<span class="price item-buy-price">{{ _h.util.valuta(prezzo, ordine.currency) }}</span>				
+					</div>
+					<div class="ck-quantita ck-cell">
+						{{ art.qta }}
+					</div>
+					<div class="ck-azioni ck-cell">
+						<a href="javascript:void(0)" class="action-elimina" data-id="{{ art.tmp_id }}" title="{{ _lblc.btn_elimina }}">{{ _lblc.btn_elimina }}</a>
+					</div>
+					<div class="ck-prezzo-totale ck-cell">
+						<span>{{ _h.util.valuta(total, ordine.currency) }}
+						{% if not(iva) %}
+						<em>+ {{ _lblc.iva }} {{ art.item.iva }}: {{ _h.util.valuta(art.total_iva, ordine.currency) }}</em>
+						{% endif %}
+						</span>
+					</div>
+				</div>
+				{% endfor %}
+				<div class="ck-footer">
+					<div class="ck-descrizione ck-cell">
+					{% if ordine.add_iva == '' and (_h.session.params.user.prezzo_senza_iva or _h.config('prezzi_senza_iva', false)) %}
+						{{ _lblc.subtotale_imponibile_articoli }}
+					{% else %}
+						{{ _lblc.subtotale_articoli }}
+					{% endif %}
+					</div>
+					<div class="ck-prezzo-totale ck-cell ck-con-iva">
+					{% if ordine.add_iva == '' and (_h.session.params.user.prezzo_senza_iva or _h.config('prezzi_senza_iva', false)) %}
+					{{ _h.util.valuta(ordine.total_articoli_imponibile, ordine.currency) }}
+					<em>+ {{ _lblc.totale_iva }}: {{ _h.util.valuta(ordine.total_articoli_iva, ordine.currency) }}</em>
+					{% else %}
+					{{ _h.util.valuta(ordine.total_articoli, ordine.currency) }}
+					{% endif %}
+					</div>
+				</div>
+				{% if ordine.add_iva == '' and (_h.session.params.user.prezzo_senza_iva or _h.config('prezzi_senza_iva', false)) %}
+				<div class="ck-footer">
+					<div class="ck-descrizione ck-cell">
+					{{ _lblc.subtotale_articoli }}
+					</div>
+					<div class="ck-prezzo-totale ck-cell ck-con-iva">
+					{{ _h.util.valuta(ordine.total_articoli, ordine.currency) }}
+					</div>
+				</div>
+				{% endif %}
+				{% if ordine.add_iva != '' %}
+				<div class="ck-footer ck-evidenza" style="text-align: right;">
+					{{ ordine.nazione_esenzione_legge }}
+				</div>
+				{% endif %}
+			</div>
+			
+			<div class="checkout-riepilogo-ordine">
+			{% include _h.template('cart/checkout/riepilogo_ordine_pagamento.html') %}
+			</div>
+			<div class="checkout-footer-toolbar">
+				<a href="javascript:void(0)" title="{{ _lblc.btn_procedi_con_acquisto }}" class="button-next button-next-cart action-step-pagamento-2">{{ _lblc.btn_procedi_con_acquisto }}</a>
+			</div>
+		</form>
+		
+		<form id="pagina" data-step-pagamento="2" style="display: none;">
+			<input type="hidden" name="token" value="{{ token }}">
+			<input type="hidden" name="id_ordine" value="{{ id_ordine }}">
+			<div class="checkout-dati-spedizione checkout-dati">
+
+				<div class="form-error-message"></div>
+				
+				<div class="field-text">
+					<strong>{% if ordine.solo_digitali or ordine.tipo_spedizione == 2 %}
+						{{ _lblc.title_dati_destinazione_merce_solo_digitali }}:
+					{% else %}
+						{{ _lblc.title_dati_destinazione_merce }}:
+					{% endif %}</strong>
+				</div>
+				{% if _h.settings.get('nome_spedizione_semplice') %}
+					<div class="field-line">
+						<div class="field">
+							<label>{{ _lblf.field_ragione_sociale }} <span>*</span></label>
+							<input type="text" name="spedizione_nome" class="valida-required" maxlength="100" value="{{ ordine.spedizione.nome }}">
+						</div>
+					</div>			
+				{% else %}
+					<div class="field-line-50-50">
+						<div class="field-line">
+							<div class="field">
+								<label>{{ _lblf.field_nome }} <span>*</span></label>
+								<input type="text" name="spedizione_nome" class="valida-required" maxlength="50" value="{{ ordine.spedizione.nome }}">
+							</div>
+						</div>
+						<div class="field-line">
+							<div class="field">
+								<label>{{ _lblf.field_cognome }} <span>*</span></label>
+								<input type="text" name="spedizione_cognome" class="valida-required" maxlength="50" value="{{ ordine.spedizione.cognome }}">
+							</div>
+						</div>
+					</div>
+				{% endif %}
+				{% if not(ordine.solo_digitali) and ordine.tipo_spedizione == 1 %}
+				<div class="field-line-50-50">
+					<div class="field-line">
+						<div class="field">
+							<label>{{ _lblf.field_co_presso }}</label>
+							<input type="text" name="spedizione_presso" maxlength="100" value="{{ ordine.spedizione.presso }}">
+						</div>
+					</div>
+					<div class="field-line">
+						<div class="field">
+							<label>{{ _lblf.field_nome_campanello }}</label>
+							<input type="text" name="spedizione_nome_campanello" maxlength="100" value="{{ ordine.spedizione.nome_campanello }}">
+						</div>
+					</div>
+				</div>
+				{% endif %}
+				<div class="field-line-80-20">
+					<div class="field-line">
+						<div class="field">
+							<label>{{ _lblf.field_indirizzo }} <span>*</span></label>
+							<input type="text" name="spedizione_via" class="valida-required" maxlength="100" value="{{ ordine.spedizione.via }}">
+						</div>
+					</div>
+					<div class="field-line">
+						<div class="field">
+							<label>{{ _lblf.field_civico }} <span>*</span></label>
+							<input type="text" name="spedizione_num_civico" class="valida-required" maxlength="10" value="{{ ordine.spedizione.num_civico }}">
+						</div>
+					</div>
+				</div>
+				<div class="field-line-30-70">
+					<div class="field-line">
+						<div class="field">
+							<label>{{ _lblf.field_cap }} <span>*</span></label>
+						{% if ordine.cap_da_preselezione and _h.settings.get('calcolo_spedizione_con_cap') != '' %}
+							<input type="text" name="spedizione_cap" readonly="true" class="valida-required" maxlength="10" value="{{ ordine.cap_da_preselezione }}">
+						{% else %}
+							<input type="text" name="spedizione_cap" class="valida-required" maxlength="10" value="{{ ordine.spedizione.cap }}">
+						{% endif %}
+						</div>
+					</div>
+					<div class="field-line">
+						<div class="field">
+							<label>{{ _lblf.field_localita }} <span>*</span></label>
+							<input type="text" name="spedizione_localita" class="valida-required" maxlength="50" value="{{ ordine.spedizione.localita }}">
+						</div>
+					</div>
+				</div>
+				<div class="field-line-50-50">
+					<div class="field-line">
+						<div class="field">
+							<label>{{ _lblf.field_provincia }} <span>*</span></label>
+						{% if ordine.provincia_da_preselezione and _h.settings.get('calcolo_spedizione_con_provincia') != '' and _h.settings.get('provincia_nazione_da_tendina') %}
+							<input type="text" name="spedizione_provincia" readonly="true" class="valida-required" maxlength="50" value="{{ ordine.provincia_da_preselezione }}">
+						{% else %}
+							{% if _h.settings.get('provincia_nazione_da_tendina') and listProvinciaNazione|length > 0 %}
+							<select name="spedizione_provincia" class="valida-required">
+							<option></option>
+							{% for prov in listProvinciaNazione %}
+								<option value="{{ prov.get('sigla') }}" {% if ordine.spedizione.provincia == prov.get('sigla') %}selected="true"{% endif%}>{{ prov.get('nome') }}</option>
+							{% endfor %}
+							</select>
+							{% else %}
+							<input type="text" name="spedizione_provincia" class="valida-required" maxlength="50" value="{{ ordine.spedizione.provincia }}">
+							{% endif %}
+						{% endif %}
+						</div>
+					</div>
+					<div class="field-line field-line-value">
+						<input type="hidden" name="spedizione_nazione_id" class="data-global-check-nazione" value="{{ ordine.spedizione.id_nazione }}">
+						<label>{{ _lblf.field_nazione }}</label>
+						{{ ordine.spedizione.nazione }}
+					</div>
+				</div>
+
+
+				<div class="field-line-50-50">
+					<div class="field-line">
+						<div class="field">
+							<label>{{ _lblf.field_telefono }} <span>*</span></label>
+							<input type="text" name="spedizione_telefono" class="field-country-phone valida-required" maxlength="20" value="{{ ordine.spedizione.telefono }}">
+						</div>
+					</div>
+				</div>
+				{% if not(ordine.solo_digitali) and ordine.tipo_spedizione == 1 %}
+				<div class="field-line">
+					<div class="field">
+						<label>{{ _lblf.field_indicazioni_consegna }}</label>
+						<input type="text" name="spedizione_indicazioni" maxlength="50" value="{{ ordine.spedizione.indicazioni }}">
+					</div>
+				</div>
+				{% endif %}
+				<div class="field-text-obbligatori">{{ _lblf.campi_obbligatori }}</div>
+			</div>
+
+			{% set spedizione_uguale_fatturazione = false %}
+			{% if ordine.spedizione_uguale_fatturazione %}
+				{% set spedizione_uguale_fatturazione = true %}
+			{% endif %}
+			<div class="checkout-dati-fatturazione checkout-dati data-check-nazione field-content-pec-sdi">
+				{% if (nazioneFattura.get('cee') != 1 and _h.settings.get('fatturazione_data_luogo_nascita_extra_cee') != '') or
+					(_h.settings.get('fatturazione_data_luogo_nascita_extra_it') != '' and nazioneFattura.id != 108 and nazioneFattura.id != 188) %}
+				<div class="field-text field-hide-if-fattura">
+					<strong>{{ _lblf.dati_fiscali }}</strong>
+				</div>
+				<div class="field-line-50-50 field-hide-if-fattura">
+					<div class="field-line">
+						<div class="field">
+							<label>{{ _lblf.field_data_nascita }} <span>*</span></label>
+							<input type="text" name="fattura_data_nascita" class="input-datepicker valida-datasimple" maxlength="10" value="{{ ordine.fattura.data_nascita }}" data-date-viewmode="years" data-date-minviewmode="days">
+						</div>
+					</div>
+					<div class="field-line">
+						<div class="field">
+							<label>{{ _lblf.field_luogo_nascita }} <span>*</span></label>
+							<input type="text" name="fattura_luogo_nascita" class="" maxlength="50" value="{{ ordine.fattura.luogo_nascita }}">
+						</div>
+					</div>
+				</div>
+				{% elseif (nazioneFattura.get('cee') == 1 and _h.settings.get('fatturazione_codice_fiscale_cee_obbligatorio')) or 
+					_h.settings.get('fatturazione_visualizza_codice_fiscale') or 
+					((nazioneFattura.id == 108 or nazioneFattura.id == 188) and _h.settings.get('fatturazione_codice_fiscale_it_obbligatorio')) %}
+				<div class="field-text field-hide-if-fattura {{ css_dati_fiscali }}">
+					<strong>{{ _lblf.dati_fiscali }}</strong>
+				</div>
+				<div class="field-line-50-50 field-uguale">
+					<div class="field-line field-hide-if-fattura {{ css_dati_fiscali }}">
+						<div class="field">
+							<label>{{ _lblf.field_codice_fiscale }}{% if _h.settings.get('fatturazione_visualizza_codice_fiscale', 2) == 2 or (nazioneFattura.get('cee') == 1 and _h.settings.get('fatturazione_codice_fiscale_cee_obbligatorio')) or ((nazioneFattura.id == 108 or nazioneFattura.id == 188) and _h.settings.get('fatturazione_codice_fiscale_it_obbligatorio')) %} <span>*</span>{% endif %}</label>
+							<input type="text" name="fattura_codice_fiscale_singolo" class="valida-digitalphanum valida-codicefiscaleit" data-check="108,188" maxlength="20" value="{{ ordine.fattura.codice_fiscale }}">
+						</div>
+					</div>
+				</div>
+				{% endif %}
+			
+				<div class="field-line" {% if _h.settings.get('abilitata_solo_fatturazione') or ordine.acquisto_come == 'azienda' %}style="display: none"{% endif %}>
+					<span class="checkbox checkbox-fatturazione" data-value="1"><input type="hidden" name="richiesta_fatturazione" value=""></span>
+					<span class="checkbox-label"><span>{{ _lblf.field_richiesta_fattura }}</span></span>
+				</div>
+				
+				<div class="checkout-dati-fatturazione-fields" {% if _h.settings.get('abilitata_solo_fatturazione') %}style="display: block"{% endif %}>
+					<div class="field-text">
+						<strong>{{ _lblc.title_dati_fatturaizone }}:</strong>
+					</div>
+					<div class="field-line"style="height: 30px">
+						<span class="checkbox checkbox-spedizione-uguale-fatturazione{% if spedizione_uguale_fatturazione %} checkbox-checked{% endif %}" data-value="1"><input type="hidden" name="spedizione_uguale_fatturazione" value="{% if spedizione_uguale_fatturazione %}1{% endif %}"></span>
+						<span class="checkbox-label"><span>
+						{% if ordine.solo_digitali or ordine.tipo_spedizione == 2 %}
+						{{ _lblf.field_dati_spedizione_uguale_fatturazione_solo_digitali }}
+						{% else %}
+						{{ _lblf.field_dati_spedizione_uguale_fatturazione }}
+						{% endif %}</span></span>
+					</div>
+					
+					<div class="field-line field-uguale" {% if spedizione_uguale_fatturazione %}style="display:none;"{% endif %}>
+						<div class="field">
+							<label>{{ _lblf.field_ragione_sociale }} <span>*</span></label>
+							<input type="text" name="fattura_nome" class="valida-required" maxlength="100" value="{{ ordine.fattura.nome }}">
+						</div>
+					</div>
+					{% if ordine.acquisto_come == 'azienda' %}
+						<div class="field-line">
+							<div class="field">
+								<label>{{ _lblf.field_p_iva }} <span>*</span></label>
+								<input type="text" name="fattura_p_iva" class="valida-required valida-digitalphanum valida-pivait" data-check="108,188" maxlength="20" value="{{ ordine.fattura.p_iva }}">
+							</div>
+						</div>
+					{% else %}
+					<div class="field-line-text">{{ _lblc.inserireAlmenoUnoTra }}</div>
+					<div class="field-line-50-50">
+						<div class="field-line">
+							<div class="field">
+								<label>{{ _lblf.field_p_iva }}</label>
+								<input type="text" name="fattura_p_iva" class="valida-digitalphanum valida-pivait" data-check="108,188" maxlength="20" value="{{ ordine.fattura.p_iva }}">
+							</div>
+						</div>
+						<div class="field-line">
+							<div class="field">
+								<label>{{ _lblf.field_codice_fiscale }}</label>
+								<input type="text" name="fattura_codice_fiscale" class="valida-digitalphanum valida-codicefiscaleit" data-check="108,188" maxlength="20" value="{{ ordine.fattura.codice_fiscale }}">
+							</div>
+						</div>
+					</div>				
+					{% endif %}
+					
+					<div class="field-wrapper-pec-sdi">
+						<div class="field-line-text">{{ _lblc.dati_fiscali_pec_sdi }}</div>
+						<div class="field-line-50-50">
+							<div class="field-line">
+								<div class="field">
+									<label>{{ _lblf.field_pec }}</label>
+									<input type="text" name="fattura_pec" class="valida-email" maxlength="100" value="{{ ordine.fattura.pec }}">
+								</div>
+							</div>
+							<div class="field-line">
+								<div class="field">
+									<label>{{ _lblf.field_sdi }}</label>
+									<input type="text" name="fattura_sdi" class="valida-digitalphanum valida-sdi" data-check="108" maxlength="7" value="{{ ordine.fattura.sdi }}">
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="field-line-80-20 field-uguale" {% if spedizione_uguale_fatturazione %}style="display:none;"{% endif %}>
+						<div class="field-line">
+							<div class="field">
+								<label>{{ _lblf.field_indirizzo }} <span>*</span></label>
+								<input type="text" name="fattura_via" class="valida-required" maxlength="100" value="{{ ordine.fattura.via }}">
+							</div>
+						</div>
+						<div class="field-line">
+							<div class="field">
+								<label>{{ _lblf.field_civico }} <span>*</span></label>
+								<input type="text" name="fattura_num_civico" class="valida-required" maxlength="10" value="{{ ordine.fattura.num_civico }}">
+							</div>
+						</div>
+					</div>
+					<div class="field-line-30-70 field-uguale" {% if spedizione_uguale_fatturazione %}style="display:none;"{% endif %}>
+						<div class="field-line">
+							<div class="field">
+								<label>{{ _lblf.field_cap }} <span>*</span></label>
+								<input type="text" name="fattura_cap" class="valida-required" maxlength="10" value="{{ ordine.fattura.cap }}">
+							</div>
+						</div>
+						<div class="field-line">
+							<div class="field">
+								<label>{{ _lblf.field_localita }} <span>*</span></label>
+								<input type="text" name="fattura_localita" class="valida-required" maxlength="50" value="{{ ordine.fattura.localita }}">
+							</div>
+						</div>
+					</div>
+					<div class="field-line-50-50 field-uguale" {% if spedizione_uguale_fatturazione %}style="display:none;"{% endif %}>
+						<div class="field-line">
+							<div class="field">
+								<label>{{ _lblf.field_provincia }} <span>*</span></label>
+								<input type="text" name="fattura_provincia" class="valida-required" maxlength="50" value="{{ ordine.fattura.provincia }}">
+							</div>
+						</div>
+						<div class="field-line">
+							<div class="field">
+								<label>{{ _lblf.field_nazione }} <span>*</span></label>
+								<select name="fattura_id_nazione" class="valida-required data-check-nazione field-nazione-pec-sdi">
+									<option value=""></option>
+									{% for naz in listNazione %}
+									<option value="{{ naz.id }}" {% if ordine.fattura.id_nazione and ordine.fattura.id_nazione == naz.id %}selected="true"{% endif %}>{{ naz.get('nome') }}</option>
+									{% endfor %}
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="clear"></div>
+				<div class="checkout-dati-terminicondizioni checkout-dati">
+				{% if _h.settings.get('checkout_spunta_autoconsumo', '') != '' %}
+					<div class="field-line-checkbox checkbox-group">
+						<div class="field-checkbox-description">
+							{{ _lblf.dichiarazione_autoconsumo }} 
+						</div>
+						<div class="field-checkbox-check">
+							<span class="checkbox checkbox-autoconsumo" data-value="1"><input type="hidden" name="autoconsumo_si" value=""></span>
+							<span class="checkbox-label"><span>{{ _lblf.btn_si }}</span></span>
+						</div>
+						<div class="field-checkbox-check">
+							<span class="checkbox checkbox-autoconsumo" data-value="2"><input type="hidden" name="autoconsumo_no" value=""></span>
+							<span class="checkbox-label"><span>{{ _lblf.btn_no }}</span></span>
+						</div>
+					</div>
+				{% endif %}
+					<div class="field-line-checkbox checkbox-group">
+						{% if _h.settings.get('testo_privacy_visibile_in_box', '') != '' %}
+						<div class="riquadro-testo-policy" data-contratto="termini_condizioni"></div>
+						{% endif %}
+						<div class="field-checkbox-description">
+							{{ _lblf.dichiarazione_letto }} <a href="{{ mapPagine.termini_condizioni.url }}" title="leggi Termini e Condizioni" target="_blank">{{ _lblf.btn_termini_condizioni }}</a>.
+						</div>
+						<div class="field-checkbox-check-acconsento clear checkbox-group">
+							<div class="field-checkbox-check">
+								<span class="checkbox checkbox-termini-condizioni" data-value="1"><input type="hidden" name="accetto_termini_condizioni" value=""></span>
+								<span class="checkbox-label"><span>{{ _lblf.btn_accetto }}</span></span>
+							</div>
+							<div class="field-checkbox-check">
+								<span class="checkbox" data-value="1"><input type="hidden" name="no_accetto_termini_condizioni" value=""></span>
+								<span class="checkbox-label"><span>{{ _lblf.btn_non_accetto }}</span></span>
+							</div>
+						</div>
+					</div>
+					
+					{% if _h.session.isAuth and _h.session.profile == 'guest' %}
+					{% else %}
+						{% if _h.settings.get('testo_privacy_checkout_senza_registrazione', '') == '' and
+								_h.settings.get('accettazione_privacy_inserimento_dati', '') != '' %}
+						<div class="field-line-checkbox">
+							{% if _h.settings.get('testo_privacy_visibile_in_box', '') != '' %}
+							<div class="riquadro-testo-policy" data-contratto="privacy"></div>
+							{% endif %}
+							<div class="field-checkbox-description">
+								{{ _lblf.descr_dichiarazione_letto_privacy }} <a href="{{ mapPagine.privacy.url }}" title="{{ _lblf.alt_btn_ulteriori_informazioni_privacy }}" target="_blank">{{ _lblf.btn_ulteriori_informazioni_privacy }}</a>
+							</div>
+							<div class="field-checkbox-check-acconsento clear checkbox-group">
+								<div class="field-checkbox-check">
+									<span class="checkbox" data-value="1"><input type="hidden" name="no_accetto_privacy" value="1"></span>
+									<span class="checkbox-label"><span>{{ _lblf.btn_non_acconsento }}</span></span>
+								</div>
+								<div class="field-checkbox-check">
+									<span class="checkbox" data-value="1"><input type="hidden" name="accetto_privacy" value=""></span>
+									<span class="checkbox-label"><span>{{ _lblf.btn_acconsento_uso_dati }}</span></span>
+								</div>
+							</div>
+						</div>
+						{% endif %}
+					{% endif %}
+					
+				
+					<div class="field-line-checkbox field-line-checkbox-registrazione-newsletter">
+						{% if _h.settings.get('testo_privacy_visibile_in_box', '') != '' %}
+						<div class="riquadro-testo-policy" data-contratto="privacy"></div>
+						{% endif %}
+						<div class="field-checkbox-description">
+							{{ _lblf.descr_iscrivimi_newsletter }} <a href="{{ mapPagine.privacy.url }}" title="{{ _lblf.alt_btn_ulteriori_informazioni_privacy }}" target="_blank">{{ _lblf.btn_ulteriori_informazioni_privacy }}</a>.
+						</div>
+						<div class="field-checkbox-check-acconsento clear checkbox-group">
+							<div class="field-checkbox-check">
+								<span class="checkbox" data-value="1"><input type="hidden" name="no_iscrizione_newsletter"></span>
+								<span class="checkbox-label"><span>{{ _lblf.btn_no_iscrivi }}</span></span>
+							</div>
+							<div class="field-checkbox-check">
+								<span class="checkbox checkbox-newsletter" data-value="1"><input type="hidden" name="iscrizione_newsletter"></span>
+								<span class="checkbox-label"><span>{{ _lblf.btn_iscrivi_newsletter }}</span></span>
+							</div>
+						</div>
+					</div>
+					{{ mc.field_newsletter_gruppo_extra(_h) }}
+
+					{% if _h.settings.get('gestione_profile_privacy', '') != '' %}
+						<div class="field-line-checkbox">
+							{% if _h.settings.get('testo_privacy_visibile_in_box', '') != '' %}
+							<div class="riquadro-testo-policy" data-contratto="profile_privacy"></div>
+							{% endif %}
+							<div class="field-checkbox-description">
+								{{ _lblf.descr_dichiarazione_letto_profile_privacy }} <a href="{{ mapPagine.profile_privacy.url }}" title="{{ _lblf.btn_ulteriori_informazioni_profile_privacy }}" target="_blank">{{ _lblf.btn_ulteriori_informazioni_profile_privacy }}</a>
+							</div>
+							<div class="field-checkbox-check-acconsento clear checkbox-group">
+								<div class="field-checkbox-check">
+									<span class="checkbox" data-value="1"><input type="hidden" name="no_accetto_profile_privacy"></span>
+									<span class="checkbox-label"><span>{{ _lblf.btn_non_acconsento }}</span></span>
+								</div>
+								<div class="field-checkbox-check">
+									<span class="checkbox" data-value="1"><input type="hidden" name="accetto_profile_privacy" value=""></span>
+									<span class="checkbox-label"><span>{{ _lblf.btn_acconsento_uso_profile_privacy }}</span></span>
+								</div>
+							</div>
+						</div>
+					{% endif %}
+					
+					{% if _h.settings.get('gestione_marketing_privacy', '') != '' %}
+						<div class="field-line-checkbox">
+							{% if _h.settings.get('testo_privacy_visibile_in_box', '') != '' %}
+							<div class="riquadro-testo-policy" data-contratto="marketing_privacy"></div>
+							{% endif %}
+							<div class="field-checkbox-description">
+								{{ _lblf.descr_dichiarazione_letto_marketing_privacy }} <a href="{{ mapPagine.marketing_privacy.url }}" title="{{ _lblf.btn_ulteriori_informazioni_marketing_privacy }}" target="_blank">{{ _lblf.btn_ulteriori_informazioni_marketing_privacy }}</a>
+							</div>
+							<div class="field-checkbox-check-acconsento clear checkbox-group">
+								<div class="field-checkbox-check">
+									<span class="checkbox" data-value="1"><input type="hidden" name="no_accetto_marketing_privacy"></span>
+									<span class="checkbox-label"><span>{{ _lblf.btn_non_acconsento }}</span></span>
+								</div>
+								<div class="field-checkbox-check">
+									<span class="checkbox" data-value="1"><input type="hidden" name="accetto_marketing_privacy" value=""></span>
+									<span class="checkbox-label"><span>{{ _lblf.btn_acconsento_uso_marketing_privacy }}</span></span>
+								</div>
+							</div>
+						</div>
+					{% endif %}
+				</div>
+			</div>
+			<div class="checkout-footer-toolbar checkout-footer-toolbar-descrizione clear">
+			{{ _lblc.indicazione_sito_banca }}
+			</div>
+			<div class="checkout-footer-toolbar clear">
+				<a class="button-prev action-step-pagamento-1">{{ _lblc.btn_precedente }}</a>
+				<a class="action-step-salva-dati button button-next button-next-cart">{{ _lblc.btn_procedi_con_acquisto }}</a>
+			</div>
+		</form>	
+		
+		<div style="display: none;">
+			{% if _h.settings.get('checkout_pagamento_cc') != '' and (_h.context('gestione_automatica_pagamenti_abilitati', true) or _h.context('checkout_pagamento_cc', false)) %}
+				{% if ordine.tipo_spedizione == 1 or _h.config('checkout_cc', 'paypal') != 'paypal' %}
+				<div class="pagamento-carta-credito">
+
+						{% if _h.config('checkout_cc') == 'cartasi' %}
+							{% set pagamento_type = 'cc' %}
+							{{ mc.pagamento_cc_cartasi(_h, 
+								_h.config('checkout_cc_alias'),  
+								_h.settings.get('checkout_cc_ultimateCreditorName'), 
+								_h.settings.get('checkout_cc_address'),  
+								ordine.total_ordine, ordine.currency, ordine.fattura.nome, ordine.e_mail, 'ITA', 
+								_h.settings.get('checkout_cc_descrizione')) }}
+						{% elseif _h.config('checkout_cc') == 'nexi' %}
+							{% set pagamento_type = 'cc' %}
+							{{ mc.pagamento_cc_nexi(_h, 
+								_h.config('checkout_cc_alias'),  
+								_h.settings.get('checkout_cc_ultimateCreditorName'), 
+								_h.settings.get('checkout_cc_address'),  
+								ordine.total_ordine, ordine.currency, ordine.fattura.nome, ordine.e_mail, 'ITA', 
+								_h.settings.get('checkout_cc_descrizione')) }}
+						{% elseif _h.config('checkout_cc') == 'tgp' %}
+							{{ mc.pagamento_cc_tgp(_h) }}
+							{% set pagamento_type = 'cc' %}	
+						{% elseif _h.config('checkout_cc') == 'payplug' %}
+							{{ mc.pagamento_cc_payplug(_h) }}
+							{% set pagamento_type = 'cc' %}	
+						{% elseif _h.config('checkout_cc') == 'pagonline' %}
+							{{ mc.pagamento_cc_pagonline(_h) }}
+							{% set pagamento_type = 'cc' %}	
+						{% elseif _h.config('checkout_cc') == 'payway' %}
+							{{ mc.pagamento_cc_payway(_h) }}
+							{% set pagamento_type = 'cc' %}	
+						{% elseif _h.config('checkout_cc') == 'stripe' %}
+							{{ mc.pagamento_cc_stripe(_h) }}
+							{% set pagamento_type = 'cc' %}	
+						{% elseif _h.config('checkout_cc') == 'paytabs' %}
+							{{ mc.pagamento_cc_paytabs(_h) }}
+							{% set pagamento_type = 'cc' %}	
+						{% elseif _h.config('checkout_cc') == 'axepta' %}
+							{{ mc.pagamento_cc_axepta(_h) }}
+							{% set pagamento_type = 'cc' %}	
+						{% elseif _h.config('checkout_cc') == 'monetaweb' %}
+							{{ mc.pagamento_cc_monetaweb(_h) }}
+							{% set pagamento_type = 'cc' %}			
+						{% elseif _h.config('checkout_cc') == 'plainplay' %}
+							{{ mc.pagamento_cc_plainplay(_h, 
+								_h.settings.get('checkout_cc_label'),  
+								_h.config('checkout_cc_alias'),  
+								_h.settings.get('checkout_cc_abi'), 
+								ordine.total_ordine, ordine.currency, ordine.e_mail) }}
+							{% set pagamento_type = 'cc' %}
+						{% else %}
+							{% set pagamento_type = 'paypal' %}
+							{% if _h.settings.get('checkout_pagamento_paypal') == '' %}
+							{{ mc.pagamento_paypal(_h, _h.settings.get('checkout_paypal_email'), _h.settings.get('checkout_paypal_intestazione'), ordine.total_ordine) }}
+							{% endif %}
+						{% endif %}
+						<a href="javascript:void(0)" class="action-ripeti-pagamento" data-type="{{ pagamento_type }}" data-id="{{ item.id }}">&nbsp;</a>
+				</div>
+				{% endif %}
+			{% endif %}
+			{% if ordine.tipo_spedizione == 1 and _h.settings.get('checkout_pagamento_paypal') != '' and (_h.context('gestione_automatica_pagamenti_abilitati', true) or _h.context('checkout_pagamento_paypal', false)) %}
+			<div class="pagamento-paypal">
+				 <a href="javascript:void(0)" class="action-ripeti-pagamento" data-type="paypal" data-id="{{ item.id }}">&nbsp;</a>
+				{{ mc.pagamento_paypal(_h, _h.settings.get('checkout_paypal_email'), _h.settings.get('checkout_paypal_intestazione'), ordine.total_ordine) }}
+			</div>
+			{% endif %}
+		</div>
+	</div>
+	</div>
+	{% else %}
+		<div class="riepilogo">
+			<h2>{{ _lblc.title_ordine_non_trovato }}</h2>
+			<div>{{ _lblc.descr_ordine_non_trovato }}</div>
+		</div>
+		<div class="riepilogo">
+			<div class="item-faq">
+				<strong>{{ _lblc.title_serve_aiuto }}</strong>
+				{% set _lblg = _h.labels.get('global') %}
+				<p>{{ _lblg.descr_help }} <a href="{{ _h.xurl('servizio-clienti') }}" title="{{ _lblg.alt_servizio_clienti }}">{{ _lblg.btn_servizio_clienti }}</a>.</p>
+			</div>
+		</div>
+	{% endif %}
+{% else %}
+{% include _h.template('cart/ripeti_pagamento.html') %}
+{% endif %}

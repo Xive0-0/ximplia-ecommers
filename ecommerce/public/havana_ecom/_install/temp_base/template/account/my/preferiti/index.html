@@ -1,0 +1,12 @@
+{% import _h.template('_macro.html') as mc %}
+
+{% set _lblc = _h.labels.get('checkout') %}
+{% set _lblm = _h.labels.get('my') %}
+
+<h2>{{ _lblm.title_articoli_preferiti }}</h2>
+
+<div class="clear">
+{% for item in list %}
+{{ mc.item_articolo(_h, item) }}
+{% endfor %}
+</div>

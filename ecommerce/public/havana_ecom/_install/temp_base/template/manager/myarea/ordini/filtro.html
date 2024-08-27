@@ -1,0 +1,144 @@
+<div class="h-layout-content-wrapper h-layout-show-topbar h-layout-show-bottombar">
+	<div class="h-layout-topbar">
+		<div class="h-layout-content-wrapper">
+			Filtra
+		</div>
+	</div>
+	<form>
+	<div class="h-layout-content">
+		<fieldset>
+			<p class="field-line field-200">
+				<label>Cerca per codice:</label>
+				<input type="text" name="codice" class="field" maxlength="50">
+			</p>
+			<p class="field-line field-200">
+				<label>Cerca per nome e/o cognome cliente:</label>
+				<input type="text" name="nome" class="field" maxlength="50">
+			</p>
+			<p class="field-line field-200">
+				<label>Cerca per parola chiave:</label>
+				<input type="text" name="query" class="field" maxlength="50">
+			</p>
+			<p class="field-line field-200">
+				<label>Cerca per articolo (codice o nome):</label>
+				<input type="text" name="query_articolo" class="field" maxlength="50">
+			</p>
+			<p class="field-line field-200">
+				<label>Cerca per PEC o SDI:</label>
+				<input type="text" name="pec_sdi" class="field" maxlength="100">
+			</p>
+			{% if _h.config('gestione_agenti', false) %}
+			<p class="field-line field-200">
+				<label>Cerca per agente:</label>
+				<select name="id_agente" class="field">
+				<option></option>
+				{% for agente in list_agenti %}
+				<option value="{{ agente.id() }}">{{ agente.get('cognome') }} {{ agente.get('nome') }}</option>
+				{% endfor %}
+				</select>
+			</p>
+			{% endif %}
+			<div class="clear field-line">
+				<div><span class="h-checkbox" data-value="1"><input type="hidden" name="eliminato" value=""></span>Classificato come eliminato</div>
+			</div>		
+			<div class="clear field-line">
+				<div><span class="h-checkbox" data-value="1"><input type="hidden" name="effettuato_da_agente" value=""></span>Effettuato da agente/customer care</div>
+			</div>			
+			{% if _h.config('gestione_preventivi', false) %}
+			<div class="field-line">
+				<div><span class="h-checkbox" data-value="1"><input type="hidden" name="deriva_da_preventivo" value=""></span>solo ordini derivanti da un preventivo</div>
+			</div>
+			{% endif %}
+			<div class="field-line">
+				<div><span class="h-checkbox" data-value="1"><input type="hidden" name="con_fattura" value=""></span>con fattura</div>
+			</div>
+			<div class="field-line">
+				<div><span class="h-checkbox" data-value="1"><input type="hidden" name="integrazione_articoli" value=""></span>integrazione articoli</div>
+			</div>
+			<div class="field-line">
+				<div><span class="h-checkbox" data-value="1"><input type="hidden" name="carrello_da_completare" value=""></span>carrello da completare</div>
+			</div>
+			<div class="field-line">
+				<div><span class="h-checkbox" data-value="1"><input type="hidden" name="ticket_aperto" value=""></span>segnalazione / ticket aperto</div>
+			</div>
+			<div class="field-line">
+				<div><span class="h-checkbox" data-value="1"><input type="hidden" name="mancano_articoli" value=""></span>mancano articoli</div>
+			</div>
+			<div class="field-line">
+				<div><span class="h-checkbox" data-value="1"><input type="hidden" name="buono_sconto_omaggio" value=""></span>buono sconto con OMAGGIO</div>
+			</div>
+			<p class="field-line field-line-left field-80">
+				<label>Data dal:</label>
+				<input type="text" name="data_dal" class="field valida-datasimple input-datepicker" maxlength="10">
+			</p>
+			<p class="field-line field-80">
+				<label>Data al:</label>
+				<input type="text" name="data_al" class="field valida-datasimple input-datepicker" maxlength="10">
+			</p>
+
+			<div class="clear field-line">
+				<label>Stato ordine:</label>
+				<div><span class="h-checkbox" data-value="0"><input type="hidden" name="stato_ordine[]" value=""></span>preso in carico</div>
+				<div><span class="h-checkbox" data-value="100"><input type="hidden" name="stato_ordine[]" value=""></span>in lavorazione</div>
+				<div><span class="h-checkbox" data-value="101"><input type="hidden" name="stato_ordine[]" value=""></span>attesa articoli</div>
+				<div><span class="h-checkbox" data-value="102"><input type="hidden" name="stato_ordine[]" value=""></span>attesa feedback</div>
+				<div><span class="h-checkbox" data-value="200"><input type="hidden" name="stato_ordine[]" value=""></span>merce disponibile / in spedizione</div>
+				<div><span class="h-checkbox" data-value="201"><input type="hidden" name="stato_ordine[]" value=""></span>consegnato</div>
+				<div><span class="h-checkbox" data-value="800"><input type="hidden" name="stato_ordine[]" value=""></span>annullato</div>
+				<div><span class="h-checkbox" data-value="801"><input type="hidden" name="stato_ordine[]" value=""></span>rimborsato</div>
+			</div>
+			
+			<div class="field-line">
+				<label>Stato spedizione:</label>
+				<div><span class="h-checkbox" data-value="0"><input type="hidden" name="stato_spedizione[]" value=""></span>non spedito</div>
+				<div><span class="h-checkbox" data-value="2"><input type="hidden" name="stato_spedizione[]" value=""></span>spedito</div>
+			</div>
+			
+			<div class="field-line">
+				<label>Stato pagamento:</label>
+				<div><span class="h-checkbox" data-value="0"><input type="hidden" name="stato_pagamento[]" value=""></span>non pagato</div>
+				<div><span class="h-checkbox" data-value="1"><input type="hidden" name="stato_pagamento[]" value=""></span>bonifico comunicato CRO</div>
+				<div><span class="h-checkbox" data-value="3"><input type="hidden" name="stato_pagamento[]" value=""></span>pagato</div>
+			</div>
+			
+			<div class="field-line">
+				<label>Tipo pagamento:</label>
+				<div><span class="h-checkbox" data-value="1"><input type="hidden" name="tipo_pagamento[]" value=""></span>Carta di credito</div>
+				<div><span class="h-checkbox" data-value="2"><input type="hidden" name="tipo_pagamento[]" value=""></span>Paypal</div>
+				<div><span class="h-checkbox" data-value="3"><input type="hidden" name="tipo_pagamento[]" value=""></span>Bonifico bancario</div>
+				<div><span class="h-checkbox" data-value="4"><input type="hidden" name="tipo_pagamento[]" value=""></span>Contrassegno</div>
+				<div><span class="h-checkbox" data-value="5"><input type="hidden" name="tipo_pagamento[]" value=""></span>Poste pay</div>
+				<div><span class="h-checkbox" data-value="6"><input type="hidden" name="tipo_pagamento[]" value=""></span>Ricarica telefonica</div>
+				<div><span class="h-checkbox" data-value="7"><input type="hidden" name="tipo_pagamento[]" value=""></span>Paga in sede</div>
+				<div><span class="h-checkbox" data-value="9"><input type="hidden" name="tipo_pagamento[]" value=""></span>Scalapay</div>
+				<div><span class="h-checkbox" data-value="20"><input type="hidden" name="tipo_pagamento[]" value=""></span>Satispay</div>
+				<div><span class="h-checkbox" data-value="21"><input type="hidden" name="tipo_pagamento[]" value=""></span>Bancontact</div>
+				<div><span class="h-checkbox" data-value="22"><input type="hidden" name="tipo_pagamento[]" value=""></span>Carta giovani</div>
+				<div><span class="h-checkbox" data-value="23"><input type="hidden" name="tipo_pagamento[]" value=""></span>Oney</div>
+				<div><span class="h-checkbox" data-value="1000"><input type="hidden" name="tipo_pagamento[]" value=""></span>Punti</div>
+			</div>
+			
+			<div class="field-line">
+				<label>Tipo spedizione:</label>
+				<div><span class="h-checkbox" data-value="1"><input type="hidden" name="tipo_spedizione[]" value=""></span>corriere</div>
+				<div><span class="h-checkbox" data-value="2"><input type="hidden" name="tipo_spedizione[]" value=""></span>ritiro presso la sede</div>
+			</div>
+			
+			<p class="field-line field-200">
+				<label>Sorgente tarking:</label>
+				<input type="text" name="sorgente" class="field" maxlength="50">
+			</p>
+			<p class="field-line field-200">
+				<label>Codice buono sconto:</label>
+				<input type="text" name="codice_buono_sconto" class="field" maxlength="50">
+				<em>(inserendo * a fine del codice verranno presi tutti i codici che iniziano per..)</em>
+			</p>
+		</fieldset>
+	</div>
+	<div class="h-layout-bottombar">
+		<div class="h-layout-content-wrapper">
+			<a href="javascript:void(0);" class="h-bar-button h-bar-button-blu h-action-filter" data-action='{"load": "#h-layout-center-content", "reset": "#azzera-filtro"}'>Filtra</a>
+		</div>
+	</div>
+	</form>
+</div>

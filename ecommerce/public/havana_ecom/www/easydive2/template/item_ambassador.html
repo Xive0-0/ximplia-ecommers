@@ -1,0 +1,206 @@
+{% import _h.template('_macro.html') as mc %}
+{% set _lblw = _h.labels.get('website') %}
+
+<div class="breadcrumbs clear">
+	{{ mc.breadcrumbs_home(_h) }}
+	{{ mc.breadcrumbs_separatore() }}
+	<a href="{{ _h.xurl('ambassador') }}" title="blog">Ambassador</a>
+	{{ mc.breadcrumbs_separatore() }}
+	<a href="{{ collezione.url }}#c{{ collezione.id }}" title="{{ collezione.get('nome') }}">{{ collezione.get('nome') }}</a>
+	{{ mc.breadcrumbs_separatore() }}
+	<a>{{ item.get('nome') }}</a>
+</div>
+			
+<div class="margin-mobile item-blog-page">
+<div class="col-box-left-dynamic-details">
+	<div class="col-box-left-dynamic-details-content">
+		{% set nazione = mapNazione[item.get('nazione')] %}
+		<h1><img src="/assets/website/img/bandiere/{{ nazione.get('codice_iso')|lower }}.png" alt="{{ nazione.get('nome') }}"> {{ item.get('nome') }}</h1>
+		<img src="{{ item.imageUrl('1290x780') }}" alt="{{ item.get('titolo') }}" class="item-blog-page-image">
+		<h3>{{ _lblw.biografia }}</h3>
+		<div class="clear html">
+			{{ item.getWithMerge('biografia') }}
+		</div>	
+
+		<div class="clear item-social">
+			<ul>
+			{% if item.get('url_sito_web') %}
+			<li>
+				<a href="{{ item.get('url_sito_web') }}" title="{{ _lblw.sito_web }}" target="_blank">
+					<img src="/assets/website/img/ico-internet.svg">
+				</a>
+			</li>
+			{% endif %}
+			{% if item.get('e_mail') %}
+			<li>
+				<a href="mailto:{{ item.get('e_mail') }}" title="{{ _lblw.contatto_e_mail }}">
+					<img src="/assets/website/img/ico-email2.svg">
+				</a>
+			</li>
+			{% endif %}
+			{% if item.get('url_facebook') %}
+			<li>
+				<a href="{{ item.get('url_facebook') }}" title="{{ _lblw.pagina_facebook }}" target="_blank">
+					<img src="/assets/website/img/ico-facebook.svg">
+				</a>
+			</li>
+			{% endif %}
+			{% if item.get('url_twitter') %}
+			<li>
+				<a href="{{ item.get('url_twitter') }}" title="{{ _lblw.pagina_twitter }}" target="_blank">
+					<img src="/assets/website/img/ico-twitter.svg">
+				</a>
+			</li>
+			{% endif %}
+			{% if item.get('url_instagram') %}
+			<li>
+				<a href="{{ item.get('url_instagram') }}" title="{{ _lblw.pagina_instagram }}" target="_blank">
+					<img src="/assets/website/img/ico-instagram.svg">
+				</a>
+			</li>
+			{% endif %}
+			{% if item.get('url_youtube') %}
+			<li>
+				<a href="{{ item.get('url_youtube') }}" title="{{ _lblw.pagina_youtube }}" target="_blank">
+					<img src="/assets/website/img/ico-youtube.svg">
+				</a>
+			</li>
+			{% endif %}
+			{% if item.get('url_vimeo') %}
+			<li>
+				<a href="{{ item.get('url_vimeo') }}" title="{{ _lblw.pagina_vimeo }}" target="_blank">
+					<img src="/assets/website/img/ico-vimeo.svg">
+				</a>
+			</li>
+			{% endif %}
+			</ul>	
+		</div>
+		{% if item.get('perche_scelto_easydive') %}
+		<h3>{{ _lblw.perche_scelto_easydive }}</h3>
+		<div class="clear html">
+			{{ item.getWithMerge('perche_scelto_easydive') }}
+		</div>
+		{% endif %}
+		
+		<div class="item-img-gallery zoom-image-list">
+		{% if item.isImage('g1') %}
+			<img class="zoom-image" src="{{ item.imageUrl('1290x780', '', 'g1') }}">
+		{% endif %}
+		{% if item.isImage('g2') %}
+			<img class="zoom-image" src="{{ item.imageUrl('1290x780', '', 'g2') }}">
+		{% endif %}
+		{% if item.isImage('g3') %}
+			<img class="zoom-image" src="{{ item.imageUrl('1290x780', '', 'g3') }}">
+		{% endif %}
+		</div>
+		{% if item.get('url_video') or item.get('url_video_2') or item.get('url_video_3') %}
+		<div class="margin-mobile">
+			<div class="items-list clear items-correlati-list">
+				<div class="clear list-video">
+				{% if item.get('url_video') %}
+				<div class="item-video">
+					<iframe src="{{ item.get('url_video') }}" width="300" height="160" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+				</div>
+				{% endif %}
+				{% if item.get('url_video_2') %}
+				<div class="item-video">
+					<iframe src="{{ item.get('url_video_2') }}" width="300" height="160" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+				</div>
+				{% endif %}
+				{% if item.get('url_video_3') %}
+				<div class="item-video">
+					<iframe src="{{ item.get('url_video_3') }}" width="300" height="160" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+				</div>
+				{% endif %}
+				</div>
+			</div>
+		</div>
+		{% endif %}
+	</div>
+</div>
+<div class="col-box-right list-single-item-blog">
+	<div class="col-box-right-margin">
+		<div class="list-title">{{ _lblw.prodotti_utilizzati }}</div>
+		{% for item in listProdottiUtilizzati %}
+		{{ mc.item_articolo(_h, item) }}
+		{% endfor %}
+	</div>
+</div>
+</div>
+
+<script>
+	$('body').on('click', '.zoom-image', function(e) {
+		$('.zoom-wrapper').remove();
+		var list_image = [];
+		var current_image = 0;
+		var current_src = $(this).attr('src');
+		$(this).closest('.zoom-image-list').find('img.zoom-image').each(function() {
+			var src = $(this).attr('src');
+			if (src == current_src) {
+				current_image = list_image.length;
+			}
+			list_image.push(src);
+		});
+		
+		var width = $(window).width();
+		var height = $(window).height();
+		if (width > 1200) {
+			width = 1200;
+		}
+		if (height > 1200) {
+			height = 1200;
+		}
+		width -= 20;
+		height -= 40;
+		var html = [
+			'<div class="zoom-wrapper">',
+			'<div class="zoom-close"></div>',
+			'<div class="zoom-arrow zoom-arrow-left"></div>',
+			'<img src="', current_src,'" style="max-height: 0px; max-width: 0px">',
+			'<div class="zoom-arrow zoom-arrow-right"></div>',
+			'</div>'
+		];
+		
+		var wrapper = $(html.join(''));
+		wrapper.css({top: e.pageY - $(document).scrollTop(), left: e.pageX});
+		$('body').append(wrapper);
+		var img = wrapper.find('img');
+		img.animate({
+			maxWidth: width,
+			maxHeight: height
+		});
+		wrapper.animate({
+			bottom: 0,
+			top: 0,
+			left: 0,
+			right: 0
+		}, function() {
+			$('body').addClass('zoom-image-show');
+		});
+		
+		wrapper.find('.zoom-close').on('click', function(e) {
+			$('body').removeClass('zoom-image-show');
+			$('.zoom-wrapper').fadeOut(function() {
+				$(this).remove();
+			});
+		});
+		wrapper.find('.zoom-arrow-left').on('click', function(e) {
+			if (current_image > 0) {
+				current_image--;
+			}
+			else {
+				current_image = list_image.length - 1;
+			}
+			img.attr('src', list_image[current_image]);
+		});
+		wrapper.find('.zoom-arrow-right').on('click', function(e) {
+			if (current_image < list_image.length - 1) {
+				current_image++;
+			}
+			else {
+				current_image = 0;
+			}
+			img.attr('src', list_image[current_image]);
+		});
+	});
+</script>

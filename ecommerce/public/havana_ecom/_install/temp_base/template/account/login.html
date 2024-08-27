@@ -1,0 +1,19 @@
+{% import _h.template('_macro.html') as mc %}
+{% set _lblm = _h.labels.get('my') %}
+{% set _lblf = _h.labels.get('form') %}
+
+<div class="breadcrumbs clear">
+	{{ mc.breadcrumbs_home(_h) }}
+	{{ mc.breadcrumbs_separatore() }}
+	<a>{{ _lblm.title_area_riservata }}</a>
+</div>
+
+<div class="col-box-left">
+{% include _h.template('account/_login.html') %}
+</div>
+<div class="col-box-left-details page-details">
+	<div class="col-box-left-details-inner">
+		{% include _h.template('account/_info_registrazione.html') %}
+		<a class="button-red button-big" href="{{ _h.url('account/registrazione') }}" title="{{ _lblf.alt_btn_registrati_ora }} {{ _h.settings.get('staff_indirizzo') }}">{{ _lblf.btn_registrati_ora }}</a>
+	</div>
+</div>

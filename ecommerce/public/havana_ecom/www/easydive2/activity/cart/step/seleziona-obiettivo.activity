@@ -1,0 +1,9 @@
+{
+	"on:begin": [
+		"cart/step/list-obiettivo"
+	],
+	"on:view": {
+		"template": "cart/step/seleziona_obiettivo",
+		"extra": false
+	}
+}

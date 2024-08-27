@@ -1,0 +1,15 @@
+{
+	"on:": [
+		"manager/myarea/ambassador/list"
+	],
+	"on:view": {
+		"template": "manager/myarea/ambassador/index",
+		"params": {
+			"js": [
+				"havana-js/js/plugin/jquery.ui.widget",
+				"havana-js/js/plugin/jquery.fileupload",
+				"havana-js/js/plugin/jquery.iframe-transport"
+			]
+		}
+	}
+}

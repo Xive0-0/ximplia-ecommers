@@ -1,0 +1,4 @@
+#ID;CODICE;NOME;PREZZO;QTA MAG.;
+{% for item in list %}
+{{ item.id }};{{ item.get('codice') }};{{ item.get('nome') }};{{ item.prezzo }} EUR;{{ item.get('quantita_magazzino') }};
+{% endfor %}

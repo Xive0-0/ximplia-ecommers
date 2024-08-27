@@ -1,0 +1,212 @@
+{% macro colore_nero() %}
+#000000
+{% endmacro %}
+
+{% macro colore_rosso() %}
+#ed1c24
+{% endmacro %}
+
+{% macro colore_link() %}
+#1c4ded
+{% endmacro %}
+
+
+{% macro item_articolo(_h, art, show_codice_fornitore) %}
+{% set _lblw = _h.labels.get('website') %}
+<td style="width: 65px" align="left" valign="top"><img src="{{ _h.webAppUrl }}/images/50x50/{{ art.item.image }}" style="max-width: 45px"></td>
+<td style="padding: 0 10px;">
+	{{ _self._item_articolo(_h, art, show_codice_fornitore) }}
+	{% for a in art.attr %}
+		{% if a.type == 'fotocamera' %}
+		<div><em>{{ _lblw.fotocamera }}:</em> {{ a.pers }}</div>
+		{% elseif a.type == 'cellulare' %}
+		<div><em>{{ _lblw.cellulare }}:</em> {{ a.pers }}</div>
+		{% elseif a.type == 'obiettivo' %}
+		<div><em>{{ _lblw.obiettivo }}:</em> {{ a.pers }}</div>
+		{% endif %}
+	{% endfor %}
+</td>
+{% endmacro %}
+
+	
+{% macro ordine_spedizione(_h, ordine, interna) %}
+{% set lang = _h.context('email_lang') %}
+{% set _lbl = _h.labels('checkout', lang) %}
+	<tr>
+		<td width="47%" valign="top">
+	{% if not(ordine.solo_digitali) or interna %}
+		{% if ordine.spedizione.nome or ordine.spedizione.cognome %}
+		<div style="{{ _self.block() }}">
+			<em style="{{ _self.style_label() }}">
+			{% if ordine.tipo_spedizione == 1 and not(ordine.solo_digitali) %}
+				{{ _lbl.indirizzo_destinazione }}
+			{% else %}
+				{{ _lbl.title_intestazione_ordine }}
+			{% endif %}
+			</em> 
+			<div style="{{ _self.style_block_details() }}">
+				{{ ordine.spedizione.nome }} {{ ordine.spedizione.cognome }}<br>
+				{% if ordine.spedizione.presso %}
+				<em style="{{ _self.style_labelSmall() }}">{{ _lbl.presso }}:</em> {{ ordine.spedizione.presso }}<br>
+				{% endif %}
+				{% if ordine.spedizione.nome_campanello %}
+				<em style="{{ _self.style_labelSmall() }}">{{ _lbl.nome_campanello_small }}:</em> {{ ordine.spedizione.nome_campanello }}<br>
+				{% endif %}
+				{% if ordine.spedizione.via %}
+				{{ ordine.spedizione.via }}, {{ ordine.spedizione.num_civico }}<br>
+				{% endif %}
+				{{ ordine.spedizione.cap }} {{ ordine.spedizione.localita }} {% if ordine.spedizione.provincia %}({{ ordine.spedizione.provincia }}){% endif %}<br>
+				{{ ordine.spedizione.nazione }}
+			</div>
+		</div>
+		{% else %}
+		&nbsp;
+		{% endif %}
+	</td>
+	<td width="47%" valign="top">
+			{% if ordine.tipo_spedizione == 1 and ordine.spedizione_opzione.list|length > 0 %}
+			<div style="{{ _self.block() }}">
+				<em style="{{ _self.style_label() }}">
+				{{ _lbl.title_opzioni_spedizione }}:
+				</em> 
+				<div style="{{ _self.style_block_details() }}">
+					{% for op in ordine.spedizione_opzione.list %}
+						<div>
+							{{ op.nome }}
+							{% if interna %}
+								<br>peso calcolato: {{ op.peso_totale }}
+								<br>prezzo: {{ _h.util.currentValuta(op.prezzo) }}
+							{% endif %}
+						</div>
+					{% endfor %}		
+				</div>
+			</div>
+			{% endif %}
+		<div style="{{ _self.block() }}">
+			<em style="{{ _self.style_label() }}">
+			{% if ordine.tipo_spedizione == 1 %}
+			{{ _lbl.notifiche_spedizione }}:
+			{% else %}
+			{{ _lbl.notifiche }}:
+			{% endif %}
+			</em> 
+			<div style="{{ _self.style_block_details() }}">
+				{{ ordine.e_mail }}<br>
+				{{ ordine.spedizione.telefono }}
+			</div>
+		</div>
+		{% if ordine.spedizione.indicazioni %}
+		<div style="{{ _self.block() }}">
+			<em style="{{ _self.style_label() }}">{{ _lbl.indicazione_spedizione }}:</em> 
+			<div style="{{ _self.style_block_details() }}">
+				{{ ordine.spedizione.indicazioni }}
+			</div>
+		</div>
+		{% endif %}
+	{% else %}
+	<div style="{{ _self.block() }}">
+		<em style="{{ _self.style_label() }}">{{ _lbl.notifiche }}:</em> 
+		<div style="{{ _self.style_block_details() }}">
+			{{ ordine.e_mail }}<br>
+			{{ ordine.spedizione.telefono }}
+		</div>
+	</div>
+	{% endif %}
+	</td>
+</tr>
+{% if ordine.tipo_spedizione == 2 %}
+<tr>
+	<td colspan="2" valign="top">
+		<div style="{{ _self.block() }}">
+			<em style="{{ _self.style_label() }}">{{ _lbl.title_dove_ritirare_merce }}:</em> 
+			<div style="{{ _self.style_block_details() }}">
+				{{ ordine.sede_ritiro.nome }}<br>
+				{{ ordine.sede_ritiro.via }}, {{ ordine.sede_ritiro.num_civico }}<br>
+				{{ ordine.sede_ritiro.cap }} {{ ordine.sede_ritiro.localita }} ({{ ordine.sede_ritiro.provincia }})</strong>
+				{% if ordine.sede_ritiro.telefono %}
+				<br><em style="{{ _self.style_label() }}">{{ _lbl.numero_telefono }}:</em>{{ ordine.sede_ritiro.telefono }}
+				{% endif %}
+				{% if ordine.sede_ritiro.note %}
+				<br><br>{{ ordine.sede_ritiro.note }}
+				{% endif %}
+				{% if ordine.sede_ritiro.orario_lunedi or 
+					ordine.sede_ritiro.orario_martedi or 
+					ordine.sede_ritiro.orario_mercoledi or
+					ordine.sede_ritiro.orario_giovedi or
+					ordine.sede_ritiro.orario_venerdi or
+					ordine.sede_ritiro.orario_sabato or
+					ordine.sede_ritiro.orario_domenica  %}
+				<br><br><div style="margin-left: 20px;">
+					{{ _lbl.orario_apertura }}:
+					{% if ordine.sede_ritiro.orario_lunedi %}
+						<div><em style="{{ _self.style_label() }}">{{ _lbl.orario_lunedi }}:</em> {{ ordine.sede_ritiro.orario_lunedi }}</div>
+					{% endif %}
+					{% if ordine.sede_ritiro.orario_martedi %}
+						<div><em style="{{ _self.style_label() }}">{{ _lbl.orario_martedi }}:</em> {{ ordine.sede_ritiro.orario_martedi }}</div>
+					{% endif %}
+					{% if ordine.sede_ritiro.orario_mercoledi %}
+						<div><em style="{{ _self.style_label() }}">{{ _lbl.orario_mercoledi }}:</em> {{ ordine.sede_ritiro.orario_mercoledi }}</div>
+					{% endif %}
+					{% if ordine.sede_ritiro.orario_giovedi %}
+						<div><em style="{{ _self.style_label() }}">{{ _lbl.orario_giovedi }}:</em> {{ ordine.sede_ritiro.orario_giovedi }}</div>
+					{% endif %}
+					{% if ordine.sede_ritiro.orario_venerdi %}
+						<div><em style="{{ _self.style_label() }}">{{ _lbl.orario_venerdi }}:</em> {{ ordine.sede_ritiro.orario_venerdi }}</div>
+					{% endif %}
+					{% if ordine.sede_ritiro.orario_sabato %}
+						<div><em style="{{ _self.style_label() }}">{{ _lbl.orario_sabato }}:</em> {{ ordine.sede_ritiro.orario_sabato }}</div>
+					{% endif %}
+					{% if ordine.sede_ritiro.orario_domenica %}
+						<div><em style="{{ _self.style_label() }}">{{ _lbl.orario_domenica }}:</em> {{ ordine.sede_ritiro.orario_domenica }}</div>
+					{% endif %}
+				</div>
+				{% endif %}		
+			</div>
+			{% if _lbl.messaggio_ritiro_presso_la_sede %}
+			<div style="{{ _self.style_block_details() }}">
+				{{ _lbl.messaggio_ritiro_presso_la_sede }}
+			</div>
+			{% endif %}
+		</div>
+	</td>	
+</tr>
+{% endif %}
+{% if not(interna) %}
+	{% if ordine.is_digitali and not(ordine.is_gift_card) and not(ordine.is_voucher) %}
+	<tr>
+		<td colspan="2" valign="top">
+			<div style="{{ _self.block() }}">
+				<em style="{{ _self.style_label() }}">{{ _lbl.informazioni_download }}:</em> 
+				<div style="{{ _self.style_block_details() }}">
+					{{ _lbl.info_articoli_digitali_download }}
+				</div>
+			</div>
+		</td>
+	</tr>
+	{% endif %}	
+	{% if ordine.is_gift_card %}
+	<tr>
+		<td colspan="2" valign="top">
+			<div style="{{ _self.block() }}">
+				<em style="{{ _self.style_label() }}">{{ _lbl.informazioni_gift_card }}:</em> 
+				<div style="{{ _self.style_block_details() }}">
+					{{ _lbl.info_articoli_gift_card }}
+				</div>
+			</div>
+		</td>
+	</tr>
+	{% endif %}
+	{% if ordine.is_voucher %}
+	<tr>
+		<td colspan="2" valign="top">
+			<div style="{{ _self.block() }}">
+				<em style="{{ _self.style_label() }}">{{ _lbl.informazioni_voucher }}:</em> 
+				<div style="{{ _self.style_block_details() }}">
+					{{ _lbl.info_articoli_voucher }}
+				</div>
+			</div>
+		</td>
+	</tr>
+	{% endif %}
+{% endif %}
+{% endmacro %}

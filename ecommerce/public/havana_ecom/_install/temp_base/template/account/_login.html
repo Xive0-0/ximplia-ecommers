@@ -1,0 +1,59 @@
+	<h1><span>{{ _lblm.title_area_riservata }}</span></h1>
+	
+	{% if facebook_error %}
+	<div class="form-error">
+		<div class="form-error-message">{{ _lblm.descr_facebook_error }}</div>
+	</div>
+	{% endif %}
+
+	<form>
+		<fieldset class="fieldset-box">
+			<input type="hidden" name="callback" value="{{ callback }}">
+			<input type="hidden" name="url_post_login" value="{{ url_post_login }}">
+			{% if _h.settings.get('disabilita_registrazione_tramite_social', '') == '' %}
+			<div class="field-text field-text-social">
+				{{ _lblm.descr_accedi_profilo_social }}
+			</div>
+			<div class="field-button-social">
+				<a class="button-red button button-facebook" onclick="_ga('send', 'event', 'login', 'accedi_con_facebook', 'login_accedi_con_facebook')" href="{{ _h.url('account/login-facebook') }}?callback={{ callback|url_encode }}" title="{{ _lblm.btn_accedi_con_facebook }}">{{ _lblm.btn_accedi_con_facebook }}</a>
+			</div>			
+			<div class="field-text field-text-email">
+				{{ _lblm.o_con_indirizzo_email }}
+			</div>
+			{% else %}
+				{% if _lblm.accedi_indirizzo_email %}
+				<div class="field-text field-text-email">
+					{{ _lblm.accedi_indirizzo_email }}
+				</div>
+				{% endif %}
+			{% endif %}
+			<div class="form-error-message"></div>
+			<div class="field-line">
+				<div class="field">
+					<label>{{ _lblf.field_email }}</label>
+					<input type="text" name="e_mail" class="valida-required valida-email input-return-submit">
+				</div>
+			</div>
+			<div class="field-line">
+				<div class="field">
+					<label>{{ _lblf.field_password }}</label>
+					<input type="password" name="password" class="valida-required input-return-submit action-show-password">
+				</div>
+			</div>
+			
+			{{ mc.google_recaptcha(_h, 'login') }}
+
+			<div class="field-text field-text-dimenticato-password">
+				<a href="{{ _h.url('account/recupero-password') }}" class="link" title="{{ _lblf.alt_btn_dimenticato_password }}">{{ _lblf.btn_dimenticato_password }}</a>
+			</div>
+			<div class="field-button field-button-right">
+				<a class="button-red button submit-form" onclick="_ga('send', 'event', 'login', 'entra', 'login_entra')" href="javascript:void(0)" title="{{ _lblf.btn_entra }}" data-action='{"url": "{{ _h.url('account/ex-login') }}"}'><span>{{ _lblf.btn_entra }}</span></a>
+			</div>
+			<div class="field-text field-text-dimenticato-password field-text-dimenticato-password-after">
+				<a href="{{ _h.url('account/recupero-password') }}" class="link" title="{{ _lblf.alt_btn_dimenticato_password }}">{{ _lblf.btn_dimenticato_password }}</a>
+			</div>
+			<div class="field-text field-text-registrazione">
+				<a href="{{ _h.url('account/registrazione') }}" class="link bottone-registrati" title="{{ _lblf.btn_registrati }} {{ _h.settings.get('staff_indirizzo') }}">{{ _lblf.btn_registrati }}</a>
+			</div>
+		</fieldset>
+	</form>

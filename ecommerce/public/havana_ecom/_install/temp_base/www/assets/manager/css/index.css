@@ -1,0 +1,132 @@
+*, *:before, *:after {
+    box-sizing: border-box;
+}
+body {
+	overflow: hidden;
+}
+header {
+	height: 90px;
+	background: #fff;
+	text-align: center;
+}
+.window-wrapper {
+	position: fixed;
+	top: 0;
+	right: 0;
+	width: 400px;
+	bottom: 0;	
+	background: #fff;
+	overflow: hidden;
+	overflow-y: auto;
+}
+.image-wrapper {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 400px;
+	bottom: 0;
+	background: url('../img/login-background2.jpg') no-repeat center right;
+	background-size: cover;
+	overflow: hidden;
+}
+
+input {
+	width: 270px;
+	height: 44px;
+	font-size: 16px;
+	padding: 0 10px;
+}
+
+fieldset {
+	padding: 0;
+}
+
+form {
+	width: 270px;
+	margin: 30px auto;
+}
+.change-password form {
+	height: 320px;
+	margin-top: -160px;
+}
+.logo {
+	width: auto;
+	height: 80px;
+	margin: 10px;
+	margin: auto;
+	text-align: center;
+}
+.logo img{
+	max-height: 100px;
+	max-width: 200px;
+}
+.copy-info {
+	margin-bottom: 20px;
+	text-align: center;
+}
+.copy {
+	margin: 20px;
+	font-size: 10px;
+	color: #909090;
+}
+.copy a {
+	color: #909090;
+}
+.copy a:hover {
+	text-decoration: underline;
+}
+.btn-submit {
+	color: #fff;
+	background: #4285f4;
+	border: 1px solid #4285f4;
+	text-transform: uppercase;
+	display: block;
+	text-align: center;
+	line-height: 44px;
+	font-size: 14px;
+	font-weight: bold;
+	border-radius: 2px;
+	width: 270px;
+}
+.sede p {
+	margin: 10px 0;
+}
+.sede-data {
+	margin-left: 15px;
+}
+.sede-line {
+	margin-top: 10px;
+}
+
+.hrow:after,
+.hrow:before {
+	content: '';
+    display: table;
+    line-height: 0;
+	clear: both;
+}
+.change-password .btn-submit {
+	line-height: 30px;
+}
+.change-password .btn-submit,
+.change-password input {
+	height: 30px;
+}
+
+@media screen and (max-width: 400px) {
+.window-wrapper {
+	position: relative;
+	top: auto;
+	right: auto;
+	width: 100%;
+	width: auto;
+	bottom: auto;	
+	background: #fff;
+	overflow: visible;
+	overflow-y: visible;
+	text-align: center;
+}
+.image-wrapper {
+	display: none;
+}
+}

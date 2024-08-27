@@ -1,0 +1,11 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Modifica prezzo articoli') }}
+<input type="hidden" name="id" value="{{ _h.input('id') }}">
+<p class="field-line field-100">
+	<label>Incremento/decremento (percentuale):</label>
+	<input type="text" name="prezzo" class="field valida-float valida-required valida-digitfloat" value="0" maxlength="5"> %
+</p>
+{{ mc.checkbox('', 1, 'applica_tutti', 'Applica a tutti gli articoli') }}
+
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/articolo/ex-add-prezzo')) }}	

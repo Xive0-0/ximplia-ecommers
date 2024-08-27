@@ -1,0 +1,98 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% set lang = _h.input('lang', _h.config('default_language', 'it')) %}
+
+{% set ordine = item.get('ordine', 0) %}
+{% if _h.input('duplica') == 1 %}
+	{% set title = 'Duplica Articolo Gift Card' %}
+{% else %}
+	{% if item == null %}
+		{% set title = 'Nuovo Articolo Gift Card' %}
+		{% set ordine = 0 %}
+	{% else %}
+		{% set title = 'Modifica Articolo Gift Card' %}
+	{% endif %}
+{% endif %}
+{{ mc.slideBoxHeader(_h, title) }}
+
+{% if _h.input('duplica') == 1 %}
+<input type="hidden" name="duplica" value="{{ item.id }}">
+{% else %}
+<input type="hidden" name="id" value="{{ item.id }}">
+{% endif %}
+<input type="hidden" name="lang" value="{{ lang }}">
+<input type="hidden" name="tipo" value="1">
+
+<div class="block-tab">
+<div class="block-tab-header">
+	<div data-block-tab="scheda_base">Articolo</div>
+	<div data-block-tab="immagini">Immagini</div>
+</div>
+<div data-block-tab-body="scheda_base" class="block-tab-body">
+
+
+<div class="h-tab">
+
+<div data-tab-rif="base">Scheda</div>
+{% include _h.template('manager/myarea/articolo/_edit_gift_tabs.html') %}
+
+<div data-tab="base">
+{{ mc.contenutiInLingua(lang) }}
+
+<div class="field-line field-400">
+	{% if item.abilitato() %} 
+		{% set cssClass = ' h-checkbox-checked' %}
+		{% set value = 1 %}
+	{% else %}
+		{% set cssClass = '' %}
+		{% set value = '' %}
+	{% endif %}
+	<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="abilitato" value="{{ value }}" /></span> <strong>Abilitato</strong></div>
+</div>
+<p class="field-line field-100 field-line-left">
+	<label>Peso/posizione<span>*</span>:</label>
+	<input type="text" name="ordine" class="field valida-required valida-digitnumber" value="{{ ordine }}">
+</p>
+<div class="clear-line"></div>
+{{ mc.codiceIvaField(_h, listIvaPerNazione, item, true) }}
+{% if not(hide_codice) %}
+<p class="field-line field-200">
+	<label>Codice:</label>
+	<input type="text" name="codice" class="field" value="{{ item.get('codice') }}" maxlength="50">
+</p>
+{% endif %}
+<p class="field-line field-350">
+	<label>{{ mc.labelLang(lang) }} Nome<span>*</span>:</label>
+	<input type="text" name="nome" class="field valida-required" value="{{ item.get('nome') }}" maxlength="100">
+</p>
+<p class="field-line field-350">
+	<label>{{ mc.labelLang(lang) }} Nome secondario (sottotitolo):</label>
+	<input type="text" name="nome_simbolico" class="field" value="{{ item.get('nome_simbolico') }}" maxlength="100">
+</p>
+<p class="field-line field-350">
+	<label>{{ mc.labelLang(lang) }} Parole chiave motore ricerca iterno <em>(separare le parole con spazio)</em>:</label>
+	<input type="text" name="keywords_ricerca" class="field" value="{{ item.get('keywords_ricerca') }}">
+</p>
+<input type="hidden" name="id_azienda" value="0">
+<p class="field-line field-150 field-line-left">
+	<label>Prezzo in euro (#,##) IVA {% if _h.config('prezzi_senza_iva', false) %}escl.{% else%}incl.{% endif%}<span>*</span>:</label>
+	<input type="text" name="prezzo" class="field valida-required valida-euro" value="{{ item.euro('prezzo') }}" maxlength="10"> {{ _h.config('manager_valuta', '&euro;') }}
+</p>
+<p class="field-line field-150 field-line-left">
+	<label>Valore Gift in euro (#,##) IVA incl.<span>*</span>:</label>
+	<input type="text" name="valore_gift" class="field valida-required valida-euro" value="{{ item.euro('valore_gift') }}" maxlength="10"> {{ _h.config('manager_valuta', '&euro;') }}
+</p>
+<div class="clear-line"></div>
+{% include _h.template('manager/myarea/articolo/_edit_gift.html') %}
+</div>
+
+</div>
+
+</div>
+{{ mc.tab_body_immagini(_h, item) }}
+</div>
+
+{% if _h.input('duplica') == 1 %}
+{% set item = null %}
+{% endif %}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/articolo/ex-edit'), item) }}	

@@ -1,0 +1,17 @@
+{% import _h.template('manager/_macro_items.html') as mci %}
+<table class="h-list h-list-slingle-selection" cellpadding="0" cellspacing="0" border="0">
+<thead>
+<tr class="h-list-header">
+	<th style="width: 20px;">&nbsp;</th>
+	<th style="width: 20px;">&nbsp;</th>
+	<th style="width: 40px;">Peso</th>
+	<th style="width: 60px;">Img</th>
+	<th>Dettaglio</th>
+</tr>
+</thead>
+<tbody>
+{% for item in list %}		
+	{{ mci.item_immagine(_h, item) }}
+{% endfor %}
+</tbody>
+</table>

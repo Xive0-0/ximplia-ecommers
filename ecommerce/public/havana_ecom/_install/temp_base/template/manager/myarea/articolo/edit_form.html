@@ -1,0 +1,115 @@
+{{ mc.contenutiInLingua(lang) }}
+<div class="field-line field-400">
+	{% if item.get('form') %} 
+		{% set cssClass = ' h-checkbox-checked' %}
+		{% set value = 1 %}
+	{% else %}
+		{% set cssClass = '' %}
+		{% set value = '' %}
+	{% endif %}
+	<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="form" value="{{ value }}" /></span> <strong>Visualizza form</strong></div>
+</div>
+
+<p class="field-line field-400">
+	<label>{{ mc.labelLang(lang) }} Titolo box form:</label>
+	<input type="text" name="form_titolo" class="field" value="{{ item.get('form_titolo') }}" maxlength="200">
+</p>
+<p class="field-line field-400 field-line-textarea">
+	<label>{{ mc.labelLang(lang) }} Descrizione box form:</label>
+	<textarea name="form_descrizione" class="field">{{ item.get('form_descrizione') }}</textarea>
+</p>
+<p class="field-line field-400">
+	<label>{{ mc.labelLang(lang) }} Testo bottone invio:</label>
+	<input type="text" name="form_label_pulsante" class="field" value="{{ item.get('form_label_pulsante') }}" maxlength="50">
+</p>
+<p class="field-line field-400">
+	<label>{{ mc.labelLang(lang) }} Testo bottone chiudi/annulla:</label>
+	<input type="text" name="form_label_pulsante_chiudi" class="field" value="{{ item.get('form_label_pulsante_chiudi') }}" maxlength="50">
+</p>
+<br>
+<p class="field-line-text">
+<strong>Campi form presenti:</strong>
+</p>
+
+<div>
+	<div class="h-nav-button-wrapper">
+		<a href="javascript:void(0);" class="h-nav-button h-nav-button-click h-action-alttext h-action-add-extra-wrapper" data-alttext="nuovo parametro extra" data-action='{"params": {"content": "#elenco_parametri_extra_form", "prefix": "form_"}}'>
+			<img src="/assets/manager/havana-js/img/icon/ico-new.svg" align="top" />
+		</a>
+	</div>	
+	<strong class="h-nav-button-wrapper" style="line-height: 40px;">Aggiungi parametro</strong>
+</div>
+<div class="clear"></div>
+<div id="elenco_parametri_extra_form" class="h-table-parametri-extra-wrapper">
+	<textarea class="h-table-parametri-extra-template">
+		<tr data-key="%id%" class="new-extra-param">
+			<td class="chiave"><div class="field-line"><label></label><input type="text" class="field valida-digitalphanum valida-required" name="form_extra_new_chiave_%id%"></div></td>
+			<td class="tipo"><div class="field-line"><label></label><select class="field" name="form_extra_new_tipo_%id%">
+			<option value="stringa">Stringa</option>
+			<option value="e-mail">E-Mail</option>
+			<option value="data">Data</option>
+			<option value="testo">Testo</option>
+			<option value="lista">Lista</option>
+			<option value="checkbox">Checkbox</option>
+			<option value="file">File</option>
+			</select></div></td>
+			<td class="label"><div class="field-line"><label></label><input type="text" class="field valida-required" name="form_extra_new_label_%id%"></div></td>
+			<td class="valore"><div class="field-line"><input type="text" class="field" name="form_extra_new_valore_%id%"></div></td>
+			<td class="obbligatorio">
+			{{ mc.checkbox('', 1, 'form_extra_new_required_%id%', '') }}
+			</td>
+			<td class="azione">
+				<div class="h-nav-button-wrapper">
+					<a href="javascript:void(0);" class="h-nav-button h-nav-button-click h-action-rem-extra-wrapper">
+						<img src="/assets/manager/havana-js/img/icon/ico-delete.svg" align="top" />
+					</a>
+				</div>
+			</td>
+		</tr>
+	</textarea>
+	<input type="hidden" name="form_parametri_extra" value="{{ item.parametriExtra('form_').keys }}">
+	<input type="hidden" name="form_parametri_extra_new" value="">
+	<table class="h-table-parametri-extra form" border="0" cellspacing="0" cellpadding="0">
+		<thead>
+		<tr>
+			<th class="chiave">Chiave <span class="required">*</span></th>
+			<th class="tipo">Tipo <span class="required">*</span></th>
+			<th class="label">Label {{ mc.labelLang(lang) }} <span class="required">*</span></th>
+			<th class="valore">Valore {{ mc.labelLang(lang) }}</th>
+			<th class="obbligatorio">Obbl.</th>
+			<th class="azione"></th>
+		</tr>
+		</thead>
+		<tbody>
+		{% for k in item.parametriExtra('form_').list %}
+		<tr data-key="{{k}}">
+			<td class="chiave"><div class="chiave-details">{{k}}</div></td>
+			<td class="tipo"><div class="field-line"><label></label><select class="field" name="form_extra_tipo_{{k}}">
+			<option value="stringa"{% if item.get('form_extra_tipo_' ~ k) == 'stringa' %} selected{% endif %}>Stringa</option>
+			<option value="e-mail"{% if item.get('form_extra_tipo_' ~ k) == 'e-mail' %} selected{% endif %}>E-Mail</option>
+			<option value="data"{% if item.get('form_extra_tipo_' ~ k) == 'data' %} selected{% endif %}>Data</option>
+			<option value="testo"{% if item.get('form_extra_tipo_' ~ k) == 'testo' %} selected{% endif %}>Testo</option>
+			<option value="lista"{% if item.get('form_extra_tipo_' ~ k) == 'lista' %} selected{% endif %}>Lista</option>
+			<option value="newsletter"{% if item.get('form_extra_tipo_' ~ k) == 'newsletter' %} selected{% endif %}>Newsletter</option>
+			<option value="checkbox"{% if item.get('form_extra_tipo_' ~ k) == 'checkbox' %} selected{% endif %}>Checkbox</option>
+			<option value="file"{% if item.get('form_extra_tipo_' ~ k) == 'file' %} selected{% endif %}>File</option>
+			</select></div></td>
+			<td class="label"><div class="field-line"><label></label><input type="text" class="field valida-required" name="form_extra_label_{{k}}" value="{{ item.get('form_extra_label_' ~ k) }}"></div></td>
+			<td class="valore"><div class="field-line"><input type="text" class="field" name="form_extra_valore_{{k}}" value="{{ item.get('form_extra_valore_' ~ k) }}"></div></td>
+			<td class="obbligatorio">
+			{{ mc.checkbox(item.get('form_extra_required_' ~ k), 1, 'form_extra_required_' ~ k, '') }}
+			</td>
+			<td class="azione">
+				<div class="h-nav-button-wrapper">
+					<a href="javascript:void(0);" class="h-nav-button h-nav-button-click h-action-rem-extra-wrapper" data-action='{"prefix": "form_"}'>
+						<img src="/assets/manager/havana-js/img/icon/ico-delete.svg" align="top" />
+					</a>
+				</div>
+			</td>
+		</tr>
+		{% endfor %}
+		</tbody>
+	</table>
+	<br>
+	<em>In caso di tipo "lista", nel campo "valore" inserire le opzioni separate da una virgola</em>
+</div>

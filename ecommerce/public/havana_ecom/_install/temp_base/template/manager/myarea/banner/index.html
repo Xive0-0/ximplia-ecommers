@@ -1,0 +1,16 @@
+{% import _h.template('manager/_macro.html') as mc %}
+{{ mc.index_page_header(_h, 'Banner', 'banner') }}
+	
+	{% if _h.session.params.user.accesso >= 5 %}
+	{{ mc.navButtonNew(_h, 'nuovo', 'banner') }}
+	{% endif %}
+	{{ mc.navButtonUpdateLang(_h, 'modifica', 'banner') }}
+	{% if _h.session.params.user.accesso >= 5 %}
+	{{ mc.navButtonDelete(_h, 'elimina', 'banner') }}		
+	{{ mc.navSeparatore() }}
+	{{ mc.navButton(_h, 'duplica', 'copia', 'click', 'h-action-selected-open-window', '{"select": {"from":"#h-layout-center-content", "check": 1}, "window": {"type": "slide-right", "url": "' ~ _h.url('manager/myarea/banner/edit') ~ '", "params": {"duplica": 1}}}') }}
+
+	{{ mc.navButton(_h, 'immagine', 'image', 'click', 'h-action-upload-file', '{"select": {"from":"#h-layout-center-content", "check": 1}, "url": "' ~ _h.url('manager/myarea/banner/upload') ~ '", "fileType": ["jpg","png","gif","jpeg"], "onComplete": {"reload": "#h-layout-center-content"}}') }}
+	{% endif %}
+	
+{{ mc.index_page_footer(_h, result, 'banner') }}

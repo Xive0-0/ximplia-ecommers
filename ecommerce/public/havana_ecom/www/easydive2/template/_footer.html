@@ -1,0 +1,432 @@
+{% set _lblm = _h.labels.get('my') %}
+{% set _lblg = _h.labels.get('global') %}
+{% set _lblw = _h.labels.get('website') %}
+{% set _lblf = _h.labels.get('form') %}
+
+{% import _h.template('_macro.html') as mc %}
+
+
+			<div class="clear"></div>
+			
+		</div >
+			
+	</div>
+
+	<div id="middle" class="content web">
+		<!--{% if _h.requestActivity != 'index' %}
+		<script src="https://apps.elfsight.com/p/platform.js" defer></script>
+		<div class="elfsight-app-11e860e8-c280-436b-aa68-1b35d67b01cb"></div>
+		{% endif %}-->
+	
+		<div class="inner-middle content">
+			{% if listFotocamera|length > 0 or listCellulare|length > 0 %}
+				<div class="list-azienda">
+					<h3>Brands</h3>
+					<div class="clear loghi">
+				{% for item in listFotocamera %}
+					{% if item.isImage() %}
+					<div class="item-azienda">
+						<div class="item-azienda-inner">
+							<img alt="{{ item.get('nome') }}" src="{{ item.imageUrl('300x150') }}">
+						</div>
+					</div>
+					{% endif %}
+				{% endfor %}
+				{% for item in listCellulare %}
+					{% if item.isImage() %}
+					<div class="item-azienda">
+						<div class="item-azienda-inner">
+							<img alt="{{ item.get('nome') }}" src="{{ item.imageUrl('300x150') }}">
+						</div>
+					</div>
+					{% endif %}
+				{% endfor %}
+					</div>
+				</div>
+			{% endif %}	
+				</div>
+			</div>
+		</div>
+
+		<div class="contacts-card-div web pb-2 pb-xl-5">
+			<div class="contacts-card first-contact-card">
+				<h4>{{ _lblw.bisogno_aiuto }}</h4>
+				<h2>{{ _lblw.info_prodotti }}</h2>
+				<button class="whatsapp-button">
+					<svg fill="#25d366ff" width="25px" height="25px" viewBox="-1.66 0 740.824 740.824" xmlns="http://www.w3.org/2000/svg">
+						<g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+						<g id="SVGRepo_iconCarrier"><path fill-rule="evenodd" clip-rule="evenodd" d="M630.056 107.658C560.727 38.271 468.525.039 370.294 0 167.891 0 3.16 164.668 3.079 367.072c-.027 64.699 16.883 127.855 49.016 183.523L0 740.824l194.666-51.047c53.634 29.244 114.022 44.656 175.481 44.682h.151c202.382 0 367.128-164.689 367.21-367.094.039-98.088-38.121-190.32-107.452-259.707m-259.758 564.8h-.125c-54.766-.021-108.483-14.729-155.343-42.529l-11.146-6.613-115.516 30.293 30.834-112.592-7.258-11.543c-30.552-48.58-46.689-104.729-46.665-162.379C65.146 198.865 202.065 62 370.419 62c81.521.031 158.154 31.81 215.779 89.482s89.342 134.332 89.311 215.859c-.07 168.242-136.987 305.117-305.211 305.117m167.415-228.514c-9.176-4.591-54.286-26.782-62.697-29.843-8.41-3.061-14.526-4.591-20.644 4.592-6.116 9.182-23.7 29.843-29.054 35.964-5.351 6.122-10.703 6.888-19.879 2.296-9.175-4.591-38.739-14.276-73.786-45.526-27.275-24.32-45.691-54.36-51.043-63.542-5.352-9.183-.569-14.148 4.024-18.72 4.127-4.11 9.175-10.713 13.763-16.07 4.587-5.356 6.116-9.182 9.174-15.303 3.059-6.122 1.53-11.479-.764-16.07-2.294-4.591-20.643-49.739-28.29-68.104-7.447-17.886-15.012-15.466-20.644-15.746-5.346-.266-11.469-.323-17.585-.323-6.117 0-16.057 2.296-24.468 11.478-8.41 9.183-32.112 31.374-32.112 76.521s32.877 88.763 37.465 94.885c4.587 6.122 64.699 98.771 156.741 138.502 21.891 9.45 38.982 15.093 52.307 19.323 21.981 6.979 41.983 5.994 57.793 3.633 17.628-2.633 54.285-22.19 61.932-43.616 7.646-21.426 7.646-39.791 5.352-43.617-2.293-3.826-8.41-6.122-17.585-10.714"></path></g>
+					</svg>
+					<p>+39 338 9994219 - WHATSAPP</p>
+				</button>
+			</div>
+			<div class="contacts-card second-contact-card">
+				<h4>{{ _lblw.easydive_newsletter }}</h4>
+				<h2>{{ _lblw.iscrizione_novita }}</h2>
+				<div class="textfield-div">
+					<input type="text" placeholder="nome@e-mail.com" class="textfield">
+					<button>{{ _lblw.iscriviti }}</button>
+				</div>
+				<div class="check-box-div">
+					<input type="checkbox" class="check-box" id="policyCheckbox">
+					<label for="policyCheckbox">{{ _lblw.parte_uno_policy }}<b>{{ _lblw.parte_due_policy }}</b></label>
+				</div>
+			</div>
+		</div>
+
+		<div class="footer-info">
+			<div class="sub-footer red">
+				<ul>
+					<li><p>{{ _lblw.Contatti }}</p></li>
+					<li>
+						<div class="div-svg">
+							<svg fill="#fff" width="20px" height="20px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg" stroke="#fff">
+								<g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+								<g id="SVGRepo_iconCarrier"> <path d="M25 12h-1v-3.816c0-4.589-3.32-8.184-8.037-8.184-4.736 0-7.963 3.671-7.963 8.184v3.816h-1c-2.206 0-4 1.794-4 4v12c0 2.206 1.794 4 4 4h18c2.206 0 4-1.794 4-4v-12c0-2.206-1.794-4-4-4zM10 8.184c0-3.409 2.33-6.184 5.963-6.184 3.596 0 6.037 2.716 6.037 6.184v3.816h-12v-3.816zM27 28c0 1.102-0.898 2-2 2h-18c-1.103 0-2-0.898-2-2v-12c0-1.102 0.897-2 2-2h18c1.102 0 2 0.898 2 2v12zM16 18c-1.104 0-2 0.895-2 2 0 0.738 0.405 1.376 1 1.723v3.277c0 0.552 0.448 1 1 1s1-0.448 1-1v-3.277c0.595-0.346 1-0.985 1-1.723 0-1.105-0.895-2-2-2z"></path> </g>
+							</svg>
+						</div>
+						<span>{{ _lblw.pagamento_sicuro }}</span>
+					</li>
+					<li>
+						<div class="div-svg">
+							<svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fff">
+								<g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+								<g id="SVGRepo_iconCarrier"> <path d="M20.62 20.13H3.39999C2.94555 20.13 2.50957 19.9502 2.18729 19.6298C1.86501 19.3094 1.68263 18.8744 1.67999 18.42V7.62C1.68263 6.62624 2.07857 5.67395 2.78126 4.97126C3.48395 4.26857 4.43624 3.87263 5.42999 3.87H18.59C19.5846 3.87 20.5384 4.26508 21.2416 4.96834C21.9449 5.67161 22.34 6.62543 22.34 7.62V18.42C22.3374 18.8744 22.155 19.3094 21.8327 19.6298C21.5104 19.9502 21.0744 20.13 20.62 20.13ZM5.42999 5.37C4.83326 5.37 4.26096 5.60705 3.839 6.02901C3.41705 6.45096 3.17999 7.02326 3.17999 7.62V18.42C3.17996 18.4484 3.18571 18.4766 3.19688 18.5027C3.20805 18.5289 3.22442 18.5525 3.24499 18.5721C3.26556 18.5918 3.28991 18.607 3.31655 18.617C3.3432 18.6269 3.37159 18.6313 3.39999 18.63H20.62C20.6484 18.6313 20.6768 18.6269 20.7034 18.617C20.7301 18.607 20.7544 18.5918 20.775 18.5721C20.7956 18.5525 20.8119 18.5289 20.8231 18.5027C20.8343 18.4766 20.84 18.4484 20.84 18.42V7.62C20.84 7.02326 20.6029 6.45096 20.181 6.02901C19.759 5.60705 19.1867 5.37 18.59 5.37H5.42999Z" fill="#ffffff"></path> 
+									<path d="M12 15.54C11.3003 15.538 10.6168 15.3287 10.036 14.9386C9.45518 14.5484 9.00301 13.9948 8.73661 13.3478C8.47021 12.7008 8.40153 11.9893 8.53925 11.3033C8.67697 10.6172 9.0149 9.98742 9.51038 9.49334C10.0059 8.99926 10.6366 8.6631 11.3231 8.52732C12.0095 8.39153 12.7207 8.46222 13.367 8.73044C14.0133 8.99867 14.5656 9.4524 14.9541 10.0343C15.3426 10.6163 15.55 11.3003 15.55 12C15.5474 12.9398 15.1722 13.8402 14.5067 14.5038C13.8412 15.1674 12.9398 15.54 12 15.54ZM12 10C11.6044 10 11.2178 10.1173 10.8889 10.3371C10.56 10.5568 10.3036 10.8692 10.1522 11.2346C10.0009 11.6001 9.96126 12.0022 10.0384 12.3902C10.1156 12.7782 10.3061 13.1345 10.5858 13.4142C10.8655 13.6939 11.2219 13.8844 11.6098 13.9616C11.9978 14.0388 12.3999 13.9991 12.7654 13.8478C13.1308 13.6964 13.4432 13.44 13.6629 13.1111C13.8827 12.7823 14 12.3956 14 12C14 11.4696 13.7893 10.9609 13.4142 10.5858C13.0391 10.2107 12.5304 10 12 10Z" fill="#ffffff"></path> 
+									<path d="M21.58 12.75H14.79C14.5911 12.75 14.4003 12.671 14.2596 12.5303C14.119 12.3897 14.04 12.1989 14.04 12C14.04 11.8011 14.119 11.6103 14.2596 11.4697C14.4003 11.329 14.5911 11.25 14.79 11.25H21.58C21.7789 11.25 21.9697 11.329 22.1103 11.4697C22.251 11.6103 22.33 11.8011 22.33 12C22.33 12.1989 22.251 12.3897 22.1103 12.5303C21.9697 12.671 21.7789 12.75 21.58 12.75Z" fill="#ffffff"></path> <path d="M9.21999 12.75H2.42999C2.23108 12.75 2.04031 12.671 1.89966 12.5303C1.75901 12.3897 1.67999 12.1989 1.67999 12C1.67999 11.8011 1.75901 11.6103 1.89966 11.4697C2.04031 11.329 2.23108 11.25 2.42999 11.25H9.21999C9.41891 11.25 9.60967 11.329 9.75032 11.4697C9.89097 11.6103 9.96999 11.8011 9.96999 12C9.96999 12.1989 9.89097 12.3897 9.75032 12.5303C9.60967 12.671 9.41891 12.75 9.21999 12.75Z" fill="#ffffff"></path> </g>
+							</svg>
+						</div>
+						<span>{{ _lblw.reso_facile }}</span>
+					</li>
+					<li class="mail">
+						<div class="div-svg">
+							<svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
+								<g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+								<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+								<g id="SVGRepo_iconCarrier"> <path d="M3.29289 5.29289C3.47386 5.11193 3.72386 5 4 5H20C20.2761 5 20.5261 5.11193 20.7071 5.29289M3.29289 5.29289C3.11193 5.47386 3 5.72386 3 6V18C3 18.5523 3.44772 19 4 19H20C20.5523 19 21 18.5523 21 18V6C21 5.72386 20.8881 5.47386 20.7071 5.29289M3.29289 5.29289L10.5858 12.5857C11.3668 13.3668 12.6332 13.3668 13.4142 12.5857L20.7071 5.29289" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path> </g>
+							</svg>
+						</div>
+						<span>{{ _lblw.email }}</span>
+						{{ mc.link(_h, "javascript:void(0)", "info@easydive.it") }}
+					</li>
+					<li>
+						<div class="div-svg">
+							<svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
+								<g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+								<g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+								<g id="SVGRepo_iconCarrier"> <path d="M3 5.5C3 14.0604 9.93959 21 18.5 21C18.8862 21 19.2691 20.9859 19.6483 20.9581C20.0834 20.9262 20.3009 20.9103 20.499 20.7963C20.663 20.7019 20.8185 20.5345 20.9007 20.364C21 20.1582 21 19.9181 21 19.438V16.6207C21 16.2169 21 16.015 20.9335 15.842C20.8749 15.6891 20.7795 15.553 20.6559 15.4456C20.516 15.324 20.3262 15.255 19.9468 15.117L16.74 13.9509C16.2985 13.7904 16.0777 13.7101 15.8683 13.7237C15.6836 13.7357 15.5059 13.7988 15.3549 13.9058C15.1837 14.0271 15.0629 14.2285 14.8212 14.6314L14 16C11.3501 14.7999 9.2019 12.6489 8 10L9.36863 9.17882C9.77145 8.93713 9.97286 8.81628 10.0942 8.64506C10.2012 8.49408 10.2643 8.31637 10.2763 8.1317C10.2899 7.92227 10.2096 7.70153 10.0491 7.26005L8.88299 4.05321C8.745 3.67376 8.67601 3.48403 8.55442 3.3441C8.44701 3.22049 8.31089 3.12515 8.15802 3.06645C7.98496 3 7.78308 3 7.37932 3H4.56201C4.08188 3 3.84181 3 3.63598 3.09925C3.4655 3.18146 3.29814 3.33701 3.2037 3.50103C3.08968 3.69907 3.07375 3.91662 3.04189 4.35173C3.01413 4.73086 3 5.11378 3 5.5Z" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g>
+							</svg>
+						</div>
+						<div class="support">
+							<div>
+								<span>{{ _lblw.supporto_clienti }}</span>
+								{{ mc.link(_h, "javascript:void(0)", "+39 0544 962923") }}
+								<span>/</span>
+								{{ mc.link(_h, "javascript:void(0)", "+39 338 9994219") }}
+							</div>
+							<div>
+								<span>{{ _lblw.lun_a_ven }}: 8:30 - 12:30 e 14:30 - 18:30</span> 
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+			<div class="sub-footer black">
+				<ul>
+					<li><p>Easydive</p></li>
+					<li>{{ mc.link(_h, "javascript:void(0)", _lblw.chi_siamo) }}</li>
+					<li>{{ mc.link(_h, "javascript:void(0)", _lblw.ambassador_testimonial) }}</li>
+					<li>{{ mc.link(_h, "javascript:void(0)", _lblw.blog) }}</li>
+					<li>{{ mc.link(_h, "javascript:void(0)", _lblw.easydive_point) }}</li>
+					<li>{{ mc.link(_h, "javascript:void(0)", _lblw.assistenza) }}</li>
+				</ul>
+				<span class="mobile-horizontal-line"></span>
+				<ul>
+					<li><p>{{ _lblw.shop }}</p></li>
+					<li>{{ mc.link(_h, "javascript:void(0)", _lblw.custodie_subacquee) }}</li>
+					<li>{{ mc.link(_h, "javascript:void(0)", _lblw.illuminazione) }}</li>
+					<li>{{ mc.link(_h, "javascript:void(0)", _lblw.accessori) }}</li>
+					<li>{{ mc.link(_h, "javascript:void(0)", _lblw.merchandising) }}</li>
+					<li>{{ mc.link(_h, "javascript:void(0)", _lblw.configura_custodia) }}</li>
+				</ul>
+				<span class="mobile-horizontal-line"></span>
+				<ul>
+					<li><p>{{ _lblw.account }}</p></li>
+					<li>{{ mc.link(_h, "javascript:void(0)", _lblw.Login) }}</li>
+					<li>{{ mc.link(_h, "javascript:void(0)", _lblw.registrati) }}</li>
+					<li>{{ mc.link(_h, "javascript:void(0)", _lblw.recupero_password) }}</li>
+					<li>{{ mc.link(_h, "javascript:void(0)", _lblw.codice_attivazione) }}</li>
+					<li>{{ mc.link(_h, "javascript:void(0)", _lblw.newsletter) }}</li>
+				</ul>
+			</div>
+		</div>
+		<footer>
+			<a href="/{% if _h.lang != 'it' %}{{ _h.lang }}{% endif %}" title="Easydive Online Shop" class="logo-footer">
+			<img src="/assets/website/img/logo-easydive-footer.png" class="footer-logo" alt="Easydive Online Shop" >
+			<strong class="made-in-italy"><em class="made-in-italy-green"></em><em class="made-in-italy-white"></em><em class="made-in-italy-red"></em></strong>
+			<p class="since"><span>{{ _lblw.made_in_italy }}</span>{{ _lblw.testo_since }}</p>
+			</a>
+			
+			<script type="text/javascript"> var zoorate_widget_server = "widget.zoorate.com"; var zoorate_api_key = "API_KEY"; var zoorate_widget_id = "afc48d5f4782d362";</script><script src="//widget.zoorate.com/widgets/v6/feed.js" async ></script><div class="zoorate_widget" data-ver="6.0.0" data-id="INCREMENT_ID" data-type="merchantsmall" data-variant="white" data-lang="all" data-gui="all" style="width: 250px; margin: auto;"></div>
+			
+			<div class="footer-social line">
+				<ul>
+					<li>
+						<a href="https://www.facebook.com/easydivefan/" title="Facebook" target="_blank">
+							<img src="/assets/website/img/facebook.svg" alt="facebook">
+						</a>
+					</li>
+					<li>
+						<a href="https://www.youtube.com/user/Easydivechannel" title="YouTube" target="_blank">
+							<img src="/assets/website/img/youtube.svg" alt="youtube">
+						</a>
+					</li>
+					<li>
+						<a href="https://vimeo.com/easydive" title="Vimeo" target="_blank">
+							<img src="/assets/website/img/vimeo.svg" alt="vimeo">
+						</a>
+					</li>
+					<li>
+						<a href="https://www.instagram.com/easydive/" title="Instagram" target="_blank">
+							<img src="/assets/website/img/instagram.svg" alt="instagram">
+						</a>
+					</li>
+					<li>
+						<a href="skype:Easydive.it" title="Skype" target="_blank">
+							<img src="/assets/website/img/skype.svg" alt="skype">
+						</a>
+					</li>
+				</ul>
+			</div>
+			<div class="policy">
+				{{ mc.link(_h, mapPagine.cookie_policy.url, mapPagine.cookie_policy.get('titolo')) }}
+				<span>-</span>
+				{{ mc.link(_h, mapPagine.privacy.url, mapPagine.privacy.get('titolo')) }}				
+			</div>
+
+			<div class="copy-wrapper">
+				<section class="copy web">
+					&copy;{{ _lblw.easydive_srl }}
+					<span>-</span>
+					{{ _lblw.p_iva }} IT02665730392
+				</section>
+			</div>
+		</footer>
+	</div>
+	
+<div class="nav-menu-laterale-window">
+<div class="nav-menu-laterale">
+
+	<div class="footer-social">
+		<ul>
+			<li>
+				<a href="https://www.facebook.com/easydivefan/" title="Facebook" target="_blank">
+					<img src="/assets/website/img/ico-facebook.svg" alt="facebook">
+				</a>
+			</li>
+			<li>
+				<a href="https://www.youtube.com/user/Easydivechannel" title="YouTube" target="_blank">
+					<img src="/assets/website/img/ico-youtube.svg" alt="youtube">
+				</a>
+			</li>
+			<li>
+				<a href="https://www.instagram.com/easydive/" title="Instagram" target="_blank">
+					<img src="/assets/website/img/ico-instagram.svg" alt="instagram">
+				</a>
+			</li>
+			<li>
+				<a href="{{ mapPagine.plastic_free.url }}" title="Plastic free">
+					<img src="/assets/website/img/plastic-free2.gif" alt="plastic free">
+				</a>
+			</li>
+		</ul>
+	</div>
+
+	<ul>
+	<li class="menu-submenu"><a href="javascript:void(0);" class="menu-arrow">Easydive</a>
+		<ul>
+			<li>{{ mc.link(_h, mapPagine.plastic_free.url, mapPagine.plastic_free.get('titolo')) }}</li>
+			<li>{{ mc.link(_h, mapPagine.chi_siamo.url, mapPagine.chi_siamo.get('titolo')) }}
+				<ul>
+					<li>{{ mc.link(_h, mapPagine.perche_easydive.url, mapPagine.perche_easydive.get('titolo')) }}</li>
+					<li>{{ mc.link(_h, mapPagine.garanzia_easydive.url, mapPagine.garanzia_easydive.get('titolo')) }}</li>
+					<li>{{ mc.link(_h, mapPagine.must.url, mapPagine.must.get('titolo')) }}</li>
+					<li>{{ mc.link(_h, _h.xurl('info/faq'), 'FAQ') }}</li>
+				</ul>
+			</li>
+			<li>{{ mc.link(_h, _h.xurl('ambassador'), 'Ambassador') }}</li>
+			<li><a href="javascript:void(0);">{{ _lblw.blog }}</a>
+				<ul>
+					{% for c in listCategoriaBlog %}
+					<li>{{ mc.link(_h, c.url, c.get('nome')) }}</li>
+					{% endfor %}
+				</ul>
+			</li>
+		</ul>
+	</li>
+	<li><a href="https://www.youtube.com/user/Easydivechannel" target="_blank" class="btn-channel"><img src="/assets/website/img/ico-youtube.svg">Channel</a></li>
+	<li class="menu-submenu"><a href="javascript:void(0);" class="btn-shop-red">{{ _lblw.tutti_i_prodotti }}</a>
+		<ul>
+		{{ tree }}
+		</ul>
+	</li>
+	</ul>
+		
+	<ul>
+		<li><a href="{{ _h.xurl('scrivi-servizio-clienti') }}">
+			<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+				<defs>
+					<polygon id="path-1" points="0.0076251046 0.0205217391 15.9675916 0.0205217391 15.9675916 6.15384615 0.0076251046 6.15384615"></polygon>
+				</defs>
+				<g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+					<g id="Menu-/-normal" transform="translate(-1357.000000, -14.000000)">
+						<g id="user" transform="translate(1357.000000, 14.000000)">
+							<g id="Group-6">
+								<g id="Group-3" transform="translate(0.000000, 9.846154)">
+									<mask id="mask-2" fill="white">
+										<use xlink:href="#path-1"></use>
+									</mask>
+									<g id="Clip-2"></g>
+									<path d="M15.3537674,5.54052174 L0.621449372,5.54052174 L0.621449372,4.48814716 C0.621449372,2.3627291 2.35179247,0.633866221 4.47895565,0.633866221 L11.4962611,0.633866221 C13.6234243,0.633866221 15.3537674,2.3627291 15.3537674,4.48814716 L15.3537674,5.54052174 Z M11.4962611,0.0205217391 L4.47895565,0.0205217391 C2.0134159,0.0205217391 0.0076251046,2.02463545 0.0076251046,4.48814716 L0.0076251046,6.15386622 L15.9675916,6.15386622 L15.9675916,4.48814716 C15.9675916,2.02463545 13.9618008,0.0205217391 11.4962611,0.0205217391 Z" id="Fill-1" fill="#231F20" mask="url(#mask-2)"></path>
+								</g>
+								<path d="M8.00001678,0.615398997 C10.0360705,0.615398997 11.6922957,2.27176491 11.6922957,4.30769231 C11.6922957,6.34361971 10.0360705,8.00001918 8.00001678,8.00001918 C5.96392953,8.00001918 4.30770429,6.34361971 4.30770429,4.30769231 C4.30770429,2.27176491 5.96392953,0.615398997 8.00001678,0.615398997 M8.00001678,8.61538462 C10.3752953,8.61538462 12.3076923,6.68301364 12.3076923,4.30769231 C12.3076923,1.93240453 10.3752953,0 8.00001678,0 C5.62470469,0 3.69230769,1.93240453 3.69230769,4.30769231 C3.69230769,6.68301364 5.62470469,8.61538462 8.00001678,8.61538462" id="Fill-4" fill="#231F20"></path>
+							</g>
+						</g>
+					</g>
+				</g>
+			</svg>
+			{{ _lblw.contatti }}
+		</a></li>
+		<li><a href="https://tourmkr.com/F1RE4CPrby" target="blank">
+			{{ _lblw.virtual_tour }}
+		</a></li>
+	{% if _h.session.isAuth and _h.session.profile == 'guest' %}
+		<li class="menu-submenu"><a href="#">
+			<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+				<defs>
+					<polygon id="path-1" points="0.0076251046 0.0205217391 15.9675916 0.0205217391 15.9675916 6.15384615 0.0076251046 6.15384615"></polygon>
+				</defs>
+				<g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+					<g id="Menu-/-normal" transform="translate(-1357.000000, -14.000000)">
+						<g id="user" transform="translate(1357.000000, 14.000000)">
+							<g id="Group-6">
+								<g id="Group-3" transform="translate(0.000000, 9.846154)">
+									<mask id="mask-2" fill="white">
+										<use xlink:href="#path-1"></use>
+									</mask>
+									<g id="Clip-2"></g>
+									<path d="M15.3537674,5.54052174 L0.621449372,5.54052174 L0.621449372,4.48814716 C0.621449372,2.3627291 2.35179247,0.633866221 4.47895565,0.633866221 L11.4962611,0.633866221 C13.6234243,0.633866221 15.3537674,2.3627291 15.3537674,4.48814716 L15.3537674,5.54052174 Z M11.4962611,0.0205217391 L4.47895565,0.0205217391 C2.0134159,0.0205217391 0.0076251046,2.02463545 0.0076251046,4.48814716 L0.0076251046,6.15386622 L15.9675916,6.15386622 L15.9675916,4.48814716 C15.9675916,2.02463545 13.9618008,0.0205217391 11.4962611,0.0205217391 Z" id="Fill-1" fill="#231F20" mask="url(#mask-2)"></path>
+								</g>
+								<path d="M8.00001678,0.615398997 C10.0360705,0.615398997 11.6922957,2.27176491 11.6922957,4.30769231 C11.6922957,6.34361971 10.0360705,8.00001918 8.00001678,8.00001918 C5.96392953,8.00001918 4.30770429,6.34361971 4.30770429,4.30769231 C4.30770429,2.27176491 5.96392953,0.615398997 8.00001678,0.615398997 M8.00001678,8.61538462 C10.3752953,8.61538462 12.3076923,6.68301364 12.3076923,4.30769231 C12.3076923,1.93240453 10.3752953,0 8.00001678,0 C5.62470469,0 3.69230769,1.93240453 3.69230769,4.30769231 C3.69230769,6.68301364 5.62470469,8.61538462 8.00001678,8.61538462" id="Fill-4" fill="#231F20"></path>
+							</g>
+						</g>
+					</g>
+				</g>
+			</svg>
+			{{ _lblg.ciao }} <strong>{{ _h.session.params.user.nome }}</strong>
+			</a>
+			<ul>
+				<li>{{ mc.link(_h, _h.xurl('account/my/ordini/index'), _lblg.btn_miei_ordini) }}</li>
+				<li>{{ mc.link(_h, _h.xurl('account/my/file/index'), _lblg.btn_miei_files) }}</li>
+				<li>{{ mc.link(_h, _h.xurl('account/my/log/index'), _lblg.btn_comunicazioni) }}</li>
+				<li>{{ mc.link(_h, _h.xurl('account/my/preferiti/index'), _lblg.btn_preferiti) }}</li>
+				<li>{{ mc.link(_h, _h.xurl('account/my/indirizzi/index'), _lblg.btn_indirizzi_spedizione) }}</li>
+				<li>{{ mc.link(_h, _h.xurl('account/my/fatturazione/index'), _lblg.btn_dati_fatturazione) }}</li>
+				<li>{{ mc.link(_h, _h.xurl('account/my/dati-personali'), _lblg.btn_dati_personali) }}</li>
+				<li>{{ mc.link(_h, _h.xurl('account/my/modifica-password'), _lblg.btn_modifica_password) }}</li>
+				<li>{{ mc.link(_h, _h.xurl('account/my/modifica-email'), _lblg.btn_modifica_email) }}</li>
+				<li>{{ mc.link(_h, _h.xurl('account/logout'), _lblg.btn_esci) }}</li>
+			</ul>
+		</li>
+	{% else %}
+		<li><a href="{{ _h.xurl('account/login') }}">
+			<svg width="18px" height="16px" viewBox="0 0 18 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+				<g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+					<g id="Menu-/-normal" transform="translate(-1492.000000, -14.000000)" fill="#000000">
+						<g id="Group-3" transform="translate(1492.000000, 14.000000)">
+							<path d="M11.4323396,7.81108962 L11.0501055,7.81108962 C7.59784533,7.81108962 4.1455302,7.81112886 0.693270061,7.81097189 C0.58763464,7.81097189 0.480954413,7.8157593 0.376528768,7.80720476 C0.126545102,7.78679943 -0.00460559017,7.67559039 0.000123533308,7.502616 C0.00479766698,7.3292492 0.142712105,7.22329846 0.394070517,7.20972107 C0.49915604,7.20403112 0.605231379,7.20736661 0.71092179,7.20736661 C4.16323692,7.20728813 7.61549705,7.20728813 11.0677572,7.20728813 L11.511195,7.20728813 C11.3879079,7.11157929 11.3163111,7.05110889 11.2377307,6.99562209 C10.561631,6.51825515 9.88591624,6.04061352 9.20640718,5.56567952 C9.00321984,5.42366629 8.92287974,5.27435423 9.12848663,5.10491153 C9.3125925,4.95324501 9.54321976,4.96584137 9.79947226,5.14387786 C10.8172236,5.8509617 11.8323905,6.55996835 12.8462925,7.26991678 C13.0578933,7.41805161 13.048875,7.60495657 12.8324901,7.75626992 C11.8345901,8.45393592 10.8396045,9.15376017 9.83340097,9.84530457 C9.71682258,9.92543472 9.53409145,10.0045446 9.38743363,9.99979644 C9.26381654,9.9958331 9.07404672,9.88038604 9.04831149,9.7938596 C9.01889194,9.69508997 9.0957127,9.54389434 9.20052328,9.46698195 C9.8553969,8.98659345 10.529407,8.51942917 11.2017674,8.05124463 C11.2920606,7.98834128 11.408474,7.94443058 11.5128447,7.89176914 C11.4860647,7.86484981 11.4591746,7.83800895 11.4323396,7.81108962" id="Fill-4"></path>
+							<path d="M9.76557847,0 C13.9893329,0.0299306517 17.283809,2.88243291 17.8995997,6.74082736 C18.5814824,11.0135271 15.7176218,15.1073575 11.5096277,15.8752335 C8.11397991,16.4948457 4.67480516,14.7632741 3.10748381,11.6448495 C3.09231001,11.6146807 3.0766278,11.58475 3.06239258,11.5541049 C2.95512001,11.3234324 2.98667997,11.1555985 3.15316167,11.0699746 C3.32159875,10.9833186 3.47486203,11.0527069 3.58921309,11.2804419 C4.00340329,12.1053608 4.53565978,12.8431077 5.22379977,13.4496996 C7.31692484,15.2946821 9.71634181,15.9052436 12.3585788,15.0143502 C15.0347613,14.1120641 16.7095508,12.185467 17.2535396,9.36706342 C18.0405831,5.28950832 15.3101972,1.38574154 11.2689586,0.707498681 C8.17033418,0.187443684 5.100845,1.7663848 3.64024871,4.63166911 C3.47415809,4.95745275 3.33004603,5.04494234 3.13982592,4.93546126 C2.96626572,4.83554687 2.95113102,4.6602898 3.11491429,4.35356017 C4.62142308,1.53225883 6.98196695,0.12444641 9.76557847,0" id="Fill-1"></path>
+						</g>
+					</g>
+				</g>
+			</svg>
+			{{ _lblw.login }}
+		</a></li>
+	{% endif %}
+	</ul>
+	
+	<ul>
+	{% if item_urlLang %}
+		{% set lang_it = item_urlLang['it'] %}
+		{% set lang_es = item_urlLang['es'] %}
+		{% set lang_de = item_urlLang['de'] %}
+		{% set lang_en = item_urlLang['en'] %}
+		{% set lang_fr = item_urlLang['fr'] %}
+	{% else %}
+		{% set lang_it = '/' %}
+		{% set lang_es = '/es' %}
+		{% set lang_de = '/de' %}
+		{% set lang_en = '/en' %}
+		{% set lang_fr = '/fr' %}		
+	{% endif %}
+	<li>
+		<a {% if _h.lang == 'it' %}class="selected"{% endif %} href="{{ lang_it }}" title="Italiano"><img src="/assets/website/img/ico-bandiera-italia.png" alt="Italiano" align="middle"></a>
+		<a {% if _h.lang == 'es' %}class="selected"{% endif %} href="{{ lang_es }}" title="Español"><img src="/assets/website/img/ico-bandiera-spagna.png" alt="Español" align="middle"></a>
+		<a {% if _h.lang == 'de' %}class="selected"{% endif %} href="{{ lang_de }}" title="Deutsch"><img src="/assets/website/img/ico-bandiera-germania.png" alt="Deutsch" align="middle"></a>
+		<a {% if _h.lang == 'en' %}class="selected"{% endif %} href="{{ lang_en }}" title="English"><img src="/assets/website/img/ico-bandiera-gran-bretagna.png" alt="English" align="middle"></a>
+		<a {% if _h.lang == 'fr' %}class="selected"{% endif %} href="{{ lang_fr }}" title="Français"><img src="/assets/website/img/ico-bandiera-francia.png" alt="Français" align="middle"></a>
+	</li>
+	</ul>
+
+</div>
+</div>
+<div class="search-window">
+	<div id="search">
+	<form autocomplete="off" action="{{ _h.url('find') }}" class="search-window-form">
+		<label>{{ _lblg.costa_stai_cercando }}</label>
+		<div class="field-input"><div><input name="query" autocomplete="off" type="text"></div></div>
+		<a href="javascript:void(0);" class="btn-submit">
+			<svg version="1.1" id="Livello_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+				 viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve">
+			<style type="text/css">
+				.st0{fill:none;stroke-width:2;stroke-miterlimit:10;}
+			</style>
+			<path class="st0" d="M4,13c0,4.97,4.03,9,9,9s9-4.03,9-9s-4.03-9-9-9S4,8.03,4,13z M19,19l9,9"/>
+			</svg>
+		</a>
+	</form>
+	</div>
+</div>
+
+<!-- <a class="etichetta-whatsapp" href="https://api.whatsapp.com/send?phone=393389994219">
+	<em class="etichetta-whatsapp-inner">
+		<span>
+			<strong>+39 338 9994219</strong>
+			{{ _lblw.numero_wapp_descrizione }}
+		</span>
+	</em>
+	<em class="etichetta-whatsapp-over"></em>
+</a> -->
+
+
+<script>
+  const dfLayerOptions = {
+	queryInput: "#search_query",
+	display: {
+		lang: "{{ _h.lang }}",
+		facets: {
+			attached: "left"
+		}
+	},
+	historyPlugin: true,
+    installationId: 'eb85ebd0-328c-406e-a886-4ed3d18ceaf4',
+    zone: 'eu1'
+  };
+  
+  (function (l, a, y, e, r, s) {
+    r = l.createElement(a); r.onload = e; r.async = 1; r.src = y;
+    s = l.getElementsByTagName(a)[0]; s.parentNode.insertBefore(r, s);
+  })(document, 'script', 'https://cdn.doofinder.com/livelayer/1/js/loader.min.js', function () {
+    doofinderLoader.load(dfLayerOptions);
+  });
+</script>

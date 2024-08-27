@@ -1,0 +1,42 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Scrivi') }}
+<input type="hidden" name="id" value="{{ _h.input('id') }}">
+<div class="field-line field-400">
+	<div class="h-checkbox-wrapper"><span class="h-checkbox h-checkbox-checked" data-value="1"><input type="hidden" name="codice_recupero" value="1" /></span> <strong>Inserisci link per recupero carrello</strong></div>
+</div>
+
+<div class="message-center-block" data-message-center="{{ _h.util.messageCenter('messaggio_a_cliente') }}">
+<div class="message-center-block-expandible" data-type="email">
+	<div class="message-center-block-expandible-title">Scrivi E-Mail</div>
+	<div class="message-center-block-expandible-body">
+		<div class="field-line field-400">
+			<label>Oggetto<span>*</span>:</label>
+			<input type="text" name="oggetto" class="field">
+		</div>
+		<div class="field-line field-400">
+			<label>Testo e-mail<span>*</span>:</label>
+			<textarea name="testo" class="visual-editor"></textarea>
+		</div>
+	</div>
+</div>
+<div class="message-center-block-expandible" data-type="wapp">
+	<div class="message-center-block-expandible-title">Scrivi WhatsApp</div>
+	<div class="message-center-block-expandible-body">
+		<div class="field-line field-400 field-line-textarea">
+			<label>Testo messaggio<span>*</span>:</label>
+			<textarea name="testo_wapp" class="field"></textarea>
+		</div>
+	</div>
+</div>
+<div class="message-center-block-expandible" data-type="sms">
+	<div class="message-center-block-expandible-title">Scrivi SMS</div>
+	<div class="message-center-block-expandible-body">
+		<div class="field-line field-400 field-line-textarea">
+			<label>Testo SMS<span>*</span>:</label>
+			<textarea name="testo_sms" class="field"></textarea>
+		</div>
+	</div>
+</div>
+</div>
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/carrello/ex-scrivi'), null, '', '', 'Invia') }}

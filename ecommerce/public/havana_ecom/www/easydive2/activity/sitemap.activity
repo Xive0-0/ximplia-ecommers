@@ -1,0 +1,11 @@
+{
+	"on:begin": [
+		{"name":"list-all-item", "params": {"list": "listArticoli"}},
+		{"name":"list-all-attributo-type", "params": {"type": "categoria", "list": "listCategoria", "view": true}}
+	],
+	"on:view": {
+		"template": "sitemap",
+		"extra": false,
+		"content_type": "text/xml"
+	}
+}

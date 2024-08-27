@@ -1,0 +1,9 @@
+{
+	"on:": [
+		"manager/myarea/fotocamera/brand/list"
+	],
+	"on:view": {
+		"template": "manager/myarea/fotocamera/brand/list",
+		"extra": false
+	}
+}

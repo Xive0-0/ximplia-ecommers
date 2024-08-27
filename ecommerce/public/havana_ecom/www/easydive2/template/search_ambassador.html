@@ -1,0 +1,27 @@
+{% import _h.template('_macro.html') as mc %}
+{% set _lblw = _h.labels.get('website') %}
+
+{% if not(_h.context.isApp()) %}
+	{{ mc.banner_header(listBanner['10'], 'Ambassador') }}
+{% endif %}
+<h1>Ambassador</h1>
+{% if testo_blog %}
+	<div class="html col-margin">{{ testo_blog.getWithMerge('testo') }}</div>
+{% endif %}
+
+<ul class="list-categoria-filtro list-categoria-filtro-ambassador" >
+{% for key,cat in list %}
+	<li><a href="#c{{ cat.id }}">{{ cat.nome }}</a></li>
+{% endfor %}
+</ul>
+
+{% for key,cat in list %}
+<div class="abbassador-list" id="c{{ cat.id }}">
+	<h2>{{ cat.nome }}</h2>
+	<div class="clear card_listino">
+	{% for item in cat.list %}
+		{{ mc.item_ambassador(_h, item, mapNazione) }}
+	{% endfor %}
+	</div>
+</div>
+{% endfor %}

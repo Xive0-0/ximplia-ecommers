@@ -1,0 +1,84 @@
+<div class="clear"></div>
+<div class="field-line field-100">
+	<label>Peso per spedizione:</label>
+	<input name="parametro_calcolo_spedizione" class="field valida-digiteuro" value="{{ item.euro('parametro_calcolo_spedizione') }}">
+</div>
+
+<div class="field-line field-400">
+	{% if item.get('plastic_free', '') != '' %} 
+		{% set cssClass = ' h-checkbox-checked' %}
+		{% set value = 1 %}
+	{% else %}
+		{% set cssClass = '' %}
+		{% set value = '' %}
+	{% endif %}
+	<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="plastic_free" value="{{ value }}" /></span> <strong>Plastic Free</strong></div>
+</div>
+<div class="field-line field-400">
+	{% if item.get('prodotto_brevettato', '') != '' %} 
+		{% set cssClass = ' h-checkbox-checked' %}
+		{% set value = 1 %}
+	{% else %}
+		{% set cssClass = '' %}
+		{% set value = '' %}
+	{% endif %}
+	<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="prodotto_brevettato" value="{{ value }}" /></span> <strong>Prodotto brevettato</strong></div>
+</div>
+<div class="clear"></div>
+<div class="field-line field-400">
+	<label>Tipo custodia:</label>
+	<select name="tipo_custodia" class="field">
+		<option value=""></option>
+		<option value="fotocamera"{% if item.get('tipo_custodia', '') == 'fotocamera' %} selected="true"{% endif %}>per fotocamera</option>
+		<option value="smartphone"{% if item.get('tipo_custodia', '') == 'smartphone' %} selected="true"{% endif %}>per smartphone</option>
+	</select>
+</div>
+<div class="clear"></div>
+<div class="field-line field-100 field-line-left">
+	{% if item.get('patent', '') != '' %} 
+		{% set cssClass = ' h-checkbox-checked' %}
+		{% set value = 1 %}
+	{% else %}
+		{% set cssClass = '' %}
+		{% set value = '' %}
+	{% endif %}
+	<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="patent" value="{{ value }}" /></span> <strong>Patented</strong></div>
+</div>
+<div class="field-line field-100 field-line-left">
+	{% if item.get('lifetime', '') != '' %} 
+		{% set cssClass = ' h-checkbox-checked' %}
+		{% set value = 1 %}
+	{% else %}
+		{% set cssClass = '' %}
+		{% set value = '' %}
+	{% endif %}
+	<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="lifetime" value="{{ value }}" /></span> <strong>Lifetime</strong></div>
+</div>
+<div class="field-line field-100 field-line-left">
+	{% if item.get('universal_housing', '') != '' %} 
+		{% set cssClass = ' h-checkbox-checked' %}
+		{% set value = 1 %}
+	{% else %}
+		{% set cssClass = '' %}
+		{% set value = '' %}
+	{% endif %}
+	<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="universal_housing" value="{{ value }}" /></span> <strong>Universal Housing</strong></div>
+</div>
+<div class="field-line field-100 field-line-left">
+	{% if item.get('waterproof', '') != '' %} 
+		{% set cssClass = ' h-checkbox-checked' %}
+		{% set value = 1 %}
+	{% else %}
+		{% set cssClass = '' %}
+		{% set value = '' %}
+	{% endif %}
+	<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="waterproof" value="{{ value }}" /></span> <strong>Waterproof</strong></div>
+</div>
+
+<div class="clear"></div>
+
+<div class="field-line field-200">
+	<label>Codice riferimento plug-in 3D:</label>
+	<input name="codice_3d_img" class="field" value="{{ item.get('codice_3d_img') }}">
+</div>
+<br><br>

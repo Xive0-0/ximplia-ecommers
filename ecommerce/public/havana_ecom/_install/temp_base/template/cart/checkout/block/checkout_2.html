@@ -1,0 +1,108 @@
+{% set _lblc = _h.labels.get('checkout') %}
+{% set _lblf = _h.labels.get('form') %}
+
+{% if testo %}
+	<div class="html clear">{{ testo.getWithMerge('testo') }}</div>
+{% endif %}
+
+<div class="checkout-main clear" data-page="2">
+	<div class="col-box-100 tab-selected">
+	{% if cart.solo_digitali %}
+		<div class="tab-title"><span>{{ _lblc.title_nazione_destinazione_solo_digitali }}</span></div>
+	{% else %}
+		<div class="tab-title"><span>{{ _lblc.title_nazione_destinazione }}</span></div>
+	{% endif %}
+	<div class="tab-content clear">
+
+		<form class="checkout-margin">
+		{% set carica_dinamicamente_provincia_cap = false %}
+		{% if cart.solo_digitali %}
+			<h2><span>{{ _lblc.title_nazione_destinazione_solo_digitali }}</span></h2>
+			<p>{{ _lblc.descr_nazione_destinazione_solo_digitali }}</p>
+		{% else %}
+			<h2><span>{{ _lblc.title_nazione_destinazione }}</span></h2>
+			{% set label_con_provincia = false %}
+			{% set label_con_cap = false %}
+			{% if _h.settings.get('calcolo_spedizione_con_provincia') != '' and _h.settings.get('provincia_nazione_da_tendina') %}
+				{% set label_con_provincia = true %}
+				{% set carica_dinamicamente_provincia_cap = true %}
+			{% endif %}
+			{% if _h.settings.get('calcolo_spedizione_con_cap') != '' %}
+				{% set label_con_cap = true %}
+				{% set carica_dinamicamente_provincia_cap = true %}
+			{% endif %}
+			{% if label_con_provincia and label_con_cap %}
+			<p>{{ _lblc.descr_nazione_destinazione_con_provincia_e_cap }}</p>
+			{% elseif label_con_provincia %}
+			<p>{{ _lblc.descr_nazione_destinazione_con_provincia }}</p>
+			{% elseif label_con_cap %}
+			<p>{{ _lblc.descr_nazione_destinazione_con_cap }}</p>
+			{% else %}
+			<p>{{ _lblc.descr_nazione_destinazione }}</p>
+			{% endif %}
+		{% endif %}
+			<div class="form-error-message"></div>
+			<div class="field-line field-select-nazione">
+				<div class="field">
+					<label>{{ _lblf.field_nazione }}</label>
+					<select id="nazione_field" name="nazione" class="valida-required{% if carica_dinamicamente_provincia_cap %} action-carica-provincia-cap{% endif %} action-aggiorna-nazione">
+					<option value=""></option>
+					{% for naz in list %}
+					<option value="{{ naz.id }}" data-cee="{% if naz.get('cee') %}1{% endif %}" {% if nazione_default == naz.id %}selected="true"{% endif %}>{{ naz.get('nome') }}</option>
+					{% endfor %}		
+					</select>
+				</div>
+			</div>
+		{% if _h.settings.get('richiedi_tipo_acquisto_scelta_nazione') != '' %}
+			<div id="content_piva" {% if nazione_default_item.id == 108 or (nazione_default_item and not(nazione_default_item.get('cee'))) %}style="display: none;"{% endif %}>
+				<div class="field-line">
+					<div class="field">
+						<label>{{ _lblc.acquisto_come }}</label>
+						<select name="acquisto_come">
+						<option></option>
+						<option value="privato" {% if cart.acquisto_come == 'privato'%}selected="true"{% endif %}>{{ _lblc.acquisto_privato }}</option>
+						<option value="azienda" {% if cart.acquisto_come == 'azienda'%}selected="true"{% endif %}>{{ _lblc.acquisto_azienda }}</option>
+						</select>
+					</div>
+				</div>
+			</div>
+		{% endif %}
+		{% if not(cart.solo_digitali) %}
+			<div id="content_provincia_cap">
+			{% if _h.settings.get('calcolo_spedizione_con_provincia') != '' and _h.settings.get('provincia_nazione_da_tendina') and listProvinciaNazione|length > 0 %}
+				<div class="field-line">
+					<div class="field">
+						<label>{{ _lblf.field_provincia }}</label>
+						<select name="provincia" class="valida-required">
+						<option></option>
+						{% for prov in listProvinciaNazione %}
+							<option value="{{ prov.get('sigla') }}" {% if cart.provincia_da_preselezione == prov.get('sigla') %}selected="true"{% endif%}>{{ prov.get('nome') }}</option>
+						{% endfor %}
+						</select>
+					</div>
+				</div>
+			{% endif %}
+			{% if _h.settings.get('calcolo_spedizione_con_cap') != '' and isListCap %}
+			<div class="field-line">
+				<div class="field">
+					<label>{{ _lblf.field_cap }}</label>
+					<input type="text" name="cap" class="valida-required" value="{{ cart.cap_da_preselezione }}" maxlength="5">
+				</div>
+			</div>
+			{% endif %}
+			</div>
+		{% endif %}
+			<a class="button-next button-next-cart action-next-page" onclick="_ga('send', 'event', 'checkout', 'fase2', 'checkout_fase2_nazione_procedi')" href="javascript:void(0)" title="{{ _lblf.btn_procedi }}">{{ _lblf.btn_procedi }}</a>
+		</form>
+	</div>
+	</div>
+	{% if not(_h.context.isApp()) %}
+	{% include _h.template('cart/checkout/block/_faq.html') %}
+	{% endif %}
+
+</div>
+{% if not(_h.context.isApp()) %}
+<div class="checkout-footer clear">
+<a href="{{ _h.config('url_home_store', '/')}}" title="{{ _lblc.btn_continua_shopping }}" class="button-prev">{{ _lblc.btn_continua_shopping }}</a>
+</div>
+{% endif %}

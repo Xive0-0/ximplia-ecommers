@@ -1,0 +1,108 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% set lang = _h.input('lang', _h.config('default_language', 'it')) %}
+
+{% if item == null %}
+	{% set title = 'Nuovo blocco testo' %}
+	{% set ordine = 0 %}
+{% else %}
+	{% set title = 'Modifica blocco testo' %}
+{% endif %}
+{{ mc.slideBoxHeader(_h, title) }}
+<input type="hidden" name="lang" value="{{ lang }}">
+<input type="hidden" name="id" value="{{ item.id }}">
+
+<div class="block-tab">
+<div class="block-tab-header">
+	<div data-block-tab="scheda_base">Blocco testo</div>
+	<div data-block-tab="relazioni">Relazioni</div>
+</div>
+<div data-block-tab-body="scheda_base" class="block-tab-body">
+
+{% if edit_lang %}
+<div class="edit-lang-wrapper">
+{% endif %}
+{{ mc.contenutiInLingua(lang) }}
+<div class="field-line">
+	{% set cssClass = ' h-checkbox-checked' %}
+	{% set value = 1 %}
+	{% if item %} 
+		{% if item.abilitato() %} 
+
+		{% else %}
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% endif %}
+	{% endif %}
+	<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="abilitato" value="{{ value }}" /></span> <strong>Abilitato</strong></div>
+</div>
+<p class="field-line field-400">
+	<label>Codice/ID<span>*</span>:</label>
+	<input type="text" name="codice" class="field valida-required valida-digitnickname" value="{{ item.get('codice') }}">
+</p>
+<p class="field-line field-400 edit-lang">
+	<label>{{ mc.labelLang(lang) }} Titolo<span>*</span>:</label>
+	<input type="text" name="titolo" class="field valida-required" value="{{ item.get('titolo') }}">
+</p>
+<div class="field-line field-400 edit-lang">
+	<label>{{ mc.labelLang(lang) }} Testo:</label>
+	{{ mc.gestione_file() }}
+	<textarea name="testo" class="visual-editor">{{ item.get('testo') }}</textarea>
+</div>
+<div class="field-line field-400 edit-lang">
+	<label>{{ mc.labelLang(lang) }} Descrizione breve:</label>
+	{{ mc.gestione_file() }}
+	<textarea name="testo_breve" class="visual-editor">{{ item.get('testo_breve') }}</textarea>
+</div>
+<p class="field-line field-400">
+	<label>Parametri:</label>
+	<input type="text" name="parametri" class="field" value="{{ item.get('parametri') }}">
+</p>
+<p class="field-line field-400">
+	<label>Riferimento:</label>
+	<input type="text" name="riferimento" class="field" value="{{ item.get('riferimento') }}">
+</p>
+<div style="width: 50%; float: left;">
+{{ mc.upload_immagine(_h, 'Immagine/Logo', item.imageAnteprima()) }}
+</div>
+<div style="width: 50%; float: left;">
+{{ mc.upload_immagine(_h, 'Versione mobile', item.imageAnteprima('m'), 'mobile') }}
+</div>
+<div class="clear"></div>
+
+{% if edit_lang %}
+</div>
+{% endif %}
+{{ mc.labelCampiObbligatori() }}
+
+</div>
+
+<div data-block-tab-body="relazioni" class="block-tab-body">
+
+	<div class="h-tab">
+		<div data-tab-rif="articoli">Articoli</div>
+		<div data-tab-rif="categoria">Categoria</div>
+		<div data-tab-rif="brand">Brand</div>
+
+		<div data-tab="articoli">
+			<p class="field-line field-400">
+				<label>Cerca e aggiungi articolo:</label>
+				<input type="hidden" name="relazione_id" value="">
+				<input type="text" name="relazione_nome" class="field autocomplete" value="" data-action='{"url": "{{ _h.url('manager/myarea/articolo/list-autocomplete') }}", "add_item_to": "#elenco_articoli", "add_item_id": "$id_articolo", "load_item_id": {% if item %}[{{ item.get('$id_articolo', [])|join(',') }}]{% else %}null{% endif %}}'>
+			</p>
+			<br><br>
+			Articoli selezionati:
+			<div id="elenco_articoli">
+			</div>
+		</div>
+		<div data-tab="categoria">
+		{{ mc.dynamicOnlyOneMultipleTreeSelect(_h, 'Categoria', listCategoria, item, '$id_categoria') }}
+		</div>
+		<div data-tab="brand">
+		{{ mc.dynamicMultipleSelect(_h, 'Azienda/Brand', listAzienda, item, '$id_azienda') }}
+		</div>	
+	</div>	
+</div>
+
+</div>
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/testo/ex-edit')) }}	

@@ -1,0 +1,36 @@
+{% set _lbl = _h.labels.get('step_acquisto') %}
+<div class="step{% if _h.input('id_fotocamera', '') == '' %} hide-button{% endif %}" data-step="">
+	<h3>{{ _lbl.step_fotocamera_titolo }}</h3>
+	<p class="evidenzia">{{ _lbl.step_fotocamera_descrizione }}</p>
+	{% if listBrand|length > 1 %}
+		<div class="field-line-filtro-brand">
+			<label>{{ _lbl.step_obiettivo_filtra_brand_field }}</label>
+			<div class="field-line-filtro-brand-list">
+				{% for item in listBrand %}
+					<div class="field-line-filtro-brand-list-item action-step-filtro-fotocamera" data-id="{{ item.id }}">
+						{{ item.nome }}
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+	{% endif %}
+	<div class="field-line">
+		<div class="field{% if _h.input('id_fotocamera', '') != '' %} keypress{% endif %}">
+			<label>{{ _lbl.step_fotocamera_field }}</label>
+			<select name="id_fotocamera" class="action-step-show-button-on-change" data-type="fotocamera">
+				<option></option>
+				{% for elem in list %}
+					<option value="{{ elem.id }}" data-brand-id="{{ elem.brand_id }}">{{ elem.nome }}</option>
+				{% endfor %}
+			</select>
+		</div>
+	</div>
+	
+	<button class="next" data-url="co-seleziona-obiettivo" data-callback="param_fotocamera,combo_value">{{ _lbl.btn_procedi }}</button>
+	
+	<p><a href="{{ _h.url('scrivi-servizio-clienti') }}" class="link-servizio-clienti">{{ _lbl.step_fotocamera_non_trovi }}</a></p>
+	<div class="clear step-bottombar">
+		<a class="prev">&lt; {{  _lbl.btn_torna_indietro }}</a>
+		<a class="item-acquista-step-close">{{ _lbl.btn_annulla }}</a>
+	</div>
+</div>

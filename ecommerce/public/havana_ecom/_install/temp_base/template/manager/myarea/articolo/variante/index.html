@@ -1,0 +1,36 @@
+{% import _h.template('manager/_macro.html') as mc %}
+{% set _lbl = _h.labels.get('manager') %}
+{% set imp_variante = _h.config('template').manager.item.variante %}
+
+{{ mc.slideBoxHeaderToolbar(_h, _lbl.list_varianti ~ ': ' ~ item.codice ~ ', ' ~ item.get('nome'), true) }}
+
+{% if imp_variante.win_edit %}
+	{% set width = imp_variante.win_edit.width %}
+	{% set height = imp_variante.win_edit.height %}
+{% else %}
+	{% set width = 700 %}
+	{% set height = 600 %}
+{% endif %}
+
+{% if _h.istanza.isMaster() and _h.session.params.user.accesso >= 5 or (_h.config('gestione_azienda_account_full', false) and _h.session.params.user.accesso == 3) %}
+	{% if imp_variante.add %}
+		{{ mc.navButton(_h, 'nuovo', 'new', 'click', 'h-action-selected-open-window', '{"window": {"type": "layer", "url": "' ~ _h.url('manager/myarea/articolo/variante/edit-new') ~ '", "width": 500, "height": 320, "overlay": true, "params": {"variante_id":' ~ item.id ~ '}}}') }}
+		{{ mc.navButton(_h, 'elimina', 'delete', 'click', 'h-action-selected-execute', '{"select": {"from":"#variante-content", "check": 0, "errorMessage": "Selezionare almeno una voce"}, "confirm": "Eliminare le voci selezionate?", "url": "' ~ _h.url('manager/myarea/articolo/variante/delete') ~ '", "reload": ["#variante-content", "#h-layout-center-content"]}') }}
+	{% else %}		
+		{{ mc.navButton(_h, 'nuovo', 'new', 'click', 'h-action-selected-open-window', '{"window": {"type": "layer", "url": "' ~ _h.url('manager/myarea/articolo/variante/edit') ~ '", "width": ' ~ width ~ ', "height": ' ~ height ~ ', "overlay": true, "event": "variante-edit", "params": {"variante_id":' ~ item.id ~ '}}}') }}
+		{{ mc.navButtonLang(_h, 'modifica', 'update', 'click', 'h-action-selected-open-window', '{"select": {"from":"#variante-content", "check": 1, "errorMessage": "Selezionare una voce"}, "window": {"type": "layer", "url": "' ~ _h.url('manager/myarea/articolo/variante/edit') ~ '", "event": "variante-edit", "width": ' ~ width ~ ', "height": ' ~ height ~ ', "overlay": true, "params": {"variante_id":' ~ item.id ~ '}}}') }}
+		{{ mc.navButton(_h, 'elimina', 'delete', 'click', 'h-action-selected-execute', '{"select": {"from":"#variante-content", "check": 1, "errorMessage": "Selezionare una voce"}, "confirm": "Eliminare le voce selezionate?", "url": "' ~ _h.url('manager/myarea/articolo/variante/delete') ~ '", "reload": ["#variante-content", "#h-layout-center-content"]}') }}
+		<div class="h-nav-button-wrapper" style="width: 2px; overflow: hidden;"><div class="h-nav-separator"></div></div>
+		{{ mc.navButton(_h, 'immagini', 'image', 'click', 'h-action-selected-open-window', '{"select": {"from":"#variante-content", "check": 1}, "window": {"type": "layer", "url": "' ~ _h.url('manager/myarea/articolo/immagine/index') ~ '", "width": 700, "height": 600, "overlay": true}}') }}
+		<div class="h-nav-button-wrapper" style="width: 2px; overflow: hidden;"><div class="h-nav-separator"></div></div>
+		{{ mc.navButton(_h, 'assegna ad altro', 'move', 'click', 'h-action-selected-open-window', '{"select": {"from":"#variante-content", "check": 0}, "window": {"type": "layer", "url": "' ~ _h.url('manager/myarea/articolo/variante/assegna-a') ~ '", "width": 470, "height": 350, "overlay": true}}') }}
+		{{ mc.navButton(_h, 'trasforma in principale', 'copy', 'click', 'h-action-selected-open-window', '{"select": {"from":"#variante-content", "check": 1, "errorMessage": "Selezionare una voce"}, "window": {"type": "layer", "url": "' ~ _h.url('manager/myarea/articolo/edit') ~ '?converti_principale=1", "event": "variante-edit", "width": ' ~ width ~ ', "height": ' ~ height ~ ', "overlay": true, "params": {"id":' ~ item.id ~ '}}}') }}
+	{% endif %}
+{% else %}
+	{% if imp_variante.add %}
+	{% else %}
+		{{ mc.navButtonLang(_h, 'modifica', 'update', 'click', 'h-action-selected-open-window', '{"select": {"from":"#variante-content", "check": 1, "errorMessage": "Selezionare una voce"}, "window": {"type": "layer", "url": "' ~ _h.url('manager/myarea/articolo/variante/edit') ~ '", "width": ' ~ width ~ ', "height": ' ~ height ~ ', "overlay": true, "params": {"variante_id":' ~ item.id ~ '}}}') }}
+	{% endif %}
+{% endif %}
+{{ mc.slideBoxHeaderToolbarEnd() }}
+{{ mc.box_footer(_h, 'variante', 'articolo/variante', list, '{"id": ' ~ item.id ~ '}') }}

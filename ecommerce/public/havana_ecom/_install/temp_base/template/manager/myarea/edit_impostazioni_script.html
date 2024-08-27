@@ -1,0 +1,37 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Integrazioni script') }}
+{% if _h.config('cookie_policy', '') == '' %}
+<p class="field-line field-400">
+	<label>Robots:</label>
+	<textarea name="script_robots" class="field">{{ _h.settings.get('script_robots') }}</textarea>
+</p>
+<p class="field-line field-400">
+	<label>Script tutte le pagine interno ad HEAD:</label>
+	<textarea name="script_all_pages_head" class="field">{{ _h.settings.get('script_all_pages_head') }}</textarea>
+</p>
+<p class="field-line field-400">
+	<label>Script tutte le pagine:</label>
+	<textarea name="script_all_pages" class="field">{{ _h.settings.get('script_all_pages') }}</textarea>
+</p>
+<p class="field-line field-400">
+	<label>Script pagina completamento acquisto interno ad HEAD:</label>
+	<textarea name="script_checkout_thankyou_head" class="field">{{ _h.settings.get('script_checkout_thankyou_head') }}</textarea>
+</p>
+<p class="field-line field-400">
+	<label>Script pagina completamento acquisto:</label>
+	<textarea name="script_checkout_thankyou" class="field">{{ _h.settings.get('script_checkout_thankyou') }}</textarea>
+</p>
+<p class="field-line field-400">
+	<label>Script tutte le pagine tranne completamento acquisto interno ad HEAD:</label>
+	<textarea name="script_all_pages_not_thankyou_head" class="field">{{ _h.settings.get('script_all_pages_not_thankyou_head') }}</textarea>
+</p>
+<p class="field-line field-400">
+	<label>Script tutte le pagine tranne completamento acquisto:</label>
+	<textarea name="script_all_pages_not_thankyou" class="field">{{ _h.settings.get('script_all_pages_not_thankyou') }}</textarea>
+</p>
+{% else %}
+Impostazione non utilizzabile, risulta attivo {{ _h.config('cookie_policy') }}
+{% endif %}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/ex-edit-impostazioni-script')) }}	
+

@@ -1,0 +1,155 @@
+{% import _h.template('manager/_macro.html') as mc %}
+{% set tipo_entita = '' %}
+{% if item == null %}
+	{% if _h.input('tipo_entita') == 'articolo' %}
+		{% set tipo_entita = 'prodotto' %}
+	{% elseif _h.input('tipo_entita') == 'cliente' %}
+		{% set tipo_entita = 'cliente' %}
+	{% elseif _h.input('tipo_entita') == 'cliente_ordini' %}
+		{% set tipo_entita = 'ordine' %}
+	{% endif %}
+	{% set title = 'Nuovo Promemoria' %}
+	{% if tipo_entita %}
+		{% set title = title ~ ' ' ~ tipo_entita %}
+	{% endif %}
+{% else %}
+	{% set title = 'Modifica Promemoria' %}
+	{% if item.get('tipo_entita') == 'articolo' %}
+		{% set tipo_entita = 'prodotto' %}
+	{% elseif item.get('tipo_entita') == 'cliente' %}
+		{% set tipo_entita = 'cliente' %}
+	{% elseif item.get('tipo_entita') == 'cliente_ordini' %}
+		{% set tipo_entita = 'ordine' %}
+	{% endif %}
+{% endif %}
+{{ mc.slideBoxHeader(_h, title) }}
+
+{% if item == null %}
+<input type="hidden" name="id_entita" value="{{ _h.input('id_entita', _h.input('id')) }}">
+<input type="hidden" name="tipo_entita" value="{{ _h.input('tipo_entita') }}">
+{% endif %}
+<input type="hidden" name="id" value="{{ item.id }}">
+{% if item %}
+	{% if item.get('id_entita') > 0 %}
+	<div class="field-line-text">
+		riferimento {{ tipo_entita }}: <strong>{{ item.get('anteprima') }}</strong>
+	</div>
+	{% endif %}
+{% else %}
+<input type="hidden" name="anteprima" value="{{ anteprima }}">
+<div class="field-line-text">
+	riferimento {{ tipo_entita }}: <strong>{{ anteprima }}</strong>
+</div>
+{% endif %}
+<div class="field-line field-400">
+	<label>Stato:</label>
+	<select name="stato" class="field">
+	{{ mc.listComboOptions([{'id': '0', 'text': 'aperto / da fare'},{'id': '1', 'text': 'attenzione / problemi'},{'id': '10', 'text': 'completato'},{'id': '11', 'text': 'annullato'}], item.get('stato')) }}
+	</select>
+</div>
+{% if tipo_entita == 'cliente' or tipo_entita == 'ordine' %}
+<div class="h-show-if-content">
+	<div class="field-line field-400">
+		<label>Esegui azione:</label>
+		<select name="azione" class="field h-show-if" data-action='{"map": [{"key": "1", "cont": [".contenuto_email_predefinita"]}, {"key": "2", "cont": [".contenuto_email_testo"]}]}'>
+		{{ mc.listComboOptions([{'id': '0', 'text': 'nessuna azione'},{'id': '1', 'text': 'invia e-mail predefinita'},{'id': '2', 'text': 'invia e-mail con testo specifico'}], item.get('azione')) }}
+		</select>
+	</div>
+	<div class="contenuto_email_predefinita">
+		<div class="field-line field-400">
+			<label>Seleziona e-mail predefinita<span>*</span>:</label>
+			<select name="azione_email_predefinita" class="field">
+				<option value=""></option>
+			{% for email in listEMailPredefinite %}
+				<option value="{{ email.id }}"{% if item.get('azione_email_predefinita') == email.id %} selected="true"{% endif%}>{{ email.get('nome') }}</option>
+			{% endfor %}
+			</select>
+		</div>
+	</div>
+	<div class="contenuto_email_testo">
+		<div class="field-line field-400">
+			<label>Oggetto e-mail<span>*</span>:</label>
+			<input type="text" name="azione_oggetto_email" class="field" value="{{ item.get('azione_oggetto_email') }}" maxlength="100">
+		</div>
+		<div class="field-line field-400">
+			<label>Testo e-mail<span>*</span>:</label>
+			<textarea name="azione_testo_email" class="visual-editor">{{ item.get('azione_testo_email') }}</textarea>
+		</div>
+	</div>
+</div>
+{% endif %}
+<div class="field-line field-100 field-line-left">
+	<label>Data<span>*</span>:</label>
+	<input type="text" name="data" class="field valida-required valida-datasimple input-datepicker" value="{{ item.getDate('data') }}" maxlength="10">
+</div>
+<div class="field-line field-100 field-line-left">
+	<label>Ora dal (hh:mm):</label>
+	<input type="text" name="ora" class="field valida-orasimple" value="{{ item.getMinuteToTime('ora') }}" maxlength="5">
+</div>
+<div class="clear"></div>
+<div p class="field-line field-400">
+	<label>Descrizione<span>*</span>:</label>
+	<textarea name="descrizione" class="field valida-required">{{ item.get('descrizione') }}</textarea>
+</div>
+{% if not(item) %}
+<div style="border: 1px solid #d9d9d9; margin-top: 10px;">
+	<div style="margin: 10px;">
+		{{ mc.checkbox('', 1, 'ripeti_si', 'Ripeti evento secondo le specifiche') }}
+		<div class="field-line field-100 field-line-left">
+			<label>Ripeti ogni:</label>
+			<input type="text" name="ripeti_ogni" class="field valida-digitint" value="1" maxlength="5">
+		</div>
+		<div class="field-line field-100 field-line-left">
+			<label>Intervallo:</label>
+			<select type="text" name="ripeti_intervallo" class="field">
+				<option value="giorno" selected="true">Giorno</option>
+				<option value="settimana">Settimana</option>
+				<option value="mese">Mese</option>
+				<option value="anno">Anno</option>
+			</select>
+		</div>
+		<div class="field-line field-100 field-line-left">
+			<label>Giorno settimana:</label>
+			<select type="text" name="ripeti_giorno_settimana" class="field">
+				<option value=""></option>
+				<option value="monday">Lunedì</option>
+				<option value="tuesday">Martedì</option>
+				<option value="wednesday">Mercoledì</option>
+				<option value="thursday">Giovedì</option>
+				<option value="friday">Venerdì</option>
+				<option value="saturday">Sabato</option>
+				<option value="sunday">Domenica</option>
+			</select>
+		</div>
+		<div class="field-line field-100 field-line-left">
+			<label>Giorno mese:</label>
+			<input type="text" name="ripeti_giorno_mese" class="field valida-digitint" value="" maxlength="2">
+		</div>
+		<div class="clear"></div>
+		<br><br>
+		<div class="tree-level-onlyone">
+			<div><strong>Fine ripetizione:</strong></div>
+			{{ mc.checkbox('1', 1, 'ripeti_mai', 'Mai') }}
+			<div class="clear"></div>
+			<div class="field-line-left" style="width: 100px">
+			{{ mc.checkbox('', 1, 'ripeti_fino', 'Fino a data') }}
+			</div>
+			<div class="field-line field-10 field-line-left">
+				<label>Fino a data:</label>
+				<input type="text" name="ripeti_fino_data" class="field valida-datasimple input-datepicker" value="" maxlength="10">
+			</div>	
+			<div class="clear"></div>
+			<div class="field-line-left" style="width: 100px">
+			{{ mc.checkbox('', 1, 'ripeti_numero', 'Dopo') }}
+			</div>
+			<div class="field-line field-100 field-line-left">
+				<label>Numero occorrenze:</label>
+				<input type="text" name="ripeti_numero_occorrenze" class="field valida-digitint" value="" maxlength="10">
+			</div>
+			<div class="clear"></div>	
+		</div>
+	</div>
+</div>
+{% endif %}
+{{ mc.labelCampiObbligatori() }}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/promemoria/ex-edit'), item) }}	

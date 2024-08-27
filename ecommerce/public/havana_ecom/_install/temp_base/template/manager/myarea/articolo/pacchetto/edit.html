@@ -1,0 +1,78 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Pacchetto') }}
+<input type="hidden" name="id_articolo" value="{{ _h.input('id_articolo') }}">
+{% if _h.input('duplica') == '' %}
+<input type="hidden" name="id" value="{{ item.id }}">
+{% endif %}
+<div class="h-tab">
+<div data-tab-rif="base">Dati</div>
+{% for l in listLang %}
+<div data-tab-rif="{{ l }}">{{ l|upper }}</div>
+{% endfor %}
+<div data-tab="base">
+{{ mc.checkbox(item.get('solo_login'), 1, 'solo_login', 'Solo per utente loggato') }}
+{{ mc.checkbox(item.get('solo_b2b'), 1, 'solo_b2b', 'Solo per utente B2B') }}
+{{ mc.checkbox(item.get('escludi_clienti_con_listino'), 1, 'escludi_clienti_con_listino', 'Escludi clienti con listini abbinati') }}
+<p class="field-line field-200 field-line-left">
+	<label>Per listino personalizzato:</label>
+	<select name="id_listino_cliente" class="field">
+	<option value=""></option>
+	{{ mc.comboOptionsFromList(listListino, 'id', 'nome', item.get('id_listino_cliente')) }}
+	</select>
+</p>
+<p class="field-line field-150 field-line-left">
+	<label>Codice:</label>
+	<input type="text" name="codice" class="field" value="{{ item.get('codice') }}" maxlength="50">
+</p>
+<div class="clear"></div>
+<p class="field-line field-400">
+	<label>Tipo calcolo quantità:</label>
+	<select name="tipo_calcolo_qta" class="field valida-required">
+	<option value="0"{% if item == null or item.get('tipo_calcolo_qta') == 0 %} selected="true"{% endif %}>Quantità articolo</option>
+	<option value="1"{% if item.get('tipo_calcolo_qta') == 1 %} selected="true"{% endif %}>Quantità stesso articolo in carrello</option>
+	<option value="2"{% if item.get('tipo_calcolo_qta') == 2 %} selected="true"{% endif %}>Qantità totale articoli in carrello</option>
+	</select>
+</p>
+<p class="field-line field-100 field-line-left">
+	<label>Data dal<span>*</span>:</label>
+	<input type="text" name="data_dal" class="field valida-required valida-datasimple input-datepicker" value="{{ item.getDate('data_dal') }}" maxlength="10">
+</p>
+<p class="field-line field-100 field-line-left">
+	<label>Data al<span>*</span>:</label>
+	<input type="text" name="data_al" class="field valida-required valida-datasimple input-datepicker" value="{{ item.getDate('data_al') }}" maxlength="10">
+</p>
+<div class="clear"></div>
+{{ mc.checkbox(item.get('multiplo'), 1, 'multiplo', 'Considera la quantità come multipli') }}
+<p class="field-line field-100 field-line-left">
+	<label>Quantità dal<span>*</span>:</label>
+	<input type="text" name="qta_dal" class="field valida-required valida-digitint valida-int" value="{{ item.get('qta_dal') }}" maxlength="10">
+</p>
+<p class="field-line field-100 field-line-left">
+	<label>Quantità al:</label>
+	<input type="text" name="qta_al" class="field valida-digitint valida-int" value="{{ item.get('qta_al') }}" maxlength="10">
+</p>
+<div class="clear"></div>
+<p class="field-line field-100 field-line-left">
+	<label>Valore<span>*</span>:</label>
+	<input type="text" name="valore" class="field valida-digitfloat valida-float valida-required" value="{{ item.euro('valore') }}" maxlength="10">
+</p>
+<p class="field-line field-250 field-line-left">
+	<label>Tipo:</label>
+	<select name="valore_tipo" class="field">
+	{{ mc.listComboOptions([{'id': '0', 'text': 'Prezzo in euro per singolo pezzo'},{'id': '1', 'text': 'Sconto sul valore totale'}], item.get('valore_tipo')) }}
+	</select>
+</p>
+<div class="clear"></div>
+{{ mc.labelCampiObbligatori() }}
+</div>
+{% for l in listLang %}
+<div data-tab="{{ l }}">
+	<p class="field-line field-400">
+		<label>{{ mc.labelLang(l) }} Descrizione<span>*</span>:</label>
+		<input type="text" name="descrizione_{{ l }}" class="field valida-required" value="{{ item.get('descrizione_' ~ l) }}" maxlength="25">
+	</p>	
+</div>
+{% endfor %}
+</div>
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/articolo/pacchetto/ex-edit'), '"reload": "#pacchetto-content"') }}	

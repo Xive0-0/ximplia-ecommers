@@ -1,0 +1,25 @@
+{% import _h.template('_macro.html') as mc %}
+{% set _lblm = _h.labels.get('my') %}
+{% set _lblf = _h.labels.get('form') %}
+
+<div class="breadcrumbs clear">
+	{{ mc.breadcrumbs_home(_h) }}
+	{{ mc.breadcrumbs_separatore() }}
+	<a>{{ _lblm.title_scelta_nazione }}</a>
+</div>
+
+<form id="pagina" class="block-margin">
+	<h2>{{ _lblm.title_scelta_nazione }}</h2>
+	<div class="field-text">
+		<p>{{ _lblm.descr_scelta_nazione }}</p>
+	</div>
+	<ul>
+	{% for item in list %}
+		{% if item.get('cee') %}
+		<li><a href="{{ _h.xurl('account/set-nazione') }}?id={{ item.id }}">{{ item.get('nome') }}</a></li>
+		{% endif %}
+	{% endfor %}
+		<li>&nbsp;</li>
+		<li><a href="{{ _h.xurl('account/rem-nazione') }}">{{ _lblm.altro_scelta_nazione }}</a></li>
+	</ul>
+</form>

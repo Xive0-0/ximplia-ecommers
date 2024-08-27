@@ -1,0 +1,30 @@
+{% set _lbl = _h.labels.get('manager') %}
+	<div id="h-layout-index-bottombar">
+		{% if _h.session.params.user.abilitato_prodotti %}
+		<a href="{{ _h.url('manager/myarea/articolo/index') }}{% if _h.settings.get('default_gestione_articoli_manager', '') == '1' %}?edit=1{% endif %}" class="btn-index">
+			<span class="icon"><img src="/assets/manager/img/ico-articoli-big.png"></span><span class="text">{{ _lbl.prodotti }}</span>
+		</a>
+		{% endif %}
+		{% if _h.session.params.user.accesso >= 3 and _h.session.params.user.abilitato_ordini %}
+			<a href="{{ _h.url('manager/myarea/ordini/index') }}" class="btn-index"><span class="icon"><img src="/assets/manager/img/ico-ordini-big.png"></span><span class="text">{{ _lbl.ordini }}</span></a>
+			{% if _h.config('gestione_preventivi', false) %}
+			<a href="{{ _h.url('manager/myarea/preventivi/index') }}" class="btn-index"><span class="icon"><img src="/assets/manager/img/ico-ordini-big.png"></span><span class="text">Preventivi</span></a>
+			{% endif %}
+		{% endif %}
+		{% if _h.config('blog', true) and _h.session.params.user.accesso >= 2 and _h.session.params.user.accesso != 3 and _h.session.params.user.abilitato_blog %}
+		<a href="{{ _h.url('manager/myarea/blog/index') }}" class="btn-index"><span class="icon"><img src="/assets/manager/img/ico-blog-big.png"></span><span class="text">{{ _lbl.title_blog }}</span></a>			
+		<a href="{{ _h.url('manager/myarea/evento_news/index') }}" class="btn-index"><span class="icon"><img src="/assets/manager/img/ico-blog-big.png"></span><span class="text">{{ _lbl.title_evento_news }}</span></a>			
+		{% endif %}
+		{% include _h.template('manager/myarea/_index_actions.html') %}
+		{% if _h.session.params.user.accesso >= 5 %}
+			{% if _h.config('gestione_cassa', true) and _h.session.params.user.abilitato_cassa %}
+			<a href="javascript:void(0);" class="h-action-window btn-index"  data-action='{"overlay": true, "type": "layer","url": "{{ _h.url('manager/myarea/cassa/index') }}", "event": "cassa"}'><span class="icon"><img src="/assets/manager/img/ico-cassa-big.png"></span><span class="text">Cassa</span></a>
+			{% endif %}
+			{% if _h.session.params.user.abilitato_clienti %}
+			<a href="{{ _h.url('manager/myarea/cliente/index') }}" class="btn-index"><span class="icon"><img src="/assets/manager/img/ico-clienti-big.png"></span><span class="text">{{ _lbl.clienti }}</span></a>
+			{% endif %}
+		{% endif %}
+		{% if _h.session.params.user.accesso >= 5 %}
+		<a href="{{ _h.url('manager/myarea/promemoria/index') }}" class="btn-index"><span class="icon"><img src="/assets/manager/img/ico-promemoria-big.png"></span><span class="text">Promemoria</span></a>
+		{% endif %}
+	</div>

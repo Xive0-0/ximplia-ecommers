@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Livello_2" data-name="Livello 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #202020;
+        stroke-width: 0px;
+      }
+    </style>
+  </defs>
+  <g id="Livello_1-2" data-name="Livello 1">
+    <g>
+      <path class="cls-1" d="M16,4c-1.66,0-3,1.34-3,3s1.34,3,3,3,3-1.34,3-3-1.34-3-3-3ZM16,8c-.55,0-1-.45-1-1s.45-1,1-1,1,.45,1,1-.45,1-1,1Z"/>
+      <path class="cls-1" d="M31,13c.55,0,1-.45,1-1v-4c0-.39-.22-.74-.58-.91L16.42.09c-.27-.12-.58-.12-.85,0L.58,7.09c-.35.16-.58.52-.58.91v4c0,.55.45,1,1,1h2v9h-1c-.55,0-1,.45-1,1v3c-.55,0-1,.45-1,1v4c0,.55.45,1,1,1h30c.55,0,1-.45,1-1v-4c0-.55-.45-1-1-1v-3c0-.55-.45-1-1-1h-1v-9h2ZM3,24h26v2H3v-2ZM5,22v-9h2v9h-2ZM9,22v-9h4v9h-4ZM15,22v-9h2v9h-2ZM19,22v-9h4v9h-4ZM25,22v-9h2v9h-2ZM30,28v2H2v-2h28ZM2,11v-2.36l14-6.53,14,6.53v2.36H2Z"/>
+    </g>
+  </g>
+</svg>

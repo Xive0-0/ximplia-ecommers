@@ -1,0 +1,23 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+<div id="import-content">
+{{ mc.slideBoxHeader(_h, 'Importa prezzi listino') }}
+
+<input type="hidden" name="id" value="{{ item.id }}">
+<p class="field-line">importa listino: <strong>{{ item.get('nome') }}</strong></p>
+
+<div class="field-line field-line-file">
+	<input type="hidden" name="file" class="field-file" value="">
+	<input type="hidden" name="file_nome" class="field-file-name valida-required" value="">
+	<label>File (formato: .csv, .xls, .xlsx, .ods)<span>*</span></label>
+	<div class="field-anteprima"></div>
+	<div class="field-button">
+		<a class="h-bar-button h-bar-button-blu h-action-upload-file" data-action='{"type": ["csv", "xls", "xlsx", "ods"], "url": "{{ _h.url('manager/myarea/upload-temp-file') }}"}'>carica file</a>
+		<a class="h-bar-button h-bar-button-gray h-action-upload-file-reset">Cancella</a>
+	</div>
+	<div class="clear"></div>
+</div>	
+
+{{ mc.labelCampiObbligatori() }}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/listino/ex-import'), '"update": "#import-content"', '', '', 'carica') }}	
+</div>

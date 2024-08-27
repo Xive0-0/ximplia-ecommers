@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<rss xmlns:g="http://base.google.com/ns/1.0" version="2.0">
+	<channel>
+		<title>{{ _h.labels.get('global').google_shopping_title }}</title>
+		<link>{{ _h.webAppUrl }}</link>
+		<language>{{ _h.lang }}</language>
+		<description>{{ _h.labels.get('global').google_shopping_description }}</description>
+		
+	{% set mapAttributo = _h.context('mapAttributo') %}
+	{% for item in list %}
+		<item>
+			<g:id>{{ item.id }}</g:id>
+			<g:title><![CDATA[{{item.get('nome')}}]]></g:title>
+			<g:description><![CDATA[{{ item.getWithClean('descrizione')|escape }} {{ item.getWithClean('scheda_tecnica')|escape }} {{ item.getWithClean('keywords_ricerca')|escape }}]]></g:description>
+			<g:link>{{ _h.webAppUrl }}{{ item.url }}</g:link>
+
+			<g:image_link>{{ _h.webAppUrl }}{{ item.imageUrl(_h.config('template').web.feed_item_image_dim) }}</g:image_link>
+			{% set listImg = item.geto('immagini').get('list') %}
+			{% if listImg|length > 0 %}
+				{% set num = '' %}
+				{% for img in listImg %}
+				<g:additional_image_link>{{ _h.webAppUrl }}{{ item.imageSrc(_h.config('template').web.feed_item_image_dim, img.src) }}</g:additional_image_link>
+				{% set num = loop.index %}
+				{% endfor %}
+			{% endif %}
+			<g:condition>new</g:condition>
+			<g:availability>in stock</g:availability>
+			{% if item.isSconto %}
+			<g:sale_price>{{ item.prezzo('simple', 0) }} EUR</g:sale_price>
+			<g:price>{{ item.prezzoOriginale('simple', 0) }} EUR</g:price>
+			{% else %}
+			<g:price>{{ item.prezzo('simple', 0) }} EUR</g:price>
+			{% endif %}
+			
+			{% if item.get('gint') %}
+			<g:gtin>{{ item.get('gint') }}</g:gtin>
+			{% else %}
+			<g:identifier_exists>no</g:identifier_exists>
+			{% endif %}
+			
+			<g:product_type><![CDATA[{% for cat in item.get('id_categoria')|reverse %}{% if loop.index0 > 0%} &gt; {% endif %}{{ mapAttributo.get(cat).get('nome') }}{% endfor %}]]></g:product_type>
+		</item>
+	{% endfor %}	
+	</channel>
+</rss>

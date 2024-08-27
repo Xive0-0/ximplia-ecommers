@@ -1,0 +1,12 @@
+{
+	"on:": [
+		"manager/myarea/list-lang",
+		"list-nazione",
+		{"name":"manager/myarea/attributo/list-all", "params": {"type": "categoria_ambassador", "list": "listCategoriaAmbassador"}},
+		{"name":"manager/myarea/ambassador/load", "check": "({input}[[id]]!=null)"}
+	],
+	"on:view": {
+		"template": "manager/myarea/ambassador/edit",
+		"extra": false
+	}
+}

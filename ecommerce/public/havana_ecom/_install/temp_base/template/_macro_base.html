@@ -1,0 +1,201 @@
+{% macro _newsletter(_h) %}
+{% if _h.session.isAuth and _h.session.profile == 'guest' %}
+{% else %}
+{% set _lblm = _h.labels.get('my') %}
+{% set _lblf = _h.labels.get('form') %}
+<form class="newsletter-layer">
+	<div class="field-text">
+		{{ _lblm.descr_iscrizione_newsletter_1 }}
+		{% if _h.settings.get('sconto_newsletter_abilitato', '') != '' %}
+			{% if _h.settings.get('sconto_newsletter_codice_riutilizzabile', '') == '' %}
+			{{ _lblm.descr_iscrizione_newsletter_2a }}
+			{% else %}
+			{{ _lblm.descr_iscrizione_newsletter_2b }}
+			{% endif %}
+			<strong>{{ _h.settings.get('sconto_newsletter_sconto') }}{% if _h.settings.get('sconto_newsletter_tipo', '') == '1' or _h.settings.get('sconto_newsletter_tipo', '') == '2' %}%{% else %}{% endif %}</strong>
+		{% endif %}
+	</div>
+	<div class="form-error-message"></div>
+	<div class="field-line">
+		<div class="field">
+			<label>{{ _lblf.field_email }}</label>
+			<input type="text" name="e_mail" class="valida-required valida-email">
+		</div>
+	</div>
+	<a class="button-red button submit-form" href="javascript:void(0)" title="{{ _lblf.btn_iscriviti_newsletter }}" data-action='{"method": "post", "url": "{{ _h.url('account/newsletter') }}"}'><span>{{ _lblf.btn_iscriviti_newsletter }}</span></a>
+	<a href="javascript:void(0)" class="chiudi" title="{{ _lblf.btn_chiudi }}">{{ _lblf.btn_chiudi }}</a>
+</form>
+{% endif %}
+{% endmacro %}
+
+{% macro _item_articolo_carrello_thanks(_h, art, dim, showAzienda, ext) %}
+{% set _lblc = _h.labels.get('checkout') %}
+	{{ _self._item_articolo_carrello_thanks_image(_h, art, dim) }}
+	<div class="item-carrello-details">
+		<div class="item-carrello-details-inner">
+			<strong>{{ art.item.nome }}</strong>
+			{% if art.item.nome_simbolico %}
+				<span class="item-carrello-info-nome-simbolico">{{ art.item.nome_simbolico }}</span>
+			{% endif %}
+			{% if showAzienda and art.item.nome_azienda != '-' %}
+			<div class="item-carrello-info-nome-azienda">{{ art.item.nome_azienda }}</div>
+			{% endif %}
+			<div class="item-carrello-info">
+				{% if _h.config('show_codice_articolo', true) and art.item.codice %}
+				<div class="item-carrello-info-codice"><em>{{ _lblc.codice_small }}:</em> {{ art.item.codice }}</div>
+				{% endif %}
+				{% if (art.item.tipo == 1) %}
+				<div><em>Gift card:</em> {{ _h.util.valuta(art.item.valore_gift, art.item.currency) }}</div>
+				{% endif %}
+				{% set map = _h.context('mapAttributo') %}
+				{% set mapType = _h.context('mapAttributoType') %}
+				{% for attr in art.attr %}
+					{% if attr.type matches '/^_extra_*/' %}
+						{% if attr.pers != null and attr.pers != '' %}
+						<div><em>{{ attr.label }}:</em> {{ attr.pers }}</div>
+						{% endif %}
+					{% elseif attr.id != 0 %}
+						{% set a = map.get(attr.id) %}
+						<div><em>{{ mapType.get(a.get('tipo')).nome }}:</em> {{ a.get('nome') }}</div>
+					{% endif %}
+				{% endfor %}
+{% if not(ext)%}
+			</div>
+		</div>
+	</div>
+{% endif %}
+{% endmacro %}
+
+{% macro _item_articolo_carrello_list(_h, elem, dim, ext) %}
+{{ _self._item_articolo_carrello_image(_h, elem, dim) }}
+<div class="cart-item-details">
+	<strong>{{ elem.item.getPart('nome', _h.config('carrello_nome_max_char', 30)) }}</strong>
+	{% if elem.item.get('nome_simbolico') %}
+	<div class="item-subtitle">{{ elem.item.getPart('nome_simbolico', _h.config('carrello_nome_simbolico_max_char', 30)) }}</div>
+	{% endif %}
+	{% if elem.item.get('codice') %}
+	<div class="item-subtitle-codice">{{ elem.item.get('codice') }}</div>
+	{% endif %}
+	{{ _h.context('numero') }}
+	{% set map = _h.context('mapAttributo') %}
+	{% set mapType = _h.context('mapAttributoType') %}
+	{% for attr in elem.attr %}
+		{% if attr.type matches '/^_extra_*/' %}
+			{% if attr.pers != null and attr.pers != '' %}
+			<div class="attributo"><em>{{ attr.label }}:</em> {{ attr.pers }}</div>
+			{% endif %}
+		{% else %}
+			{% set a = map.get(attr.id) %}
+			{% if a %}
+			<div class="attributo"><em>{{ mapType.get(a.get('tipo')).nome }}:</em> {{ a.get('nome') }}</div>
+			{% endif %}
+		{% endif %}
+	{% endfor %}
+{% if not(ext)%}
+</div>
+{% endif %}
+{% endmacro %}
+
+{% macro _item_articolo_carrello_riepilogo(_h, art, dim, ext) %}
+{{ _self._item_articolo_carrello_image(_h, art, dim) }}
+<div class="item-carrello-details">
+	<strong class="item-buy-title">{{ art.item.getPart('nome', _h.config('carrello_nome_max_char', 30)) }}</strong>
+	{% if art.item.get('nome_simbolico') %}
+	<div class="item-subtitle">{{ art.item.getPart('nome_simbolico', _h.config('carrello_nome_simbolico_max_char', 30)) }}</div>
+	{% endif %}
+	<div>{{ art.item.codice }}</div>
+{% if not(ext)%}
+</div>
+{% endif %}
+{% endmacro %}
+
+{% macro _item_articolo_carrello_image(_h, art, dim) %}
+	<img src="{{ art.item.imageUrl(dim) }}">
+{% endmacro %}
+
+{% macro _item_articolo_carrello_thanks_image(_h, art, dim) %}
+	<img src="{{ _h.webAppUrl }}/images/{{ dim }}/{{ art.item.image }}">
+{% endmacro %}
+
+{% macro _item_articolo_carrello(_h, art, dim, ext) %}
+{% set _lblc = _h.labels.get('checkout') %}
+	<div class="ck-image ck-cell">
+		<a href="{{ _h.xurl('item-articolo') }}?id={{ art.item.id }}">{{ _self._item_articolo_carrello_image(_h, art, dim) }}</a>
+	</div>
+	<div class="ck-articolo ck-cell">
+		<div class="ck-articolo-content">
+			<div class="label-title">{{ art.item.get('nome') }}</div>
+			{% if art.item.tipo < 10000 %}
+				{% if art.item.get('nome_simbolico') %}
+				<div class="label-subtitle">{{ art.item.get('nome_simbolico') }}</div>
+				{% endif %}
+				{% if art.item.get('nome_azienda') and art.item.get('nome_azienda') != '-' %}
+				<div class="label-subtitle-azienda">{{ art.item.get('nome_azienda') }}</div>
+				{% endif %}
+			{% endif %}
+			{% if art.item.isCodiceScontoNonUtilizzabile() %}
+			<div class="label-simple label-simple-nota">{{ _lblc.codice_sconto_non_utilizzabile }}</div>
+			{% endif %}
+			{% if _h.config('show_codice_articolo', true) and art.item.codice and art.item.tipo < 10000 %}
+			<div class="label-simple label-subtitle-codice"><em>{{ _lblc.codice }}:</em>{{ art.item.codice }}</div>
+			{% endif %}
+			{% if (art.item.tipo == 1) %}
+			<div class="label-simple"><em>{{ _lblc.valore_gift_card }}:</em>{{ _h.util.valuta(art.item.valoreGift, art.item.currency) }}</div>
+			{% endif %}
+			{% set map = _h.context('mapAttributo') %}
+			{% set mapType = _h.context('mapAttributoType') %}
+			{% for attr in art.attr %}
+				{% if attr.type matches '/^_extra_*/' %}
+					{% if attr.pers != null and attr.pers != '' %}
+					<div class="label-simple"><em>{{ attr.label }}:</em> {{ attr.pers }}</div>
+					{% endif %}
+				{% elseif attr.id != 0 %}
+					{% set a = map.get(attr.id) %}
+					{% if a %}
+					<div class="label-simple"><em>{{ mapType.get(a.get('tipo')).nome }}:</em> {{ a.get('nome') }}</div>
+					{% endif %}
+				{% endif %}
+			{% endfor %}
+{% if not(ext)%}
+		</div>
+	</div>
+{% endif %}
+{% endmacro %}
+
+
+{% macro _item_articolo_carrello_pagamento(_h, art, dim, ext) %}
+{% set _lblc = _h.labels.get('checkout') %}
+	<div class="ck-image ck-cell">
+		{{ _self._item_articolo_carrello_thanks_image(_h, art, dim) }}
+	</div>
+	<div class="ck-articolo ck-cell">
+		<div class="ck-articolo-content">
+			<div class="label-title">{{ art.item.nome }}</div>
+			{% if art.item.nome_simbolico %}
+			<div class="label-subtitle">{{ art.item.nome_simbolico }}</div>
+			{% endif %}
+			{% if _h.config('show_codice_articolo', true) and art.item.codice %}
+			<div class="label-simple"><em>{{ _lblc.codice }}:</em>{{ art.item.codice }}</div>
+			{% endif %}
+			{% if (art.item.tipo == 1) %}
+			<div class="label-simple"><em>{{ _lblc.valore_gift_card }}:</em>{{ _h.util.valuta(art.item.valoreGift, art.item.currency) }}</div>
+			{% endif %}
+			{% set map = _h.context('mapAttributo') %}
+			{% set mapType = _h.context('mapAttributoType') %}
+			{% for attr in art.attr %}
+				{% if attr.type matches '/^_extra_*/' %}
+					{% if attr.pers != null and attr.pers != '' %}
+					<div class="label-simple"><em>{{ attr.label }}:</em> {{ attr.pers }}</div>
+					{% endif %}
+				{% elseif attr.id != 0 %}
+					{% set a = map.get(attr.id) %}
+					{% if a %}
+					<div class="label-simple"><em>{{ mapType.get(a.get('tipo')).nome }}:</em> {{ a.get('nome') }}</div>
+					{% endif %}
+				{% endif %}
+			{% endfor %}
+{% if not(ext)%}
+		</div>
+	</div>
+{% endif %}
+{% endmacro %}

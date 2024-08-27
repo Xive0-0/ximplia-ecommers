@@ -1,0 +1,36 @@
+{% macro treeMenu(_h, list) %}
+	{% if list and list|length > 0 %}
+	<ul>
+		{% for elem in list %}
+		<li{% if elem.childs and elem.childs|length > 0 %} class="has-childs"{% endif %}>
+			<a{% if elem.childs and elem.childs|length > 0 %}{% else %} href="{{ elem.url }}"{% endif %}{% if elem.img %} class="has-image"{% endif %}>
+				{% if elem.img %}
+				<strong style="background-image: url({{ elem.img }})"></strong>
+				{% endif %}
+				<span class="ellipsis">{{ elem.nome }}</span>
+				{% if elem.childs and elem.childs|length > 0 %}
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+				{% endif%}
+			</a>
+			{{ _self.treeMenu(_h, elem.childs) }}
+		</li>
+		{% endfor %}
+	</ul>
+	{% endif %}
+{% endmacro %}
+
+<div class="appweb-menu">
+{{ _self.treeMenu(_h, my_amc) }}
+</div>
+<script>
+$('.appweb-menu .has-childs > a').on('click', function() {
+	var li = $(this).closest('li');
+	if (li.hasClass('show-submenu')) {
+		li.removeClass('show-submenu');
+		li.find('.show-submenu').removeClass('show-submenu');
+	}
+	else {
+		li.addClass('show-submenu');
+	}
+});
+</script>

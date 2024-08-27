@@ -1,0 +1,153 @@
+h1 {
+	font-size: 50px;
+	text-transform: capitalize;
+}
+
+.riepilogo-header {
+	text-align: center;
+}
+
+.riepilogo {
+	margin-bottom: 50px;
+}
+
+.item-carrello:after,
+.riepilogo:after {
+    clear: both;
+    content: '';
+    display: table;
+    line-height: 0;
+}
+.item-carrello-price-iva {
+	font-size: 12px;
+	font-style: italic;
+}
+.riepilogo .item-faq strong {
+	display: block;
+	margin-bottom: 4px;
+}
+.riepilogo .item-faq {
+	margin-bottom: 20px;
+}
+
+.thanks {
+	margin: 0 100px;
+}
+
+.codice {
+	font-size: 18px;
+}
+
+.small-label {
+	font-size: 12px;
+}
+.line {
+	margin-bottom: 30px;
+}
+.font-big {
+	font-size: 16px;
+	line-height: 22px;
+}
+.rientro {
+	margin-left: 30px;
+}
+
+.col-info {
+	float: left;
+	width: 300px;
+}
+.col-dettaglio {
+	float: left;
+	width: 100%;
+	margin-left: -300px;
+}
+.col-dettaglio-content {
+	margin-left: 350px;
+}
+
+.item-carrello {
+	margin-bottom: 20px;
+	padding-bottom: 10px;
+	border-bottom: 1px dashed #dddcdc;
+}
+.item-carrello img {
+	float: left;
+}
+.item-carrello-articolo {
+	width: 100%;
+	float: left;
+	margin-right: -120px;
+}
+.item-carrello-articolo-inner {
+	margin-right: 120px;
+}
+.item-carrello-details-inner {
+	margin-right: 10px;
+	margin-left: 55px;
+}
+.item-carrello-details {
+	float: left;
+	width: 100%;
+	margin-left: -45px;
+}
+.item-carrello-price {
+	float: left;
+	width: 100px;
+}
+.item-carrello-details strong {
+	display: block;
+}
+.item-carrello-details span {
+	display: block;
+}
+.item-carrello-info {
+	margin-top: 10px;
+	font-size: 12px;
+}
+.item-carrello-info em {
+	display: inline-block;
+	min-width: 35px;
+}
+.item-carrello-price .price-old{
+	font-size: 12px; 
+	display: inline-block;
+}
+.item-carrello-price .price {
+	display: inline-block;
+}
+.item-carrello-price {
+	text-align: right;
+}
+.item-carrello-price-total strong {
+	display: block;
+	margin-top: 5px;
+}
+
+.line-label {
+	line-height: 30px;
+	height: 30px;
+}
+.line-label span{
+	display: inline-block;
+	width: 100px;
+	text-align: right;
+}
+.line-label em{
+	text-align: right;
+	display: inline-block;
+	width: 140px;
+}
+.line-label-total {
+	text-transform: uppercase;
+	font-weight: bold;
+	border-top: 1px solid #dddcdc
+}
+.line-label-total  em {
+	color: #231f20;
+}
+.line-label-total  span {
+	font-size: 16px;
+}
+.riepilogo-carrello .item-carrello-articolo-inner {
+	text-align: right;
+}

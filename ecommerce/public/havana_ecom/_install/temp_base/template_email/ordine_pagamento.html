@@ -1,0 +1,25 @@
+{% set _lbl = _h.labels('email', lang) %}
+{% import _h.template('_macro.html') as mc %}
+
+<div style="{{ mc.margin() }}">
+	<h2 style="{{ mc.style_h2() }}">{{ _lbl.il_tuo_ordine }}</h2>
+	<div style="{{ mc.style_fontBase() }}">{{ _lbl.riferimento_tuo_ordine}}: <strong style="{{ mc.style_fontTitolo() }}">{{ item.get('codice') }}</strong></div>
+</div>	
+
+<div style="{{ mc.margin() }}">
+	<h3 style="{{ mc.style_h3() }}">{{ _lbl.title_problemi_con_pagamento }}</h3>
+	<div style="{{ mc.style_fontBase() }}">{{ _lbl.descr_problemi_con_pagamento }} <a href="{{ link }}"><strong>{{ _lbl.esegui_pagamento }}</strong></a></div>
+</div>
+
+<div style="{{ mc.margin() }}">
+	<table width="100%" cellspacing="0" cellpadding="0" border="0">
+	<tbody>
+	{{ mc.ordine_spedizione(_h, ordine) }}
+	</tbody>
+	</table>
+	<br>
+	<div style="{{ mc.margin() }}">
+	<h2 style="{{ mc.style_h2() }}">{{ _lble.title_dettagli_ordine }}</h2>
+	{{ mc.ordine_articoli(_h, ordine) }}
+	</div>
+</div>

@@ -1,0 +1,61 @@
+{% include _h.template('manager/myarea/ordini/documenti/template_header.html') %}
+{% if data.intestazione %}
+	<br><br>
+	<div style="font-size: 11pt;">Intestazione: <strong>{{ data.intestazione }}</strong></div>
+	<br><br>	
+{% endif %}
+	<table class="fattura" border="0" cellpadding="0" cellspacing="0" style="width: 100%" style="margin-top: 15pt;">
+	<tr class="fattura-intestazione">
+		<td	class="col-codice">
+			<div class="valore">Codice</div>
+		</td>
+		<td	class="col-descrizione">
+			<div class="valore">Descrizione</div>
+		</td>
+		<td	class="col-prezzo">
+			<div class="valore">Prezzo Unitario</div>
+		</td>
+		<td	class="col-quantita">
+			<div class="valore">Qta</div>
+		</td>
+		<td	class="col-subtotale">
+			<div class="valore">Subtotale</div>
+		</td>
+	</tr>
+
+	{% for art in data.items %}
+	<tr class="fattura-linea">
+		<td	class="col-codice"><div class="valore">{{ art.codice }}</div></td>
+		<td	class="col-descrizione"><div class="valore">{{ art.nome }}</div></td>
+		<td class="col-prezzo euro"><div class="valore">
+			{{ art.prezzo }} {{ _h.config('manager_valuta', '&euro;') }}<br>	
+			{% if art.sconto > 0 %}
+			<span class="small">sconto: -{{ art.sconto }}%</span><br>
+			<span class="small prezzo-old">{{ art.prezzo_originale }} {{ _h.config('manager_valuta', '&euro;') }}</span>
+			{% endif %}
+		</div></td>
+		<td class="col-quantita euro"><div class="valore">{{ art.qta }}</div></td>
+		<td class="col-subtotale euro"><div class="valore">{{ art.totale }} {{ _h.config('manager_valuta', '&euro;') }}</div></td>
+	</tr>
+	{% endfor %}
+	
+	<tr class="fattura-linea fattura-linea-subtotale">
+		<td	class="col-riepilogo" colspan="2" rowspan="3">&nbsp;</td>
+		<td	class="col-testo" colspan="2"><div class="valore">
+			Subtotale articoli
+		</div></td>
+		<td class="col-subtotale euro"><div class="valore">{{ data.totale_ordine }} {{ _h.config('manager_valuta', '&euro;') }}</div></td>
+	</tr>
+	<tr class="fattura-linea fattura-linea-subtotale">
+		<td	class="col-testo" colspan="2"><div class="valore">
+			Sconto
+		</div></td>
+		<td class="col-subtotale euro"><div class="valore">-{{ data.sconto }} %</div></td>
+	</tr>
+	<tr class="fattura-linea fattura-linea-subtotale fattura-linea-totale">
+		<td	class="col-testo" colspan="2"><div class="valore">
+			TOTALE
+		</div></td>
+		<td class="col-subtotale euro"><div class="valore">{{ data.totale_ordine_finale }} {{ _h.config('manager_valuta', '&euro;') }}</div></td>
+	</tr>
+	</table>

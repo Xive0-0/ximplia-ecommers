@@ -1,0 +1,17 @@
+{% set _lbl = _h.labels('email', lang) %}
+{% import _h.template('_macro.html') as mc %}
+
+<div style="{{ mc.style_fontBase() }}">Attività da svolgere oggi:</div>
+<div style="{{ mc.style_fontBase() }}">
+<ul>
+	{% for item in list %}
+	<li style="{{ mc.style_fontBase() }}"><strong>{{ item.getTime('data_ora') }}</strong> {{ item.get('descrizione') }}
+		{% if item.get('anteprima') %}
+		<div><small>{{ item.get('anteprima') }}</small></div>
+		{% endif %}
+	</li>
+	{% endfor %}
+</ul>
+</div>
+
+

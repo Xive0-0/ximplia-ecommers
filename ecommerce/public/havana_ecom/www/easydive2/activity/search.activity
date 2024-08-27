@@ -1,0 +1,20 @@
+{
+	"put": {
+		"view": [
+			{"mymetainfo": true}
+		]
+	},
+	"on:": [
+		{"name": "check-collezione-anteprima-search", "check": "({input}[[autoload]]==null)"},
+		{"name": "search", "params": {"autoload": true, "order": "ordine", "order_type": "desc", "attributo_all": false, "tree_collezione": true}, "check": "({view}[[list_categoriaAnteprima]]==null)"},
+		{"name": "list-hreflang", "params": {"tipo": "collezione"}, "check": "({input}[[autoload]]==null)"}
+	],
+	"on:view": [
+		{"template": "search_list", "extra": false, "check": "({input}[[autoload]]!=null)"},
+		{"template": "search", "params": {
+			"js": [
+				"search"
+			]
+		}}
+	]
+}

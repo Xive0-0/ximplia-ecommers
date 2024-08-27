@@ -1,0 +1,46 @@
+{% import _h.template('_macro.html') as mc %}
+
+{% if _h.context.isApp() %}
+			</div>
+			{% include _h.template('_footer_app_mobile.html') %}
+		</div>
+{% else %}
+	{% if hide_header_footer %}
+					</div>
+				</div>
+			</div>
+		</div>
+	{% else %}
+		{% if html_to_pdf %}
+					</div>
+				</div>
+			</div>
+			{% include _h.template('_footer_html_to_pdf.html') %}
+			</div>
+		</div>
+		{% else %}
+			{% import _h.template('_macro.html') as mc %}
+
+			{% include _h.template('_footer.html') %}
+
+			{% if noscript or _h.input('noscript', '') != '' %}
+			{% else %}
+				{% if _h.config('cookie_policy') == 'gdpr22' %}
+					{{ _h.cookieScript('body_footer') }}
+				{% else %}
+					{% if not(thanks_page) %}
+						{{ _h.template_string(_h.settings.get('script_all_pages_not_thankyou')) }}
+					{% endif %}
+					{{ _h.template_string(_h.settings.get('script_all_pages')) }}
+					{{ mc.script(_h, 'snippet_body') }}
+				{% endif %}
+			{% endif %}
+		{% endif %}
+	{% endif %}
+{% endif %}
+
+{% if not(html_to_pdf) %}
+	{{ mc.timeout_carrello(_h) }}
+{% endif %}
+</body>
+</html>

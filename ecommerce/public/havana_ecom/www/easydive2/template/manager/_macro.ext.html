@@ -1,0 +1,81 @@
+{% macro navMenuActionsAdd(_h, selected, is_in_dashboard) %}
+		<div class="h-block-menu">
+			<h2 class="clear">
+				<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+					 viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve">
+				<g id="Bounding_Boxes">
+					<path fill="none" d="M0,0h24v24H0V0z"/>
+				</g>
+				<g id="Outline">
+					<g id="ui_x5F_spec_x5F_header">
+					</g>
+					<g>
+						<path d="M4,6H2v14c0,1.1,0.9,2,2,2h14v-2H4V6z"/>
+						<path d="M20,2H8C6.9,2,6,2.9,6,4v12c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V4C22,2.9,21.1,2,20,2z M20,16H8V4h12V16z"/>
+						<rect x="10" y="9" width="8" height="2"/>
+						<rect x="10" y="12" width="4" height="2"/>
+						<rect x="10" y="6" width="8" height="2"/>
+					</g>
+				</g>
+				</svg>			
+				<span>Fotocamere</span>
+			</h2>
+			<ul>
+				<li {% if selected == 'fotocamera_brand' %}class="selected"{% endif %}><a href="{{ _h.url('manager/myarea/fotocamera/brand/index') }}">Brand</a></li>
+				<li {% if selected == 'fotocamera_modello' %}class="selected"{% endif %}><a href="{{ _h.url('manager/myarea/fotocamera/modello/index') }}">Modello</a></li>
+				<li {% if selected == 'fotocamera_obiettivo' %}class="selected"{% endif %}><a href="{{ _h.url('manager/myarea/fotocamera/obiettivo/index') }}">Obiettivo</a></li>
+			</ul>
+		</div>
+		<div class="h-block-menu">
+			<h2 class="clear">
+				<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+					 viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve">
+				<g id="Bounding_Boxes">
+					<path fill="none" d="M0,0h24v24H0V0z"/>
+				</g>
+				<g id="Outline">
+					<g id="ui_x5F_spec_x5F_header">
+					</g>
+					<g>
+						<path d="M4,6H2v14c0,1.1,0.9,2,2,2h14v-2H4V6z"/>
+						<path d="M20,2H8C6.9,2,6,2.9,6,4v12c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V4C22,2.9,21.1,2,20,2z M20,16H8V4h12V16z"/>
+						<rect x="10" y="9" width="8" height="2"/>
+						<rect x="10" y="12" width="4" height="2"/>
+						<rect x="10" y="6" width="8" height="2"/>
+					</g>
+				</g>
+				</svg>			
+				<span>Ambassador</span>
+			</h2>
+			<ul>
+				<li {% if selected == 'ambassador' %}class="selected"{% endif %}><a href="{{ _h.url('manager/myarea/ambassador/index') }}">Ambassador</a></li>
+				<li {% if selected == 'categoria_ambassador' %}class="selected"{% endif %}><a href="{{ _h.url('manager/myarea/attributo/index-categoria-ambassador') }}">Categoria ambassador</a></li>
+			</ul>
+		</div>		
+		<div class="h-block-menu">
+			<h2 class="clear">
+				<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+					 viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve">
+				<g id="Bounding_Boxes">
+					<path fill="none" d="M0,0h24v24H0V0z"/>
+				</g>
+				<g id="Outline">
+					<g id="ui_x5F_spec_x5F_header">
+					</g>
+					<g>
+						<path d="M4,6H2v14c0,1.1,0.9,2,2,2h14v-2H4V6z"/>
+						<path d="M20,2H8C6.9,2,6,2.9,6,4v12c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V4C22,2.9,21.1,2,20,2z M20,16H8V4h12V16z"/>
+						<rect x="10" y="9" width="8" height="2"/>
+						<rect x="10" y="12" width="4" height="2"/>
+						<rect x="10" y="6" width="8" height="2"/>
+					</g>
+				</g>
+				</svg>			
+				<span>Easydive Point</span>
+			</h2>
+			<ul>
+				<li {% if selected == 'easydivepoint' %}class="selected"{% endif %}><a href="{{ _h.url('manager/myarea/easydivepoint/index') }}">Easydive Point</a></li>
+				<li {% if selected == 'categoria_easydivepoint' %}class="selected"{% endif %}><a href="{{ _h.url('manager/myarea/attributo/index-categoria-easydivepoint') }}">Categoria Easydive Point</a></li>
+			</ul>
+		</div>
+{% endmacro %}

@@ -1,0 +1,14 @@
+{
+	"input": [
+		{"name": "id_articolo", "required": true, "type": "int"},
+		{"name": "lang", "required": true},
+		{"name": "url", "required": true},
+		{"name": "testo", "required": true},
+		{"name": "voto", "required": true},
+		{"name": "data", "required": true},
+		{"name": "nome", "required": true}
+	],
+	"on:": [
+		"manager/myarea/articolo/recensione/ex-edit"
+	]
+}

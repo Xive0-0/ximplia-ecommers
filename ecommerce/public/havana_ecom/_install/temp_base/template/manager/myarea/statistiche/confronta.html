@@ -1,0 +1,12 @@
+<div class="chart-statistica-line chart-statistica-line-1 hrow" style="height: 450px;">
+	<div class="chart-statistica h-chart-wrapper" style="height: 450px;">
+		<div class="h-chart" style="height: 450px;" data-action='{"type": "linea"{% if stat.confronta.format_euro %}, "format_euro": true{% endif %}, "options": {"hAxis" : {"textStyle" : {"fontSize": 6}}, "title": "{{ stat.confronta.title }}", "chartArea": {"left:": "5%", "width": "90%"}, "legend": "bottom"}}'>
+		[
+			['Tipo', '{{ stat.confronta.tipo_1 }}', '{{ stat.confronta.tipo_2 }}']
+			{% for val in stat.confronta.list %}
+				,['{{ val.label }}', {{ val.val_1 }}, {{ val.val_2 }}]
+			{% endfor %}
+		]
+		</div>
+	</div>
+</div>

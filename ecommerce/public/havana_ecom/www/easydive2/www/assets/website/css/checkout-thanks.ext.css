@@ -1,0 +1,55 @@
+.item-carrello-price-total strong {
+	color: #202020;
+	font-size: 12px;
+	text-transform: uppercase;
+}
+
+.item-carrello-price-details .price {
+	color: #202020;
+}
+.codice {
+	color: #ed1c24;
+}
+
+.label {
+	color: #202020;
+}
+.small-label {
+	color: #202020;
+}
+.font-big {
+	font-size: 12px;
+	text-transform: uppercase;
+	color: #202020;
+}
+.col-dettaglio-content {
+	background: #fff;
+}
+.thanks .line {
+	background: #fff;
+	padding: 5px 10px;
+}
+.line-label-total span {
+	font-size: 14px;
+	color: #202020;
+}
+.item-carrello-details span {
+	color: #202020;
+}
+.item-carrello-info em {
+	color: #202020;
+}
+.line-label em{
+	width: 200px;
+	color: #202020;
+}
+.line-label-total em {
+	color: #202020;
+}
+.item-carrello img {
+	max-width: 45px;
+	max-height: 45px;
+}
+.riepilogo .errore-transazione{
+	color: #c02941;
+}

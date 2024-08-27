@@ -1,0 +1,104 @@
+@font-face {
+    font-family: 'Grandis';
+    src: url('../fonts/subset-Grandis-MediumItalic.eot');
+    src: url('../fonts/subset-Grandis-MediumItalic.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/subset-Grandis-MediumItalic.woff2') format('woff2'),
+    url('../fonts/subset-Grandis-MediumItalic.woff') format('woff'),
+    url('../fonts/subset-Grandis-MediumItalic.ttf') format('truetype'),
+    url('../fonts/subset-Grandis-MediumItalic.svg#Grandis-MediumItalic') format('svg');
+    font-weight: 500;
+    font-style: italic;
+    font-display: block;
+}
+
+@font-face {
+    font-family: 'Grandis';
+    src: url('../fonts/subset-Grandis-Light.eot');
+    src: url('../fonts/subset-Grandis-Light.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/subset-Grandis-Light.woff2') format('woff2'),
+    url('../fonts/subset-Grandis-Light.woff') format('woff'),
+    url('../fonts/subset-Grandis-Light.ttf') format('truetype'),
+    url('../fonts/subset-Grandis-Light.svg#Grandis-Light') format('svg');
+    font-weight: 300;
+    font-style: normal;
+    font-display: block;
+}
+
+@font-face {
+    font-family: 'Grandis';
+    src: url('../fonts/subset-Grandis-Medium.eot');
+    src: url('../fonts/subset-Grandis-Medium.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/subset-Grandis-Medium.woff2') format('woff2'),
+    url('../fonts/subset-Grandis-Medium.woff') format('woff'),
+    url('../fonts/subset-Grandis-Medium.ttf') format('truetype'),
+    url('../fonts/subset-Grandis-Medium.svg#Grandis-Medium') format('svg');
+    font-weight: 500;
+    font-style: normal;
+    font-display: block;
+}
+
+@font-face {
+    font-family: 'Grandis';
+    src: url('../fonts/subset-Grandis-LightItalic.eot');
+    src: url('../fonts/subset-Grandis-LightItalic.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/subset-Grandis-LightItalic.woff2') format('woff2'),
+    url('../fonts/subset-Grandis-LightItalic.woff') format('woff'),
+    url('../fonts/subset-Grandis-LightItalic.ttf') format('truetype'),
+    url('../fonts/subset-Grandis-LightItalic.svg#Grandis-LightItalic') format('svg');
+    font-weight: 300;
+    font-style: italic;
+    font-display: block;
+}
+
+@font-face {
+    font-family: 'Grandis Extended';
+    src: url('../fonts/subset-GrandisExtended-MediumItalic.eot');
+    src: url('../fonts/subset-GrandisExtended-MediumItalic.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/subset-GrandisExtended-MediumItalic.woff2') format('woff2'),
+    url('../fonts/subset-GrandisExtended-MediumItalic.woff') format('woff'),
+    url('../fonts/subset-GrandisExtended-MediumItalic.ttf') format('truetype'),
+    url('../fonts/subset-GrandisExtended-MediumItalic.svg#GrandisExtended-MediumItalic') format('svg');
+    font-weight: 500;
+    font-style: italic;
+    font-display: block;
+}
+
+@font-face {
+    font-family: 'Grandis Extended';
+    src: url('../fonts/subset-GrandisExtended-Medium.eot');
+    src: url('../fonts/subset-GrandisExtended-Medium.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/subset-GrandisExtended-Medium.woff2') format('woff2'),
+    url('../fonts/subset-GrandisExtended-Medium.woff') format('woff'),
+    url('../fonts/subset-GrandisExtended-Medium.ttf') format('truetype'),
+    url('../fonts/subset-GrandisExtended-Medium.svg#GrandisExtended-Medium') format('svg');
+    font-weight: 500;
+    font-style: normal;
+    font-display: block;
+}
+
+@font-face {
+    font-family: 'Grandis Extended';
+    src: url('../fonts/subset-GrandisExtended-Bold.eot');
+    src: url('../fonts/subset-GrandisExtended-Bold.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/subset-GrandisExtended-Bold.woff2') format('woff2'),
+    url('../fonts/subset-GrandisExtended-Bold.woff') format('woff'),
+    url('../fonts/subset-GrandisExtended-Bold.ttf') format('truetype'),
+    url('../fonts/subset-GrandisExtended-Bold.svg#GrandisExtended-Bold') format('svg');
+    font-weight: bold;
+    font-style: normal;
+    font-display: block;
+}
+
+@font-face {
+    font-family: 'Grandis Extended';
+    src: url('../fonts/subset-GrandisExtended-BoldItalic.eot');
+    src: url('../fonts/subset-GrandisExtended-BoldItalic.eot?#iefix') format('embedded-opentype'),
+    url('../fonts/subset-GrandisExtended-BoldItalic.woff2') format('woff2'),
+    url('../fonts/subset-GrandisExtended-BoldItalic.woff') format('woff'),
+    url('../fonts/subset-GrandisExtended-BoldItalic.ttf') format('truetype'),
+    url('../fonts/subset-GrandisExtended-BoldItalic.svg#GrandisExtended-BoldItalic') format('svg');
+    font-weight: bold;
+    font-style: italic;
+    font-display: block;
+}
+

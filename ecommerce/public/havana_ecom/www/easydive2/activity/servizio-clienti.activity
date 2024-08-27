@@ -1,0 +1,12 @@
+{
+	"put": {
+		"view": [
+			{"noindex": true}
+		]
+	},
+	"on:": [
+		{"name": "testo", "params": {"codice": "servizio_clienti"}},
+		{"name": "page", "params": {"default": "termini_condizioni"}}
+	],
+	"on:view": "servizio_clienti"
+}

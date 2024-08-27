@@ -1,0 +1,9 @@
+{
+	"input": [
+		{"name": "nome", "required": true}
+	],
+	"on:": [
+		"manager/myarea/easydivepoint/ex-edit",
+		{"name":"manager/myarea/easydivepoint/load", "check": "({input}[[id]]!=null)", "params": {"template": true, "def_lang": true}}
+	]
+}

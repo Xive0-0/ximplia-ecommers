@@ -1,0 +1,29 @@
+{% import _h.template('manager/_macro_items.html') as mci %}
+
+{% if _h.input('file') or list|length > 0 %}
+<table class="h-list h-list-slingle-selection" cellpadding="0" cellspacing="0" border="0">
+<thead>
+<tr class="h-list-header">
+	<th style="width: 20px;">&nbsp;</th>
+	<th style="width: 200px;">Chiave</th>
+	<th>Valore</th>
+</tr>
+</thead>
+<tbody>	
+{% for item in list %}
+	{{ mci.item_label(_h, item) }}
+{% endfor %}
+</tbody>
+</table>
+
+{% else %}
+<table class="h-list h-list-slingle-selection item-autoload-total" cellpadding="0" cellspacing="0" border="0">
+<thead>
+<tr class="h-list-header">
+	<th>
+		Nessuna voce selezionata
+	</th>
+</tr>
+</thead>
+</table>
+{% endif %}

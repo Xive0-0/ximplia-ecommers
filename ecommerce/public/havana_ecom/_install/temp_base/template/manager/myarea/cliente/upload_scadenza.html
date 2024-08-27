@@ -1,0 +1,40 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% set lang = _h.input('lang', _h.config('default_language', 'it')) %}
+
+{{ mc.slideBoxHeader(_h, 'Carica acquisti/scadenze clienti') }}
+<p class="field-line-label">
+	Import degli acquisti e scadenze, sono supportati solo i seguenti formati: <strong>.xls, .xlsx</strong>
+</p>
+<div class="field-line-label" style="margin-top: 10px;">
+	NOTA: <strong>I dati degli articoli vengono sempre aggiunti.</strong><br>
+	Se l'utente non è presente viene inserito.<br>
+	La prima riga del file viene considerata come intestazione, i nomi delle colonne (anche non in ordine) da utilizzare:
+	<ul style="margin-top: 10px; margin-left: 20px;">
+		<li><strong>LINGUA</strong>, lingua di riferimento dell'utente, se non presente viene preso l'italiano</li>
+		<li><strong>TIPOLOGIA</strong>, intra o extra UE</li>
+		<li><strong>E-MAIL</strong>, e-mail dell'utente, campo obbligatorio</li>
+		<li><strong>NOME</strong>, nome dell'utente</li>
+		<li><strong>COGNOME</strong>, cognome dell'utente</li>
+		<li><strong>TELEFONO</strong>, numero di telefono dell'utente</li>
+		<li><strong>CODICE ARTICOLO</strong>, codice articolo (se non presente è obbligatorio specificare l'id)</li>
+		<li><strong>ID ARTICOLO</strong>, id articolo (se non presente è obbligatorio specificare il codice)</li>
+		<li><strong>NUMERO SERIALE</strong>, numero seriale articolo</li>
+		<li><strong>DATA ACQUISTO</strong>, data di acquisto o di ultimo aggiornamento</li>
+	</ul>
+</div>
+
+<fieldset class="fieldset-box">
+	<div class="field-line field-line-file" data-file="">
+		<input type="hidden" name="file_data" class="field-file valida-required" value="">
+		<input type="hidden" name="file_data_name" class="field-file-name">
+		<label>File (.xls, .xlsx) <span>*</span></label>
+		<div class="field-anteprima"></div>
+		<div class="field-button">
+			<a class="h-bar-button h-bar-button-blu h-action-upload-file" data-action='{"url": "{{ _h.url('manager/myarea/upload-temp-file') }}", "fileType": ["xls","xlsx"]}'>carica file</a>
+			<a class="h-bar-button h-bar-button-gray h-action-upload-file-reset">Cancella</a>
+		</div>
+		<div class="clear"></div>
+	</div>
+</fieldset>
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/cliente/ex-upload-scadenza'), '"none": true') }}	

@@ -1,0 +1,355 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% set lang = _h.input('lang', _h.config('default_language', 'it')) %}
+
+{% if item == null %}
+	{% set title = 'Nuovo valore' %}
+{% else %}
+	{% set title = 'Modifica valore' %}
+{% endif %}
+{{ mc.slideBoxHeader(_h, title) }}
+{% if item %}
+	{% set id_tipo = item.get('tipo') %}
+	{% set id_padre = item.get('id_padre') %}
+{% else %}
+	{% set id_tipo = _h.input('id_tipo') %}
+	{% set id_padre = _h.input('id_padre') %}
+{% endif %}
+<input type="hidden" name="id_padre" value="{{ id_padre }}">
+<input type="hidden" name="id_tipo" value="{{ id_tipo }}">
+<input type="hidden" name="lang" value="{{ lang }}">
+<input type="hidden" name="id" value="{{ item.id }}">
+
+<div class="block-tab">
+<div class="block-tab-header">
+	<div data-block-tab="scheda_base">Collezione</div>
+	<div data-block-tab="form">Form</div>
+</div>
+<div data-block-tab-body="scheda_base" class="block-tab-body">
+
+{% if listLang|length > 1 %}
+<div class="h-tab{% if edit_lang %} edit-lang-wrapper{% endif %}">
+<div data-tab-rif="base" class="edit-lang">Base</div>
+<div data-tab-rif="visibilita">Visibilità</div>
+<div data-tab="base" class="edit-lang">
+{% endif %}
+
+{{ mc.contenutiInLingua(lang) }}
+{% if id_tipo != 1100 %}
+<div class="field-line field-line-left field-100">
+	{% set cssClass = ' h-checkbox-checked' %}
+	{% set value = 1 %}
+	{% if item %} 
+		{% if item.abilitato() %} 
+
+		{% else %}
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% endif %}
+	{% endif %}
+	<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="abilitato" value="{{ value }}" /></span> <strong>Abilitato</strong></div>
+</div>
+<div class="field-line field-line-left field-150">
+	{% if item.get('show_home') %} 
+		{% set cssClass = ' h-checkbox-checked' %}
+		{% set value = 1 %}
+	{% else %}
+		{% set cssClass = '' %}
+		{% set value = '' %}
+	{% endif %}
+	<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="show_home" value="{{ value }}" /></span> <strong>Visualizza in home</strong></div>
+</div>
+<div class="clear"></div>
+<div class="field-line field-line-left field-100">
+	<label>Peso/posizione<span>*</span>:</label>
+	<input type="text" name="ordine" class="field valida-required valida-digitnumber" value="{% if item %}{{ item.get('ordine') }}{% else %}0{% endif %}">
+</div>
+<div class="field-line field-line-left field-200">
+	<label>Template visualizzazione:</label>
+	<select name="template" class="field">
+		<option value=""></option>
+	{% for i in listTemplate %}
+		<option value="{{ i.id }}" {% if i.id == item.get('template') %}selected{% endif %}>{{ i.nome }}</option>
+	{% endfor %}	
+	</select> 
+</div>	
+<div class="clear"></div>	
+{% else %}
+<input type="hidden" name="abilitato" value="1">
+<input type="hidden" name="ordine" value="0">
+{% endif %}
+<p class="field-line field-400 edit-lang">
+	<label>{{ mc.labelLang(lang) }} Nome<span>*</span>:</label>
+	<input type="text" name="nome" class="field valida-required" value="{{ item.get('nome') }}" maxlength="100">
+</p>
+{% if _h.config('gestione_azienda_account', false) and (id_padre == null or id_padre == '' or id_padre == 0) %}
+<div class="field-line field-400">
+	<label>Visibile solo per azienda:</label>
+	<select name="id_azienda" class="field">
+		<option value="0">- nessuna -</option>
+	{% for i in listAzienda %}
+		<option value="{{ i.id }}" {% if i.id == item.get('id_azienda') %}selected{% endif %}>{{ i.get('nome') }}</option>
+	{% endfor %}	
+	</select> 
+</div>
+{% endif %}
+{% if id_tipo == 1100 %}
+<p class="field-line field-400">
+	<label>{{ mc.labelLang(lang) }} Tag<span>*</span>:</label>
+	<input type="text" name="tag" class="field valida-required" maxlength="100" value="{{ item.get('tag') }}">
+</p>
+{% else %}
+<p class="field-line field-400 edit-lang">
+	<label>{{ mc.labelLang(lang) }} Sottotitolo:</label>
+	<input type="text" name="sottotitolo" class="field" value="{{ item.get('sottotitolo') }}" maxlength="500">
+</p>
+<p class="field-line field-400 edit-lang">
+	<label>{{ mc.labelLang(lang) }} Descrizione breve:</label>
+	<input type="text" name="descrizione_breve" class="field" value="{{ item.get('descrizione_breve') }}" maxlength="500">
+</p>
+<p class="field-line field-400">
+	<label>{{ mc.labelLang(lang) }} Tag:</label>
+	<input type="text" name="tag" class="field" maxlength="100" value="{{ item.get('tag') }}">
+</p>
+<p class="field-line field-300">
+	<label>Codice:</label>
+	<input type="text" name="codice" class="field" maxlength="100" value="{{ item.get('codice') }}">
+</p>
+<p class="field-line field-400 edit-lang">
+	<label>{{ mc.labelLang(lang) }} Titolo nella pagina:</label>
+	<input type="text" name="titolo_pagina" class="field" value="{{ item.get('titolo_pagina') }}">
+</p>
+<p class="field-line field-400 edit-lang">
+	<label>{{ mc.labelLang(lang) }} Testo in caso di contenitore vuoto (senza prodotti):</label>
+	<input type="text" name="testo_no_prodotti" class="field" value="{{ item.get('testo_no_prodotti') }}">
+</p>
+<div class="field-line field-400 edit-lang">
+	<label>{{ mc.labelLang(lang) }} Descrizione:</label>
+	{{ mc.gestione_file() }}
+	<textarea name="descrizione" class="visual-editor">{{ item.get('descrizione') }}</textarea>
+</div>
+<div style="width: 50%; float: left;">
+{{ mc.upload_immagine(_h, 'Immagine', item.imageAnteprima()) }}
+</div>
+<div style="width: 50%; float: left;">
+{{ mc.upload_immagine(_h, 'Versione mobile', item.imageAnteprima('m'), 'mobile') }}
+</div>
+<div class="clear"></div>
+<p class="field-line field-400">
+	<label>Parametri:</label>
+	<input type="text" name="parametri" class="field" value="{{ item.get('parametri') }}">
+</p>
+<p class="field-line field-300">
+	<label>Codice load:</label>
+	<input type="text" name="codice_load" class="field" maxlength="50" value="{{ item.get('codice_load') }}">
+</p>
+<p class="field-line field-400">
+	<label>Sondaggio:</label>
+	<select name="id_sondaggio" class="field">
+	<option value=""></option>
+	{% for s in listSondaggio %}
+	<option value="{{ s.id }}" {% if item.get('id_sondaggio') == s.id %} selected="true"{% endif %}>{{ s.get('nome') }}</option>
+	{% endfor %}
+	</select>
+</p>
+<div class="field-line field-400 edit-lang">
+	<label>{{ mc.labelLang(lang) }} Descrizione aggiuntiva:</label>
+	{{ mc.gestione_file() }}
+	<textarea name="descrizione_add" class="visual-editor">{{ item.get('descrizione_add') }}</textarea>
+</div>
+
+<p class="field-line field-400">
+	<label>Codice riferimento porting:</label>
+	<input type="text" name="codice_old" class="field" maxlength="100" value="{{ item.get('codice_old') }}">
+</p>
+<div class="field-line field-100 field-line-left">
+	<label>Codice coll. Amazon:</label>
+	<input type="text" name="codice_collegamento_amazon" class="field" maxlength="50" value="{{ item.get('codice_collegamento_amazon') }}">
+</div>
+<div class="field-line field-100 field-line-left">
+	<label>Codice coll. EBay:</label>
+	<input type="text" name="codice_collegamento_ebay" class="field" maxlength="50" value="{{ item.get('codice_collegamento_ebay') }}">
+</div>
+<div class="field-line field-100 field-line-left">
+	<label>Codice coll. Google:</label>
+	<input type="text" name="codice_collegamento_google" class="field" maxlength="50" value="{{ item.get('codice_collegamento_google') }}">
+</div>
+<div class="clear-line"></div>
+{% endif %}
+
+{{ mc.labelCampiObbligatori() }}
+
+{% if listLang|length > 1 %}
+</div>
+<div data-tab="visibilita">
+	{% set nuovo = true %}
+	{% if item %}
+		{% set nuovo = false %}
+	{% endif %}
+	{% set list_lang = item.get('visibilita_lang', '')|split(',') %}
+	{% for l in listLang %}
+		{% set valore = '' %}
+		{% if nuovo or item.get('visibilita_lang', '') == '-' or l in list_lang %}
+			{% set valore = l %}
+		{% endif %}
+		{{ mc.checkbox(valore, l, 'visibilita_lang', 'Visibilità ' ~ l|upper, l) }}
+	{% endfor %}
+</div>
+</div>
+{% endif %}
+</div>
+<div data-block-tab-body="form" class="block-tab-body">
+	<div class="h-tab">
+		<div data-tab-rif="form">Form</div>
+		<div data-tab-rif="email">E-Mail</div>
+
+		<div data-tab="form">
+			{{ mc.contenutiInLingua(lang) }}
+			<div class="field-line field-400">
+				{% if item.get('form') %} 
+					{% set cssClass = ' h-checkbox-checked' %}
+					{% set value = 1 %}
+				{% else %}
+					{% set cssClass = '' %}
+					{% set value = '' %}
+				{% endif %}
+				<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="form" value="{{ value }}" /></span> <strong>Visualizza form</strong></div>
+			</div>
+
+			<p class="field-line field-400">
+				<label>{{ mc.labelLang(lang) }} Titolo box form:</label>
+				<input type="text" name="form_titolo" class="field" value="{{ item.get('form_titolo') }}" maxlength="200">
+			</p>
+			<p class="field-line field-400 field-line-textarea">
+				<label>{{ mc.labelLang(lang) }} Descrizione box form:</label>
+				<textarea name="form_descrizione" class="field">{{ item.get('form_descrizione') }}</textarea>
+			</p>
+			<p class="field-line field-400">
+				<label>{{ mc.labelLang(lang) }} Testo bottone invio:</label>
+				<input type="text" name="form_label_pulsante" class="field" value="{{ item.get('form_label_pulsante') }}" maxlength="50">
+			</p>
+			<p class="field-line field-200">
+				<label>{{ mc.labelLang(lang) }} ID lista klaviyo:</label>
+				<input type="text" name="form_lista_id_klaviyo" class="field" value="{{ item.get('form_lista_id_klaviyo') }}" maxlength="20">
+			</p>
+			<p class="field-line field-400">
+				<label>{{ mc.labelLang(lang) }} Titolo box form ringraziamento:</label>
+				<input type="text" name="form_titolo_conferma" class="field" value="{{ item.get('form_titolo_conferma') }}" maxlength="200">
+			</p>
+			<p class="field-line field-400 field-line-textarea">
+				<label>{{ mc.labelLang(lang) }} Descrizione box form ringraziamento:</label>
+				<textarea name="form_descrizione_conferma" class="field">{{ item.get('form_descrizione_conferma') }}</textarea>
+			</p>
+			<br>
+			<p class="field-line-text">
+			<strong>Campi form presenti:</strong>
+			</p>
+			
+			<div>
+				<div class="h-nav-button-wrapper">
+					<a href="javascript:void(0);" class="h-nav-button h-nav-button-click h-action-alttext h-action-add-extra-wrapper" data-alttext="nuovo parametro extra" data-action='{"params": {"content": "#elenco_parametri_extra_form"}}'>
+						<img src="/assets/manager/havana-js/img/icon/ico-new.svg" align="top" />
+					</a>
+				</div>	
+				<strong class="h-nav-button-wrapper" style="line-height: 40px;">Aggiungi parametro</strong>
+			</div>
+			<div class="clear"></div>
+			<div id="elenco_parametri_extra_form" class="h-table-parametri-extra-wrapper">
+				<textarea class="h-table-parametri-extra-template">
+					<tr data-key="%id%" class="new-extra-param">
+						<td class="chiave"><div class="field-line"><label></label><input type="text" class="field valida-digitalphanum valida-required" name="extra_new_chiave_%id%"></div></td>
+						<td class="tipo"><div class="field-line"><label></label><select class="field" name="extra_new_tipo_%id%">
+						<option value="stringa">Stringa</option>
+						<option value="e-mail">E-Mail</option>
+						<option value="data">Data</option>
+						<option value="testo">Testo</option>
+						<option value="lista">Lista</option>
+						<option value="newsletter">Newsletter</option>
+						<option value="checkbox">Checkbox</option>
+						<option value="file">File</option>
+						</select></div></td>
+						<td class="label"><div class="field-line"><label></label><input type="text" class="field valida-required" name="extra_new_label_%id%"></div></td>
+						<td class="valore"><div class="field-line"><input type="text" class="field" name="extra_new_valore_%id%"></div></td>
+						<td class="obbligatorio">
+						{{ mc.checkbox('', 1, 'extra_new_required_%id%', '') }}
+						</td>
+						<td class="azione">
+							<div class="h-nav-button-wrapper">
+								<a href="javascript:void(0);" class="h-nav-button h-nav-button-click h-action-rem-extra-wrapper">
+									<img src="/assets/manager/havana-js/img/icon/ico-delete.svg" align="top" />
+								</a>
+							</div>
+						</td>
+					</tr>
+				</textarea>
+				<input type="hidden" name="parametri_extra" value="{{ item.parametriExtra('form_').keys }}">
+				<input type="hidden" name="parametri_extra_new" value="">
+				<table class="h-table-parametri-extra form" border="0" cellspacing="0" cellpadding="0">
+					<thead>
+					<tr>
+						<th class="chiave">Chiave <span class="required">*</span></th>
+						<th class="tipo">Tipo <span class="required">*</span></th>
+						<th class="label">Label {{ mc.labelLang(lang) }} <span class="required">*</span></th>
+						<th class="valore">Valore {{ mc.labelLang(lang) }}</th>
+						<th class="obbligatorio">Obbl.</th>
+						<th class="azione"></th>
+					</tr>
+					</thead>
+					<tbody>
+					{% for k in item.parametriExtra('form_').list %}
+					<tr data-key="{{k}}">
+						<td class="chiave"><div class="chiave-details">{{k}}</div></td>
+						<td class="tipo"><div class="field-line"><label></label><select class="field" name="extra_tipo_{{k}}">
+						<option value="stringa"{% if item.get('extra_tipo_' ~ k) == 'stringa' %} selected{% endif %}>Stringa</option>
+						<option value="e-mail"{% if item.get('extra_tipo_' ~ k) == 'e-mail' %} selected{% endif %}>E-Mail</option>
+						<option value="data"{% if item.get('extra_tipo_' ~ k) == 'data' %} selected{% endif %}>Data</option>
+						<option value="testo"{% if item.get('extra_tipo_' ~ k) == 'testo' %} selected{% endif %}>Testo</option>
+						<option value="lista"{% if item.get('extra_tipo_' ~ k) == 'lista' %} selected{% endif %}>Lista</option>
+						<option value="newsletter"{% if item.get('extra_tipo_' ~ k) == 'newsletter' %} selected{% endif %}>Newsletter</option>
+						<option value="checkbox"{% if item.get('extra_tipo_' ~ k) == 'checkbox' %} selected{% endif %}>Checkbox</option>
+						<option value="file"{% if item.get('extra_tipo_' ~ k) == 'file' %} selected{% endif %}>File</option>
+						</select></div></td>
+						<td class="label"><div class="field-line"><label></label><input type="text" class="field valida-required" name="extra_label_{{k}}" value="{{ item.get('extra_label_' ~ k) }}"></div></td>
+						<td class="valore"><div class="field-line"><input type="text" class="field" name="extra_valore_{{k}}" value="{{ item.get('extra_valore_' ~ k) }}"></div></td>
+						<td class="obbligatorio">
+						{{ mc.checkbox(item.get('extra_required_' ~ k), 1, 'extra_required_' ~ k, '') }}
+						</td>
+						<td class="azione">
+							<div class="h-nav-button-wrapper">
+								<a href="javascript:void(0);" class="h-nav-button h-nav-button-click h-action-rem-extra-wrapper">
+									<img src="/assets/manager/havana-js/img/icon/ico-delete.svg" align="top" />
+								</a>
+							</div>
+						</td>
+					</tr>
+					{% endfor %}
+					</tbody>
+				</table>
+				<br>
+				<em>In caso di tipo "lista", nel campo "valore" inserire le opzioni separate da una virgola</em>
+				<br><br>
+				<em>Utilizzare la chiave "email" per il campo che sarà considerato come indirizzo di posta elettronica dell'utente a cui inviare l'e-mail</em>
+			</div>
+		</div>
+		<div data-tab="email">
+			{{ mc.contenutiInLingua(lang) }}
+			<p class="field-line field-400">
+				<label>{{ mc.labelLang(lang) }} Oggetto:</label>
+				<input type="text" name="e_mail_oggetto" class="field" value="{{ item.get('form_titolo') }}">
+			</p>
+			<div class="field-line field-400">
+				<label>{{ mc.labelLang(lang) }} Testo:</label>
+				<textarea name="e_mail_testo" class="visual-editor">{{ item.get('e_mail_testo') }}</textarea>
+			</div>
+			<div style="margin-top: 5px;"><em>è possibile inserire all'interno del testo della e-mail i riferimenti ai campi compilati dall'utente secondo la seguente logica: nome del campo racchiuso tra doppie parentesi graffe. Ad esempio {{ '{{' }}nome_campo{{ '}}' }}</em></div>
+			<div style="margin-top: 10px"><em>Campi disponibili: </em> 
+			{% for key in list_key %}
+			{{ key }}
+			{% endfor %}
+			</div>
+		</div>
+	</div>
+</div>
+
+</div>
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/attributo/ex-edit')) }}	

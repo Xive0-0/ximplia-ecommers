@@ -1,0 +1,18 @@
+{% set _lblc = _h.labels.get('checkout') %}
+<div id="cart-details" data-number-items="{{ cart.number }}">
+	<div class="cart-toolbar-total">
+		<div class="cart-toolbar-total-inner">
+				<span class="total"><em>Totale provvisorio:</em> 
+				<span class="cart-total-price">{{ _h.util.euro(cart.total) }} &euro;</span>
+			</span>
+		</div>
+	</div>	
+	
+	<div class="cart-items-list">
+	{{ cart.details }}
+	</div>
+	
+	<div class="cart-toolbar">
+		<a href="{{ _h.url('cart/checkout/index') }}" class="btn-vai-alla-cassa">Procedi all'ordine</a>
+	</div>
+</div>

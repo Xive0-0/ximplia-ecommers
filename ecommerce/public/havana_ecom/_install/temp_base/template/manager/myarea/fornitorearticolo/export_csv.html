@@ -1,0 +1,3 @@
+HID;CODICE;CODICE FORNITORE;FORNITORE;NOME;QTA DA ORDINARE;
+{% for item in result.list %}{% if mapCodiceFornitore.get(item.id ~ '_' ~ item.get('id_fornitore_articolo')) %}{{ item.set('codice_fornitore', mapCodiceFornitore.get(item.id ~ '_' ~ item.get('id_fornitore_articolo'))) }}{% endif %}{{ item.id }};{{ item.codice }};{{ item.getExportCsv('codice_fornitore','') }};{{ item.getExportCsv('nome','') }};{{ item.getExportCsv('fornitore_nome','') }};{{ item.get('fornitore_in_arrivo') }};
+{% endfor %}

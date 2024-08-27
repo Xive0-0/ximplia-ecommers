@@ -1,0 +1,37 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% set lang = _h.input('lang', _h.config('default_language', 'it')) %}
+
+{{ mc.slideBoxHeader(_h, 'Importa extra valori') }}
+<p class="field-line field-200">
+	<label>Lingua<span>*</span>:</label>
+	<select name="lang" class="field valida-required">
+	{% for l in listLang %}
+	<option value="{{ l }}">{{ l|upper }}</option>
+	{% endfor %}
+	</select>
+</p>
+<p class="field-line field-200 edit-lang">
+	<label>I valori partono dalla colonna numero:</label>
+	<input type="text" name="numero_colonna_start" class="field valida-digitint valida-required" value="">
+</p>
+<div class="field-line-label" style="margin-top: 10px;">
+	La prima colonna deve contenere gli ID degli articoli<br>
+	La prima riga del file viene considerata come chiave di riferimento del campo<br>
+	La seconda riga del file viene considerata come labels del campo
+</div>
+
+<fieldset class="fieldset-box">
+	<div class="field-line field-line-file" data-file="">
+		<input type="hidden" name="file_data" class="field-file valida-required" value="">
+		<input type="hidden" name="file_data_name" class="field-file-name">
+		<label>File (.xls, .xlsx) <span>*</span></label>
+		<div class="field-anteprima"></div>
+		<div class="field-button">
+			<a class="h-bar-button h-bar-button-blu h-action-upload-file" data-action='{"url": "{{ _h.url('manager/myarea/upload-temp-file') }}", "fileType": ["xls","xlsx"]}'>carica file</a>
+			<a class="h-bar-button h-bar-button-gray h-action-upload-file-reset">Cancella</a>
+		</div>
+		<div class="clear"></div>
+	</div>
+</fieldset>
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/articolo/ex-extra-from-upload'), '"none": true') }}	

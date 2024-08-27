@@ -1,0 +1,36 @@
+{% set _lbl = _h.labels.get('step_acquisto') %}
+<div class="step" data-step="">
+	<h3>{{ _lbl.step_bracci_cellulare_titolo }}</h3>
+	<p class="evidenzia">{{ _lbl.step_bracci_cellulare_descrizione }}</p>
+
+{% macro item(_h, _lbl, item) %}
+	{% if item %}
+	<div class="step-item-accessorio">
+		<div class="clear">
+			<div class="step-item-accessorio-img">
+				<img src="{{ item.imageUrl('300x300') }}">
+			</div>
+			<div class="step-item-accessorio-nome">
+			<div class="step-item-accessorio-nome-inner">
+				<div class="step-item-accessorio-descrizione">{{ item.get('nome') }}</div>
+				{% if item.get('step_acquisto_testo') %}
+				<div class="step-item-accessorio-descrizione-dettaglio">{{ item.get('step_acquisto_testo') }}</div>
+				{% endif %}
+				<div class="step-item-accessorio-prezzo">{{ item.prezzo('e', false) }}</div>
+				<button class="add-item" data-callback="param_articolo" data-id="{{ item.id }}" data-url="seleziona-luci" data-nome="{{ item.get('nome') }}" data-img="{{ item.imageUrl('300x300') }}" data-prezzo="{{ item.prezzo('', false) }}" data-prezzo-euro="{{ item.prezzo('e', false) }}">{{ _lbl.btn_aggiungi }}</button>
+			</div>
+			</div>
+		</div>
+	</div>
+	{% endif %}
+{% endmacro %}
+	
+	{{ _self.item(_h, _lbl, item1) }}
+	{{ _self.item(_h, _lbl, item2) }}
+	
+	<button class="next light" data-url="seleziona-luci">{{ _lbl.btn_procedi_senza }}</button>
+	<div class="clear step-bottombar">
+		<a class="prev">&lt; {{  _lbl.btn_torna_indietro }}</a>
+		<a class="item-acquista-step-close">{{ _lbl.btn_annulla }}</a>
+	</div>
+</div>

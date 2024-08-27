@@ -1,0 +1,59 @@
+.redactor-styles p {
+	margin: 0;
+	padding: 0;
+	margin-bottom: 10px;
+}
+
+.redactor-styles ul {
+	list-style-type: circle;
+}
+.redactor-styles ol {
+	list-style-type: decimal;
+}
+.redactor-styles ol,
+.redactor-styles ul {
+	margin-left: 20px;
+	margin-bottom: 20px;
+}
+.redactor-styles blockquote {
+	margin-left: 20px;
+}
+.redactor-styles a {
+	text-decoration: underline;
+}
+
+.redactor-styles, 
+.redactor-styles div, 
+.redactor-styles p, 
+.redactor-styles ul, 
+.redactor-styles ol, 
+.redactor-styles table, 
+.redactor-styles dl, 
+.redactor-styles blockquote, 
+.redactor-styles pre {
+	line-height: normal;
+	font-size: 14px;
+}
+
+.redactor-air a.re-button-icon, 
+.redactor-toolbar a.re-button-icon {
+	padding: 8px 12px;
+	font-size: 14px;
+	box-shadow: none;
+	background: transparent;
+	margin: 0;
+	border-radius: 0;
+}
+.redactor-box.redactor-styles-on .redactor-toolbar {
+	padding: 0;
+	background: #efefef;
+}
+.redactor-toolbar a.redactor-button-active,
+.redactor-toolbar a.re-button-icon:hover {
+	background: #1f78d8;
+	color: #fff;
+}
+.redactor-toolbar a.redactor-button-disabled {
+	color: #666;
+	color: #666;
+}

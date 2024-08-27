@@ -1,0 +1,23 @@
+{% set _lblm = _h.labels.get('my') %}
+{% set _lblg = _h.labels.get('global') %}
+	<h2>{{ _lblm.title_nuovo_utente }}</h2>
+	<p>{{ _lblm.descr_un_mondo_di_servizi }}:</p>
+	<ul>
+		{% if _h.settings.get('sconto_registrazione_abilitato', '') != '' %}
+			<li><strong>{{ _h.settings.get('sconto_registrazione_sconto') }}{% if _h.settings.get('sconto_registrazione_tipo', '') == '1' or _h.settings.get('sconto_registrazione_tipo', '') == '2' %}%{% else %}{% endif %}</strong>
+			{% if _h.settings.get('sconto_registrazione_codice_riutilizzabile', '') == '' %}
+			{{ _lblm.servizi_my_area_0a }}
+			{% else %}
+			{{ _lblm.servizi_my_area_0b }}
+			{% endif %}
+			{% if _h.settings.get('sconto_registrazione_acquisto_minimo', '') != '' %}
+				<br><em>{{ _lblm.servizi_my_area_0c }} {{ _h.settings.get('sconto_registrazione_acquisto_minimo', '') }}</em>
+			{% endif %}</li>
+		{% endif %}
+		<li>{{ _lblm.servizi_my_area_1 }}</li>
+		<li>{{ _lblm.servizi_my_area_2 }}</li>
+		<li>{{ _lblm.servizi_my_area_3 }} {{ _h.settings.get('staff_indirizzo') }} </li>
+		<li>{{ _lblm.servizi_my_area_4 }}</li>
+		<li>{{ _lblm.servizi_my_area_5 }}</li>
+	</ul>
+	<p>{{ _lblg.descr_help }} <a href="{{ _h.xurl('servizio-clienti') }}" title="{{ _lblg.alt_servizio_clienti }}">{{ _lblg.btn_servizio_clienti }}</a>.</p>

@@ -1,0 +1,179 @@
+{% import _h.template('manager/_macro.html') as mc %}
+{% set _lbl = _h.labels.get('manager') %}
+{% set lang = _h.input('lang', _h.config('default_language', 'it')) %}
+
+{% if item == null %}
+	{% set ordine = 0 %}
+{% else %}
+	{% set ordine = item.get('ordine', 0) %}
+{% endif %}
+{{ mc.slideBoxHeader(_h, _lbl.articoli_blog) }}
+<input type="hidden" name="lang" value="{{ lang }}">
+<input type="hidden" name="id" value="{{ item.id }}">
+
+<div class="block-tab">
+<div class="block-tab-header">
+	<div data-block-tab="scheda_base">Articolo blog</div>
+	<div data-block-tab="relazioni">Relazioni</div>
+</div>
+<div data-block-tab-body="scheda_base" class="block-tab-body">
+
+<div class="h-tab{% if edit_lang %} edit-lang-wrapper{% endif %}">
+
+<div data-tab-rif="base" class="edit-lang">Articolo</div>
+<div data-tab-rif="categorie">Categoria</div>
+<div data-tab-rif="redattore">Redattore</div>
+{% if listLang|length > 1 %}
+<div data-tab-rif="visibilita">Visibilità</div>
+{% endif %}
+{% include _h.template('manager/myarea/blog/_edit_tabs.html') %}
+<div data-tab="base" class="edit-lang">
+{{ mc.contenutiInLingua(lang) }}
+<div class="field-line field-150 field-line-left">
+	{% set cssClass = ' h-checkbox-checked' %}
+	{% set value = 1 %}
+	{% if item %} 
+		{% if item.abilitato() %} 
+
+		{% else %}
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% endif %}
+	{% endif %}
+	<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="abilitato" value="{{ value }}" /></span> <strong>Abilitato</strong></div>
+</div>
+<div class="field-line field-150 field-line-left">
+	{% if item.get('show_home') %} 
+		{% set cssClass = ' h-checkbox-checked' %}
+		{% set value = 1 %}
+	{% else %}
+		{% set cssClass = '' %}
+		{% set value = '' %}
+	{% endif %}
+	<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="show_home" value="{{ value }}" /></span> <strong>Visualizza in home</strong></div>
+</div>
+<div class="field-line field-150 field-line-left">
+	{% if item.get('in_evidenza') %} 
+		{% set cssClass = ' h-checkbox-checked' %}
+		{% set value = 1 %}
+	{% else %}
+		{% set cssClass = '' %}
+		{% set value = '' %}
+	{% endif %}
+	<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="in_evidenza" value="{{ value }}" /></span> <strong>In evidenza</strong></div>
+</div>
+<div class="clear"></div>
+<div class="field-line field-150">
+	<label>Peso/posizione<span>*</span>:</label>
+	<input type="text" name="ordine" class="field valida-required valida-digitnumber" value="{{ ordine }}">
+</div>
+<p class="field-line field-400 edit-lang">
+	<label>{{ mc.labelLang(lang) }} Titolo<span>*</span>:</label>
+	<input type="text" name="titolo" class="field valida-required" value="{{ item.get('titolo') }}" maxlength="250">
+</p>
+<p class="field-line field-400 edit-lang">
+	<label>{{ mc.labelLang(lang) }} Sottotitolo:</label>
+	<input type="text" name="sottotitolo" class="field" value="{{ item.get('sottotitolo') }}" maxlength="250">
+</p>
+<div style="width: 50%; float: left;">
+{{ mc.upload_immagine(_h, 'Immagine', item.imageAnteprima()) }}
+</div>
+<div style="width: 50%; float: left;">
+{{ mc.upload_immagine(_h, 'Versione mobile', item.imageAnteprima('m'), 'mobile') }}
+</div>
+<div class="clear"></div>
+{{ mc.upload_immagine(_h, 'Banner', item.imageAnteprima('b'), 'banner') }}
+<div class="clear"></div>
+<div class="field-line field-400 edit-lang">
+	<label>{{ mc.labelLang(lang) }} Testo:</label>
+	{{ mc.gestione_file() }}
+	<textarea name="testo" class="visual-editor">{{ item.get('testo') }}</textarea>
+</div>
+<p class="field-line field-400 edit-lang">
+	<label>{{ mc.labelLang(lang) }} Anteprima (breve descrizione):</label>
+	<textarea name="descrizione_breve" class="field" maxlength="500">{{ item.get('descrizione_breve') }}</textarea>
+</p>
+{{ mc.upload_file(_h, mc.labelLang(lang) ~ ' File allegato', item, 'allegato') }}
+
+<p class="field-line field-400 edit-lang">
+	<label>{{ mc.labelLang(lang) }} Tags:</label>
+	<input type="text" name="tag" class="field" value="{{ item.get('tag') }}">
+</p>
+<p class="field-line field-400 edit-lang">
+	<label>{{ mc.labelLang(lang) }} URL embed video youtube o codice video:</label>
+	<input type="text" name="url_video" class="field valida-urlyoutube" value="{{ item.get('url_video') }}">
+</p>
+<fieldset class="fieldset-box">
+<label>Bottone inserito alla fine dell'articolo:</label>
+<p class="field-line field-400 edit-lang">
+	<label>{{ mc.labelLang(lang) }} Testo bottone:</label>
+	<input type="text" name="bottone_testo" class="field" value="{{ item.get('bottone_testo') }}" maxlength="100">
+</p>
+<p class="field-line field-400 edit-lang">
+	<label>{{ mc.labelLang(lang) }} URL bottone:</label>
+	<input type="text" name="bottone_url" class="field valida-url" value="{{ item.get('bottone_url') }}">
+</p>
+</fieldset>
+<p class="field-line field-300">
+	<label>Codice load:</label>
+	<input type="text" name="codice_load" class="field" maxlength="50" value="{{ item.get('codice_load') }}">
+</p>
+{{ mc.labelCampiObbligatori() }}
+</div>
+
+<div data-tab="categorie">
+{{ mc.dynamicOnlyOneTreeSelect(_h, 'Categoria', listCategoriaBlog, item, 'id_categoria', 'categoria_blog') }}
+</div>
+<div data-tab="redattore">
+{{ mc.dynamicMultipleSelect(_h, 'Redattore', listRedattore, item, 'id_redattore') }}
+</div>
+{% if listLang|length > 1 %}
+<div data-tab="visibilita">
+	{% set nuovo = true %}
+	{% if item %}
+		{% set nuovo = false %}
+	{% endif %}
+	{% set list_lang = item.get('visibilita_lang', '')|split(',') %}
+	{% for l in listLang %}
+		{% set valore = '' %}
+		{% if nuovo or item.get('visibilita_lang', '') == '-' or l in list_lang %}
+			{% set valore = l %}
+		{% endif %}
+		{{ mc.checkbox(valore, l, 'visibilita_lang', 'Visibilità ' ~ l|upper, l) }}
+	{% endfor %}
+</div>
+{% endif %}
+</div>
+
+
+</div>
+
+<div data-block-tab-body="relazioni" class="block-tab-body">
+
+	<div class="h-tab">
+		<div data-tab-rif="articoli">Articoli</div>
+		<div data-tab-rif="categoria">Categoria</div>
+		<div data-tab-rif="brand">Brand</div>
+
+		<div data-tab="articoli">
+			<p class="field-line field-400">
+				<label>Cerca e aggiungi articolo:</label>
+				<input type="hidden" name="relazione_id" value="">
+				<input type="text" name="relazione_nome" class="field autocomplete" value="" data-action='{"url": "{{ _h.url('manager/myarea/articolo/list-autocomplete') }}", "add_item_to": "#elenco_articoli", "add_item_id": "$id_articolo", "load_item_id": {% if item %}[{{ item.get('$id_articolo', [])|join(',') }}]{% else %}null{% endif %}}'>
+			</p>
+			<br><br>
+			Articoli selezionati:
+			<div id="elenco_articoli">
+			</div>
+		</div>
+		<div data-tab="categoria">
+		{{ mc.dynamicOnlyOneMultipleTreeSelect(_h, 'Categoria', listCategoria, item, '$id_categoria') }}
+		</div>
+		<div data-tab="brand">
+		{{ mc.dynamicMultipleSelect(_h, 'Azienda/Brand', listAzienda, item, '$id_azienda') }}
+		</div>	
+	</div>	
+</div>
+
+</div>
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/blog/ex-edit')) }}	

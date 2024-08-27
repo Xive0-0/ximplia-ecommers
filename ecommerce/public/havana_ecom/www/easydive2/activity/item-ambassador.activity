@@ -1,0 +1,15 @@
+{
+	"put": {
+		"view": [
+			{"mymetainfo": true}
+		]
+	},
+	"on:": [
+		"item-ambassador",
+		"list-prodotti-utilizzati-ambassador",
+		{"name": "list-nazione", "params": {"list": "listNazione", "map": "mapNazione"}},
+		{"name": "item-tipologia-articolo", "params": {"item": "collezione", "type": "categoria_ambassador", "first_level": false}},
+		{"name": "list-hreflang", "params": {"tipo": "ed_ambassador"}}
+	],
+	"on:view": "item_ambassador"
+}

@@ -1,0 +1,5 @@
+{
+	"on:": [
+		{"name": "manager/myarea/regen-image", "params": {"tipo_entita": 6, "image_dim": "ed_easydivepoint_image_dim"}}
+	]
+}

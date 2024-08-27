@@ -1,0 +1,137 @@
+<!--card banner  (stive)-->
+{% import _h.template('_macro.html') as mc %} {% set _lblw =
+    _h.labels.get('website') %}
+
+<div class="index-background">
+    {{ mc.banner(0, listBanner['1'], '2000x715', 'top', null, '1100x1100') }}
+    {% if listSelezioni|length > 0 %}
+        {% for elem in listSelezioni %}
+            {% if elem.list|length > 0 and elem.cat.get('codice') == 'custodie' %}
+                <div class="anteprima-home web my-2 my-xl-5">
+                    <div class="container1_titoli items-list clear my-2 my-xl-3 d-inline-block">
+                        <p class="txt-blue mb-0 mb-md-auto" style="font-size: 17px;">{{ elem.cat.get('nome') }}</p>
+                        <div class="row mx-auto w-100 align-items-end">
+                            <div class="col-md-9 col-xl-10 p-0">
+                                <h2 class="mt-3 mb-3 mb-md-0 col-md-9 col-xl-8">{{ elem.cat.get('sottotitolo') }}</h2>
+                            </div>
+                            <div class="col-md-2 d-none d-md-flex p-0 flex-column justify-content-end align-items-center">
+                                <a href="{{ elem.cat.url }}" class="btn btn-black">
+                                    <label class="btn-text">{{ _lblw.approfondisci }}</label>
+                                    <span class="btn-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 16">
+                                            <path class="cls-1"
+                                                  d="M11.29.29c-.39.39-.39,1.02,0,1.41l5.29,5.29H1c-.55,0-1,.45-1,1,0,.55.45,1,1,1h15.59s-5.29,5.29-5.29,5.29c-.39.39-.39,1.02,0,1.41.39.39,1.02.39,1.41,0l7-7s.01-.02.02-.03c.08-.09.15-.18.2-.29,0,0,0,0,0,0,.05-.12.07-.24.07-.37,0,0,0,0,0-.01h0c0-.13-.03-.26-.07-.38-.05-.12-.12-.23-.22-.33L12.71.29c-.39-.39-1.02-.39-1.41,0Z"/>
+                                        </svg>
+                                  </span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card_listino">
+                        {% for item in elem.list %} {{ mc.item_articolo_anteprima(_h, item) }} {% endfor %}
+                    </div>
+                    <div class="d-flex justify-content-start py-3 p-0 d-md-none">
+                        <a href="{{ elem.cat.url }}" class="btn btn-black">
+                            <label class="btn-text">{{ _lblw.approfondisci }}</label>
+                            <span class="btn-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 16">
+                                    <path class="cls-1"
+                                          d="M11.29.29c-.39.39-.39,1.02,0,1.41l5.29,5.29H1c-.55,0-1,.45-1,1,0,.55.45,1,1,1h15.59s-5.29,5.29-5.29,5.29c-.39.39-.39,1.02,0,1.41.39.39,1.02.39,1.41,0l7-7s.01-.02.02-.03c.08-.09.15-.18.2-.29,0,0,0,0,0,0,.05-.12.07-.24.07-.37,0,0,0,0,0-.01h0c0-.13-.03-.26-.07-.38-.05-.12-.12-.23-.22-.33L12.71.29c-.39-.39-1.02-.39-1.41,0Z"/>
+                                </svg>
+                          </span>
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+
+
+    <div>
+
+        <div class="banner_card web py-2 py-md-3">
+            {{ mc.banner_puzzle_grande(_h, listBanner['20']) }}
+            <div class="right-column">
+                {{ mc.banner_puzzle_medio(_h, listBanner['21']) }}
+                <div class="container p-0 justify-content-center">
+                    <div class="row w-100 justify-content-between align-items-center g-2">
+                        {{ mc.banner_puzzle_piccolo(_h, listBanner['22']) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        {% if _h.requestActivity == 'index' %}
+            <div class="anteprima-home web my-2 my-xl-5">
+                <div class="container1_titoli items-list clear my-2 my-xl-3 d-inline-block">
+                    <p class="txt-blue mb-0 mb-md-auto" style="font-size: 17px;">{{ _lblw.recensioni }}</p>
+                    <div class="row mx-auto w-100 align-items-end">
+                        <div class="col-md-9 col-xl-10 p-0">
+                            <h2 class="mt-3 mb-3 mb-md-0 col-md-9 col-xl-8">{{ _lblw.recensioni_titolo }}</h2>
+                        </div>
+                    </div>
+                </div>
+                <script src="https://apps.elfsight.com/p/platform.js" defer></script>
+                
+            </div>
+        {% endif %}
+
+        <div class="banner_card web py-2 py-md-3">
+            {{ mc.banner_dna_grande(_h, listBanner['23']) }}
+            <div class="right-column ">
+                <div class="container p-0 justify-content-center">
+                    <div class="row w-100 justify-content-between align-items-stretch g-2">
+                        {{ mc.banner_dna_numeri(_h, listBanner['25']) }}
+                    </div>
+                </div>
+                {{ mc.banner_dna_medio(_h, listBanner['24']) }}
+            </div>
+        </div>
+
+        {% if listSelezioni|length > 0 %}
+            {% for elem in listSelezioni %}
+                {% if elem.list|length > 0 and elem.cat.get('codice') == 'venduti' %}
+                    <div class="anteprima-home web my-2 my-xl-5">
+                        <div class="container1_titoli items-list clear my-2 my-xl-3 d-inline-block">
+                            <p class="mb-0 mb-md-auto" style="font-size: 17px;">{{ elem.cat.get('nome') }}</p>
+                            <div class="row mx-auto w-100 align-items-end">
+                                <div class="col-md-9 p-0">
+                                    <h2 class="mt-3 mb-3 mb-md-0 col-md-6">{{ elem.cat.get('sottotitolo') }}</h2>
+                                </div>
+                                <div class="col-md-3 d-none d-md-flex p-0 flex-column justify-content-end align-items-end">
+                                    <a href="{{ elem.cat.url }}" class="btn btn-black">
+                                        <label class="btn-text">{{ _lblw.tutti_i_prodotti }}</label>
+                                        <span class="btn-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 16">
+                                            <path class="cls-1"
+                                                  d="M11.29.29c-.39.39-.39,1.02,0,1.41l5.29,5.29H1c-.55,0-1,.45-1,1,0,.55.45,1,1,1h15.59s-5.29,5.29-5.29,5.29c-.39.39-.39,1.02,0,1.41.39.39,1.02.39,1.41,0l7-7s.01-.02.02-.03c.08-.09.15-.18.2-.29,0,0,0,0,0,0,.05-.12.07-.24.07-.37,0,0,0,0,0-.01h0c0-.13-.03-.26-.07-.38-.05-.12-.12-.23-.22-.33L12.71.29c-.39-.39-1.02-.39-1.41,0Z"/>
+                                        </svg>
+                                  </span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="item-list-slick mt-2 mt-xl-5 row ms-0">
+                            {% for item in elem.list %}
+                                {{ mc.item_articolo(_h, item) }}
+                            {% endfor %}
+                        </div>
+                        <div class="d-flex justify-content-start py-3 p-0 d-md-none">
+                            <a href="{{ elem.cat.url }}" class="btn btn-black">
+                                <label class="btn-text">{{ _lblw.tutti_i_prodotti }}</label>
+                                <span class="btn-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 16">
+                                        <path class="cls-1"
+                                              d="M11.29.29c-.39.39-.39,1.02,0,1.41l5.29,5.29H1c-.55,0-1,.45-1,1,0,.55.45,1,1,1h15.59s-5.29,5.29-5.29,5.29c-.39.39-.39,1.02,0,1.41.39.39,1.02.39,1.41,0l7-7s.01-.02.02-.03c.08-.09.15-.18.2-.29,0,0,0,0,0,0,.05-.12.07-.24.07-.37,0,0,0,0,0-.01h0c0-.13-.03-.26-.07-.38-.05-.12-.12-.23-.22-.33L12.71.29c-.39-.39-1.02-.39-1.41,0Z"/>
+                                    </svg>
+                              </span>
+                            </a>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </div>
+</div>
+

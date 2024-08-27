@@ -1,0 +1,71 @@
+{% if not(_h.context.isWebApp()) %}
+<script>
+var _last_versione_ios = '1.0.0';
+var _last_versione_android = '1.0.0';
+
+function notifica_aggiorna_app() {
+	var store = AppProxy.getType() == 'android' ? 'Google Play' : 'Apple';
+	var versione = AppProxy.getType() == 'android' ? _last_versione_android : _last_versione_ios;
+	$('.window-layer').remove();
+	var layer = $([
+		'<div class="window-layer">',
+			'<h1>Aggiorna app</h1>',
+			'<h2>La tua app <strong>NON</strong> è aggiornata, accedi allo store <strong>', store,'</strong> per scaricare l\'ultimo aggiornamento.</h2>',
+			'<br><br>',
+			'<p>Con un\'app non aggiornata non avrai a disposizione tutte le nuove funzionalità<br>oltre a poter avere mal funzionamenti.</p>',
+			'<br><br>',
+			'<p>La versione più aggiornata è: ', versione,'</p>',
+			'<br><br>',
+			'<a class="app-button app-button-white action-close"><strong>Chiudi</strong></a>',						
+		'</div>'
+	].join(''));
+	$('body').append(layer);
+	layer.find('.action-close').on('click', function() {
+		layer.remove();
+	});	
+	$('body,html').scrollTop(0);
+}
+
+var _timeoutVerifica = null;
+AppProxy.event.on('callback_versione', 
+	function (parametro) {
+		clearTimeout(_timeoutVerifica);
+		parametro = parametro.split(':');
+		if (parametro.length >= 2) {
+			var ver_inst = parametro[1].split('.');
+			var ver_store = '';
+			switch(parametro[0]) {
+			case 'ios':
+				ver_store = _last_versione_ios;
+				break;
+			case 'android':
+				ver_store = _last_versione_android;
+				break;
+			}
+			ver_store = ver_store.split('.');
+			if (ver_store.length == 3 && ver_inst.length == 3) {
+				var ver_inst_num = 0;
+				var ver_store_num = 0;
+				var base = [100000, 10000, 1000];
+				for (var i = 0; i < 3; i++) {
+					if (!isNaN(ver_inst[i])) {
+						ver_inst_num += parseInt(ver_inst[i]) * base[i];
+						ver_store_num += parseInt(ver_store[i]) * base[i];
+					}
+				}
+				if (ver_inst_num < ver_store_num) {
+					notifica_aggiorna_app();
+				}
+			}
+		}
+	}
+);
+AppProxy.versione('callback_versione');
+_timeoutVerifica = setTimeout(notifica_aggiorna_app, 1000);
+</script>
+{% endif %}
+{% if cart %}
+<script>
+AppProxy.carrello({{ cart.number }});
+</script>
+{% endif %}

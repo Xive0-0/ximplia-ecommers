@@ -1,0 +1,10 @@
+{% import _h.template('manager/_macro.html') as mc %}
+{{ mc.index_page_header(_h, 'Redirect 301/404/410') }}
+		
+	{{ mc.navButtonNew(_h, 'nuovo', 'redirect') }}
+	{{ mc.navButtonUpdate(_h, 'modifica', 'redirect') }}
+	{{ mc.navButtonDelete(_h, 'elimina', 'redirect') }}		
+	{{ mc.navSeparatore() }}
+	{{ mc.navButton(_h, 'importa', 'report', 'click', 'h-action-upload-file', '{"url": "' ~ _h.url('manager/myarea/redirect/import') ~ '", "fileType": ["csv"], "onComplete": {"reload": "#h-layout-center-content"}}') }}
+
+{{ mc.index_page_footer(_h, result, 'redirect') }}

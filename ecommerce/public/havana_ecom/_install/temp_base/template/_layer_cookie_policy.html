@@ -1,0 +1,227 @@
+{% set _lblcc = _h.labels.get('cookie') %}
+
+{% macro cookie_list_fornitore(_h, _lblcc, fornitore, descrizione, luogo, url_fornitore, list, list_domini) %}
+	<div class="cookie-policy-block-list-ul-fornitore">
+		<div><em>{{ _lblcc.fornitore }}:</em> <strong><a href="javascript:void(0)" class="cookie-policy-block-list-ul-fornitore-expand">{{ fornitore }}</a></strong></div>
+		<div><em>{{ _lblcc.numero_cookie }}:</em> <strong>{{ list|length }}</strong></div>
+		<div class="cookie-policy-block-list-ul-fornitore-data">
+		{% if descrizione %}
+		<p>{{ descrizione }}</p>
+		{% endif %}
+		<p>
+			<em>{{ _lblcc.luogo_conservazione_dati }}:</em> <strong>{{ luogo }}</strong><br>
+			{% if list_domini|length == 0 %}
+				{% set list_domini = [_h.domain] %}
+			{% endif %}
+			<em>{{ _lblcc.domini_considerati }}:</em> <strong>{{ list_domini|join(', ') }}</strong>
+		</p>
+		<p><a href="{{ url_fornitore }}" target="_blank">{{ _lblcc.per_saperne_di_piu_su_fornitore }}</a></p>
+		<p>{{ _lblcc.elenco_dei_cookie }}:</p>
+		<ul>
+			{% for item in list %}
+			<li>
+				<strong>{{ item.cookie }}</strong>
+				<p>{{ item.descrizione }}</p>
+				<div>
+					<span>
+						<em>{{ _lblcc.scadenza }}</em>
+						<strong>{{ item.scadenza }}</strong>
+					</span>
+					<span>
+						<em>{{ _lblcc.tipo }}</em>
+						<strong>{{ item.tipo|upper }}</strong>
+					</span>
+				</div>
+			</li>
+			{% endfor %}
+		</ul>
+		</div>
+	</div>
+{% endmacro %}
+
+{% set data_aggiornamento = '12/04/2021' %}
+{% if cookie_data.data_aggiornamento %}
+	{% set data_aggiornamento = cookie_data.data_aggiornamento %}
+{% endif %}
+{% set list_cookie_necessari = [
+	{
+		"cookie": "HUSID", 
+		"descrizione": _lblcc["cookie[HUSID]"], 
+		"scadenza": "Session", 
+		"tipo": "HTTP"
+	},
+	{
+		"cookie": "PHPSESSID", 
+		"descrizione": _lblcc["cookie[PHPSESSID]"], 
+		"scadenza": "Session", 
+		"tipo": "HTTP"
+	},
+	{
+		"cookie": "cart", 
+		"descrizione": _lblcc["cookie[cart]"], 
+		"scadenza": "30 days", 
+		"tipo": "HTTP"
+	},
+	{
+		"cookie": "cartprev", 
+		"descrizione": _lblcc["cookie[cartprev]"], 
+		"scadenza": "30 days", 
+		"tipo": "HTTP"
+	},
+	{
+		"cookie": "_cookie_policy", 
+		"descrizione": _lblcc["cookie[_cookie_policy]"], 
+		"scadenza": "1 year", 
+		"tipo": "HTTP"
+	},
+	{
+		"cookie": "_codice_iva_iso", 
+		"descrizione": _lblcc["cookie[_codice_iva_iso]"], 
+		"scadenza": "30 days", 
+		"tipo": "HTTP"
+	},
+	{
+		"cookie": "sorgente", 
+		"descrizione": _lblcc["cookie[sorgente]"], 
+		"scadenza": "30 days", 
+		"tipo": "HTTP"
+	}
+]%}
+
+{% set list_cookie_preferenze = [
+	{
+		"cookie": "_popup_[#]", 
+		"descrizione": _lblcc["cookie[_popup_]"], 
+		"scadenza": "30 days", 
+		"tipo": "HTTP"
+	},
+	{
+		"cookie": "ultimo_visualizzato", 
+		"descrizione": _lblcc["cookie[ultimo_visualizzato]"], 
+		"scadenza": "30 days", 
+		"tipo": "HTTP"
+	}
+]%}
+
+<div class="cookie-policy-layer-header">
+	<div class="cookie-policy-layer-close">
+		<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+			<path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+			<path d="M0 0h24v24H0z" fill="none"/>
+		</svg>			
+	</div>
+</div>
+<div class="cookie-policy-layer-body">
+	<div class="cookie-policy-layer-tab-header">
+		<button data-tab-type="content" class="selected">{{ _lblcc.header_content }}</button>		
+		<button data-tab-type="details">{{ _lblcc.header_details }}</button>		
+		<button data-tab-type="about">{{ _lblcc.header_about }}</button>	
+	</div>
+	<div class="cookie-policy-layer-tab-body">
+		<div data-tab-type="content" class="selected">
+			<div class="cookie-policy-layer-body-title">{{ _lblcc.content_title }}</div>
+			{{ _lblcc.content_description }}
+		</div>		
+		<div data-tab-type="details">
+			<div class="cookie-policy-layer-body-title">{{ _lblcc.details_title }}</div>
+			{{ _lblcc.details_description }}
+			<div class="cookie-policy-block">
+				<div class="cookie-policy-block-header">
+					<div class="cookie-policy-block-header-title">{{ _lblcc.cookie_necessari_title }}</div>
+					<div class="cookie-policy-checkbox denied">
+						<div class="cookie-policy-checkbox-alert">{{ _lblcc.cookie_necessari_alert }}</div>
+						<input type="checkbox" checked="checked" name="{{ key }}" readonly="true" value="enabled">
+						<span></span>
+					</div>
+				</div>
+				<div class="cookie-policy-block-body">
+					<p>{{ _lblcc.cookie_necessari_description }}</p>
+					{% set numero_cookie = cookie_data.cookie_necessari.numero %}
+					{% set numero_cookie = numero_cookie + list_cookie_necessari|length %}
+					<p>{{ _lblcc.numero_totale_cookie }}: <strong>{{ numero_cookie }}</strong></p>
+					<div class="cookie-policy-block-list">
+						<a class="cookie-policy-block-expand" href="javascript:void(0);">{{ _lblcc.visualizza_elenco }}</a>
+						<div class="cookie-policy-block-list-ul">
+						{{ _self.cookie_list_fornitore(_h, _lblcc, _h.config('template').web.copy, '', 'Italy', _h.xurl('privacy-policy'), list_cookie_necessari, [_h.domain]) }}
+						{% for c in cookie_data.cookie_necessari.list %}
+							{{ _self.cookie_list_fornitore(_h, _lblcc, c.fornitore, c.descrizione, c.luogo, c.url, c.list, c.list_domain) }}
+						{% endfor %}
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			{% for key in ['preferenze', 'statistiche', 'marketing', 'non_classificati'] %}
+				{% set numero_cookie = cookie_data['cookie_' ~ key].numero %}
+				{% if key == 'preferenze' %}
+					{% set numero_cookie = numero_cookie + list_cookie_preferenze|length %}
+				{% endif %}
+			<div class="cookie-policy-block">
+				<div class="cookie-policy-block-header{% if numero_cookie == 0 %} cookie-policy-block-no-checkbox{% endif%}">
+					<div class="cookie-policy-block-header-title">{{ _lblcc['cookie_' ~ key ~ '_title'] }}</div>
+					{% if numero_cookie > 0 %}
+					<div class="cookie-policy-checkbox">
+						<input type="checkbox" name="{{ key }}" value="enabled">
+						<span></span>
+					</div>
+					{% endif %}
+				</div>
+				<div class="cookie-policy-block-body">
+					<p>{{ _lblcc['cookie_' ~ key ~ '_description'] }}</p>
+					{% if numero_cookie > 0 %}
+					<p>{{ _lblcc.numero_totale_cookie }}: <strong>{{ numero_cookie }}</strong></p>
+					<div class="cookie-policy-block-list">
+						<a class="cookie-policy-block-expand" href="javascript:void(0);">{{ _lblcc.visualizza_elenco }}</a>
+						<div class="cookie-policy-block-list-ul">
+						{% if key == 'preferenze' %}
+							{{ _self.cookie_list_fornitore(_h, _lblcc, _h.config('template').web.copy, '', 'Italy', _h.xurl('privacy-policy'), list_cookie_preferenze, [_h.domain]) }}
+						{% endif %}
+						{% for c in cookie_data['cookie_' ~ key].list %}
+							{{ _self.cookie_list_fornitore(_h, _lblcc, c.fornitore, c.descrzione, c.luogo, c.url, c.list, c.list_domain) }}
+						{% endfor %}
+						</div>
+					</div>
+					{% else %}
+					<p class="cookie-policy-non-presente">{{ _lblcc.cookie_tipologia_non_presente }}</p>
+					{% endif %}
+				</div>
+			</div>
+			{% endfor %}
+			
+			<div class="cookie-policy-block">
+				<div class="cookie-policy-block-header cookie-policy-block-no-checkbox">
+					<div class="cookie-policy-block-header-title">{{ _lblcc.consenso_interdominio_title }}</div>
+				</div>
+				<div class="cookie-policy-block-body">
+					{{ _lblcc.consenso_interdominio_description }}
+					<div class="cookie-policy-block-list expand">
+						<div class="cookie-policy-block-list-ul">
+							<ul>
+								<li><strong>{{ _h.domain }}</strong></li>
+								{% for domain in cookie_data.list_domain %}
+								<li><strong>{{ domain }}</strong></li>
+								{% endfor %}
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="cookie-policy-aggiornamento">
+				{{ _lblcc.aggiornamento_cookie|replace({'%data_aggiornamento%': data_aggiornamento, '%sito%': _h.config('template').web.copy}) }}
+			</div>
+		</div>		
+		<div data-tab-type="about">
+			<div class="cookie-policy-layer-body-title">{{ _lblcc.about_title }}</div>
+			{{ _lblcc.about_description|replace({'%url_privacy%': _h.xurl('privacy-policy'), '%url_cookie%': _h.xurl('cookie-policy')}) }}
+		</div>	
+	</div>
+</div>
+<div class="cookie-policy-layer-footer">
+	<div class="cookie-policy-layer-footer-toolbar">
+		<button data-action="deny">{{ _lblcc.btn_deny }}</button>
+		<button data-action="btn_allow_only_selected" class="inverso">{{ _lblcc.btn_allow_only_selected }}</button>
+		<button data-action="allow_selection">{{ _lblcc.btn_allow_selection }}</button>
+		<button data-action="allow_all" class="evidenzia">{{ _lblcc.btn_allow_all }}</button>
+	</div>
+</div>

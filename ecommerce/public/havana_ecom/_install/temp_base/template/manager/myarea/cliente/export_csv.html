@@ -1,0 +1,4 @@
+MARKETING;LANG;NOME;COGNOME;E_MAIL;ISCRIZIONE;ULTIMO ACCESSO;DATA NASCITA;ANNO NASCITA;SESSO;
+{% for item in list %}
+{% if item.get('marketing_policy') %}si{% else %}no{% endif %};{{ item.get('lang') }};{{ item.get('nome') }};{{ item.get('cognome') }};{{ item.get('e_mail') }};{{ item.getDateTime('data_inserimento') }};{{ item.getDateTime('ultimo_accesso') }};{{ item.getDate('data_nascita') }};{{ item.get('anno_nascita') }};{{ item.getFromList('sesso', ['', 'M','F','A']) }};
+{% endfor %}

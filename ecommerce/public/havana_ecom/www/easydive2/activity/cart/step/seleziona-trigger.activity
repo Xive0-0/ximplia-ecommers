@@ -1,0 +1,9 @@
+{
+	"on:begin": [
+		{"name": "cart/step/list-item-from-id", "params": {"list_id": [704, 705, 726, 66, 198]}}
+	],
+	"on:view": {
+		"template": "cart/step/seleziona_trigger",
+		"extra": false
+	}
+}

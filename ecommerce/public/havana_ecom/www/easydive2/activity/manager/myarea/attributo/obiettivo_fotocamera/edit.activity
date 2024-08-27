@@ -1,0 +1,14 @@
+{
+	"input": [
+		{"name": "id", "type": "int", "required": true}
+	],
+	"on:": [
+		{"name": "manager/myarea/attributo/list-all", "params": {"list": "listFotocamera", "type": "fotocamera"}},
+		"manager/myarea/attributo/load",
+		"manager/myarea/attributo/obiettivo_fotocamera/load-abbinamento"
+	],
+	"on:view": {
+		"template": "manager/myarea/attributo/obiettivo_fotocamera/edit",
+		"extra": false
+	}
+}

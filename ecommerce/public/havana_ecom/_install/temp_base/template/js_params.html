@@ -1,0 +1,46 @@
+var Params = {
+	{% if _h.config('url_prefix') %}
+		'url_prefix': '/{{ _h.config('url_prefix') }}',
+	{% else %}
+		'url_prefix': '',
+	{% endif %}
+	{% if _h.config('cookie_policy') == 'gdpr22' %}
+		{% if _h.cookie('statistiche') %}
+		'cookie_statistiche': true,
+		{% endif %}
+	{% else %}
+	'cookie_statistiche': true,
+	{% endif %}
+	'password_strong': {% if _h.settings.get('account_password_strong', false)  %}true{% else %}false{% endif %},
+	'timeout_carrello': {% if _h.settings.get('abilita_controllo_tempo_completamento_carrello', false)  %}true{% else %}false{% endif %},
+	'no_animazione_add_to_cart': {% if _h.settings.get('no_animazione_add_to_cart', '') == '' %}false{% else %}true{% endif %},
+	'timeout_add_to_cart_message': {{ _h.settings.get('timeout_add_to_cart_message', 8) }},
+	'layer_add_to_cart_fisso': '{{ _h.settings.get('layer_add_to_cart_fisso', '') }}',
+	'app': '{{ _h.config('app_type', '') }}',
+	'url': '{{ _h.config('url') }}',
+	'url_lang': '{{ _h.lang }}',
+	'force_message_position': '{% if _h.context.isApp() %}bottom{% endif%}',
+	'currentValuta': '{{ _h.util.currentValta() }}',
+	'show_riepilogo_carrello_on': '{{ _h.config('show_riepilogo_carrello_on', 'click') }}',
+	'hide_riepilogo_carrello_on': '{{ _h.config('hide_riepilogo_carrello_on', 'mousedown') }}',
+	'html_field_wrapper': '{{ _h.config('html_field_wrapper', 'field-line') }}',
+	'search_keywords': '{{ _h.config('search_keywords', 'false') }}'
+};
+var Const = {
+	'cartThanks': '{{ _h.xurl('cart/thanks') }}?_lang={{ _h.lang }}',
+	'cartIndex': '{{ _h.xurl('cart/checkout/index') }}?_lang={{ _h.lang }}',
+	'resetCartUrl': '{{ _h.xurl('cart/reset') }}?_lang={{ _h.lang }}',
+	'addRemQtaCartUrl': '{{ _h.xurl('cart/add-rem-qta-item') }}?_lang={{ _h.lang }}',
+	'removeFromCartUrl': '{{ _h.xurl('cart/rem-item') }}?_lang={{ _h.lang }}',
+	'updateItemFromCartUrl': '{{ _h.xurl('cart/update-item') }}?_lang={{ _h.lang }}',
+	'addToCartUrl': '{{ _h.xurl('cart/add-item') }}?_lang={{ _h.lang }}',
+	'addSubItemPriceUrl': '{{ _h.xurl('cart/add-sub-item-price') }}?_lang={{ _h.lang }}',
+	
+	'addArticoloVirtualePreventivoUrl': '{{ _h.xurl('cartprev/add-item-virtuale') }}?_lang={{ _h.lang }}',
+	'cartPreventivoIndex': '{{ _h.xurl('cartprev/checkout/index') }}?_lang={{ _h.lang }}',
+	'resetCartPreventivoUrl': '{{ _h.xurl('cartprev/reset') }}?_lang={{ _h.lang }}',
+	'addRemQtaCartPreventivoUrl': '{{ _h.xurl('cartprev/add-rem-qta-item') }}?_lang={{ _h.lang }}',
+	'removeFromCartPreventivoUrl': '{{ _h.xurl('cartprev/rem-item') }}?_lang={{ _h.lang }}',
+	'updateItemFromCartPreventivoUrl': '{{ _h.xurl('cartprev/update-item') }}?_lang={{ _h.lang }}',
+	'addToCartPreventivoUrl': '{{ _h.xurl('cartprev/add-item') }}?_lang={{ _h.lang }}'
+};

@@ -1,0 +1,52 @@
+{% import _h.template('_macro.html') as mc %}
+{% set _lbl = _h.labels.get('global') %}
+
+<div class="breadcrumbs clear">
+	{{ mc.breadcrumbs_home(_h) }}
+	{{ mc.breadcrumbs_separatore() }}
+	<a>{{ _lbl.title_servizio_clienti }}</a>
+</div>
+
+<h1>{{ _lbl.title_servizio_clienti }}</h1>
+
+<div class="recapito servizio-clienti-recapito">
+	<ul>
+		<li class="indirizzo">{{ _h.settings.get('recapito_via') }}<br>{{ _h.settings.get('recapito_citta') }}</li>
+		<li class="telefono">
+			{% if _h.settings.get('recapito_messaggio') %}
+			<strong>{{ _h.settings.get('recapito_messaggio') }}</strong>
+			{% endif %}
+			{% if _h.settings.get('recapito_telefono_1') and  _h.settings.get('recapito_telefono_1') != '-' %}
+			<span><em>{{ _lbl.telefono_small}}</em> {{ _h.settings.get('recapito_telefono_1') }}</span>
+			{% endif %}
+			{% if _h.settings.get('recapito_telefono_2') %}
+			<span><em>{{ _lbl.telefono_small}}</em> {{ _h.settings.get('recapito_telefono_2') }}</span>
+			{% endif %}
+			{% if _h.settings.get('recapito_fax') %}
+			<span><em>{{ _lbl.fax}}</em> {{ _h.settings.get('recapito_fax') }}</span>
+			{% endif %}
+		</li>
+		<li class="email"><a href="{{ _h.xurl('scrivi-servizio-clienti') }}" title="scrivi al servizio clienti">{{ _h.settings.get('email_info') }}</a></li>
+	</ul>
+</div>
+<div class="servizio-clienti-map" id="map-canvas"></div>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key={{ _h.settings.getByUrl('google_site_map_key') }}&callback=initMap" type="text/javascript"></script>
+<script>
+function initMap() {
+	var mapCanvas = document.getElementById('map-canvas');
+	var pos = new google.maps.LatLng({{ _h.settings.get('recapito_latitudine', 0) }},{{ _h.settings.get('recapito_longitudine', 0) }});
+	var mapOptions = {
+		zoom: 10,
+		mapTypeId: google.maps.MapTypeId.ROADMAP,
+		center: pos
+	}
+	var map = new google.maps.Map(mapCanvas, mapOptions);
+	new google.maps.Marker({
+			map: map,
+			position: pos
+		});
+}
+</script>
+<div class="html clear">
+{{ item.get('testo') }}
+</div>

@@ -1,0 +1,122 @@
+<script src="/assets/manager/js/jsQR.js"></script>
+<div class="window-wrapper">
+	<header>
+		<div class="logo">
+			<img src="/assets/manager/img/logo-login.png">
+		</div>
+	</header>
+	<div class="qrcode-camera-content" style="margin: 20px 2% 0 2%;"></div>
+	<div class="qrcode-codice-stato" style="margin-top: 10px; height: 30px; line-height: 30px; text-align: center; font-size: 18px;"></div>
+	<div class="qrcode-codice" style="margin-top: 10px; background: #dfdfdf; padding: 10px 5px; text-align: center; font-size: 14px;"></div>
+	<p class="field-line" style="margin-top: 10px;">
+		<a href="javascript:void(0);" class="action-reset-codice" style="color: #00f; text-transform: uppercase; line-height: 30px; display: inline-block;">Reset</a>
+	</p>	
+
+	<p class="field-line" style="margin-top: 50px;">
+		<a href="/manager/voucher/valida-manuale.php" style="color: #00f; text-transform: uppercase; line-height: 30px; display: inline-block;">Validazione manuale</a>
+	</p>
+</div>
+
+<script>
+var _loading = false;
+
+function reset() {
+	$('.qrcode-codice').html('');
+	$('.qrcode-codice-stato').html('');
+	_loading = false;
+}
+
+$('.action-reset-codice').on('click', reset);
+
+function valida(codice) {
+	_loading = true;
+	H.ajax('/manager/voucher/ex-valida.php', {
+		data: {
+			codice: codice
+		},
+		success: function (data) {
+			if (data.success && data.data.error == null) {
+				$('body').message({message: 'Codice VALIDO'});
+				$('.qrcode-codice-stato').html('<strong style="color: #00f;">OK</strong>');
+			}
+			else {
+				$('body').message({message: data.data.error, type: 'error'});
+				$('.qrcode-codice-stato').html('<strong style="color: #f00;">' + data.data.error + '</strong>');
+			}
+			setTimeout(reset, 1000);
+		},
+		error: function() {
+			$('body').message({message: 'Errore in fase di comunicazione con il server, verificare lo stato della linea', type: 'error'});
+			setTimeout(reset, 1000);
+		}
+	});
+}
+
+function qrcode() {
+	var _play = true;
+	$('#canvas').remove();
+	var cont = $('.qrcode-camera-content').html('');
+
+	cont.append('<div class="camera-content-loading-message" style="font-weight: bold; margin-bottom 20px; color: #fe2b2b;">🎥 Impossibile accedere alla telecamera, verificare l\'abilitazione dei permessi</div>');
+	cont.append('<div style="width: 100%; height: 320px; overflow: hidden;"><canvas id="canvas" hidden></canvas></div>');
+	var video = document.createElement("video");
+	var canvasElement = document.getElementById("canvas");
+	var canvas = canvasElement.getContext("2d");
+
+	function drawLine(begin, end, color) {
+		canvas.beginPath();
+		canvas.moveTo(begin.x, begin.y);
+		canvas.lineTo(end.x, end.y);
+		canvas.lineWidth = 4;
+		canvas.strokeStyle = color;
+		canvas.stroke();
+	}
+	var _requestID = null;
+	
+	navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }).then(function(stream) {
+		video.srcObject = stream;
+		video.setAttribute("playsinline", true); 
+		video.play();
+		_requestID = requestAnimationFrame(tick);
+	});
+
+	function tick() {
+		if (!_play) {
+			return;
+		}
+		$('.camera-content-loading-message').html('⌛ Caricamento video...')
+		if (video.readyState === video.HAVE_ENOUGH_DATA) {
+			$('.camera-content-loading-message').remove();
+			canvasElement.hidden = false;
+
+			canvasElement.height = video.videoHeight;
+			canvasElement.width = video.videoWidth;
+			canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
+			var imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
+			var code = jsQR(imageData.data, imageData.width, imageData.height, {
+				inversionAttempts: "dontInvert",
+			});
+			if (code) {
+				drawLine(code.location.topLeftCorner, code.location.topRightCorner, "#FF3B58");
+				drawLine(code.location.topRightCorner, code.location.bottomRightCorner, "#FF3B58");
+				drawLine(code.location.bottomRightCorner, code.location.bottomLeftCorner, "#FF3B58");
+				drawLine(code.location.bottomLeftCorner, code.location.topLeftCorner, "#FF3B58");
+				if (code.data && !_loading) {
+					var codice = code.data;
+					if (codice.length > 10 && codice.indexOf('://') > 0) {
+						var codice = codice.split('/');
+						codice = codice[codice.length - 1];
+						if ($('.qrcode-codice').text() != codice) {
+							$('.qrcode-codice').text(codice);
+							valida(codice);
+						}
+					}
+				}
+			}
+		}
+		_requestID = requestAnimationFrame(tick);
+	}
+}
+
+qrcode();
+</script>

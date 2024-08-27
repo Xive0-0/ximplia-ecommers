@@ -1,0 +1,44 @@
+{% set _lbl = _h.labels.get('step_acquisto') %}
+<div class="step hide-button step-no-clear" data-step="">
+	<h3>{{ _lbl.step_obiettivo_titolo }}</h3>
+	<p class="evidenzia">{{ _lbl.step_obiettivo_descrizione }}</p>
+	{% if listBrand|length > 1 %}
+		<div class="field-line-filtro-brand">
+			<label>{{ _lbl.step_obiettivo_filtra_brand_field }}</label>
+			<div class="field-line-filtro-brand-list">
+				{% for item in listBrand %}
+					<div class="field-line-filtro-brand-list-item action-step-filtro-obiettivo" data-id="{{ item.id }}">
+						{{ item.nome }}
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+	{% endif %}
+	<div class="field-line">
+		<div class="field">
+			<label>{{ _lbl.step_obiettivo_field }}</label>
+			<select name="id_obiettivo" class="action-step-seleziona-obiettivo" data-type="obiettivo">
+				<option></option>
+				{% for item in list %}
+				<option value="{{ item.id }}" data-brand-id="{{ item.brand_id }}">{{ item.nome }}</option>
+				{% endfor %}
+			</select>
+		</div>
+	</div>
+
+	<div class="step-elenco-kit-oblo">
+	</div>
+	<p>{{ _lbl.step_obiettivo_attenzione }}</p>
+	
+	{% if _h.input('id_articolo') == 840 %}
+	<button class="next light" data-url="seleziona-predisposizione-bracci-fotocamera" data-callback="param_fotocamera">{{ _lbl.btn_procedi_senza }}</button>
+	{% else %}
+	<button class="next light" data-url="seleziona-logo" data-callback="param_fotocamera">{{ _lbl.btn_procedi_senza }}</button>
+	{% endif %}
+	
+	<p><a href="{{ _h.url('scrivi-servizio-clienti') }}" class="link-servizio-clienti">{{ _lbl.step_obiettivo_non_trovi }}</a></p>
+	<div class="clear step-bottombar">
+		<a class="prev">&lt; {{  _lbl.btn_torna_indietro }}</a>
+		<a class="item-acquista-step-close">{{ _lbl.btn_annulla }}</a>
+	</div>
+</div>

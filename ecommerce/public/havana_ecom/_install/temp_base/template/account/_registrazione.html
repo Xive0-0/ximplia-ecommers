@@ -1,0 +1,166 @@
+{% if include_in_page %}
+<form id="pagina" class="form-registrazione">
+{% else %}
+<div class="breadcrumbs clear">
+	{{ mc.breadcrumbs_home(_h) }}
+	{{ mc.breadcrumbs_separatore() }}
+	<a>{{ _lblm.title_registrazione }}</a>
+</div>
+
+<div id="pagina">
+<div class="col-box-left">
+	<fieldset class="fieldset-box">
+	{% include _h.template('account/_info_registrazione.html') %}
+	</fieldset>
+</div>
+<div class="col-box-left-details page-details">
+	<div class="col-box-left-details-inner">
+		<form class="form-registrazione">
+{% endif %}
+	<h1><span>{{ _lblm.title_registrazione }}</span></h1>
+	{% if _h.settings.get('disabilita_registrazione_tramite_social', '') == '' %}
+	<div class="field-text field-text-social">
+		{{ _lblm.descr_registrazione_social }}
+	</div>
+	<div class="field-button-social">
+		<a class="button-red button button-facebook" onclick="_ga('send', 'event', 'registrati', 'registrati_con_facebook', 'registrati_accedi_con_facebook')" href="{{ _h.url('account/login-facebook') }}" title="{{ _lblm.btn_accedi_con_facebook }}">{{ _lblm.btn_accedi_con_facebook }}</a>
+	</div>	
+	{% endif %}
+	{% if _lblm.descr_registrazione_standard %}
+	<div class="field-text field-text-email">
+		{{ _lblm.descr_registrazione_standard }}
+	</div>
+	{% endif %}
+	<div class="form-error-message"></div>
+	<div class="field-line">
+		<div class="field">
+			<label>{{ _lblf.field_email }} <span>*</span></label>
+			<input type="text" name="e_mail" class="valida-required valida-email" maxlength="100">
+		</div>
+	</div>
+	{% if _h.settings.get('form_campo_registrazione_conferma_password', '') == '' %}
+		<div class="field-line">
+			<div class="field">
+				<label>{{ _lblf.field_password }} <span>*</span></label>
+				<input type="password" name="password" class="valida-required valida-password valida-check-password valida-strong action-show-password" maxlength="20">
+			</div>
+		</div>
+	{% else %}
+	<div class="field-line-50-50">
+		<div class="field-line">
+			<div class="field">
+				<label>{{ _lblf.field_password }} <span>*</span></label>
+				<input type="password" name="password" class="valida-required valida-password valida-check-password valida-strong action-show-password" maxlength="20">
+			</div>
+		</div>
+		<div class="field-line">
+			<div class="field">
+				<label>{{ _lblf.field_conferma_password }} <span>*</span></label>
+				<input type="password" name="conferma_password" class="valida-required valida-confermapassword action-show-password" maxlength="20">
+			</div>
+		</div>
+	</div>
+	{% endif %}
+	{{ mc.field_registrazione(_h, 'registrazione') }}
+	{{ mc.field_registrazione_extra(_h) }}
+	<div class="field-text-obbligatori">{{ _lblf.campi_obbligatori }}</div>
+	
+	<div class="field-line-checkbox">
+		{% if _h.settings.get('testo_privacy_visibile_in_box', '') != '' %}
+		<div class="riquadro-testo-policy" data-contratto="privacy"></div>
+		{% endif %}
+		<div class="field-checkbox-description">
+			{{ _lblf.descr_dichiarazione_letto_privacy }} <a href="{{ mapPagine.privacy.url }}" title="{{ _lblf.alt_btn_ulteriori_informazioni_privacy }}" target="_blank">{{ _lblf.btn_ulteriori_informazioni_privacy }}</a>
+		</div>
+		<div class="field-checkbox-check-acconsento clear checkbox-group">
+			<div class="field-checkbox-check">
+				<span class="checkbox" data-value="1"><input type="hidden" name="accetto_privacy" value=""></span>
+				<span class="checkbox-label"><span>{{ _lblf.btn_acconsento_uso_dati }}</span></span>
+			</div>
+			<div class="field-checkbox-check">
+				<span class="checkbox" data-value="1"><input type="hidden" name="no_accetto_privacy" value="1"></span>
+				<span class="checkbox-label"><span>{{ _lblf.btn_non_acconsento }}</span></span>
+			</div>
+		</div>
+	</div>
+{% if (_h.session.params.user.tipo == 'agente' and _h.config('gestione_agenti_nuovo_cliente_con_iscrizione_newsletter', false) or not(_h.session.isAuth)) %}
+	{% if _h.settings.get('gestione_profile_privacy', '') != '' and _lblf.descr_dichiarazione_letto_profile_privacy %}
+		<div class="field-line-checkbox">
+			{% if _h.settings.get('testo_privacy_visibile_in_box', '') != '' %}
+			<div class="riquadro-testo-policy" data-contratto="profile_privacy"></div>
+			{% endif %}
+			<div class="field-checkbox-description">
+				{{ _lblf.descr_dichiarazione_letto_profile_privacy }} <a href="{{ mapPagine.profile_privacy.url }}" title="{{ _lblf.btn_ulteriori_informazioni_profile_privacy }}" target="_blank">{{ _lblf.btn_ulteriori_informazioni_profile_privacy }}</a>
+			</div>
+			<div class="field-checkbox-check-acconsento clear checkbox-group">
+				<div class="field-checkbox-check">
+					<span class="checkbox" data-value="1"><input type="hidden" name="accetto_profile_privacy" value=""></span>
+					<span class="checkbox-label"><span>{{ _lblf.btn_acconsento_uso_profile_privacy }}</span></span>
+				</div>
+				<div class="field-checkbox-check">
+					<span class="checkbox" data-value="1"><input type="hidden" name="no_accetto_profile_privacy"></span>
+					<span class="checkbox-label"><span>{{ _lblf.btn_non_acconsento }}</span></span>
+				</div>
+			</div>
+		</div>
+	{% endif %}
+	{% if _h.settings.get('disabilita_iscrizione_newsletter', '') == '' and _lblf.descr_iscrivimi_newsletter %}
+	<div class="field-line-checkbox field-line-checkbox-registrazione-newsletter">
+		<div class="field-checkbox-description">
+			{{ _lblf.descr_iscrivimi_newsletter }} <a href="{{ mapPagine.privacy.url }}" title="{{ _lblf.alt_btn_ulteriori_informazioni_privacy }}" target="_blank">{{ _lblf.btn_ulteriori_informazioni_privacy }}</a>.
+		</div>
+		<div class="field-checkbox-check-acconsento clear checkbox-group">
+			<div class="field-checkbox-check">
+				<span class="checkbox checkbox-newsletter" data-value="1"><input type="hidden" name="iscrizione_newsletter"></span>
+				<span class="checkbox-label"><span>{{ _lblf.btn_iscrivi_newsletter }}</span></span>
+			</div>
+			<div class="field-checkbox-check">
+				<span class="checkbox" data-value="1"><input type="hidden" name="no_iscrizione_newsletter"></span>
+				<span class="checkbox-label"><span>{{ _lblf.btn_no_iscrivi }}</span></span>
+			</div>
+		</div>
+	</div>	
+	{{ mc.field_newsletter_gruppo_extra(_h) }}
+	{% endif %}
+	{% if _h.settings.get('gestione_marketing_privacy', '') != '' and _lblf.descr_dichiarazione_letto_marketing_privacy %}
+	<div class="field-line-checkbox">
+		{% if _h.settings.get('testo_privacy_visibile_in_box', '') != '' %}
+		<div class="riquadro-testo-policy" data-contratto="marketing_privacy"></div>
+		{% endif %}
+		<div class="field-checkbox-description">
+			{{ _lblf.descr_dichiarazione_letto_marketing_privacy }} <a href="{{ mapPagine.marketing_privacy.url }}" title="{{ _lblf.btn_ulteriori_informazioni_marketing_privacy }}" target="_blank">{{ _lblf.btn_ulteriori_informazioni_marketing_privacy }}</a>
+		</div>
+		<div class="field-checkbox-check-acconsento clear checkbox-group">
+			<div class="field-checkbox-check">
+				<span class="checkbox" data-value="1"><input type="hidden" name="accetto_marketing_privacy" value=""></span>
+				<span class="checkbox-label"><span>{{ _lblf.btn_acconsento_uso_marketing_privacy }}</span></span>
+			</div>
+			<div class="field-checkbox-check">
+				<span class="checkbox" data-value="1"><input type="hidden" name="no_accetto_marketing_privacy"></span>
+				<span class="checkbox-label"><span>{{ _lblf.btn_non_acconsento }}</span></span>
+			</div>
+		</div>
+	</div>
+	{% endif %}
+	
+{% endif %}
+	{{ mc.google_recaptcha(_h, 'registrazione') }}
+	<div class="field-button field-button-left">
+		<a class="button-red button submit-form" onclick="_ga('send', 'event', 'registrati', 'iscriviti', 'registrati_iscriviti')" href="javascript:void(0)" title="{{ _lblf.btn_iscriviti }}" data-action='{"url": "{{ _h.url('account/ex-registrazione') }}", "onComplete": {"type": "show", "show": "#conferma_pagina", "hide": "#pagina"}}'><span>{{ _lblf.btn_iscriviti }}</span></a>
+	</div>
+	<div class="field-text field-text-servizio-clienti">
+		<a href="{{ _h.xurl('scrivi-servizio-clienti') }}" class="link" title="{{ _lblf.btn_bisogno_di_aiuto }}">{{ _lblf.btn_bisogno_di_aiuto }}</a>
+	</div>
+</form>
+
+{% if not(include_in_page) %}	
+	</div>
+</div>
+</div>
+{% endif %}
+<div id="conferma_pagina" class="hide-block block-margin">
+	<div class="hide-block-title">{{ _lblm.title_grazie }}</div>
+	<p>{{ _lblm.descr_conf_registrazione }}</p>
+	<p>{{ _lblm.descr_conf_ripeti_invio_email }} <a href="{{ _h.url('account/recupero-codice') }}">{{ _lblm.recupera_codice }}</a>.</p>
+	<p>{{ _h.settings.get('staff_firma') }}.</p>
+</div>

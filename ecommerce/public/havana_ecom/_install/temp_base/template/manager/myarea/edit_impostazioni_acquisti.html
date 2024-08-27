@@ -1,0 +1,142 @@
+{% import _h.template('manager/_macro.html') as mc %}
+{{ mc.slideBoxHeader(_h, 'Impostazioni Acquisti') }}
+{% if not(_h.config('message_center', false)) %}
+<p class="field-line field-400">
+	<label>E-mail notifica ricezione ordini<span>*</span>:</label>
+	<input type="text" name="email_ordini" class="field valida-required valida-email" value="{{ _h.settings.get('email_ordini') }}">
+</p>
+<p class="field-line field-400">
+	<label>Altre E-mail notifica ricezione ordini (se più email separare con una virgola):</label>
+	<input type="text" name="email_ordini_altre" class="field" value="{{ _h.settings.get('email_ordini_altre') }}">
+</p>
+<p class="field-line field-400">
+	<label>E-mail in copia nascosta conferma ordine cliente pagato:</label>
+	<input type="text" name="email_ccn_ordini" class="field valida-email" value="{{ _h.settings.get('email_ccn_ordini') }}">
+</p>
+{% endif %}
+<p class="field-line field-200">
+	<label>Prefisso codice ordini ordini<span>*</span>:</label>
+	<input type="text" name="prefisso_codice_ordine" class="field valida-required valida-digitalphanum" value="{{ _h.settings.get('prefisso_codice_ordine') }}">
+</p>
+<p class="field-line field-100">
+	<label>Massimo articoli acquistabili (0 per illimitati)<span>*</span>:</label>
+	<input type="text" name="max_articoli_acquisto" class="field valida-required valida-digitnumber" value="{{ _h.settings.get('max_articoli_acquisto') }}">
+</p>
+<p class="field-line field-100">
+	<label>Massimo articoli speciali in carrello acquistabili (0 per illimitati)<span>*</span>:</label>
+	<input type="text" name="max_articoli_speciali_acquisto" class="field valida-required valida-digitnumber" value="{{ _h.settings.get('max_articoli_speciali_acquisto') }}">
+</p>
+<p class="field-line field-100">
+	<label>Orine minimo (0 o vuoto per nessun minimo):</label>
+	<input type="text" name="importo_ordine_minimo" class="field valida-euro" value="{{ _h.settings.get('importo_ordine_minimo', 0) }}">
+</p>
+<p class="field-line field-100">
+	<label>Secondi visualizzazione messaggio conferma aggiunta a carrello (0 per non visualizzare)<span>*</span>:</label>
+	<input type="text" name="timeout_add_to_cart_message" class="field valida-required valida-digitnumber" value="{{ _h.settings.get('timeout_add_to_cart_message', 8) }}">
+</p>
+{{ mc.checkbox(_h.settings.get('articoli_carrello_in_checkout'), 1, 'articoli_carrello_in_checkout', 'Visualizza articoli speciali in fase di acquisto') }}
+
+<div style="float: left; width: 50%">
+	<div class="field-line field-200">
+		<label>Num. totale articoli checkout:</label>
+		<input type="text" name="numero_max_articoli_carrello_in_checkout" class="field valida-digitnumber" value="{{ _h.settings.get('numero_max_articoli_carrello_in_checkout', '') }}">
+	</div>
+</div>
+<div style="float: left; width: 50%">
+	<div class="field-line field-200">
+		<label>Num. articoli checkout con tag:</label>
+		<input type="text" name="numero_max_articoli_tag_carrello_in_checkout" class="field valida-digitnumber" value="{{ _h.settings.get('numero_max_articoli_tag_carrello_in_checkout', '') }}">
+	</div>
+</div>
+<div class="clear-line"></div>
+
+<div style="float: left; width: 40%; padding-top: 15px;">
+{{ mc.checkbox(_h.settings.get('abilita_controllo_tempo_completamento_carrello'), 1, 'abilita_controllo_tempo_completamento_carrello', 'Carrello con timeout') }}
+</div>
+<div style="float: left; width: 60%">
+	<div class="field-line field-100">
+		<label>Minuti max:</label>
+		<input type="text" name="tempo_completamento_carrello" class="field valida-digitnumber" value="{{ _h.settings.get('tempo_completamento_carrello', '') }}">
+	</div>
+</div>
+<div class="clear-line"></div>
+
+
+{{ mc.checkbox(_h.settings.get('visualizza_ordini_eliminati'), 1, 'visualizza_ordini_eliminati', 'Visualizza ordini classificati come eliminati') }}
+{{ mc.checkbox(_h.settings.get('abbina_ordine_a_cliente_se_registrato'), 1, 'abbina_ordine_a_cliente_se_registrato', 'Abbina ordine a cliente registrato se corrispondenza con e-mail') }}
+{{ mc.checkbox(_h.settings.get('registra_cliente_se_non_registrato'), 1, 'registra_cliente_se_non_registrato', 'Registra cliente se non registrato con e-mail usata in ordine') }}
+{{ mc.checkbox(_h.settings.get('disabilita_notifica_ordine_esercente'), 1, 'disabilita_notifica_ordine_esercente', 'Disabilita notifica ordine per esercente') }}
+{{ mc.checkbox(_h.settings.get('layer_add_to_cart_fisso'), 1, 'layer_add_to_cart_fisso', 'Mantieni fisso il layer aggiunta al carrello') }}
+{{ mc.checkbox(_h.settings.get('checkout_invia_email_solo_ordine_pagato'), 1, 'checkout_invia_email_solo_ordine_pagato', 'Invia e-mail di notifica solo alla conferma del pagamento') }}
+{{ mc.checkbox(_h.settings.get('acquisto_solo_con_login'), 1, 'acquisto_solo_con_login', 'Acquisti abilitati solo per utenti loggati') }}
+{{ mc.checkbox(_h.settings.get('nascondi_richiesta_registrazione_fine_acquisto'), 1, 'nascondi_richiesta_registrazione_fine_acquisto', 'Alla fine acquisto, se utente non registrato, NON visualizzare proposta registrazione') }}
+{{ mc.checkbox(_h.settings.get('checkout_spunta_autoconsumo'), 1, 'checkout_spunta_autoconsumo', 'Richiesta indicazione acquisto di tipo autoconsumo o meno') }}
+{{ mc.checkbox(_h.settings.get('correlati_in_checkout'), 1, 'correlati_in_checkout', 'Visualizza articoli correlati in fase di acquisto') }}
+{{ mc.checkbox(_h.settings.get('messaggio_articoli_add_cart'), 1, 'messaggio_articoli_add_cart', 'Messaggio conferma come layer ad aggiunta carrello') }}
+{{ mc.checkbox(_h.settings.get('no_animazione_add_to_cart'), 1, 'no_animazione_add_to_cart', 'Disabilita animazione in aggiungi a carrello') }}
+{{ mc.checkbox(_h.settings.get('ordine_considera_tutti_articoli_disponibili'), 1, 'ordine_considera_tutti_articoli_disponibili', 'In un ordine considera per default tutti gli articoli come disponibili') }}
+{{ mc.checkbox(_h.settings.get('integrazione_carrello_con_ordini_esistenti'), 1, 'integrazione_carrello_con_ordini_esistenti', 'Abilita in fase di checkout la possibilità di integrare ordini in corso') }}
+{% if _h.config('gestione_magazzino', false) %}
+{{ mc.checkbox(_h.settings.get('acquisto_max_disp_magazzino'), 1, 'acquisto_max_disp_magazzino', 'Articoli acquistabili solo se disponibile quantità a magazzino (vale per tutti gli articoli al netto del flag specifico)') }}
+{{ mc.checkbox(_h.settings.get('quantita_magazzino_con_valore_negativo'), 1, 'quantita_magazzino_con_valore_negativo', 'Consentire valore negativo per quantità magazzino') }}
+{% endif %}
+{{ mc.checkbox(_h.settings.get('gestione_spese_imballaggio'), 1, 'gestione_spese_imballaggio', 'Abilita gestione spese imballaggio') }}
+<p class="field-line field-400">
+	<label>Impostazioni calcolo statistiche e magazzino:</label>
+	<select name="checkout_magazzino_statistiche" class="field">
+		{{ mc.listComboOptions([{'id': 'ordine_pagato', 'text': 'Quando ordine è PAGATO'},{'id': 'ordine_ricevuto', 'text': 'Quando ordine è RICEVUTO'}], _h.settings.get('checkout_magazzino_statistiche')) }}
+	</select>
+</p>
+<p class="field-line field-400">
+	<label>Azione quando l'utente aggiunge un articolo al carrello:</label>
+	<select name="visualizza_articoli_add_cart" class="field">
+		{{ mc.listComboOptions([{'id': '', 'text': 'Nessuna'},{'id': '1', 'text': 'Visualizza articoli correlati'},{'id': '2', 'text': 'Visualizza articoli stessa categoria'},{'id': '3', 'text': 'Visualizza articoli correlati, se non presenti usa stessa categoria'}], _h.settings.get('visualizza_articoli_add_cart')) }}
+	</select>
+</p>
+<p class="field-line field-400">
+	<label>Nazione default per spedizione in checkout:</label>
+	<select name="nazione_default" class="field valida-required">
+	<option value=""></option>
+	{% for item in listNazione %}
+	<option value="{{ item.id }}" {% if _h.settings.get('nazione_default') == item.id %} selected="true"{% endif %}>{{ item.get('nome') }}</option>
+	{% endfor %}
+	</select>
+</p>
+
+<p class="field-line field-400">
+	<label>Sondaggio in pagina completamento ordine:</label>
+	<select name="sondaggio_thank_you_page" class="field">
+	<option value=""></option>
+	{% for item in listSondaggio %}
+	<option value="{{ item.id }}" {% if _h.settings.get('sondaggio_thank_you_page') == item.id %} selected="true"{% endif %}>{{ item.get('nome') }}</option>
+	{% endfor %}
+	</select>
+</p>
+
+{{ mc.checkbox(_h.settings.get('provincia_nazione_da_tendina'), 1, 'provincia_nazione_da_tendina', 'In fase acquisto la provincia seleziona da tendina se disponibile elenco') }}
+{{ mc.checkbox(_h.settings.get('checkout_ritiro_sede'), 1, 'checkout_ritiro_sede', 'Abilita "Ritiro in sede" nelle opzioni di spedizione') }}
+{{ mc.checkbox(_h.settings.get('calcolo_spedizione_con_provincia'), 1, 'calcolo_spedizione_con_provincia', 'Calcolo spedizione considerando la provincia') }}
+{{ mc.checkbox(_h.settings.get('calcolo_spedizione_con_cap'), 1, 'calcolo_spedizione_con_cap', 'Calcolo spedizione considerando il CAP') }}
+{{ mc.checkbox(_h.settings.get('richiedi_tipo_acquisto_scelta_nazione'), 1, 'richiedi_tipo_acquisto_scelta_nazione', 'Richiesta tipo acquisto (Privato o Azienda) in fase di scelta nazione') }}
+
+{% if _h.config('gestione_iva_paese_ue', false) %}
+<p class="field-line field-400">
+	<label>Calcolo massimale per applicazione IVA del paese di spedizione in UE:</label>
+	<select name="calcolo_massimale_per_iva_paese_ue" class="field valida-required">
+	<option value="1" {% if _h.settings.get('calcolo_massimale_per_iva_paese_ue') == 1 %} selected="true"{% endif %}>Imponibile ordini, solo da privati</option>
+	<option value="2" {% if _h.settings.get('calcolo_massimale_per_iva_paese_ue') == 2 %} selected="true"{% endif %}>Totale ordini, solo da privati</option>
+	<option value="3" {% if _h.settings.get('calcolo_massimale_per_iva_paese_ue') == 3 %} selected="true"{% endif %}>Imponibile ordini</option>
+	<option value="4" {% if _h.settings.get('calcolo_massimale_per_iva_paese_ue') == 4 %} selected="true"{% endif %}>Totale ordini</option>
+	<option value="10" {% if _h.settings.get('calcolo_massimale_per_iva_paese_ue') == 10 %} selected="true"{% endif %}>Sempre, senza condiderare massimale</option>
+	</select>
+</p>
+{% endif %}
+
+<p class="field-line field-100">
+	<label>Num. giorni aggiunta scadenza per utenti extra UE:</label>
+	<input type="text" name="articolo_scadenza_giorni_add_clienti_extra" class="field valida-digitint" value="{{ _h.settings.get('articolo_scadenza_giorni_add_clienti_extra', 0) }}">
+</p>
+
+{{ mc.labelCampiObbligatori() }}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/ex-edit-impostazioni-acquisti')) }}	
+

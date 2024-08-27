@@ -1,0 +1,24 @@
+{% import _h.template('manager/_macro_items.html') as mci %}
+<table class="h-list item-autoload-total h-fixed-header-table h-list-slingle-selection" cellpadding="0" cellspacing="0" border="0" data-total="{{ result.total }}">
+<thead>
+<tr class="h-list-header">
+	<th style="width: 20px;">&nbsp;</th>
+	<th data-order="nome" data-order-type="{{ result.order_type_nome }}">Descrizione</th>
+	<th style="width: 80px;" data-order="codice_unico" data-order-type="{{ result.order_type_codice_unico }}">Codice</th>
+	<th style="width: 40px;">Riut.</th>
+	<th style="width: 160px;" data-order="tipo" data-order-type="{{ result.order_type_tipo }}">Tipo</th>
+	<th style="width: 160px;" data-order="prefisso" data-order-type="{{ result.order_type_prefisso }}">Pref.</th>
+	<th style="width: 100px;">Sconto/Valore</th>
+	<th style="width: 100px;">Acq. min.</th>
+	<th style="width: 80px;" data-order="numero" data-order-type="{{ result.order_type_numero }}">Num. buoni</th>
+	<th style="width: 80px;" data-order="utilizzati" data-order-type="{{ result.order_type_utilizzati }}">Num. utiliz.</th>
+	<th style="width: 80px;" data-order="data_scadenza" data-order-type="{{ result.order_type_data_scadenza }}">Data scad.</th>
+	<th style="width: 110px;" data-order="data_inserimento" data-order-type="{{ result.order_type_data_inserimento }}">Data inserimento</th>
+</tr>
+</thead>
+<tbody>
+{% for item in result.list %}		
+	{{ mci.item_buonosconto(_h, item) }}
+{% endfor %}
+</tbody>
+</table>

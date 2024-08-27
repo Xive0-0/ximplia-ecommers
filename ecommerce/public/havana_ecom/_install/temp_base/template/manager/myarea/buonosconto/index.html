@@ -1,0 +1,29 @@
+{% import _h.template('manager/_macro.html') as mc %}
+{{ mc.index_page_header(_h, 'Buoni Sconto', 'buonosconto') }}
+		
+	<div class="h-nav-button-wrapper">
+		<a href="javascript:void(0);" class="h-nav-button h-action-popup-menu h-action-alttext" data-alttext="nuovo">
+			<img src="/assets/manager/havana-js/img/icon/ico-new.svg" align="top" />
+			<span>Nuovo</span>
+		</a>
+		<div class="h-popup-content h-popup-menu">
+			<a href="javascript:void(0);" class="h-action-window h-action-close-popup-menu" data-action='{"type": "slide-right", "url": "{{ _h.url('manager/myarea/buonosconto/edit-singolo') }}"}'>
+				Buono sconto codice impostato a mano
+			</a>
+			<a href="javascript:void(0);" class="h-action-window h-action-close-popup-menu" data-action='{"type": "slide-right", "url": "{{ _h.url('manager/myarea/buonosconto/edit-multiplo') }}"}'>
+				Buono sconto codice univoco per cliente
+			</a>
+			<a href="javascript:void(0);" class="h-action-window h-action-close-popup-menu" data-action='{"type": "slide-right", "url": "{{ _h.url('manager/myarea/buonosconto/edit-item-singolo') }}"}'>
+				Buono sconto codice impostato a mano personalizzato per prodotti
+			</a>
+			<a href="javascript:void(0);" class="h-action-window h-action-close-popup-menu" data-action='{"type": "slide-right", "url": "{{ _h.url('manager/myarea/buonosconto/edit-item-multiplo') }}"}'>
+				Buono sconto codice univoco per cliente personalizzato per prodotti
+			</a>
+		</div>
+	</div>	
+	{{ mc.navButtonUpdate(_h, 'modifica', 'buonosconto') }}
+	{{ mc.navButtonDelete(_h, 'elimina', 'buonosconto') }}		
+	{{ mc.navSeparatore() }}
+	{{ mc.navButton(_h, 'esporta buoni', 'disk', 'click', 'h-action-link', '{"select": {"from":"#h-layout-center-content", "check": 1, "errorMessage": "Selezionare una voce"}, "url": "' ~ _h.url('manager/myarea/buonosconto/export') ~ '"}') }}
+		
+{{ mc.index_page_footer(_h, result, 'buonosconto') }}

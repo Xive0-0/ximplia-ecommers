@@ -1,0 +1,414 @@
+{% import _h.template('_macro.html') as mc %}
+{% import _h.template('cart/_macro.html') as cmc %}
+{% set _lblc = _h.labels.get('checkout') %}
+
+{% macro formRegistrazione(_h, ordine) %}
+	{% import _h.template('_macro.html') as mc %}
+	{% set _lblm = _h.labels.get('my') %}
+	{% set _lblf = _h.labels.get('form') %}
+	<form class="block-margin" id="form_ordine">
+		<div class="form-error-message"></div>
+		<div class="field-line">
+			<div class="field">
+				<label>{{ _lblf.field_email }}</label>
+				<input type="text" name="e_mail" class="valida-required valida-email" maxlength="100" readonly="true" value="{{ ordine.e_mail }}">
+			</div>
+		</div>
+		{% if _h.settings.get('form_campo_registrazione_conferma_password', '') == '' %}
+			<div class="field-line">
+				<div class="field">
+					<label>{{ _lblf.field_password }} <span>*</span></label>
+					<input type="password" name="password" class="valida-required valida-password valida-check-password" maxlength="20">
+				</div>
+			</div>
+		{% else %}
+		<div class="field-line-50-50">
+			<div class="field-line">
+				<div class="field">
+					<label>{{ _lblf.field_password }} <span>*</span></label>
+					<input type="password" name="password" class="valida-required valida-password valida-check-password" maxlength="20">
+				</div>
+			</div>
+			<div class="field-line">
+				<div class="field">
+					<label>{{ _lblf.field_conferma_password }} <span>*</span></label>
+					<input type="password" name="conferma_password" class="valida-required valida-confermapassword" maxlength="20">
+				</div>
+			</div>
+		</div>
+		{% endif %}
+		{{ mc.field_registrazione(_h, 'registrazione') }}
+		{{ mc.field_registrazione_extra(_h) }}
+		<div class="field-text-obbligatori">{{ _lblf.campi_obbligatori }}</div>
+		
+		<div class="field-line-checkbox">
+			{% if _h.settings.get('testo_privacy_visibile_in_box', '') != '' %}
+			<div class="riquadro-testo-policy" data-contratto="privacy"></div>
+			{% endif %}
+			<div class="field-checkbox-description">
+				{{ _lblf.descr_dichiarazione_letto_privacy }} <a href="{{ mapPagine.privacy.url }}" title="{{ _lblf.alt_btn_ulteriori_informazioni_privacy }}" target="_blank">{{ _lblf.btn_ulteriori_informazioni_privacy }}</a>
+			</div>
+			<div class="field-checkbox-check-acconsento clear checkbox-group">
+				<div class="field-checkbox-check">
+					<span class="checkbox" data-value="1"><input type="hidden" name="no_accetto_privacy" value="1"></span>
+					<span class="checkbox-label"><span>{{ _lblf.btn_non_acconsento }}</span></span>
+				</div>
+				<div class="field-checkbox-check">
+					<span class="checkbox" data-value="1"><input type="hidden" name="accetto_privacy" value=""></span>
+					<span class="checkbox-label"><span>{{ _lblf.btn_acconsento_uso_dati }}</span></span>
+				</div>
+			</div>
+		</div>
+
+		{% if _h.settings.get('gestione_profile_privacy', '') != '' %}
+			<div class="field-line-checkbox">
+				{% if _h.settings.get('testo_privacy_visibile_in_box', '') != '' %}
+				<div class="riquadro-testo-policy" data-contratto="profile_privacy"></div>
+				{% endif %}
+				<div class="field-checkbox-description">
+					{{ _lblf.descr_dichiarazione_letto_profile_privacy }} <a href="{{ mapPagine.profile_privacy.url }}" title="{{ _lblf.btn_ulteriori_informazioni_profile_privacy }}" target="_blank">{{ _lblf.btn_ulteriori_informazioni_profile_privacy }}</a>
+				</div>
+				<div class="field-checkbox-check-acconsento clear checkbox-group">
+					<div class="field-checkbox-check">
+						<span class="checkbox" data-value="1"><input type="hidden" name="no_accetto_profile_privacy" value="1"></span>
+						<span class="checkbox-label"><span>{{ _lblf.btn_non_acconsento }}</span></span>
+					</div>
+					<div class="field-checkbox-check">
+						<span class="checkbox" data-value="1"><input type="hidden" name="accetto_profile_privacy" value=""></span>
+						<span class="checkbox-label"><span>{{ _lblf.btn_acconsento_uso_profile_privacy }}</span></span>
+					</div>
+				</div>
+			</div>
+		{% endif %}
+		
+		<div class="field-button field-button-left">
+			<a class="button-red button submit-form" href="javascript:void(0)" title="{{ _lblf.btn_iscriviti }}" data-action='{"url": "{{ _h.url('account/ex-registrazione') }}", "onComplete": {"type": "show", "show": "#conferma_pagina", "hide": "#form_ordine"}}'><span>{{ _lblf.btn_iscriviti }}</span></a>
+		</div>
+	</form>
+	<div id="conferma_pagina" class="hide-block block-margin">
+		<div class="hide-block-title">{{ _lblm.title_grazie }}</div>
+		<p>{{ _lblm.descr_conf_registrazione }}</p>
+		<p>{{ _lblm.descr_conf_ripeti_invio_email }} <a href="{{ _h.url('account/recupero-codice') }}">{{ _lblm.recupera_codice }}</a></p>
+	</div>
+{% endmacro %}
+
+{% set ordine = ordine.ordine %}
+<div class="thanks">
+<div id="pagina">
+
+{% if cancel_return %}
+<div class="riepilogo">
+	{% if ordine_tempo_scaduto %}
+		<div class="riepilogo riepilogo-header">
+			<h1><span>{{ _lblc.title_tempo_scaduto_pagamento }}</span></h1>
+			<div>{{ _lblc.descr_tempo_scaduto_pagamento }}</div>
+		</div>
+	{% else %}
+		{% if transaction_error %}
+		<h2 class="errore-transazione"><span>{{ _lblc.title_banca_non_autorizzato }}</span></h2>
+		{% else %}
+		<h2><span>{{ _lblc.title_pagamento_annullato }}</span></h2>
+		<div style="margin-bottom: 10px;">
+			{{ _lblc.descr_pagamento_annullato }}
+			{% if cancel_from_type == 'cc' %} 
+				{{ _lblc.tipo_pag_carta_credito }}
+			{% elseif cancel_from_type == 'scalapay'%}
+				{{ _lblc.tipo_pag_scalapay }}
+			{% elseif cancel_from_type == 'satispay'%}
+				{{ _lblc.tipo_pag_satispay }}
+			{% elseif cancel_from_type == 'bancontact'%}
+				{{ _lblc.tipo_pag_bancontact }}
+			{% elseif cancel_from_type == '18app'%}
+				{{ _lblc.tipo_pag_18app }}
+			{% elseif cancel_from_type == 'oney'%}
+				{{ _lblc.tipo_pag_oney }}
+			{% else %}
+				{{ _lblc.tipo_pag_paypal }}
+			{% endif %}
+		</div>
+		{% endif %}
+	
+		<div style="margin-bottom: 10px;">
+			{{ _lblc.descr_ripeti_operazione }}:
+		</div>
+
+		{% if _h.settings.get('checkout_pagamento_cc') != '' %}
+		<div class="rientro">
+			<strong class="font-big">{{ _lblc.tipo_pag_carta_credito }}</strong>
+			<div style="padding: 15px 0">
+				{% if _h.config('checkout_cc') == 'cartasi' %}
+					{% set pagamento_type = 'cc' %}
+					{{ mc.pagamento_cc_cartasi(_h, 
+						_h.config('checkout_cc_alias'),  
+						_h.settings.get('checkout_cc_ultimateCreditorName'), 
+						_h.settings.get('checkout_cc_address'),  
+						ordine.total_ordine, ordine.currency, ordine.fattura.nome, ordine.e_mail, 'ITA', 
+						_h.settings.get('checkout_cc_descrizione')) }}
+				{% elseif _h.config('checkout_cc') == 'nexi' %}
+					{% set pagamento_type = 'cc' %}
+					{{ mc.pagamento_cc_nexi(_h, 
+						_h.config('checkout_cc_alias'),  
+						_h.settings.get('checkout_cc_ultimateCreditorName'), 
+						_h.settings.get('checkout_cc_address'),  
+						ordine.total_ordine, ordine.currency, ordine.fattura.nome, ordine.e_mail, 'ITA', 
+						_h.settings.get('checkout_cc_descrizione')) }}
+				{% elseif _h.config('checkout_cc') == 'tgp' %}
+					{{ mc.pagamento_cc_tgp(_h) }}
+					{% set pagamento_type = 'cc' %}	
+				{% elseif _h.config('checkout_cc') == 'payplug' %}
+					{{ mc.pagamento_cc_payplug(_h) }}
+					{% set pagamento_type = 'cc' %}	
+				{% elseif _h.config('checkout_cc') == 'pagonline' %}
+					{{ mc.pagamento_cc_pagonline(_h) }}
+					{% set pagamento_type = 'cc' %}	
+				{% elseif _h.config('checkout_cc') == 'stripe' %}
+					{{ mc.pagamento_cc_stripe(_h) }}
+					{% set pagamento_type = 'cc' %}	
+				{% elseif _h.config('checkout_cc') == 'paytabs' %}
+					{{ mc.pagamento_cc_paytabs(_h) }}
+					{% set pagamento_type = 'cc' %}	
+				{% elseif _h.config('checkout_cc') == 'payway' %}
+					{{ mc.pagamento_cc_payway(_h) }}
+					{% set pagamento_type = 'cc' %}	
+				{% elseif _h.config('checkout_cc') == 'axepta' %}
+					{{ mc.pagamento_cc_axepta(_h) }}
+					{% set pagamento_type = 'cc' %}	
+				{% elseif _h.config('checkout_cc') == 'monetaweb' %}
+					{{ mc.pagamento_cc_monetaweb(_h) }}
+					{% set pagamento_type = 'cc' %}		
+				{% elseif _h.config('checkout_cc') == 'plainplay' %}
+					{{ mc.pagamento_cc_plainplay(_h, 
+						_h.settings.get('checkout_cc_label'),  
+						_h.config('checkout_cc_alias'),  
+						_h.settings.get('checkout_cc_abi'), 
+						ordine.total_ordine, ordine.currency, ordine.e_mail) }}
+					{% set pagamento_type = 'cc' %}
+				{% else %}
+					{% set pagamento_type = 'paypal' %}
+					{% if _h.settings.get('checkout_pagamento_paypal') == '' %}
+					{{ mc.pagamento_paypal(_h, _h.settings.get('checkout_paypal_email'), _h.settings.get('checkout_paypal_intestazione'), ordine.total_ordine) }}
+					{% endif %}
+				{% endif %}
+				{{ _lblc.clicca_pagamento_carta_di_credito }} 
+				<div>
+					<a href="javascript:void(0)" title="{{ _lblc.paga_con_carta_di_credito }}" class="button button-red action-ripeti-pagamento" data-type="{{ pagamento_type }}" data-id="{{ id_ordine }}"><strong>{{ _lblc.paga_con_carta_di_credito }}</strong></a>
+				</div>
+			</div>
+		</div>
+		<br>
+		{% endif %}
+		{% if ordine.tipo_spedizione == 1 and _h.settings.get('checkout_pagamento_paypal') != '' %}
+		<div class="rientro">
+			<strong class="font-big">{{ _lblc.tipo_pag_paypal }}</strong>
+			<div style="padding: 15px 0">
+				{{ _lblc.clicca_pagamento_paypal }} 
+				<div>
+					<a href="javascript:void(0)" title="{{ _lblc.paga_con_paypal }}" class="button button-red action-ripeti-pagamento" data-type="paypal" data-id="{{ id_ordine }}"><strong>{{ _lblc.paga_con_paypal }}</strong></a>
+				</div>
+				{{ mc.pagamento_paypal(_h, _h.settings.get('checkout_paypal_email'), _h.settings.get('checkout_paypal_intestazione'), ordine.total_ordine) }}
+			</div>
+		</div>
+		<br>
+		{% endif %}	
+		{% if _h.settings.get('checkout_pagamento_scalapay') != '' %}
+		<div class="rientro">
+			<strong class="font-big">{{ _lblc.tipo_pag_scalapay }}</strong>
+			<div style="padding: 15px 0">
+				{{ _lblc.clicca_pagamento_scalapay }} 
+				<div>
+				<a href="javascript:void(0)" title="{{ _lblc.tipo_pag_scalapay }}" class="button button-red action-ripeti-pagamento" data-type="scalapay" data-id="{{ id_ordine }}"><strong>{{ _lblc.paga_con_scalapay }}</strong></a>
+				</div>
+				{{ mc.pagamento_scalapay(_h) }}
+			</div>
+		</div>
+		<br>
+		{% endif %}
+		{% if _h.settings.get('checkout_pagamento_satispay') != '' %}
+		<div class="rientro">
+			<strong class="font-big">{{ _lblc.tipo_pag_satispay }}</strong>
+			<div style="padding: 15px 0">
+				{{ _lblc.clicca_pagamento_satispay }}
+				<div>
+					<a href="javascript:void(0)" title="{{ _lblc.tipo_pag_satispay }}" class="button button-red action-ripeti-pagamento" data-type="satispay" data-id="{{ id_ordine }}"><strong>{{ _lblc.paga_con_satispay }}</strong></a>
+				</div>
+				{{ mc.pagamento_satispay(_h) }}
+			</div>
+		</div>
+		<br>
+		{% endif %}
+		{% if _h.settings.get('checkout_pagamento_bancontact') != '' %}
+		<div class="rientro">
+			<strong class="font-big">{{ _lblc.tipo_pag_bancontact }}</strong>
+			<div style="padding: 15px 0">
+				{{ _lblc.clicca_pagamento_bancontact }} 
+				<div>
+					<a href="javascript:void(0)" title="{{ _lblc.tipo_pag_bancontact }}" class="button button-red action-ripeti-pagamento" data-type="bancontact" data-id="{{ id_ordine }}"><strong>{{ _lblc.paga_con_bancontact }}</strong></a>
+				</div>
+				{{ mc.pagamento_bancontact(_h) }}
+			</div>
+		</div>
+		<br>
+		{% endif %}
+		{% if _h.settings.get('checkout_pagamento_18app') != '' %}
+		<div class="rientro">
+			<strong class="font-big">{{ _lblc.tipo_pag_18app }}</strong>
+			<div style="padding: 15px 0">
+				{{ _lblc.clicca_pagamento_18app }}
+				<div>
+					<a href="javascript:void(0)" title="{{ _lblc.tipo_pag_18app }}" class="button button-red action-ripeti-pagamento" data-type="18app" data-id="{{ id_ordine }}"><strong>{{ _lblc.paga_con_18app }}</strong></a>
+				</div>
+				{{ mc.pagamento_18app(_h) }}
+			</div>
+		</div>
+		<br>
+		{% endif %}
+		{% if _h.settings.get('checkout_pagamento_oney') != '' %}
+		<div class="rientro">
+			<strong class="font-big">{{ _lblc.tipo_pag_oney }}</strong>
+			<div style="padding: 15px 0">
+				{{ _lblc.clicca_pagamento_oney }}
+				<div>
+					<a href="javascript:void(0)" title="{{ _lblc.tipo_pag_oney }}" class="button button-red action-ripeti-pagamento" data-type="oney" data-id="{{ id_ordine }}"><strong>{{ _lblc.paga_con_oney }}</strong></a>
+				</div>
+				{{ mc.pagamento_oney(_h) }}
+			</div>
+		</div>
+		<br>
+		{% endif %}
+		{% if ordine.tipo_spedizione == 2 and _h.settings.get('checkout_pagamento_ritiro_sede') != '' %}
+		<div class="rientro">
+			<strong class="font-big">{{ _lblc.tipo_pag_ritiro_sede }}</strong>
+			<div style="padding: 15px 0">
+				{{ _lblc.clicca_pagamento_tipo_pag_ritiro_sede }}
+				<div>
+					<a href="javascript:void(0)" class="button button-red action-ripeti-pagamento" data-type="ritiro_sede" data-id="{{ id_ordine }}"><strong>{{ _lblc.paga_con_ritiro_sede }}</strong></a>
+				</div>
+			</div>
+		</div>
+		<br>
+		{% endif %}	
+		{% if _h.settings.get('checkout_pagamento_bonifico') != '' %}
+		<div class="rientro">
+			{{ cmc.pagamento(_h, 3) }}
+		</div>
+		<br>
+		{% endif %}
+		{% if _h.settings.get('checkout_pagamento_postepay') != '' %}
+		<div class="rientro">
+			{{ cmc.pagamento(_h, 5) }}
+		</div>
+		<br>
+		{% endif %}
+		{% if _h.settings.get('checkout_pagamento_ricarica') != '' %}
+		<div class="rientro">
+			{{ cmc.pagamento(_h, 6) }}
+		</div>
+		<br>
+		{% endif %}
+	{% endif %}
+</div>
+
+{% else %}
+	<div class="riepilogo riepilogo-header">
+		<h1><span>{{ _lblc.title_grazie }}</span></h1>
+		<div>{{ _lblc.descr_conf_ricezione_ordine }}</div>
+	</div>
+
+	{% if testo %}
+		<div class="html clear">{{ testo.getWithMerge('testo') }}</div>
+	{% endif %}
+
+{% endif %}
+
+{% if ordine and not(ordine_tempo_scaduto) %}
+	<div class="riepilogo">
+		<h2>{{ _lblc.title_il_tuo_ordine }}</h2>
+		<div>{{ _lblc.descr_riferimento_ordine }}: <strong class="codice">{{ codice }}</strong></div>
+		{% if _lblc.descr_riferimento_ordine_note_aggiuntive %}
+		<div>{{ _lblc.descr_riferimento_ordine_note_aggiuntive }}</div>
+		{% endif %}
+	</div>
+	
+	{% if punti_disponibili_registrati %}
+	<div class="riepilogo riepilogo-punti riepilogo-punti-registrati">
+		<h2>{{ _lblc.title_totale_saldo_punti_thanks_registrati }}</h2>
+		{{ mc.punti(_h, punti_disponibili_registrati) }}
+		<div>{{ _lblc.totale_saldo_punti_thanks_registrati }}</div>
+		{{ _self.formRegistrazione(_h, ordine) }}
+	</div>
+	{% elseif punti_disponibili %}
+	<div class="riepilogo riepilogo-punti">
+		<h2>{{ _lblc.title_totale_saldo_punti_thanks }}</h2>
+		{% if item.get('stato_pagamento') == 3 %}
+		<div>{{ _lblc.totale_saldo_punti_thanks }}</div>
+		{% else %}
+		<div>{{ _lblc.totale_saldo_punti_thanks_attesa_conferma }}</div>
+		{% endif %}
+		{{ mc.punti(_h, punti_disponibili) }}
+	</div>
+	{% endif %}
+	
+	{{ mc.sondaggio(_h, sondaggio) }}
+	
+	{% if callback_url %}
+	<div class="riepilogo">
+		<div class="field-button field-button-left">
+			<a class="button-red button" href="{{ callback_url }}" title="{{ _lblc.btn_torna_alla_piattaforma }}"><span>{{ _lblc.btn_torna_alla_piattaforma }}</span></a>
+		</div>
+	</div>
+	{% endif %}
+	{{ cmc.riepilogo_ordine(_h, ordine) }}
+	{% if callback_url %}
+	<div class="riepilogo">
+		<div class="field-button field-button-left">
+			<a class="button-red button" href="{{ callback_url }}" title="{{ _lblc.btn_torna_alla_piattaforma }}"><span>{{ _lblc.btn_torna_alla_piattaforma }}</span></a>
+		</div>
+	</div>
+	{% endif %}
+	
+	{% if not(item.get('thankyou_page')) %}
+	{% include _h.template('cart/_thanks_script.html') %}
+	{% endif %}
+{% endif %}
+<div class="riepilogo">
+	{% if listFaq and listFaq|length > 0 %}
+		<h2>{{ _lblc.title_domande }}</h2>
+		{% for item in listFaq %}
+			<div class="item-faq">
+			<strong>{{ item.get('domanda') }}</strong>
+			<p>{{ item.get('risposta') }}</p>
+			</div>
+		{% endfor %}
+	{% endif %}
+	{% set _lblg = _h.labels.get('global') %}
+	<div class="item-faq">
+		<strong>{{ _lblc.title_serve_aiuto }}</strong>
+		<p>{{ _lblg.descr_help }} <a href="{{ _h.xurl('servizio-clienti') }}" title="{{ _lblg.alt_servizio_clienti }}">{{ _lblg.btn_servizio_clienti }}</a></p>
+	</div>
+</div>
+
+{% if transaction_error %}
+	</div>
+{% else %}
+	{% if _h.session.isAuth and _h.session.profile == 'guest' %}
+	{% else %}
+		{% if cancel_return %}
+		{% else %}
+			{% if _h.settings.get('nascondi_richiesta_registrazione_fine_acquisto', '') == '' and not(punti_disponibili_registrati) %}
+				<div class="riepilogo">
+					<h2>{{ _lblm.title_registrati_su }}</h2>
+					{{ _self.formRegistrazione(_h, ordine) }}
+				</div>
+			{% endif %}
+		{% endif %}
+	{% endif %}
+{% endif %}
+
+</div>
+
+
+
+{% if cancel_return %}
+{% else %}
+{{ _h.settings.get('script_checkout_thankyou') }}
+{% endif %}

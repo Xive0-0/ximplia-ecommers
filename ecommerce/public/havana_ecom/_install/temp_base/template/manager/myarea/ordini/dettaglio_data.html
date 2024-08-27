@@ -1,0 +1,543 @@
+{% import _h.template('manager/_macro.html') as mc %}
+{% import _h.template('manager/_my_macro.html') as mymc %}
+
+{% if item %}
+{% set ordine = item.dettaglio.ordine %}
+
+{% macro info_fatturazione(ordine) %}
+	{% if ordine.fattura.nome %}
+		{{ ordine.fattura.nome }}<br>
+		{% if ordine.fattura.p_iva %}
+			<em>P.IVA</em> {{ ordine.fattura.p_iva }}<br>
+		{% endif %}
+		{% if ordine.fattura.codice_fiscale %}
+			<em>C.F.</em> {{ ordine.fattura.codice_fiscale }}<br>
+		{% endif %}			
+		{% if ordine.fattura.data_nascita %}
+			<em>Data nascita</em> {{ ordine.fattura.data_nascita }}<br>
+		{% endif %}	
+		{% if ordine.fattura.luogo_nascita %}
+			<em>Luogo nascita</em> {{ ordine.fattura.luogo_nascita }}<br>
+		{% endif %}	
+		{% if ordine.fattura.pec %}
+			<em>E-Mail PEC</em> {{ ordine.fattura.pec }}<br>
+		{% endif %}		
+		{% if ordine.fattura.sdi %}
+			<em>SDI</em> {{ ordine.fattura.sdi }}<br>
+		{% endif %}			
+		{{ ordine.fattura.via }}, {{ ordine.fattura.num_civico }}<br>
+		{{ ordine.fattura.cap }} {{ ordine.fattura.localita }} ({{ ordine.fattura.provincia }})<br>
+		{{ ordine.fattura.nazione }}
+	{% endif %}
+{% endmacro %}
+
+{% macro info_spedizione(ordine) %}
+	{% if ordine.spedizione.nome %}
+		{% if ordine.tipo_spedizione == 1%}
+			{{ ordine.spedizione.nome }} {{ ordine.spedizione.cognome }}<br>
+			{% if ordine.spedizione.presso %}
+			<em>presso:</em> {{ ordine.spedizione.presso }}<br>
+			{% endif %}
+			{% if ordine.spedizione.nome_campanello %}
+			<em>nome camp.:</em> {{ ordine.spedizione.nome_campanello }}<br>
+			{% endif %}
+			{{ ordine.spedizione.via }}, {{ ordine.spedizione.num_civico }}<br>
+			{{ ordine.spedizione.cap }} {{ ordine.spedizione.localita }} ({{ ordine.spedizione.provincia }})<br>
+			{{ ordine.spedizione.nazione }}
+			{% if ordine.spedizione.indicazioni %}
+				<br><br><em>indicazioni:</em> {{ ordine.spedizione.indicazioni }}
+			{% endif %}
+		{% else %}
+			{{ ordine.sede_ritiro.nome }}<br>
+			{{ ordine.sede_ritiro.via }}, {{ ordine.sede_ritiro.num_civico }}<br>
+			{{ ordine.sede_ritiro.cap }} {{ ordine.sede_ritiro.localita }} ({{ ordine.sede_ritiro.provincia }})
+		{% endif %}
+	{% endif %}
+{% endmacro %}
+
+	{% if item.get('stato') == 0 %}
+		{% set stato = 'preso in carico' %}
+	{% elseif item.get('stato') == 100 %}
+		{% set stato = 'in lavorazione' %}
+	{% elseif item.get('stato') == 101 %}
+		{% set stato = 'attesa articoli' %}
+	{% elseif item.get('stato') == 102 %}
+		{% set stato = 'in attesa di feedback' %}
+	{% elseif item.get('stato') == 200 %}
+		{% set stato = 'merce disponibile / in spedizione' %}
+	{% elseif item.get('stato') == 201 %}
+		{% set stato = 'consegnato' %}
+	{% elseif item.get('stato') == 800 %}
+		{% set stato = 'annullato' %}
+	{% elseif item.get('stato') == 801 %}
+		{% set stato = 'rimborsato' %}
+	{% elseif item.get('stato') == 900 %}
+		{% set stato = 'reso' %}
+	{% elseif item.get('stato') == 901 %}
+		{% set stato = 'reso parziale' %}
+	{% elseif item.get('stato') == 902 %}
+		{% set stato = 'cambio merce' %}
+	{% elseif item.get('stato') == 903 %}
+		{% set stato = 'cambio merce parziale' %}
+	{% endif %}	
+
+{% if item.isOrdineCarrelloDaCompletare() %}
+	<div style="margin-bottom: 10px;"><strong style="color: #ed4747;">ATTENZIONE! ordine con dati incompleti creato da opreatore</strong> <a href="javascript:void(0);" style="font-weight: bold; padding: 2px 5px; border: 1px solid #4285f4;" class="link h-action-selected-execute" data-action='{"confirm": "Inviare e-mail con il link per completare i dati ed effettuare pagamento?", "url": "{{ _h.url('manager/myarea/ordini/ex-email-esegui-pagamento') }}", "params": {"id": {{ item.id }}}}'>Invia e-mail con link completa dati e paga</a></div>
+{% endif %}
+
+<table class="h-list" cellpadding="0" cellspacing="0" border="0">
+<tbody>
+<tr>
+	<td style="width: 50%;">		
+		{% if item.get('integra_cliente_ordine_precedente_id') %}
+			<div style="margin-bottom: 10px;"><em style="font-weight: bold;">Collegato a ordine: </em> <strong style="color: #ed4747;">{{ item.get('integra_cliente_ordine_precedente_id') }}</strong></div>
+		{% endif %}
+		
+		{% if stampa %}
+			<div style="margin-bottom: 10px;"><em>ordine: </em> <strong style="color: #ed4747;">{{ item.get('codice') }}</strong></div>
+			<div style="margin-bottom: 10px;"><em>data: </em> <strong style="color: #ed4747;">{{ item.getDateTime('data_inserimento') }}</strong></div>
+			{% if _h.config('gestione_agenti', false) and item.get('id_agente') > 0 %}
+			<div style="margin-bottom: 10px;"><em>effettuato da agente: </em> <strong style="color: #ed4747;">{{ item.get('agente') }}</strong></div>
+			{% endif %}
+		{% else %}
+			<div style="margin-bottom: 10px;"><em>lang: </em> <strong style="color: #ed4747;">{{ item.get('lang') }}</strong></div>
+			<div style="margin-bottom: 10px;"><em>ordine: </em> <strong style="color: #ed4747;">{{ item.get('codice') }}</strong></div>
+			{% if _h.config('gestione_agenti', false) and item.get('id_agente') > 0 %}
+			<div style="margin-bottom: 10px;"><em>effettuato da agente: </em> <strong style="color: #ed4747;">{{ item.get('agente') }}</strong></div>
+			{% endif %}
+			{% if item.get('punti') > 0 %}
+			<div style="margin-bottom: 10px;"><em>punti accumulati: </em> <strong>{{ item.get('punti') }}</strong></div>
+			{% endif %}
+			{% if not(item.isOrdineCarrelloDaCompletare()) and item.isOrdine() %}
+				<div style="margin-bottom: 15px;"><em>stato ordine: </em> <strong style="color: #4285f4; text-transform: uppercase;">{{ stato }}</strong></div>
+			{% endif %}
+			{% if item.get('codice_buono_sconto') %}
+			<div style="margin-bottom: 15px;"><em>codice sconto: </em> <strong style="text-transform: uppercase;">{{ item.get('codice_buono_sconto') }}</strong><br>
+				{% if item.get('tipo_buono_sconto', 0) == 10 %}<strong style="text-transform: uppercase; color: #4285f4;">BUONO SCONTO CON OMAGGIO</strong>{% endif %}
+			</div>
+			{% endif %}
+			{% if item.get('fattura') %}
+			<div style="margin-bottom: 5px;"><em>fattura/ricevuta: </em> <strong class="h-action-link" data-action='{"url": "{{ _h.url('manager/myarea/ordini/documenti/download-fattura') }}?id={{ item.id }}"}'>{{ item.get('fattura') }}</strong> ({{ item.getDateTime('data_fattura') }})</div>
+			{% endif %}
+			{% if item.get('fattura_proforma') %}
+			<div style="margin-bottom: 5px;"><em>fattura proforma: </em> <strong class="h-action-link" data-action='{"url": "{{ _h.url('manager/myarea/ordini/documenti/download-fattura-proforma') }}?id={{ item.id }}"}'>{{ item.get('fattura_proforma') }}</strong> ({{ item.getDateTime('data_fattura_proforma') }})</div>
+			{% endif %}
+			{% if item.get('ddt') %}
+			<div style="margin-bottom: 5px;"><em>DDT: </em> <strong class="h-action-link" data-action='{"url": "{{ _h.url('manager/myarea/ordini/documenti/download-ddt') }}?id={{ item.id }}"}'>{{ item.get('ddt') }}</strong> ({{ item.getDateTime('data_ddt') }})</div>
+			{% endif %}
+		{% endif %}
+	</td>
+	<td style="width: 50%;">
+		{% if cliente_registrato %}
+			<div style="margin-bottom: 5px;">Utente registrato:</div>
+			<div style="margin-bottom: 5px;"><em>E-Mail: </em> <strong>{{ cliente_registrato.get('e_mail') }}</strong></div>
+			{% if cliente_registrato.get('nome') %}
+			<div style="margin-bottom: 5px;"><em>Nome: </em> <strong>{{ cliente_registrato.get('nome') }}</strong></div>
+			{% endif %}
+			{% if cliente_registrato.get('cognome') %}
+			<div style="margin-bottom: 5px;"><em>Cognome: </em> <strong>{{ cliente_registrato.get('cognome') }}</strong></div>
+			{% endif %}
+			{% if cliente_registrato.get('totale_punti', 0) > 0 %}
+			<div><em>Punti residui: </em> <strong>{{ cliente_registrato.get('totale_punti') }}</strong></div>
+			<div><em>Credito residuo: </em> <strong>{{ cliente_registrato.euro('totale_credito') }} &euro;</strong></div>
+			{% endif %}
+		{% else %}
+		Cliente NON registrato al sito
+		{% endif %}
+	</td>
+</tr>
+{% set list_rimborsi = item.listRimborsi() %}
+{% if list_rimborsi and list_rimborsi|length > 0 %}
+<tr>
+<td colspan="2">
+	<div class="ordine-rimborsi">
+		<strong style="color: #4285f4; text-transform: uppercase;">Rimborsi effettuati:</strong>
+		<ul>
+		{% for rimborso in list_rimborsi %}
+			<li>
+				{{ rimborso.data_inserimento }} 
+				rimborsato: {{ _h.util.valuta(rimborso.importo, item.get('currency')) }}
+				- {{ rimborso.tipo_nome }}
+				{% if rimborso.tipo == 'gift' %}
+					<strong>{{ rimborso.codice }}</strong>
+				{% endif %}
+				<em>({{ rimborso.utente }})</em>
+			</li>
+		{% endfor %}
+		</ul>
+	</div>
+</td>
+</tr>
+{% endif %}
+</tbody>
+</table>
+
+{% if stampa %}
+<table class="h-list" cellpadding="0" cellspacing="0" border="0">
+<thead>
+<tr class="h-list-header">
+	<th style="width: 50%;">{% if ordine.tipo_spedizione == 1%}Indirizzo di spedizione{% else %}Ritiro merce presso <span style="color: #ed4747">[SEDE]<span>{% endif%}</th>
+	<th style="width: 50%;">Pagamento e Fatturazione</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+	<td>
+		{% if ordine.tipo_spedizione != 1%}<div style="color: #ed4747; font-weight: bold;">RITIRO IN SEDE:</div>{% endif%}
+		{{ _self.info_spedizione(ordine) }}<br><br>
+		{{ ordine.e_mail }}<br>
+		{{ ordine.spedizione.telefono }}
+	</td>
+	<td>
+		{{ _self.info_fatturazione(ordine) }}<br><br>
+		<em>Tipo pagamento: </em> {{ _h.context('checkout_util').getPagamento(item.get('tipo_pagamento')) }}
+	</td>
+</tr>
+</tbody>
+</table>
+{% else %}
+<div class="separatore-linea"></div>
+<table class="h-list" cellpadding="0" cellspacing="0" border="0">
+<thead>
+<tr class="h-list-header">
+	<th colspan="4">
+		{{ mc.navButton(_h, 'modifica indirizzo', 'update', 'click', 'h-action-window', '{"type": "layer", "url": "' ~ _h.url('manager/myarea/ordini/edit-spedizione') ~ '", "overlay": true, "width": 500, "height": 500, "params": {"id": ' ~ item.id ~ '}}') }}
+		<span class="h-nav-text">RECAPITI E SPEDIZIONE</span>
+	</th>
+</tr>
+<tr class="h-list-header h-list-header-light">
+	<th>{% if ordine.tipo_spedizione == 1%}Indirizzo di spedizione{% else %}Ritiro merce presso <span style="color: #ed4747">[SEDE]<span>{% endif%}</th>
+	<th style="width: 200px;">
+	{{ mc.navButton(_h, 'modifica e-mail', 'update', 'click', 'h-action-window', '{"type": "layer", "url": "' ~ _h.url('manager/myarea/ordini/edit-email') ~ '", "overlay": true, "width": 500, "height": 250, "params": {"id": ' ~ item.id ~ '}}') }}
+	<span class="h-nav-text">E-mail</span>
+	</th>
+	<th style="width: 150px;">Telefono</th>
+	<th style="width: 100px;">Stato</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+	<td>
+		{% if not(item.isOrdineCarrelloDaCompletare()) %}
+			{% if ordine.tipo_spedizione != 1%}<div style="color: #ed4747; font-weight: bold;">RITIRO IN SEDE:</div>{% endif%}
+			{{ _self.info_spedizione(ordine) }}
+		{% endif %}
+	</td>
+	<td>
+		<div class="h-list-cell-auto-wrapper">
+			<div class="h-list-cell-auto h-action-alttext" data-alttext="{{ ordine.e_mail }}">
+				<a class="link h-action-window" data-action='{"type": "layer", "url": "{{ _h.url('manager/myarea/ordini/scrivi') }}", "overlay": true, "width": 500, "height": 300, "params": {"id": {{ item.id }}}}'>
+					{{ ordine.e_mail }}
+				</a>
+			</div>
+		</div>
+	</td>
+	<td>
+		<div class="h-list-cell-auto-wrapper">
+			<div class="h-list-cell-auto h-action-alttext" data-alttext="{{ ordine.spedizione.telefono }}">
+				{{ ordine.spedizione.telefono }}
+			</div>
+		</div>
+	</td>	
+	<td>
+		<div>
+		{% if item.get('stato_spedizione') == 0 %}	
+		&nbsp;
+		{% elseif item.get('stato_spedizione') == 1 %}	
+		evasione parziale
+		{% elseif item.get('stato_spedizione') == 2 %}
+		spedito 
+		{% elseif item.get('stato_spedizione') == 3 %}
+		consegnato
+		{% endif %}	
+		</div>
+		{% if item.get('stato_spedizione') > 0 and item.get('traking') %}
+			<div>{{ item.get('traking') }}</div>
+		{% endif %}	
+	</td>
+</tbody>
+</table>
+{% if ordine.tipo_spedizione == 1 %}
+<table class="h-list" cellpadding="0" cellspacing="0" border="0">
+<thead>
+<tr class="h-list-header">
+	<th>
+	{{ mc.navButton(_h, 'modifica opzioni spedizione', 'update', 'click', 'h-action-window', '{"type": "layer", "url": "' ~ _h.url('manager/myarea/ordini/edit-spedizione-opzione') ~ '", "overlay": true, "width": 500, "height": 500, "params": {"id": ' ~ item.id ~ '}}') }}
+	<span class="h-nav-text">Opzioni di spedizione</span>
+	</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+	<td>
+		{% for op in ordine.spedizione_opzione.list_id %}
+			<div>{{ nazione_opzione_spedizione.get(op) }}</div>
+		{% endfor %}	
+	</td>
+</tr>
+</tbody>
+</table>
+{% endif %}
+
+<div class="separatore-linea"></div>
+
+<table class="h-list" cellpadding="0" cellspacing="0" border="0">
+<thead>
+<tr class="h-list-header">
+	<th colspan="4">
+		{{ mc.navButton(_h, 'modifica fatturazione', 'update', 'click', 'h-action-window', '{"type": "layer", "url": "' ~ _h.url('manager/myarea/ordini/edit-fatturazione') ~ '", "overlay": true, "width": 500, "height": 500, "params": {"id": ' ~ item.id ~ '}}') }}
+		<span class="h-nav-text">PAGAMENTO E FATTURAZIONE</span>
+	</th>
+</tr>
+<tr class="h-list-header h-list-header-light">
+	<th>Fatturazione:</th>
+	<th style="width: 100px;">Documento</th>
+	<th style="width: 130px;">Tipo pagamento</th>
+	<th style="width: 100px;">Stato pagamento</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+	<td>
+		{% if not(item.isOrdineCarrelloDaCompletare()) %}
+			{{ _self.info_fatturazione(ordine) }}
+		{% endif %}
+	</td>
+	<td>
+		{% if ordine.richiesta_fatturazione == 1 %}
+			fattura
+		{% else %}
+			ricevuta
+		{% endif %}
+	</td>
+	<td>
+		{{ _h.context('checkout_util').getPagamento(item.get('tipo_pagamento')) }}
+	</td>
+	<td>
+		{% if item.get('stato_pagamento') == 0 %}	
+		non pagato
+		{% elseif item.get('stato_pagamento') == 1 %}	
+		bonifico comunicato CRO
+		{% elseif item.get('stato_pagamento') == 2 %}
+		pagato acconto
+		{% elseif item.get('stato_pagamento') == 3 %}
+		pagato 
+		{% elseif item.get('stato_pagamento') == 10 %}
+		annullato
+		{% endif %}	
+	</td>
+</tbody>
+</table>
+{% endif %}
+
+<div class="separatore-linea"></div>
+{% set colspan = 7 %}
+{% if not(stampa) %}
+	{% set colspan = 8 %}
+{% endif %}
+<table class="h-list h-list-multiple-selection" cellpadding="0" cellspacing="0" border="0">
+<thead>
+<tr class="h-list-header">
+	<th colspan="{{ colspan }}">
+	{% if _h.config('manager_ordine_add_articolo', true) %}
+		{{ mc.navButton(_h, 'aggiungi articolo', 'new', 'click', 'h-action-window', '{"type": "layer", "url": "' ~ _h.url('manager/myarea/ordini/add-articolo') ~ '", "overlay": true, "width": 750, "height": 450, "params": {"id": ' ~ item.id ~ '}}') }}
+	{% endif %}
+		{{ mc.navButton(_h, 'modifica sconto ordine', 'update', 'click', 'h-action-window', '{"type": "layer", "url": "' ~ _h.url('manager/myarea/ordini/edit-sconto') ~ '", "overlay": true, "width": 300, "height": 270, "params": {"id": ' ~ item.id ~ '}}') }}
+		<span class="h-nav-text">ARTICOLI ACQUISTATI</span>
+	</th>
+</tr>
+{% set iva = true %}
+{% if ordine.add_iva != '' %}
+	{% set iva = false %}
+<tr class="h-list-header h-list-header-light">
+	<th colspan="{{ colspan }}" style="color: #ed4747">
+		ARTICOLI SENZA IVA PER ESENZIONE: {{ ordine.nazione_esenzione_legge }}
+	</th>
+</tr>
+{% endif %}
+{% if _h.settings.get('checkout_spunta_autoconsumo', '') != '' %}
+<tr class="h-list-header h-list-header-light">
+	<th colspan="{{ colspan }}">
+		Acquisto per autoconsumo: <strong style="color: #ed4747">{% if item.get('autoconsumo', false) %}SI{% else %}NO{% endif %}</strong>
+	</th>
+</tr>
+{% endif %}
+{% if not(item.isOrdineCarrelloDaCompletare()) %}
+<tr class="h-list-header h-list-header-light">
+	<th colspan="{{ colspan }}">
+		<span class="h-checkbox" data-action='{"callback": "gestione_disponibilita_tutti_articoli"}' data-value="{{ item.id }}"><input type="hidden" name="id" value="" /></span> Imposta tutti gli articoli come "disponibili"
+	</th>
+</tr>
+{% endif %}
+<tr class="h-list-header">
+	<th style="width: 20px; padding-left: 5px">&nbsp;</th>
+	{% set colspan = 6 %}
+	{% if not(stampa) %}
+		{% set colspan = 7 %}
+	<th style="width: 75px; padding-left: 5px">&nbsp;</th>
+	{% endif %}
+	<th style="width: 60px;">&nbsp;</th>
+	<th style="width: 120px;">COD</th>
+	<th>Articolo</th>
+	<th style="width: 80px;">Prezzo unit.</th>
+	<th style="width: {% if _h.settings.get('gestione_ordini_fornitore', '') != '' %}90{% else %}45{% endif %}px;">Qta</th>
+	<th style="width: 90px; text-align: right">Totale</th>
+</tr>
+</thead>
+<tbody>
+	{% set map = _h.context('mapAttributo') %}
+	{% set mapType = _h.context('mapAttributoType') %}
+
+	{% set listItems = item.listItems() %}
+	{% for art in listItems %}
+		{% if iva %}
+			{% set prezzo_originale = art.item.prezzo_originale %}
+			{% set prezzo = art.item.prezzo %}
+			{% set total = art.total %}
+		{% else %}
+			{% set prezzo_originale = art.item.prezzo_originale_imponibile %}
+			{% set prezzo = art.item.prezzo_imponibile %}
+			{% set total = art.total_imponibile %}
+		{% endif %}
+	<tr class="row-articolo-ordine{% if art.disponibile %} h-list-row-selected{% endif %}" data-ordine-id="{{ item.id }}" data-articolo-id="{{ art.item.id }}" data-articolo-tmp-id="{{ art.tmp_id }}" data-articolo-quantita="{{ art.qta }}">
+		<td style=" padding-left: 5px; position: relative;">
+		{% if art.ordinato_a_fornitore and not(art.disponibile) %} 
+			<div style="position: absolute; width: 5px; left: 0; top: 0; bottom: 0; background: #ed4747;"></div>
+		{% endif%}
+		{% if item.isOrdineCarrelloDaCompletare() %}
+		&nbsp;
+		{% else %}
+		<span class="articolo-ordine-disponibile h-checkbox{% if art.disponibile %} h-checkbox-checked{% endif%}" data-action='{"callback": "gestione_disponibilita_articolo"}' data-value="{{ item.id }}#{{ art.item.id }}#{{ art.tmp_id }}"><input type="hidden" name="id" value="" /></span>
+		{% endif %}
+		</td>
+		{% if not(stampa) %}
+		<td class="h-cell" style="padding-left: 5px">
+		{% if _h.config('manager_ordine_update_articolo', true) %}
+			{{ mc.navButton(_h, 'modifica articolo', 'update', 'click', 'h-action-window', '{"type": "layer", "url": "' ~ _h.url('manager/myarea/ordini/edit-articolo') ~ '", "overlay": true, "width": 500, "height": 500, "params": {"id": ' ~ item.id ~ ', "articolo_id": ' ~ art.item.id ~ ', "articolo_tmp_id": "' ~ art.tmp_id ~ '"}}') }}	
+		{% endif %}
+		{{ mc.navButton(_h, 'elimina articolo', 'delete', 'click', 'h-action-selected-execute', '{"confirm": "Eliminare articolo? Il carrello sarà ricalcolato.", "url": "' ~ _h.url('manager/myarea/ordini/ex-delete-articolo') ~ '", "params": {"id": ' ~ item.id ~ ', "articolo_id": ' ~ art.item.id ~ ', "articolo_tmp_id": "' ~ art.tmp_id ~ '"}, "reload": ["#h-layout-center-content", "#dettaglio-content"]}') }}
+		</td>
+		{% endif %}
+		<td>{{ mymc.immagine_articolo_ordine(_h, art) }}</td>
+		<td>{{ art.item.codice }}{% if _h.config('template').manager.item.articolo.id %}<div style="font-size:9px;">#{{ art.item.id }}</div>{% endif %}</td>
+		<td>
+			<div><strong>{{ art.item.nome }}</strong></div>
+			{% if art.item.nome_simbolico %}
+			<div>{{ art.item.nome_simbolico }}</div>
+			{% endif %}
+			{% for attr in art.attr %}
+				{% if attr.type matches '/^_extra_*/' %}
+				<div><em>{{ attr.label }}:</em> {{ attr.pers }}</div>
+				{% elseif attr.id != 0 %}
+					{% set a = map.get(attr.id) %}
+					{% if a %}
+					<div><a style="color: #4285f4; cursor: pointer;" class="h-action-edit-attributo-articolo-ordine" data-attributo="{{ a.get('tipo') }}" data-attributo-id="{{ a.id }}" data-action='{"attributo_id": "{{ a.id }}", "tipo": "{{ a.get('tipo') }}"}'>[modifica] </a><em>{{ mapType.get(a.get('tipo')).nome }}:</em> {{ a.get('nome') }}</div>
+					{% endif %}
+				{% endif %}
+			{% endfor %}
+			{{ mymc.dettaglio_articolo_ordine(_h, art) }}
+			{% if art.giorni_attesa %}
+			<div style="color: #ed4747;">attesa giorni <strong>{{ art.giorni_attesa }}</strong></div>
+			{% endif %}	
+			{% if art.ordinato_a_fornitore and art.ordinato_a_fornitore.inviato and not(art.disponibile) %}
+			<div style="color: #ed4747; margin-top: 10px;">ordinato {% if not(art.ordinato_a_fornitore.fornitore_manuale) %}<strong>{{ art.ordinato_a_fornitore.qta }}</strong> pezzo/i{% endif %} il <strong>{{ art.ordinato_a_fornitore.data }}</strong> a <strong>{% if art.ordinato_a_fornitore.fornitore_manuale %}{{ art.ordinato_a_fornitore.fornitore_manuale }}{% else %}{{ art.ordinato_a_fornitore.fornitore }}{% endif %}</strong></div>
+			{% endif %}
+			{% if art.note %}
+			<div style="color: #888; margin-top: 10px;">{{ art.note }}</div>
+			{% endif %}
+		</td>
+		<td style="text-align: right;">
+			<div>{{ _h.util.valuta(prezzo, item.get('currency')) }}</div>			
+			{% if art.item.is_pacchetto %}
+			<div style="color: #888; font-size: 12px;">{{ art.item.nome_pacchetto }}%</div>
+			{% elseif art.item.is_sconto %}
+			<div style="color: #888; font-size: 12px;">-{{ art.item.sconto }}%</div>
+			<div style="color: #888; font-size: 12px; text-decoration: line-through">{{ _h.util.valuta(prezzo_originale, item.get('currency')) }}</div>
+			{% endif %}
+		</td>
+		<td>
+			<strong>{{ art.qta }}</strong>
+		{% if _h.settings.get('gestione_ordini_fornitore', '') != '' %}
+			{% set info = mapInOrdine.get(art.item.id) %}
+			{% if not(info) %}
+				{% set info = {"magazzino": 0, "in_ordine": 0} %}
+			{% endif %}
+			{% if _h.config('gestione_magazzino', false) %}
+			<div style="color: #888; font-size: 11px;">magazzino: {{ info.magazzino }}</div>
+			{% endif %}
+			<div style="color: #888; font-size: 11px;">in arrivo: {{ info.in_arrivo }}</div>
+			<div style="color: #4285f4; font-size: 11px; font-weight: bold; cursor: pointer;" class="action-ordina-articolo-a-fornitore">ORDINA</div>
+		{% endif %}
+		</td>
+		<td style="text-align: right;">
+			<div><strong>{{ _h.util.valuta(total, item.get('currency')) }}</strong></div>	
+		</td>
+	</tr>
+	{% endfor %}
+	
+	<tr>
+		<td colspan="{{ colspan }}" style="text-align: right; border-bottom: none;">tot. articoli:</td>
+	{% if iva %}
+		<td style="text-align: right;">{{ _h.util.valuta(ordine.total_articoli, item.get('currency')) }}</td>
+	{% else %}
+		<td style="text-align: right;">{{ _h.util.valuta(ordine.total_articoli_imponibile, item.get('currency')) }}</td>
+	{% endif %}
+	</tr>
+	<tr>
+		<td colspan="{{ colspan - 1 }}" style="text-align: right; border-bottom: none;" valign="middle">
+			Tot. spedizione:
+			{% if ordine.total_spedizione_imballaggio or total_spedizione_opzione %}
+				<div style="color: #999; font-size: 11px;">
+					<em>di cui:</em>
+					{% if ordine.total_spedizione_imballaggio %}
+					<div>imballaggio: {{ _h.util.valuta(ordine.total_spedizione_imballaggio, item.get('currency')) }}</div>
+					{% endif %}
+					{% if ordine.total_spedizione_opzione %}
+					<div>extra: {{ _h.util.valuta(ordine.total_spedizione_opzione, item.get('currency')) }}</div>
+					{% endif %}
+				</div>
+			{% endif %}
+		</td>
+		<td style="width: 40px; padding: 0; border-bottom: none;">
+			{{ mc.navButton(_h, 'modifica spese spedizione', 'update', 'click', 'h-action-window', '{"type": "layer", "url": "' ~ _h.url('manager/myarea/ordini/edit-spese-spedizione') ~ '", "overlay": true, "width": 350, "height": 260, "params": {"id": ' ~ item.id ~ '}}') }}
+		</td>
+		<td style="text-align: right;">{{ _h.util.valuta(ordine.total_spedizione + ordine.total_spedizione_opzione, item.get('currency')) }}</td>
+	</tr>
+	<tr>
+		<td colspan="{{ colspan }}" style="text-align: right; border-bottom: none;">tot. opz. pagamento:</td>
+		<td style="text-align: right;">{{ _h.util.valuta(ordine.total_pagamento, item.get('currency')) }}</td>
+	</tr>
+	<tr>
+		<td colspan="{{ colspan }}" style="text-align: right; border-bottom: none;">
+			{% if ordine.sconto.codice %}
+			Codice gift/sconto <strong style="color: #ed4747;">{{ ordine.sconto.codice }}</strong>
+			{% endif %}
+			Sconto:
+		</td>
+		<td style="text-align: right;">-{{ _h.util.valuta(ordine.total_sconto, item.get('currency')) }}</td>
+	</tr>
+	{% if item.get('valore_pagato_con_punti_cent', 0) > 0 %}
+	<tr>
+		<td colspan="{{ colspan }}" style="text-align: right; border-bottom: none; font-weight: bold; font-size: 16px; color: #ed4747;">SCONTO DA CREDITO</td>
+		<td style="text-align: right; font-weight: bold; font-size: 16px; color: #ed4747;">{{ _h.util.valuta(item.get('valore_pagato_con_punti_cent', 0) / 100, item.get('currency')) }}</td>
+	</tr>
+	{% endif %}
+	<tr>
+		<td colspan="{{ colspan }}" style="text-align: right; border-bottom: none; font-weight: bold; font-size: 16px;">TOTALE</td>
+		<td style="text-align: right; font-weight: bold; font-size: 16px;">{{ _h.util.valuta(ordine.total_ordine, item.get('currency')) }}</td>
+	</tr>
+	{% if item.get('totale_rimborsato_cent', 0) > 0 %}
+	<tr>
+		<td colspan="{{ colspan }}" style="text-align: right; border-bottom: none; font-weight: bold; font-size: 16px; color: #ed4747;">RIMBORSATO</td>
+		<td style="text-align: right; font-weight: bold; font-size: 16px; color: #ed4747;">{{ _h.util.valuta(item.get('totale_rimborsato_cent', 0) / 100, item.get('currency')) }}</td>
+	</tr>
+	{% endif %}
+	{% if ordine.add_iva != '' %}
+		{% set colspan = colspan + 1 %}
+		<tr><td colspan="{{ colspan }}" style="text-align: right;">{{ ordine.nazione_esenzione_legge }}</td></tr>
+	{% endif %}	
+</tbody>
+</table>
+{% else %}
+Ordine non trovato
+{% endif %}

@@ -1,0 +1,90 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Indirizzo') }}
+<input type="hidden" name="id" value="{{ item.id }}">
+{% set numero_colli = 1 %}
+{% if item %}
+	{% set numero_colli = item.get('numero_colli', 1) %}
+{% endif %}
+
+<p class="field-line field-line-left field-150">
+	<label>Codice:</label>
+	<input type="text" name="codice" class="field" value="{{ item.get('codice') }}" maxlength="50">
+</p>
+<p class="field-line field-line-left field-150">
+	<label>Totale ordine per export {{ item.get('currency')|upper }}:</label>
+	<input type="text" name="totale_ordine" class="field valida-euro" value="{{ item.euro('totale_ordine') }}" maxlength="10">
+</p>
+<div class="clear"></div>
+<p class="field-line field-line-left field-150">
+	<label>Importo Contrassegno {{ item.get('currency')|upper }}:</label>
+	<input type="text" name="contrassegno" class="field valida-euro" value="{{ item.euro('contrassegno') }}" maxlength="10">
+</p>
+<p class="field-line field-line-left field-150">
+	<label>Numero Colli:</label>
+	<input type="text" name="numero_colli" class="field valida-int valida-digitint" value="{{ numero_colli }}" maxlength="10">
+</p>
+<div class="clear"></div>
+<p class="field-line field-line-left field-150">
+	<label>Importo assicurazione {{ item.get('currency')|upper }}:</label>
+	<input type="text" name="assicurazione" class="field valida-euro" value="{{ item.euro('assicurazione') }}" maxlength="10">
+</p>
+<p class="field-line field-line-left field-150">
+	<label>Tipo porto<span>*</span>:</label>
+	<select name="tipo_porto" class="field valida-required">
+		<option value="F" {% if item == null or item.get('tipo_porto') == 'F' %}selected="true"{% endif %}>Franco</option>
+		<option value="A" {% if item.get('tipo_porto') == 'A' %}selected="true"{% endif %}>Assegnato</option>
+	</select>
+</p>
+<div class="clear"></div>
+<p class="clear field-line field-line-left field-200">
+	<label>Nome<span>*</span>:</label>
+	<input type="text" name="nome" class="field valida-required" value="{{ item.get('nome') }}" maxlength="50">
+</p>
+<p class="field-line field-200">
+	<label>Cognome<span>*</span>:</label>
+	<input type="text" name="cognome" class="field" value="{{ item.get('cognome') }}" maxlength="50">
+</p>
+<p class="clear field-line field-200">
+	<label>C/O presso:</label>
+	<input type="text" name="presso" class="field" value="{{ item.get('presso') }}" maxlength="100">
+</p>
+<p class="clear field-line field-line-left field-300">
+	<label>Via<span>*</span>:</label>
+	<input type="text" name="via" class="field valida-required" value="{{ item.get('via') }}" maxlength="100">
+</p>
+<p class="field-line field-50">
+	<label>Num. civico<span>*</span>:</label>
+	<input type="text" name="num_civico" class="field valida-required" value="{{ item.get('num_civico') }}" maxlength="10">
+</p>
+<p class="clear field-line clear field-line-left field-50">
+	<label>CAP<span>*</span>:</label>
+	<input type="text" name="cap" class="field valida-digitnumber valida-required" value="{{ item.get('cap') }}" maxlength="10">
+</p>
+<p class="field-line field-400">
+	<label>Località<span>*</span>:</label>
+	<input type="text" name="localita" class="field valida-required" value="{{ item.get('localita') }}" maxlength="50">
+</p>
+<p class="clear field-line field-400">
+	<label>Nazione<span>*</span>:</label>
+	<select name="id_nazione" class="field valida-required">
+		<option></option>
+		{% for n in list %}
+		<option value="{{ n.id }}" {% if (item and item.get('id_nazione') == n.id) or (not(item) and n.id == 108) %}selected="true"{% endif %}>{{ n.get('nome') }}</option>
+		{% endfor %}
+	</select>
+</p>
+<p class="clear field-line field-400">
+	<label>Provincia (indicare SIGLA se prov. Italiana)<span>*</span>:</label>
+	<input type="text" name="provincia" class="field valida-required" value="{{ item.get('provincia') }}" maxlength="50">
+</p>
+<p class="field-line field-400">
+	<label>E-Mail<span>*</span>:</label>
+	<input type="text" name="e_mail" class="field valida-required valida-email" value="{{ item.get('e_mail') }}" maxlength="100">
+</p>
+<p class="field-line field-200">
+	<label>Telefono:</label>
+	<input type="text" name="telefono" class="field" value="{{ item.get('telefono') }}" maxlength="20">
+</p>
+{{ mc.labelCampiObbligatori() }}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/ordini/extraindirizzo/ex-edit'), '"reload": "#ordini-extraindirizzo-content"') }}	

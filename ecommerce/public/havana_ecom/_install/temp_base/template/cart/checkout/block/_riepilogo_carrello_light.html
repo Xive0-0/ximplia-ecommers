@@ -1,0 +1,12 @@
+		<div class="checkout-riepilogo-carrello">
+		<div class="tab-title tab-title-2"><span>{{ _lblc.riepilogo }}</span></div>
+		<div class="tab-content clear">
+		<div class="riepilogo-cart">
+			<div class="header show"><span>{{ _lblc.riepilogo }}</span></div>
+			<div class="body">
+				<div class="label"><em>{{ _lblc.email_riferimento }}:</em><span>{{ e_mail }}</span><a href="javascript:void(0)" class="action-page" data-page="1">{{ _lblc.btn_modifica }}</a></div>
+				<div class="label" {% if cart.solo_digitali %}style="display: none;"{% endif %}><em>{{ _lblc.nazione_destinazione }}:</em><span>{{ nazione.get('nome') }}</span><a href="javascript:void(0)" class="action-page" data-page="2">{{ _lblc.btn_modifica }}</a></div>
+			</div>
+		</div>
+		</div>
+	</div>

@@ -1,0 +1,176 @@
+{% import _h.template('cart/_macro.html') as cmc %}
+{% set _lblc = _h.labels.get('checkout') %}
+
+		{% set total_spese_spedizione = ordine.total_spedizione + ordine.total_spedizione_opzione %}
+		<div class="checkout-title block-spedizione-titolo" {% if ordine.solo_digitali %}style="display: none;"{% endif %}>{{ _lblc.title_opzione_spedizione }}</div>
+		<div class="checkout-block block-spedizione" {% if ordine.solo_digitali %}style="display: none;"{% endif %}>
+			<div class="ck-header">
+				<div class="ck-checkbox ck-cell">&nbsp;</div>
+				<div class="ck-checkbox-descrizione ck-cell">{{ _lblc.spedizione }}</div>
+				<div class="ck-prezzo-totale ck-cell">{{ _lblc.prezzo }}</div>
+			</div>
+			<div class="ck-footer">
+				<div class="ck-descrizione ck-cell">
+				{% if ordine.tipo_spedizione != 1 and ordine.total_spedizione < 0 %}
+					{{ _lblc.subtotale_spedizione_sconto }}
+				{% else %}
+					{{ _lblc.subtotale_spedizione }}
+				{% endif %}
+				</div>
+				<div class="ck-prezzo-totale ck-cell">
+				{% if total_spese_spedizione <= 0 %}
+					{{ _lblc.gratis }}
+				{% else %}
+					{{ _h.util.valuta(total_spese_spedizione, ordine.currency) }}
+				{% endif %}
+				</div>
+			</div>
+			{% if ordine.add_iva != '' %}
+			<div class="ck-footer ck-evidenza" style="text-align: right;">
+				{{ ordine.nazione_esenzione_legge }}
+			</div>
+			{% endif %}
+		</div>
+
+<div class="checkout-title">{{ _lblc.title_opzione_pagamento }}</div>
+<div class="checkout-block checkbox-group checkbox-group-pagamento-email block-pagamento">
+	<div class="ck-header">
+		<div class="ck-checkbox ck-cell">&nbsp;</div>
+		<div class="ck-checkbox-descrizione ck-cell">{{ _lblc.pagamento }}</div>
+		<div class="ck-prezzo-totale ck-cell">{{ _lblc.prezzo }}</div>
+	</div>
+	{% if ordine.tipo_spedizione == 1 or _h.config('checkout_cc', 'paypal') != 'paypal' %}
+	{{ cmc.box_pagamento(_h, 'checkout_pagamento_cc', 0, ordine.tipo_pagamento, _lblc.tipo_pag_carta_credito, _lblc.tipo_pag_carta_credito, 1, 'checkout-cc.png') }}
+	{% endif %}
+	{% if ordine.tipo_spedizione == 1 %}
+	{{ cmc.box_pagamento(_h, 'checkout_pagamento_paypal', 0, ordine.tipo_pagamento, _lblc.tipo_pag_paypal, _lblc.tipo_pag_paypal, 2, 'checkout-paypal.png') }}
+	{% endif %}
+	
+	{% if _h.settings.get('checkout_pagamento_con_link_tutto_abilitato', 0) %}
+		{{ cmc.box_pagamento(_h, 'checkout_pagamento_bonifico', 0, ordine.tipo_pagamento, _lblc.tipo_pag_bonifico_small, _lblc.descr_tipo_pag_bonifico, 3) }}
+		{% if ordine.solo_digitali %}
+		{% else %}
+			{% if ordine.spedizione.id_nazione == 108 and ordine.tipo_spedizione == 1 %}
+				{% if _h.settings.get('checkout_pagamento_contrassegno') != '' %}
+					{{ cmc.box_pagamento(_h, 'checkout_pagamento_contrassegno', _h.settings.get('checkout_contrassegno_spesa', 0), ordine.tipo_pagamento, _lblc.tipo_pag_contrassegno, _lblc.descr_tipo_pag_contrassegno, 4) }}
+				{% else %}
+					{% if _h.session.params.user.pagamento_contrassegno %}
+						{{ cmc.box_pagamento(_h, 'checkout_pagamento_contrassegno_utenti_speciali', _h.settings.get('checkout_contrassegno_spesa', 0), ordine.tipo_pagamento, _lblc.tipo_pag_contrassegno, _lblc.descr_tipo_pag_contrassegno, 4) }}
+					{% endif %}
+				{% endif %}
+			{% endif %}
+		{% endif %}
+	{% endif %}
+	
+	<div class="ck-footer">
+		<div class="ck-descrizione ck-cell">
+		{% if ordine.total_pagamento < 0 %}
+			{{ _lblc.subtotale_pagamento_sconto }}
+		{% else %}
+			{{ _lblc.subtotale_pagamento }}
+		{% endif %}
+		</div>
+		<div class="ck-prezzo-totale ck-cell">
+			{% if ordine.total_pagamento <= 0 %}
+				{{ _lblc.gratis }}
+			{% else %}
+				{{ _h.util.valuta(ordine.total_pagamento, ordine.currency) }}
+			{% endif %}	
+		</div>
+		</div>
+	</div>
+	{% if ordine.add_iva != '' %}
+	<div class="ck-footer ck-evidenza" style="text-align: right;">
+		{{ ordine.nazione_esenzione_legge }}
+	</div>
+	{% endif %}
+	
+	{% if ordine.sconto.codice %}
+	<div class="checkout-title">{{ _lblc.codice_promozionale_gift }}</div>
+	<div class="checkout-block ck-codice-promozionale">
+		<div class="checkout-block">
+			<div class="ck-line">
+				<div class="ck-descrizione ck-cell">
+					<div class="ck-codice-inserito">{{ _lblc.codice_inserito }}: <strong>{{ ordine.sconto.codice }}</strong></div>
+					<div class="ck-codice-inserito-dettaglio">
+					{% if ordine.sconto.dettaglio.tipo == 1 %}
+						<strong>{{ _lblc.descr_sconto_1 }} {{ ordine.sconto.dettaglio.sconto }}%</strong>
+					{% elseif ordine.sconto.dettaglio.tipo == 2 %}
+						<strong>{{ _lblc.descr_sconto_2 }} {{ ordine.sconto.dettaglio.sconto }}%</strong>
+					{% elseif ordine.sconto.dettaglio.tipo == 3 %}
+						<strong>{{ _lblc.descr_sconto_3 }} {{ _h.util.valuta(ordine.sconto.dettaglio.sconto, ordine.currency) }}</strong>
+					{% elseif ordine.sconto.dettaglio.tipo == 4 %}
+						<strong>{{ _lblc.descr_sconto_4 }} {{ _h.util.valuta(ordine.sconto.dettaglio.sconto, ordine.currency) }}</strong>
+					{% elseif ordine.sconto.dettaglio.tipo == 5 %}
+						<strong>{{ _lblc.descr_sconto_5 }}</strong>
+					{% elseif ordine.sconto.dettaglio.tipo == 8 %}
+						<strong>{{ _lblc.descr_sconto_8 }} {{ _h.util.valuta(ordine.sconto.dettaglio.sconto, ordine.currency) }}</strong>
+					{% elseif ordine.sconto.dettaglio.tipo == 10 %}
+						<strong>{{ _lblc.descr_sconto_10 }}</strong>
+					{% elseif ordine.sconto.dettaglio.tipo == 100 %}
+						<strong>{{ _lblc.descr_sconto_6 }} {{ _h.util.valuta(ordine.sconto.dettaglio.sconto, ordine.currency) }}</strong>
+						<br><i>({{ _lblc.descr_sconto_6_residuo }})</i>
+					{% elseif ordine.sconto.dettaglio.tipo == 1000 %}
+						<strong>{{ _lblc.descr_sconto_7 }} {{ _h.util.valuta(ordine.sconto.dettaglio.sconto, ordine.currency) }}</strong>
+					{% endif %}
+					{% if ordine.sconto.sconto_selezione or ordine.sconto.dettaglio.tipo == 8 %}
+						<br><i>
+						{% if ordine.list_id_in_sconto|length > 0 %}
+							{{ _lblc.descr_sconto_valido_solo_selezione }}:
+							{% for art in ordine.list %}
+								{% if art.item.id in ordine.list_id_in_sconto %}
+									<br> {{ art.item.get('nome') }} 
+								{% endif %}
+							{% endfor %}
+						{% else %}
+						{{ _lblc.descr_sconto_valido_solo_selezione_articoli_non_trovati }}
+						{% endif %}
+						</i>
+					{% endif %}
+
+					{% if articoli_non_scontabili %}
+					<div class="ck-codice-inserito-dettaglio-evidenza">{{ _lblc.articoli_con_codice_sconto_non_utilizzabile }}</div>
+					{% endif %}
+					</div>
+						
+				</div>
+				<div class="ck-prezzo-totale ck-cell">					
+				</div>
+			</div>
+		{% if ordine.total_sconto > 0 %}
+			{% if ordine.add_iva == '' and (_h.session.params.user.prezzo_senza_iva or _h.config('prezzi_senza_iva', false)) %}
+			<div class="ck-footer">
+				<div class="ck-descrizione ck-cell">{{ _lblc.sconto_imponibile }}</div>
+				<div class="ck-prezzo-totale ck-cell ck-con-iva">
+					- {{ _h.util.valuta(ordine.total_sconto_imponibile, ordine.currency) }}<br>
+					<em>{{ _lblc.sconto_iva }}: - {{ _h.util.valuta(ordine.total_sconto_iva, ordine.currency) }}</em>
+				</div>
+			</div>
+			{% else %}
+			<div class="ck-footer">
+				<div class="ck-descrizione ck-cell">{{ _lblc.sconto_gift }}</div>
+				<div class="ck-prezzo-totale ck-cell">- {{ _h.util.valuta(ordine.total_sconto, ordine.currency) }}</div>
+			</div>
+			{% endif %}
+		{% endif %}
+		</div>
+	</div>
+	{% endif %}	
+	
+	<div class="ck-totale-ordine">
+		<div class="checkout-title">{{ _lblc.title_il_tuo_ordine }}</div>
+		<div class="checkout-block">
+			<div class="ck-footer">
+				<div class="ck-descrizione ck-cell">
+					{{ _lblc.totale_ordine }}
+					{% if ordine.add_iva == '' and (_h.session.params.user.prezzo_senza_iva or _h.config('prezzi_senza_iva', false)) %}
+					{{ _lblc.prezzo_iva_incl_small }}
+					{% endif %}
+				</div>
+				<div class="ck-prezzo-totale ck-cell" id="totale-ordine">
+					{{ _h.util.valuta(ordine.total_ordine, ordine.currency) }}					
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

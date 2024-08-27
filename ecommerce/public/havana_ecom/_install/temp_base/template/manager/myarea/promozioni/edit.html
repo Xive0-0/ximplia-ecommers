@@ -1,0 +1,94 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Promozioni') }}
+
+{% if item %}
+<input type="hidden" name="id_entita" value="{{ item.get('id_entita') }}">
+<input type="hidden" name="tipo_entita" value="{{ item.get('tipo_entita') }}">
+<input type="hidden" name="id" value="{{ item.id }}">
+{% else %}
+<input type="hidden" name="id_entita" value="{{ _h.input('id_entita') }}">
+<input type="hidden" name="tipo_entita" value="{{ _h.input('table') }}">
+{% endif %}
+
+{% if azienda %}
+<div class="h-tab">
+<div data-tab-rif="base">Promozione</div>
+<div data-tab-rif="brand">Aziende/Brand</div>
+<div data-tab="base">
+{% endif %}
+
+{{ mc.checkbox(item.get('solo_login'), 1, 'solo_login', 'Solo per utente loggato') }}
+{{ mc.checkbox(item.get('escludi_clienti_con_listino'), 1, 'escludi_clienti_con_listino', 'Escludi clienti con listini abbinati') }}
+
+<p class="field-line field-200 field-line-left">
+	<label>Applica:</label>
+	<select name="tipo_applicazione_sconto" class="field">
+	{{ mc.listComboOptions([{'id': '0', 'text': 'Se non presente sconto'},{'id': '1', 'text': 'Sovrascrivi sconto esistente'},{'id': '2', 'text': 'Aggiungi a sconto esistente'}], item.get('tipo_applicazione_sconto')) }}
+	</select>
+</p>
+<p class="field-line field-150 field-line-left">
+	<label>Codice:</label>
+	<input type="text" name="codice" class="field" value="{{ item.get('codice') }}" maxlength="50">
+</p>
+<div class="clear-line"></div>
+<p class="field-line field-100 field-line-left">
+	<label>Data dal<span>*</span>:</label>
+	<input type="text" name="data_dal" class="field valida-required valida-datasimple input-datepicker" value="{{ item.getDate('data_dal') }}" maxlength="10">
+</p>
+<p class="field-line field-100 field-line-left">
+	<label>Data al<span>*</span>:</label>
+	<input type="text" name="data_al" class="field valida-required valida-datasimple input-datepicker" value="{{ item.getDate('data_al') }}" maxlength="10">
+</p>
+<p class="field-line field-50 field-line-left">
+	<label>Sconto<span>*</span>:</label>
+	<input type="text" name="sconto" class="field valida-digitfloat valida-float valida-required" value="{{ item.get('sconto')|number_format(2, ',', '') }}" maxlength="6"> %
+</p>
+<div class="clear-line"></div>
+{{ mc.checkbox(item.get('lunedi'), 1, 'lunedi', 'Lunedì') }}
+{{ mc.checkbox(item.get('martedi'), 1, 'martedi', 'Martedì') }}
+{{ mc.checkbox(item.get('mercoledi'), 1, 'mercoledi', 'Mercoledì') }}
+{{ mc.checkbox(item.get('giovedi'), 1, 'giovedi', 'Giovedì') }}
+{{ mc.checkbox(item.get('venerdi'), 1, 'venerdi', 'Venerdì') }}
+{{ mc.checkbox(item.get('sabato'), 1, 'sabato', 'Sabato') }}
+{{ mc.checkbox(item.get('domenica'), 1, 'domenica', 'Domenica') }}
+<p class="field-line field-100 field-line-left">
+	<label>Ora dal (hh:mm):</label>
+	<input type="text" name="ora_dal" class="field valida-orasimple" value="{{ item.getMinuteToTime('ora_dal') }}" maxlength="5">
+</p>
+<p class="field-line field-100 field-line-left">
+	<label>Ora al (hh:mm):</label>
+	<input type="text" name="ora_al" class="field valida-orasimple" value="{{ item.getMinuteToTime('ora_al') }}" maxlength="5">
+</p>
+<div class="clear-line"></div>
+{{ mc.labelCampiObbligatori() }}
+
+{% if azienda %}
+</div>
+<div data-tab="brand">
+<div class="field-line-text">
+Selezionando un Brand, saranno considerati solo gli articoli appartenenti sia alla categoria che al Brand
+</div>
+<div class="field-line field-select-add">
+	<label>Azienda/Brand:</label>
+	<div class="select-content-wrapper">
+		<div class="select-content">
+			{% set list = item.getUnserialized('aziende') %} 
+			{% for i in listAzienda %}	
+				{% if i.id in list %} 
+					{% set cssClass = ' h-checkbox-checked' %}
+					{% set value = i.id %}
+				{% else %}
+					{% set cssClass = '' %}
+					{% set value = '' %}
+				{% endif %}
+				<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="{{ i.id }}"><input type="hidden" name="id_azienda[]" value="{{ value }}" /></span> <strong>{{ i.get('nome') }}</strong></div>
+			{% endfor %}
+		</div>
+		<div class="clear-line"></div>
+	</div>	
+</div>
+</div>
+</div>
+{% endif %}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/promozioni/ex-edit'), '"reload": "#promozione-content"') }}	

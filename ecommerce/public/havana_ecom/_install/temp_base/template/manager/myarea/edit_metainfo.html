@@ -1,0 +1,56 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Meta Info Sito') }}
+<div class="h-tab">
+
+{% for l in listLang %}
+<div data-tab-rif="{{ l }}">{{ l|upper }}</div>
+{% endfor %}
+
+{% for l in listLang %}
+<div data-tab="{{ l }}">
+{{ mc.contenutiInLingua(l) }}
+
+<p class="field-line field-400">
+	<label>Meta Author{% if l == 'it'%}<span>*</span>{% endif %}:</label>
+	<input type="text" name="website_meta_author_{{ l }}" class="field{% if l == 'it'%} valida-required{% endif %}" value="{{ _h.settings(l).get('website_meta_author') }}">
+</p>
+<p class="field-line field-400">
+	<label>Meta Copyright{% if l == 'it'%}<span>*</span>{% endif %}:</label>
+	<input type="text" name="website_meta_copy_{{ l }}" class="field{% if l == 'it'%} valida-required{% endif %}" value="{{ _h.settings(l).get('website_meta_copy') }}">
+</p>
+
+<p class="field-line field-400">
+	<label>{{ mc.labelLang(l) }} Titolo pagina{% if l == 'it'%}<span>*</span>{% endif %}:</label>
+	<input type="text" name="meta_title_{{ l }}" class="field{% if l == 'it'%} valida-required{% endif %}" value="{{ _h.settings(l).get('meta_title') }}">
+</p>
+<p class="field-line field-400">
+	<label>{{ mc.labelLang(l) }} Meta keywords{% if l == 'it'%}<span>*</span>{% endif %}:</label>
+	<input type="text" name="meta_keywords_{{ l }}" class="field{% if l == 'it'%} valida-required{% endif %}" value="{{ _h.settings(l).get('meta_keywords') }}">
+</p>
+<p class="field-line field-400">
+	<label>{{ mc.labelLang(l) }} Meta description{% if l == 'it'%}<span>*</span>{% endif %}:</label>
+	<textarea name="meta_description_{{ l }}" class="field{% if l == 'it'%} valida-required{% endif %}">{{ _h.settings(l).get('meta_description') }}</textarea>
+</p>
+
+
+<p class="field-line field-400">
+	<label>{{ mc.labelLang(l) }}OG Site name:</label>
+	<input type="text" name="meta_og_site_name_{{ l }}" class="field" value="{{ _h.settings(l).get('meta_og_site_name') }}">
+</p>
+<p class="field-line field-400">
+	<label>{{ mc.labelLang(l) }}OG Titolo:</label>
+	<input type="text" name="meta_og_title_{{ l }}" class="field" value="{{ _h.settings(l).get('meta_og_title') }}">
+</p>
+<p class="field-line field-400">
+	<label>{{ mc.labelLang(l) }}OG Meta Description:</label>
+	<textarea name="meta_og_description_{{ l }}" class="field">{{ _h.settings(l).get('meta_og_description') }}</textarea>
+</p>
+
+{{ mc.labelCampiObbligatori() }}
+</div>
+{% endfor %}
+
+</div>
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/ex-edit-metainfo')) }}	
+

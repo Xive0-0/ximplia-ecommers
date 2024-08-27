@@ -1,0 +1,48 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Seleziona campi') }}
+
+<input type="hidden" name="id" value="{{ item.id }}">
+<input type="hidden" name="file" value="{{ file }}">
+{% if list_colonne %}
+<p class="field-line">seleziona campi importazione listino: <strong>{{ item.get('nome') }}</strong></p>
+
+<div class="field-line">Verifica associazione tra colonna nel file e campi unione:</div>
+<table class="h-list" border="0" cellpadding="0" cellspacing="0">
+<thead>
+<tr class="h-list-header">
+	<th style="width: 200px;">Colonna nel file</th>
+	<th style="width: 100px;">Campo unione</th>
+</tr>
+</thead>
+<tbody>	
+{% for c in list_colonne %}
+	<tr>
+		<td>{{ c.valore }}</td>
+		<td>
+			<div class="field-line field-150">
+				<label>Campo unione:</label>
+				<select name="campo_unione_{{ c.chiave }}" class="field">
+					<option value=""></option>
+					{{ campi_unione }}
+				</select>
+			</div>		
+		</td>
+	</tr>	
+{% endfor %}
+</tbody>	
+</table>
+{{ mc.labelCampiObbligatori() }}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/listino/ex-edit-import'), item) }}	
+{% else %}
+			<p class="field-line">Impossibile recuperare le informazioni delle colonne</p>
+		</fieldset>
+	</div>
+	<div class="h-layout-bottombar">
+		<div class="h-layout-content-wrapper">
+			<a href="javascript:void(0);" class="h-bar-button h-bar-button-gray h-close-box">chiudi</a>
+		</div>
+	</div>
+	</form>
+</div>
+{% endif %}

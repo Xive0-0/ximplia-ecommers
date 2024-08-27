@@ -1,0 +1,147 @@
+<div id="h-layout-navigation" class="h-layout">
+	<div class="h-layout-content-wrapper">
+		{{ mc.navMenu(_h, 'dashboard') }}
+		<div class="h-nav-white">
+	{% if _h.session.params.user.accesso >= 5 and _h.session.params.user.abilitato_ordini %}
+		{{ mc.navMenuGestione(_h) }}
+	{% endif %}
+	{% if _h.session.params.user.accesso >= 10 %}
+		<div class="h-nav-button-wrapper">
+			<a href="javascript:void(0);" class="h-nav-button h-action-popup-menu">
+				Sistema
+			</a>
+			<div class="h-popup-content h-popup-menu">
+				<a href="javascript:void(0)" class="h-action-window h-action-close-popup-menu" data-action='{"width": 950, "height": 600, "overlay": true, "type": "layer","url": "{{ _h.url('manager/myarea/edit-impostazioni') }}"}'>Sito</a>
+				<a href="javascript:void(0)" class="h-action-window h-action-close-popup-menu" data-action='{"width": 500, "height": 500, "overlay": true, "type": "layer","url": "{{ _h.url('manager/myarea/edit-metainfo') }}"}'>Meta info</a>
+				<a href="javascript:void(0)" class="h-action-window h-action-close-popup-menu" data-action='{"width": 500, "height": 500, "overlay": true, "type": "layer","url": "{{ _h.url('manager/myarea/edit-impostazioni-acquisti') }}"}'>Acquisti</a>
+				<a href="javascript:void(0)" class="h-action-window h-action-close-popup-menu" data-action='{"width": 500, "height": 500, "overlay": true, "type": "layer","url": "{{ _h.url('manager/myarea/edit-impostazioni-share') }}"}'>Condivisione</a>
+				<a href="javascript:void(0)" class="h-action-window h-action-close-popup-menu" data-action='{"width": 600, "height": 500, "overlay": true, "type": "layer","url": "{{ _h.url('manager/myarea/edit-impostazioni-sconti') }}"}'>Sconti iscrizione</a>
+				<a href="javascript:void(0)" class="h-action-window h-action-close-popup-menu" data-action='{"width": 1100, "height": 500, "overlay": true, "type": "layer","url": "{{ _h.url('manager/myarea/logprivacy/log') }}"}'>Log E-Mail Privacy</a>
+				{% if _h.config('gestione_magazzino', false) %}
+				<a href="javascript:void(0)" class="h-action-window h-action-close-popup-menu" data-action='{"width": 550, "height": 500, "overlay": true, "type": "layer","url": "{{ _h.url('manager/myarea/edit-alert-magazzino') }}"}'>Alert magazzino</a>
+				{% endif %}
+				<a href="javascript:void(0)" class="h-action-window h-action-close-popup-menu" data-action='{"width": 550, "height": 350, "overlay": true, "type": "layer","url": "{{ _h.url('manager/myarea/edit-impostazioni-promemoria') }}"}'>Impostazioni promemoria</a>
+				<a href="javascript:void(0)" class="h-action-window h-action-close-popup-menu" data-action='{"width": 700, "height": 500, "overlay": true, "type": "layer","url": "{{ _h.url('manager/myarea/edit-url-mapping') }}"}'>URL Mapping entità</a>	
+				<a href="javascript:void(0)" class="h-action-window h-action-close-popup-menu" data-action='{"width": 500, "height": 500, "overlay": true, "type": "layer","url": "{{ _h.url('manager/myarea/edit-default-metainfo') }}"}'>Meta info default entità</a>
+				{% if _h.config('cookie_policy') == 'gdpr22' %}
+				<a href="javascript:void(0)" class="h-action-window h-action-close-popup-menu" data-action='{"width": 900, "height": 500, "overlay": true, "type": "layer","url": "{{ _h.url('manager/myarea/cookiepolicy/index') }}"}'>Cookie policy / Script</a>
+				<a href="javascript:void(0)" class="h-action-window h-action-close-popup-menu" data-action='{"width": 600, "height": 400, "overlay": true, "type": "layer","url": "{{ _h.url('manager/myarea/edit-impostazioni-robots') }}"}'>Robots</a>
+				{% else %}
+				<a href="javascript:void(0)" class="h-action-window h-action-close-popup-menu" data-action='{"width": 500, "height": 500, "overlay": true, "type": "layer","url": "{{ _h.url('manager/myarea/edit-impostazioni-script') }}"}'>Script</a>
+				{% endif %}
+				{{ mymc.menuSistemaManager(_h) }}
+			</div>
+		</div>
+		{% if _h.istanza.isMaster() %}
+		<div class="h-nav-button-wrapper">
+			<a href="javascript:void(0);" class="h-nav-button h-action-popup-menu">
+				Fatturazione/Pagamento
+			</a>
+			<div class="h-popup-content h-popup-menu">
+				<a href="javascript:void(0)" class="h-action-window h-action-close-popup-menu" data-action='{"width": 900, "height": 600, "overlay": true, "type": "layer","url": "{{ _h.url('manager/myarea/edit-impostazioni-pagamento') }}"}'>Pagamento</a>
+				<a href="javascript:void(0)" class="h-action-window h-action-close-popup-menu" data-action='{"width": 600, "height": 500, "overlay": true, "type": "layer","url": "{{ _h.url('manager/myarea/edit-impostazioni-fatturazione') }}"}'>Fatturazione</a>
+				<a href="javascript:void(0)" class="h-action-window h-action-close-popup-menu" data-action='{"width": 500, "height": 500, "overlay": true, "type": "layer","url": "{{ _h.url('manager/myarea/edit-numerazione-fatturazione') }}"}'>Numerazione fatture/ricevute</a>
+				<a href="{{ _h.url('manager/myarea/nazione/index') }}">Costi e optional spedizione, IVA fatturazione</a>
+				<a href="javascript:void(0)" class="h-action-window h-action-close-popup-menu" data-action='{"width": 500, "height": 500, "overlay": true, "type": "layer","url": "{{ _h.url('manager/myarea/iva/index') }}"}'>Codici IVA</a>	
+				<a href="javascript:void(0)" class="h-action-window h-action-close-popup-menu" data-action='{"width": 500, "height": 500, "overlay": true, "type": "layer","url": "{{ _h.url('manager/myarea/venditeextraue/index') }}"}'>Vendite extra e-commerce UE</a>
+				<a href="javascript:void(0)" class="h-action-window h-action-close-popup-menu" data-action='{"width": 500, "height": 500, "overlay": true, "type": "layer","url": "{{ _h.url('manager/myarea/fasciasconto/index') }}"}'>Fasce sconto</a>	
+				<a href="javascript:void(0)" class="h-action-window h-action-close-popup-menu" data-action='{"width": 600, "height": 500, "overlay": true, "type": "layer","url": "{{ _h.url('manager/myarea/costoimballaggio/index') }}"}'>Costi imballaggio</a>	
+				{% if _h.settings.get('gestione_ordini_fornitore', '') != '' %}
+				<a href="javascript:void(0)" class="h-action-window h-action-close-popup-menu" data-action='{"width": 600, "height": 500, "overlay": true, "type": "layer","url": "{{ _h.url('manager/myarea/fornitore/index') }}"}'>Fornitori</a>	
+				{% endif %}
+				{{ mymc.menuFatturazioneManager(_h) }}
+			</div>
+		</div>
+		{% endif %}
+		<div class="h-nav-button-wrapper">
+			<a href="javascript:void(0);" class="h-nav-button h-action-popup-menu">
+				Recapiti
+			</a>
+			<div class="h-popup-content h-popup-menu">
+				<a href="javascript:void(0)" class="h-action-window h-action-close-popup-menu" data-action='{"width": 500, "height": 500, "overlay": true, "type": "layer","url": "{{ _h.url('manager/myarea/edit-impostazioni-mittente') }}"}'>Mittente in spedizioni</a>
+				<a href="javascript:void(0)" class="h-action-window h-action-close-popup-menu" data-action='{"width": 500, "height": 500, "overlay": true, "type": "layer","url": "{{ _h.url('manager/myarea/edit-impostazioni-recapiti') }}"}'>Recapiti in contatti</a>
+				<a href="javascript:void(0)" class="h-action-window h-action-close-popup-menu" data-action='{"width": 500, "height": 500, "overlay": true, "type": "layer","url": "{{ _h.url('manager/myarea/edit-impostazioni-firma-email') }}"}'>Firma e-mail</a>
+				<a href="javascript:void(0)" class="h-action-window h-action-close-popup-menu" data-action='{"width": 500, "height": 500, "overlay": true, "type": "layer","url": "{{ _h.url('manager/myarea/edit-info-footer') }}"}'>Descrizione in footer</a>
+			</div>
+		</div>
+	{% endif %}
+	{% if _h.session.params.user.accesso >= 5 and _h.session.params.user.abilitato_contenuti %}
+		<div class="h-nav-button-wrapper">
+			<a href="javascript:void(0);" class="h-nav-button h-action-popup-menu">
+				Impostazioni
+			</a>
+			<div class="h-popup-content h-popup-menu">
+			{% if _h.istanza.isMaster() %}
+			<a href="{{ _h.url('manager/myarea/label/index') }}" class="h-action-close-popup-menu">Labels sito</a>
+			{% endif %}
+			<a href="{{ _h.url('manager/myarea/redirect/index') }}" class="h-action-close-popup-menu">Redirect 301/404/410</a>
+			<a href="{{ _h.url('manager/myarea/urlmeta/index') }}" class="h-action-close-popup-menu">Meta info e testi specifici per URL</a>
+			<a href="{{ _h.url('manager/myarea/mapping/index') }}" class="h-action-close-popup-menu">Mappatura manuale activity</a>
+			<a href="javascript:void(0)" class="h-action-window h-action-close-popup-menu" data-action='{"width": 600, "height": 500, "overlay": true, "type": "layer","url": "{{ _h.url('manager/myarea/attributo/index-extra') }}"}'>Opzioni articolo</a>
+			<a href="javascript:void(0)" class="h-action-window h-action-close-popup-menu" data-action='{"width": 750, "height": 500, "overlay": true, "type": "layer","url": "{{ _h.url('manager/myarea/testoemail/index') }}"}'>E-mail Predefinite</a>
+			<a href="javascript:void(0)" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"url": "{{ _h.url('manager/myarea/clean-cache') }}", "confirm": "Procedere con la cancellazione della cache?"}'>Svuota cache dati</a>
+			<a href="javascript:void(0)" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"url": "{{ _h.url('manager/myarea/clean-session') }}", "confirm": "Procedere con eliminare la sessione degli utenti?"}'>Elimina sessioni utenti</a>
+			{% if _h.config('import') != null %}
+			<a href="javascript:void(0)" class="h-action-window h-action-close-popup-menu" data-action='{"width": 500, "height": 400, "overlay": true, "type": "layer","url": "{{ _h.url('manager/myarea/importdata/index') }}"}'>Import dati</a>
+			{% endif %}
+			{{ mymc.menuImpostazioniManager(_h) }}
+			</div>
+		</div>
+		<div class="h-nav-button-wrapper">
+			<a href="javascript:void(0);" class="h-nav-button h-action-popup-menu">
+				Automatismi
+			</a>
+			<div class="h-popup-content h-popup-menu">
+				<a href="javascript:void(0)" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"url": "{{ _h.url('manager/myarea/update-url-mapping') }}", "confirm": "Procedere con la rigenerazione degli URL? Potrebbero essere necessari diversi minuti."}'>Forza aggiornamento URL Mapping</a>
+				<a href="javascript:void(0)" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"url": "{{ _h.url('manager/myarea/update-metainfo') }}", "confirm": "Procedere con la rigenerazione delle metainfo? Potrebbero essere necessari diversi minuti."}'>Forza aggiornamento metainfo default</a>
+				<a href="javascript:void(0)" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"url": "{{ _h.url('manager/myarea/indicizza-articoli') }}", "confirm": "Procedere con la re-indicizzazione degli articoli? Potrebbero essere necessari diversi minuti."}'>Forza indicizzazione articoli</a>
+				<a href="javascript:void(0)" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"url": "{{ _h.url('manager/myarea/indicizza-blog') }}", "confirm": "Procedere con la re-indicizzazione del blog? Potrebbero essere necessari diversi minuti."}'>Forza indicizzazione Blog</a>
+				<a href="javascript:void(0)" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"url": "{{ _h.url('manager/myarea/indicizza-evento-news') }}", "confirm": "Procedere con la re-indicizzazione delgli eventi e news? Potrebbero essere necessari diversi minuti."}'>Forza indicizzazione Eventi e News</a>
+				<a href="javascript:void(0)" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"url": "{{ _h.url('manager/myarea/indicizza-ordini') }}", "confirm": "Procedere con la re-indicizzazione degli ordini? Potrebbero essere necessari diversi minuti."}'>Forza indicizzazione Ordini</a>
+				<a href="javascript:void(0)" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"url": "{{ _h.url('manager/myarea/regen-anteprima-image') }}", "confirm": "Procedere con la rigenerazione delle anteprime? Potrebbero essere necessari diversi minuti."}'>Rigenera anteprime immagini</a>
+				<a href="javascript:void(0)" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"url": "{{ _h.url('manager/myarea/regen-articoli-image') }}", "confirm": "Procedere con la rigenerazione delle immagini degli articoli? Potrebbero essere necessari diversi minuti."}'>Rigenera immagini articoli</a>
+				<a href="javascript:void(0)" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"url": "{{ _h.url('manager/myarea/regen-attributo-image') }}", "confirm": "Procedere con la rigenerazione delle immagini delle collezioni? Potrebbero essere necessari diversi minuti."}'>Rigenera immagini collezioni</a>
+				<a href="javascript:void(0)" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"url": "{{ _h.url('manager/myarea/regen-azienda-image') }}", "confirm": "Procedere con la rigenerazione delle immagini dei brands? Potrebbero essere necessari diversi minuti."}'>Rigenera immagini aziende/brands</a>
+				<a href="javascript:void(0)" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"url": "{{ _h.url('manager/myarea/regen-banner-image') }}", "confirm": "Procedere con la rigenerazione delle immagini dei banner? Potrebbero essere necessari diversi minuti."}'>Rigenera immagini banner</a>
+				<a href="javascript:void(0)" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"url": "{{ _h.url('manager/myarea/regen-blog-image') }}", "confirm": "Procedere con la rigenerazione delle immagini del blog? Potrebbero essere necessari diversi minuti."}'>Rigenera immagini blog</a>
+				<a href="javascript:void(0)" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"url": "{{ _h.url('manager/myarea/regen-evento-news-image') }}", "confirm": "Procedere con la rigenerazione delle immagini degli eventi e news? Potrebbero essere necessari diversi minuti."}'>Rigenera immagini Eventi e News</a>
+				<a href="javascript:void(0)" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"url": "{{ _h.url('manager/myarea/regen-pagina-image') }}", "confirm": "Procedere con la rigenerazione delle immagini delle pagine? Potrebbero essere necessari diversi minuti."}'>Rigenera immagini pagine</a>
+				<a href="javascript:void(0)" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"url": "{{ _h.url('manager/myarea/regen-editor-image') }}", "confirm": "Procedere con la rigenerazione delle immagini editor? Potrebbero essere necessari diversi minuti."}'>Rigenera immagini editor</a>
+				<a href="javascript:void(0)" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"url": "{{ _h.url('manager/myarea/regen-landig-page') }}", "confirm": "Procedere con la rigenerazione delle immagini landing page? Potrebbero essere necessari diversi minuti."}'>Rigenera immagini landing page</a>
+				<a href="javascript:void(0)" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"url": "{{ _h.url('manager/myarea/regen-testo-image') }}", "confirm": "Procedere con la rigenerazione delle immagini dei blocchi testo? Potrebbero essere necessari diversi minuti."}'>Rigenera immagini blocco testo</a>
+				<a href="javascript:void(0)" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"url": "{{ _h.url('manager/myarea/reset-image-name') }}", "confirm": "Procedere con la rigenerazione dei nomi immagini degli articoli? Potrebbero essere necessari diversi minuti."}'>Assegna nome immagine articolo da nome articolo</a>
+				<a href="javascript:void(0)" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"url": "{{ _h.url('manager/myarea/reset-image-blog-name') }}", "confirm": "Procedere con la rigenerazione dei nomi immagini del blog? Potrebbero essere necessari diversi minuti."}'>Assegna nome immagine blog da titolo blog</a>
+				<a href="javascript:void(0)" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"url": "{{ _h.url('manager/myarea/reset-image-evento-news-name') }}", "confirm": "Procedere con la rigenerazione dei nomi immagini degli eventi e news? Potrebbero essere necessari diversi minuti."}'>Assegna nome immagine Eventi e News da titolo Eventi e News</a>
+				<a href="javascript:void(0)" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"url": "{{ _h.url('manager/myarea/load-carrelli-abbandonati') }}", "confirm": "Procedere con il caricamento dei carrelli abbandonati? Potrebbero essere necessari diversi minuti."}'>Forza caricamento carrelli abbandonati</a>
+				<a href="javascript:void(0)" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"url": "{{ _h.url('manager/myarea/azioni-carrelli-abbandonati') }}", "confirm": "Procedere con le azioni dei carrelli abbandonati? Potrebbero essere necessari diversi minuti."}'>Forza azioni carrelli abbandonati</a>
+				<a href="javascript:void(0)" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"url": "{{ _h.url('manager/myarea/azioni-ordini-non-pagati') }}", "confirm": "Procedere con le azioni degli ordini non pagati? Potrebbero essere necessari diversi minuti."}'>Forza azioni ordini non pagati</a>
+				<a href="javascript:void(0)" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"url": "{{ _h.url('manager/myarea/azioni-ordini-pagati') }}", "confirm": "Procedere con le azioni post ordini? Potrebbero essere necessari diversi minuti."}'>Forza azioni ordini post ordini</a>
+				<a href="javascript:void(0)" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"url": "{{ _h.url('manager/myarea/aggiorna-conteggio-item-attributo') }}", "confirm": "Procedere con il calcolo del numero articoli presenti in categoria? Potrebbero essere necessari diversi minuti."}'>Forza calcolo numero articoli in categoria</a>
+				{% if _h.config('gestione_prezzo_calcolato_per_articoli', false) %}
+				<a href="javascript:void(0)" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"url": "{{ _h.url('manager/myarea/aggiorna-prezzo-calcolato-articoli') }}", "confirm": "Procedere con il calcolo del prezzo personalizzato per gli articoli? Potrebbero essere necessari diversi minuti."}'>Forza calcolo prezzo personalizzato articoli</a>
+				{% endif %}
+				<a href="javascript:void(0)" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"url": "{{ _h.url('manager/myarea/riassegna-categoria-principale-articolo') }}", "confirm": "Procedere con riassegnare la categoria principale agli articoli? Potrebbero essere necessari diversi minuti."}'>Riassegna categoria principale ad articoli</a>
+				<a href="javascript:void(0)" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"url": "{{ _h.url('manager/myarea/aggiorna-fasce-sconto') }}", "confirm": "Procedere con aggiornare le fasce sconto? Potrebbero essere necessari diversi minuti."}'>Forza aggiornamento fasce sconto</a>
+				<a href="javascript:void(0)" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"url": "{{ _h.url('manager/myarea/share-store') }}", "confirm": "Procedere la ripetizione di caricamento articoli sugli store esterni (Amazon, EBay...)? Potrebbero essere necessari diversi minuti."}'>Ripetere caricamento articoli store esterni</a>
+				{{ mymc.menuAutomatismiManager(_h) }}
+			</div>
+		</div>	
+	{% elseif _h.session.params.user.id_azienda > 0 %}
+		<div class="h-nav-button-wrapper">
+			<a href="javascript:void(0);" class="h-nav-button h-action-popup-menu">
+				Impostazioni
+			</a>
+			<div class="h-popup-content h-popup-menu">
+				<a href="{{ _h.url('manager/myarea/nazione/index') }}">Costi e optional spedizione</a>
+			</div>
+		</div>
+		{{ mc.navButton(_h, 'Profilo', 'update', 'click', 'h-action-selected-open-window', '{"window": {"width": 600, "height": 500, "overlay": true, "type": "layer","url": "' ~ _h.url('manager/myarea/azienda/profilo') ~ '"}}') }}
+	{% endif %}
+		</div>		
+	</div>	
+
+	<a href="{{ _h.url('manager/myarea/index') }}" class="h-application-name">
+		<strong><img src="/assets/manager/img/favicon.png"></strong>
+		<span>{{ _h.config('template').manager.name }}</span>
+	</a>	
+</div>

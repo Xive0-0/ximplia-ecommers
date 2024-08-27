@@ -1,0 +1,13 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+
+{{ mc.slideBoxHeader(_h, 'Relazione Obiettivo-Fotocamera') }}
+<input type="hidden" name="id" value="{{ item.id }}">
+{% if item.get('tipo') == 6 %}
+	{{ mc.dynamicBaseTreeSelect(_h, 'Abbinabile a fotocamere', listFotocamera, item_abbinamento, 'id_fotocamera', 'fotocamera') }}
+
+	{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/attributo/obiettivo_fotocamera/ex-edit')) }}	
+{% else %}
+	<strong>Funzionalità attiva solo per gli Obiettivi</strong>
+	{{ mc.slideBoxFooter(_h) }}	
+{% endif %}

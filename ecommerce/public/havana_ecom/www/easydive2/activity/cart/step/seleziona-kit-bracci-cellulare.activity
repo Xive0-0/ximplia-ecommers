@@ -1,0 +1,9 @@
+{
+	"on:begin": [
+		{"name": "cart/step/list-kit-bracci", "params": {"tipo": "50"}}
+	],
+	"on:view": {
+		"template": "cart/step/seleziona_kit_bracci_cellulare",
+		"extra": false
+	}
+}

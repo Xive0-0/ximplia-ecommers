@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="it">
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, target-densitydpi=device-dpi">
+	<meta http-equiv="Content-Language" content="IT">
+	<meta name="copyright" content="Powered by Joinstore srl - Copyright (c) 2015 - All Rights Reserved">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>{{ _h.config('template').manager.name }} :: Elenco Articoli</title>
+	<link rel="icon" href="/assets/manager/img/favicon.png" type="image/x-icon" > 
+	<link rel="stylesheet" href="/assets/manager/havana-js/css/h.css" />
+<style>
+th {
+	font-weight: bold;
+}
+td,
+th {
+	padding: 3px 5px;
+	border-bottom: 1px solid #ccc;
+	border-right: 1px solid #ccc;
+}
+</style>
+	
+</head>
+<body>
+<table cellpadding="0" cellspacing="0" border="0">
+<tr>
+	<th>ID</th>
+	<th>Codice</th>
+	<th>Nome</th>
+	<th>Nome simbolico</th>
+	<th>Descrizione breve</th>
+	<th>Descrizione</th>
+	<th>Scheda tecnica</th>
+	<th>Indicazioni</th>
+</tr>
+{% for item in list %}
+<tr>
+	<td>#{{ item.id }}</td>
+	<td>{{ item.get('codice') }}</td>
+	<td>{{ item.get('nome') }}</td>
+	<td>{{ item.get('nome_simbolico') }}</td>
+	<td>{{ item.get('descrizione_breve') }}</td>
+	<td>{{ item.get('descrizione') }}</td>
+	<td>{{ item.get('scheda_tecnica') }}</td>
+	<td>{{ item.get('testo_indicazioni') }}</td>
+</tr>
+{% endfor %}
+</table>
+</body>
+</html>

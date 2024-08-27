@@ -1,0 +1,73 @@
+
+{% macro item_fotocamera_obiettivo(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td style="background: {% if item.abilitato() %}#34a853{% else %}#aaaaaa{% endif %}; width: 10px; padding: 0; overflow: hidden;">&nbsp;</td>
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>{{ item.get('brand_nome') }}</td>
+		<td>{{ item.get('codice') }}</td>
+		<td>{{ item.get('nome') }}</td>
+		<td>{{ item.get('mount_lens') }}</td>
+		<td>{{ item.get('angle_min') }}</td>
+		<td>{{ item.get('angle_max') }}</td>
+		<td>{% if item.get('ring') %}SI{% else %}NO{% endif %}</td>
+		<td>{{ item.get('length_mm') }}</td>
+		<td>{{ item.get('diameter_mm') }}</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_fotocamera_modello(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td style="background: {% if item.abilitato() %}#34a853{% else %}#aaaaaa{% endif %}; width: 10px; padding: 0; overflow: hidden;">&nbsp;</td>
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>{{ item.get('brand_nome') }}</td>
+		<td>{{ item.get('codice') }}</td>
+		<td>{{ item.get('nome') }}</td>
+		<td>{{ item.get('mount_lens') }}</td>
+		<td>{{ item.get('leo3_wi_dic_mm') }}</td>
+		<td>{{ item.get('leo3_wi_plus_dic_mm') }}</td>
+		<td>{{ item.get('leo3_dic_mm') }}</td>
+		<td>{{ item.get('leo3_plus_dic_mm') }}</td>
+		<td>{{ item.get('leor_dic_mm') }}</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_fotocamera_brand(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td style="background: {% if item.abilitato() %}#34a853{% else %}#aaaaaa{% endif %}; width: 10px; padding: 0; overflow: hidden;">&nbsp;</td>
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>{{ item.get('codice') }}</td>
+		<td>{{ item.get('nome') }}</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_ambassador(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td style="background: {% if item.abilitato() %}#34a853{% else %}#aaaaaa{% endif %}; width: 10px; padding: 0; overflow: hidden;">&nbsp;</td>
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td><div class="image-anteprima"><img alt="{{ item.get('nome') }}" class="image" src="{{ item.imageAnteprima() }}"></div></td>
+		<td>{{ item.get('ordine') }}</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					{{ item.get('nome') }}
+				</div>
+			</div>
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_easydivepoint(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td style="background: {% if item.abilitato() %}#34a853{% else %}#aaaaaa{% endif %}; width: 10px; padding: 0; overflow: hidden;">&nbsp;</td>
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td><div class="image-anteprima"><img alt="{{ item.get('nome') }}" class="image" src="{{ item.imageAnteprima() }}"></div></td>
+		<td>{{ item.get('ordine') }}</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					{{ item.get('nome') }}
+				</div>
+			</div>
+		</td>
+	</tr>
+{% endmacro %}

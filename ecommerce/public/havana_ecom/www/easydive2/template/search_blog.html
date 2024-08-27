@@ -1,0 +1,78 @@
+{% import _h.template('_macro.html') as mc %}
+{% set _lblw = _h.labels.get('website') %}
+
+{% if not _h.context.isApp() %}
+    {% if result.collezione %}
+        <div class="breadcrumbs clear">
+            {{ mc.breadcrumbs_home(_h) }}
+            {{ mc.breadcrumbs_separatore() }}
+            <a href="{{ _h.xurl('blog') }}" title="blog">{{ _lblw.blog }}</a>
+            {{ mc.breadcrumbs_separatore() }}
+            <a>{{ result.collezione.get('nome') }}</a>
+        </div>
+    {% else %}
+        {{ mc.banner_header(listBanner['7'], 'blog') }}
+    {% endif %}
+{% endif %}
+
+{% if result.collezione %}
+    <h1>{{ result.collezione.get('nome') }}</h1>
+    {% if result.collezione.get('descrizione') %}
+        <div class="html col-margin">{{ result.collezione.get('descrizione') }}</div>
+    {% endif %}
+{% else %}
+    <h1>{{ _lblw.blog }}</h1>
+    {% if testo_blog %}
+        <div class="html col-margin">{{ testo_blog.getWithMerge('testo') }}</div>
+    {% endif %}
+{% endif %}
+
+<div class="clear">
+    {% if result.list|length > 0 %}
+        {% set prima = true %}
+        <div class="blog-evidenza">
+        {% for item in result.list %}
+            {% if item.get('in_evidenza')  %}
+                {% if result.collezione.id == 842 %}
+                    <h2 class="item-blog-subtitle">{{ _lblw.prossimamente_saremo_qui }}</h2>
+                {% endif %}
+                    {{mc.banner_blog(_h,item)}}  
+            {% else %}
+                {% if result.collezione.id == 842 and prima and not item.get('in_evidenza') %}
+                    {% set prima = false %}
+                    <h2 class="item-blog-subtitle">{{ _lblw.siamo_stati_qui }}</h2>
+                {% endif %}
+                
+            {% endif %}
+        {% endfor %}
+        </div>
+ <!--modifica stive-->
+        
+        <div class="card_listino d-flex ">
+            {% set prima = true %}
+            {% for item in result.list %}
+                {% if not item.get('in_evidenza') %}
+                    {% if result.collezione.id == 842 and prima %}
+                        {% set prima = false %}
+                        <h2 class="item-blog-subtitle">{{ _lblw.siamo_stati_qui }}</h2>
+                    {% endif %}
+                    
+                    {{ mc.item_blog(_h, item) }}
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if result.prevStart >= 0 or result.nextStart < result.total %}
+        <div class="col-blog-paginazione clear">
+            {% if result.prevStart >= 0 %}
+                <a href="{{ _h.context.requestUrl }}?start=0&{{ result.urlAddParams }}" title="prima pagina" class="col-blog-paginazione-prev">|&lt;</a>
+                <a href="{{ _h.context.requestUrl }}?start={{ result.prevStart }}&{{ result.urlAddParams }}" title="pagina precedente" class="col-blog-paginazione-prev">Pagina precedente</a>
+            {% endif %}
+            {% if result.nextStart < result.total %}
+                <a href="{{ _h.context.requestUrl }}?start={{ result.lastStart }}&{{ result.urlAddParams }}" title="ultima pagina" class="col-blog-paginazione-next">&gt;|</a>
+                <a href="{{ _h.context.requestUrl }}?start={{ result.nextStart }}&{{ result.urlAddParams }}" title="pagina successiva" class="col-blog-paginazione-next">Pagina successiva</a>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>

@@ -1,0 +1,21 @@
+{% if item %}
+	<div class="popup" data-altezza="{{ item.get('altezza') }}" data-larghezza="{{ item.get('larghezza') }}">
+		<div class="popup-html">
+	{% if item.get('tipo') == 1 %}
+		{{ item.get('codice_html') }}
+		</div>
+		<script>
+		$('body').on('popup-loaded', function() {
+			try {
+				{{ item.get('codice_cript') }}
+			}
+			catch(e) {
+			}
+		});
+		</script>
+	{% else %}
+		<a class="popup-html-link" href="{{ item.url }}"{% if item.get('apri_nuova_pagina') %} target="_blank"{% endif %}><img src="{{ item.imageUrl('0x0') }}"></a>
+		</div>
+	{% endif %}
+	</div>
+{% endif %}

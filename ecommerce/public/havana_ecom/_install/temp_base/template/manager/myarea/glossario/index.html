@@ -1,0 +1,16 @@
+{% import _h.template('manager/_macro.html') as mc %}
+{{ mc.index_page_header(_h, 'Glossario', 'glossario') }}
+	
+	{% if _h.session.params.user.accesso >= 5 %}
+	{{ mc.navButtonNew(_h, 'nuovo', 'glossario') }}
+	{% endif %}
+	{{ mc.navButtonUpdateLang(_h, 'modifica', 'glossario') }}
+	{% if _h.session.params.user.accesso >= 5 %}
+	{{ mc.navButtonDelete(_h, 'elimina', 'glossario') }}
+	{{ mc.navSeparatore() }}
+	{{ mc.navButton(_h, 'gallery immagini', 'gallery', 'click', 'h-action-selected-open-window', '{"select": {"from":"#h-layout-center-content", "check": 1}, "window": {"type": "slide-right", "url": "' ~ _h.url('manager/myarea/galleryimmagini/index') ~ '", "params": {"tipo_entita": "glossario"}}}') }}
+	{{ mc.navSeparatore() }}
+	{{ mc.navButtonMetaInfo(_h, 'glossario') }}
+	{% endif %}
+	
+{{ mc.index_page_footer(_h, result, 'glossario') }}

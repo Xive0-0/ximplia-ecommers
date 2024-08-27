@@ -1,0 +1,289 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% set lang = _h.input('lang', _h.config('default_language', 'it')) %}
+
+{% if item == null %}
+	{% set title = 'Nuovo Banner' %}
+{% else %}
+	{% if _h.input('duplica', '') == '' %}
+		{% set title = 'Modifica Banner' %}
+	{% else %}
+		{% set title = 'Duplica Banner' %}
+	{% endif %}
+{% endif %}
+{{ mc.slideBoxHeader(_h, title) }}
+<div id="banner_edit">
+{% if item == null %}
+<input type="hidden" name="tabella" value="{{ _h.input('tabella') }}">
+<input type="hidden" name="tabella_id" value="{{ _h.input('tabella_id') }}">
+{% endif %}
+<input type="hidden" name="lang" value="{{ lang }}">
+{% if _h.input('duplica', '') == '' %}
+<input type="hidden" name="id" value="{{ item.id }}">
+{% else %}
+<input type="hidden" name="duplica" value="{{ item.id }}">
+{% endif %}
+
+<div class="h-tab{% if edit_lang %} edit-lang-wrapper{% endif %}">
+<div data-tab-rif="base" class="edit-lang">Banner</div>
+<div data-tab-rif="gallery_desktop">Gallery desktop</div>
+<div data-tab-rif="gallery_mobile">Gallery mobile</div>
+{% if listLang|length > 1 %}
+<div data-tab-rif="visibilita">Visibilità</div>
+{% endif %}
+<div data-tab="base" class="edit-lang">
+
+{{ mc.contenutiInLingua(lang) }}
+<div class="field-line field-line-left">
+	{% if item %} 
+		{% if item.abilitato() %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% else %}
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% endif %}
+	{% else %}
+		{% set cssClass = ' h-checkbox-checked' %}
+		{% set value = 1 %}
+	{% endif %}
+	<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="abilitato" value="{{ value }}" /></span> <strong>Abilitato</strong></div>
+</div>
+<div class="field-line field-line-left">
+	{% set cssClass = '' %}
+	{% set value = '' %}
+	{% if item %} 
+		{% if item.get('slider') %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% endif %}
+	{% endif %}
+	<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="slider" value="{{ value }}" /></span> <strong>Slider</strong></div>
+</div>
+<div class="clear"></div>
+<p class="field-line field-100 field-line-left">
+	<label>Peso/posizione<span>*</span>:</label>
+	<input type="text" name="ordine" class="field valida-required valida-digitnumber" value="{% if item %}{{ item.get('ordine') }}{% else %}0{% endif %}">
+</p>
+<p class="field-line field-300 field-line-left">
+	<label>Posizione all'interno del sito<span>*</span>:</label>
+	<select name="posizione" class="field valida-required">
+		{{ mc.listComboOptions(listType, item.get('posizione')) }}
+	</select>
+</p>
+<div class="clear"></div>
+<p class="field-line field-100 field-line-left">
+	<label>Visibile dal:</label>
+	<input type="text" name="visibile_dal" class="field valida-datasimple input-datepicker" value="{{ item.getDate('visibile_dal') }}">
+</p>
+<p class="field-line field-100 field-line-left">
+	<label>Visibile al:</label>
+	<input type="text" name="visibile_al" class="field valida-datasimple input-datepicker" value="{{ item.getDate('visibile_al') }}">
+</p>
+<p class="field-line field-100 field-line-left">
+	<label>Countdown:</label>
+	<input type="text" name="countdown" class="field valida-datasimple input-datepicker" value="{{ item.getDate('countdown') }}">
+</p>
+<div class="clear"></div>
+<p class="field-line field-400 edit-lang">
+	<label>{{ mc.labelLang(lang) }} Titolo:</label>
+	<input type="text" name="titolo" class="field" value="{{ item.get('titolo') }}">
+</p>
+<p class="field-line field-400 edit-lang">
+	<label>{{ mc.labelLang(lang) }} Sottotitolo:</label>
+	<input type="text" name="sottotitolo" class="field" value="{{ item.get('sottotitolo') }}">
+</p>
+<div class="h-show-if-content">
+	<p class="field-line field-400">
+		<label>Tipo descrizione:</label>
+		<select name="contenuto_descrizione"  class="field h-show-if" data-action='{"map": [{"key": "0", "cont": [".contenuto_semplice"]}, {"key": "1", "cont": [".contenuto_html"]}]}'>
+			{{ mc.listComboOptions([{'id': '0', 'text': 'Testo semplice'},{'id': '1', 'text': 'Editor visuale'}], item.get('contenuto_descrizione')) }}
+		</select>
+	</p>	
+	<div class="contenuto_html">
+	<div class="field-line field-400 edit-lang">
+		<label>{{ mc.labelLang(lang) }} Descrizione:</label>
+		<textarea name="descrizione_html" class="visual-editor">{{ item.get('descrizione_html') }}</textarea>
+	</div>
+	</div>
+	<div class="contenuto_semplice">
+		<p class="field-line field-400 edit-lang">
+			<label>{{ mc.labelLang(lang) }} Testo semplice:</label>
+			<textarea name="descrizione" class="field" style="height: 100px;">{{ item.get('descrizione') }}</textarea>
+		</p>
+	</div>
+</div>	
+
+<p class="field-line field-400 edit-lang">
+	<label>{{ mc.labelLang(lang) }} Label bottone:</label>
+	<input type="text" name="bottone" class="field" value="{{ item.get('bottone') }}">
+</p>
+<p class="field-line field-400">
+	<label>Codice:</label>
+	<input type="text" name="codice" class="field" value="{{ item.get('codice') }}" maxlength="100">
+</p>
+<p class="field-line field-400">
+	<label>CTA su evento click:</label>
+	<input type="text" name="cta_click" class="field" value="{{ item.get('cta_click') }}">
+</p>
+<p class="field-line field-400">
+	<label>Parametri:</label>
+	<input type="text" name="parametri" class="field" value="{{ item.get('parametri') }}">
+</p>
+<div style="width: 50%; float: left;">
+{{ mc.upload_immagine(_h, 'Immagine', item.imageAnteprima()) }}
+</div>
+<div style="width: 50%; float: left;">
+{{ mc.upload_immagine(_h, 'Versione mobile', item.imageAnteprima('m'), 'mobile') }}
+</div>
+<div class="clear"></div>
+<div style="width: 50%; float: left;">
+	<div class="fieldset-box file-digitale-box" style="padding: 10px 20px">
+		<div class="field-line field-line-file">
+			<input type="hidden" name="file_video" class="field-file" value="{{ item.getFile('video').id }}">
+			<input type="hidden" name="file_video_name" class="field-file-name">
+			<label>File video MP4 per desktop</label>
+			<div class="field-anteprima" data-download="articolo/download-file-digitale">
+			{{ item.getFile('video').nome }}
+			</div>
+			<div class="field-button">
+				<a class="h-bar-button h-bar-button-blu h-action-upload-file" data-action='{"url": "{{ _h.url('manager/myarea/upload-temp-file') }}"}'>carica file</a>
+				<a class="h-bar-button h-bar-button-gray h-action-upload-file-reset">Cancella</a>
+			</div>
+			<div class="clear"></div>
+		</div>
+	</div>	
+</div>
+<div style="width: 50%; float: left;">
+	<div class="fieldset-box file-digitale-box" style="padding: 10px 20px">
+		<div class="field-line field-line-file">
+			<input type="hidden" name="file_video_mobile" class="field-file" value="{{ item.getFile('video_mobile').id }}">
+			<input type="hidden" name="file_video_mobile_name" class="field-file-name">
+			<label>File video MP4 per mobile</label>
+			<div class="field-anteprima" data-download="articolo/download-file-digitale">
+			{{ item.getFile('video_mobile').nome }}
+			</div>
+			<div class="field-button">
+				<a class="h-bar-button h-bar-button-blu h-action-upload-file" data-action='{"url": "{{ _h.url('manager/myarea/upload-temp-file') }}"}'>carica file</a>
+				<a class="h-bar-button h-bar-button-gray h-action-upload-file-reset">Cancella</a>
+			</div>
+			<div class="clear"></div>
+		</div>
+	</div>	
+</div>
+<div class="clear"></div>
+<div data-tipo-risorsa-selected="{{ item.get('tipo') }}" style="margin-top: 10px">
+	<p class="field-line field-100 field-line-left">
+		<label>Risorsa da collegare<span>*</span>:</label>
+		<select name="tipo" class="field h-action-seleziona-risorsa-elenco">
+			<option></option>
+			{{ mc.listComboOptions([{'id': '1', 'text': 'Articolo'},{'id': '2', 'text': 'Azienda'},{'id': '3', 'text': 'Collezione'},{'id': '4', 'text': 'Pagina'},{'id': '5', 'text': 'URL'},{'id': '6', 'text': 'Blog'},{'id': '8', 'text': 'Evento/News'},{'id': '7', 'text': 'File'},{'id': '1000', 'text': 'Vuoto'}], item.get('tipo')) }}
+		</select>
+	</p>
+	<a data-tipo-risorsa="1" class="h-bar-button h-bar-button-blu h-action-seleziona-risorsa">Scegli articolo</a>
+	<a data-tipo-risorsa="2" class="h-bar-button h-bar-button-blu h-action-seleziona-risorsa">Scegli azienda</a>
+	<a data-tipo-risorsa="3" class="h-bar-button h-bar-button-blu h-action-seleziona-risorsa">Scegli collezione</a>
+	<a data-tipo-risorsa="4" class="h-bar-button h-bar-button-blu h-action-seleziona-risorsa">Scegli pagina</a>
+	<a data-tipo-risorsa="6" class="h-bar-button h-bar-button-blu h-action-seleziona-risorsa">Scegli blog</a>
+	<a data-tipo-risorsa="8" class="h-bar-button h-bar-button-blu h-action-seleziona-risorsa">Scegli evento/news</a>
+	<a data-tipo-risorsa="7" class="h-bar-button h-bar-button-blu h-action-seleziona-risorsa">Scegli file</a>
+	<div class="clear"></div>
+	<div class="h-action-seleziona-risorsa-dettaglio">
+		{{ risorsa_dettaglio }}
+	</div>
+	<p data-tipo-risorsa="5" class="field-line field-400" style="margin-top: 5px">
+		<label>Inserire l'indirizzo (se interno al sito senza il dominio)<span>*</span></label>
+		<input type="text" name="id_entita" class="field valida-required" value="{{ item.get('id_entita') }}">
+	</p>
+</div>
+<div class="field-line">
+	{% set cssClass = '' %}
+	{% set value = '' %}
+	{% if item %} 
+		{% if item.get('apri_url_pagina_bianca') %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% endif %}
+	{% endif %}
+	<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="apri_url_pagina_bianca" value="{{ value }}" /></span> <strong>Apri il link in un nuova pagina</strong></div>
+</div>
+<div style="border: 1px solid #d9d9d9; margin-top: 10px;">
+	<div style="margin: 10px;">
+	<p class="field-line field-400">
+		<label>Stile css:</label>
+		<textarea name="style_css" class="field">{{ item.get('style_css') }}</textarea>
+	</p>
+
+	<div class="field-line field-100 field-line-left">
+		<label>Colore titolo (RGB):</label>
+		#<input type="text" name="colore_titolo" class="field valida-rgb valida-digitrgb" value="{{ item.get('colore_titolo') }}" maxlength="6">
+	</div>
+	<div class="field-line field-100 field-line-left">
+		<label>Colore testo (RGB):</label>
+		#<input type="text" name="colore_testo" class="field valida-rgb valida-digitrgb" value="{{ item.get('colore_testo') }}" maxlength="6">
+	</div>
+	<div class="field-line field-100 field-line-left">
+		<label>Testo bottone (RGB):</label>
+		#<input type="text" name="colore_bottone" class="field valida-rgb valida-digitrgb" value="{{ item.get('colore_bottone') }}" maxlength="6">
+	</div>
+	<div class="clear"></div>
+	<div class="field-line field-100 field-line-left">
+		<label>Sfondo bottone (RGB):</label>
+		#<input type="text" name="colore_sfondo" class="field valida-rgb valida-digitrgb" value="{{ item.get('colore_sfondo') }}" maxlength="6">
+	</div>
+	<div class="field-line field-100 field-line-left">
+		<label>Classe CSS:</label>
+		<input type="text" name="classe_css" class="field" value="{{ item.get('classe_css') }}" maxlength="50">
+	</div>
+	<div class="field-line field-100 field-line-left">
+		<label>Classe CSS hover:</label>
+		<input type="text" name="classe_css_hover" class="field" value="{{ item.get('classe_css_hover') }}" maxlength="50">
+	</div>
+	<div class="clear"></div>
+	<div class="field-line field-200 field-line-left">
+		<label>Allineamento verticale:</label>
+		<select name="allinea_verticale">
+			{{ mc.listComboOptions([{'id': 'allinea-ver-top', 'text': 'Sopra'},{'id': 'allinea-ver-mid', 'text': 'Mezzo'},{'id': 'allinea-ver-bot', 'text': 'Sotto'}], item.get('allinea_verticale')) }}
+		</select>
+	</div>
+	<div class="field-line field-200 field-line-left">
+		<label>Allineamento orizzontale:</label>
+		<select name="allinea_orizzontale">
+			{{ mc.listComboOptions([{'id': 'allinea-orr-left', 'text': 'Sinistra'},{'id': 'allinea-orr-center', 'text': 'Centro'},{'id': 'allinea-orr-right', 'text': 'Destra'}], item.get('allinea_orizzontale')) }}
+		</select>
+	</div>
+	<div class="clear"></div>
+	</div>
+</div>
+
+{{ mc.labelCampiObbligatori() }}
+</div>
+<div data-tab="gallery_desktop">
+{% for i in 1..10 %}
+	{{ mc.upload_immagine(_h, 'Immagine ' ~ loop.index, item.imageAnteprima('g' ~ i), 'gallery' ~ i) }}
+{% endfor %}
+</div>
+<div data-tab="gallery_mobile">
+{% for i in 11..20 %}
+	{{ mc.upload_immagine(_h, 'Immagine ' ~ loop.index, item.imageAnteprima('g' ~ i), 'gallery' ~ i) }}
+{% endfor %}
+</div>
+{% if listLang|length > 1 %}
+<div data-tab="visibilita">
+	{% set nuovo = true %}
+	{% if item %}
+		{% set nuovo = false %}
+	{% endif %}
+	{% set list_lang = item.get('visibilita_lang', '')|split(',') %}
+	{% for l in listLang %}
+		{% set valore = '' %}
+		{% if nuovo or item.get('visibilita_lang', '') == '-' or l in list_lang %}
+			{% set valore = l %}
+		{% endif %}
+		{{ mc.checkbox(valore, l, 'visibilita_lang', 'Visibilità ' ~ l|upper, l) }}
+	{% endfor %}
+</div>
+</div>
+{% endif %}
+</div>
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/banner/ex-edit'), '"reload": ["#h-layout-center-content", "#banner-content"]') }}	

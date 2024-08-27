@@ -1,0 +1,17 @@
+<div data-tab-rif="descrizione">Descrizione</div>
+<div data-tab-rif="categoria">Categoria</div>
+<div data-tab-rif="selezione">Selezione</div>
+
+<div data-tab="descrizione">
+<div class="field-line field-400">
+	<label>Descrizione:</label>
+	<textarea name="descrizione" class="visual-editor">{{ item.get('descrizione') }}</textarea>
+</div>
+</div>
+
+<div data-tab="categoria">
+{{ mc.dynamicSingleTreeSelect(_h, 'Categoria', listCategoria, item, 'id_categoria', 'categoria', true, true, item.get('id_categoria_principale')) }}
+</div>
+<div data-tab="selezione">
+{{ mc.dynamicMultipleSelect(_h, 'Selezione', listSelezione, item, 'id_selezione', 'selezione') }}
+</div>

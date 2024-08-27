@@ -1,0 +1,5 @@
+LANG;CODICE;DATA;ISO PAESE SPEDIZIONE;TOTALE;TIPO PAGAMENTO;COGNOME;NOME;E_MAIL;TELEFONO;FATT./RIC.;FATT.PROF.;DDT;SORGENTE;CODICE SCONTO;
+{% for item in list %}
+{% set ordine = item.dettaglio.ordine %}
+{{ item.get('lang') }};{{ item.get('codice') }};{{ item.getDate('data_inserimento') }};{{ item.get('codice_iso_spedizione') }};{{ _h.util.euro(ordine.total_ordine) }};{{ item.tipoPagamento() }};{{ ordine.spedizione.cognome }};{{ ordine.spedizione.nome }};{{ ordine.e_mail }};{{ ordine.spedizione.telefono }};{{ item.get('fattura') }};{{ item.get('fattura_proforma') }};{{ item.get('ddt') }};{{ item.get('sorgente_traking') }};{{ ordine.sconto.codice }};
+{% endfor %}

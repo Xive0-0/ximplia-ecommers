@@ -1,0 +1,1121 @@
+{% macro sondaggio(_h, sondaggio) %}
+	{% if sondaggio %}
+	
+	{% endif %}
+{% endmacro %}
+
+{% macro punti(_h, puntiAttivi) %}
+	{% if puntiAttivi and puntiAttivi.punti > 0 %}
+		{% set _lbl = _h.labels.get('website') %}
+		<punti>
+			<punti_info>
+				<punti_icon><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M22 10V6c0-1.1-.9-2-2-2H4c-1.1 0-1.99.9-1.99 2v4c1.1 0 1.99.9 1.99 2s-.89 2-2 2v4c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2v-4c-1.1 0-2-.9-2-2s.9-2 2-2zm-2-1.46c-1.19.69-2 1.99-2 3.46s.81 2.77 2 3.46V18H4v-2.54c1.19-.69 2-1.99 2-3.46 0-1.48-.8-2.77-1.99-3.46L4 6h16v2.54zM9.07 16L12 14.12 14.93 16l-.89-3.36 2.69-2.2-3.47-.21L12 7l-1.27 3.22-3.47.21 2.69 2.2z"/></svg></punti_icon>
+				<punti_numero>{{ puntiAttivi.punti }}</punti_numero>
+				<punti_valore_1>{{ puntiAttivi.valore_1_punto_cent }}</punti_valore_1>
+				<punti_valore_cent>{{ puntiAttivi.punti_valore_cent }}</punti_valore_cent>
+				<punti_valore_euro>{{ _h.util.currentValuta(puntiAttivi.punti_valore) }}</punti_valore_euro>
+				<punti_icon_euro><svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" viewBox="0 0 24 24"><rect fill="none" height="24" width="24"/><g><path d="M15,10c0-0.55,0.45-1,1-1s1,0.45,1,1c0,0.55-0.45,1-1,1S15,10.55,15,10z M8,9h5V7H8V9z M22,7.5v6.97l-2.82,0.94L17.5,21 L12,21v-2h-2v2l-5.5,0C4.5,21,2,12.54,2,9.5S4.46,4,7.5,4l5,0c0.91-1.21,2.36-2,4-2C17.33,2,18,2.67,18,3.5 c0,0.21-0.04,0.4-0.12,0.58c-0.14,0.34-0.26,0.73-0.32,1.15l2.27,2.27H22z M20,9.5h-1L15.5,6c0-0.65,0.09-1.29,0.26-1.91 C14.79,4.34,14,5.06,13.67,6L7.5,6C5.57,6,4,7.57,4,9.5c0,1.88,1.22,6.65,2.01,9.5L8,19v-2h6v2l2.01,0l1.55-5.15L20,13.03V9.5z"/></g></svg></punti_icon_euro>
+			</punti_info>
+			<punti_descrizione>{{ _lbl.info_punti_descrizione|replace({'%punto_valore%': puntiAttivi.valore_1_punto_cent}) }}</punti_descrizione>
+		</punti>
+	{% endif  %}
+{% endmacro %}
+
+{% macro google_recaptcha(_h, posizione) %}
+	{% if _h.settings.getByUrl('google_recaptcha_client_key') and (posizione == '-' or _h.settings.get('google_recaptcha_' ~ posizione)) %}
+		<div class="g-recaptcha" data-sitekey="{{ _h.settings.getByUrl('google_recaptcha_client_key') }}"></div>
+	{% endif %}
+{% endmacro %}
+
+{% macro timeout_carrello(_h) %}
+	{% if _h.settings.getByUrl('abilita_controllo_tempo_completamento_carrello') and _h.settings.get('tempo_completamento_carrello') %}
+		{% set pageUtils = _h.lib('PageUtils') %}
+		{% set _lblg = _h.labels.get('global') %}
+		{% if pageUtils.cartCountdown() %}
+		<div class="timeout-carrello">
+			<div class="timeout-carrello-back">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M15.41 16.59L10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z"/></svg>
+			</div>
+			<div class="timeout-carrello-label">
+				{{ _lblg.title_tempo_completamento_carrello }}
+			</div>
+			<div class="timeout-carrello-timer" data-event="timeout-carrello-event" data-countdown="{{ pageUtils.cartCountdown() }}" data-format="blocco"></div>
+			<div class="timeout-carrello-button">
+				<a href="{{ _h.xurl('cart/checkout/index') }}">
+				{{ _lblg.btn_tempo_completamento_carrello }}
+				</a>
+			</div>
+		</div>
+		{% endif %}
+	{% endif %}
+{% endmacro %}
+
+{% macro dataLayerGa4(_h) %}
+	{% if _h.config('ga4', false) %}
+		{% if _h.settings.getByUrl('google_tag_manager', '-') != '-' and _h.settings.getByUrl('google_tag_manager') != '' or
+			_h.settings.getByUrl('google_site_tag', '-') != '-' and _h.settings.getByUrl('google_site_tag') != '' %}
+		<script type="text/javascript">
+			{% if _h.requestActivity == 'account/avvisa-prodotto-disponibile' %}
+				{% set ga4 = _h.lib('GA4DataLayer') %}
+				{% set item_ga4 = ga4.items(_h.input('id', 0)) %}
+				{% if item_ga4 %}
+				window.dataLayer.push({
+					event: 'view_request_product',
+					ecommerce: {
+						items: {{ item_ga4|json_encode }}
+					}
+				});
+				{% endif %}
+			{% elseif _h.requestActivity == 'item-articolo' %}
+				{% set ga4 = _h.lib('GA4DataLayer') %}
+				{% set item_ga4 = ga4.items(_h.input('id', 0)) %}
+				{% if item_ga4 %}
+				window.dataLayer.push({
+					event: 'view_item',
+					ecommerce: {
+						items: {{ item_ga4|json_encode }}
+					}
+				});
+				{% endif %}
+			{% elseif _h.requestActivity == 'cart/checkout/index' %}
+				{% set ga4 = _h.lib('GA4DataLayer') %}
+				window.dataLayer.push({
+					event: 'begin_checkout',
+					ecommerce: {
+						items: {{ ga4.checkout()|json_encode }}
+					}
+				});
+			{% elseif _h.requestActivity == 'search' %}
+				{% set result = _h.view('result') %}
+				{% if result and result.list_id %}
+				{% set ga4 = _h.lib('GA4DataLayer') %}
+				window.dataLayer.push({
+					event: 'view_item_list',
+					ecommerce: {
+						item_list_id: '{{ _h.requestUrl }}',
+						item_list_name: '{{ result.title }}',
+						items: {{ ga4.items( result.list_id )|json_encode }}
+					}
+				});
+				{% endif %}
+			{% elseif _h.requestActivity == 'find' and _h.input('query', '') %}
+				window.dataLayer.push({
+					event: 'search',
+					search_term: "{{ _h.input('query', '') }}"
+				});
+			{% endif %}
+		</script>
+		{% endif %}
+	{% endif %}
+{% endmacro %}
+
+{% macro microdata(_h) %}
+	{% if _h.requestActivity == 'search' %}
+		{% set result = _h.view('result') %}
+		{% if result and result.listCollezioneTree %}
+<script type="application/ld+json"> 
+{ 
+	"@context": "https://schema.org", 
+	"@type": "BreadcrumbList", 
+	"itemListElement": [
+		{% for c in result.listCollezioneTree %}
+		{ "@type": "ListItem", "position": {{ loop.index }}, "name": "{{ c.getForJson('nome') }}", "item": "{{ _h.webAppUrl }}{{ c.url }}" }{% if loop.index < result.listCollezioneTree|length %},{% endif %}
+		{% endfor %}
+	] 
+} 
+</script>
+		{% endif %}
+	{% elseif _h.requestActivity == 'item-articolo' %}
+		{% set listCollezioneTree = _h.view('listCollezioneTree') %}
+		{% if listCollezioneTree %}
+<script type="application/ld+json"> 
+{ 
+	"@context": "https://schema.org", 
+	"@type": "BreadcrumbList", 
+	"itemListElement": [
+		{% for c in listCollezioneTree %}
+		{ "@type": "ListItem", "position": {{ loop.index }}, "name": "{{ c.getForJson('nome') }}", "item": "{{ _h.webAppUrl }}{{ c.url }}" }{% if loop.index < listCollezioneTree|length %},{% endif %}
+		{% endfor %}
+	] 
+} 
+</script>
+		{% endif %}
+		{% set item = _h.view('item') %}
+		{% if item %}
+<script type="application/ld+json">
+{
+	"@context": "https://schema.org",
+	"@type": "Product",
+	"productID": "{{ item.id }}",
+	"mpn": "{{ item.id }}",
+	"sku": "{{ item.id }}",
+	"name": "{{ item.getForJson(['nome', 'nome_simbolico']) }}",
+	"description": "{%if item.getForJson('descrizione_microdati') %}{{ item.getForJson('descrizione_microdati') }}{% else %}{{ item.getForJson('nome') }}{% endif %}",
+	"url": "{{ _h.webAppUrl }}{{ item.url}}",
+	"image": "{{ _h.webAppUrl }}/images/{{ _h.config('template').web['item_image_dim'] }}/{{ item.imageName() }}",
+	"brand": {
+		"@type": "Brand",
+		"name": "{{ item.azienda.getForJson('nome') }}"
+	},
+	"offers": [
+		{
+		  "@type": "Offer",
+		  "price": "{{ item.prezzo(2) }}",
+		  "url": "{{ _h.webAppUrl }}{{ item.url}}",
+		  "priceValidUntil": "2050-12-31",
+		  "priceCurrency": "{{ item.currency()|upper }}",
+		  "itemCondition": "https://schema.org/NewCondition",
+		  "availability": "https://schema.org/InStock"
+		}
+	]
+}
+</script>	
+		{% endif %}
+	{% endif %}
+{% endmacro %}
+
+{% macro google_tag_manager_img(_h) %}
+	{% if _h.settings.getByUrl('google_tag_manager', '-') != '-' and _h.settings.getByUrl('google_tag_manager') != '' %}
+	<noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ _h.settings.getByUrl('google_tag_manager') }}"
+	height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+	{% endif %}	
+{% endmacro %}
+
+{% macro google_tag_manager_script(_h) %}
+	{% if _h.settings.getByUrl('google_tag_manager', '-') != '-' and _h.settings.getByUrl('google_tag_manager') != '' %}
+	  <script type="text/javascript">
+		{% if _h.config('cookie_policy') == 'gdpr22' and (not(_h.cookie('statistiche')) and _h.settings.get('google_tag_manager_come_cookie_tecnici', '') == '') %}
+		  gtag("consent", "default", {
+			ad_storage: "denied",
+			analytics_storage: "denied",
+			wait_for_update: 2000
+		  });
+		{% endif %}
+	
+	(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+	new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+	j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+	'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+	})(window,document,'script','dataLayer','{{ _h.settings.getByUrl('google_tag_manager') }}');
+	</script>
+	{% endif %}
+{% endmacro %}
+
+{% macro pinterest_tag_script(_h, script_statistiche_enabled) %}
+	{% if script_statistiche_enabled and _h.settings.getByUrl('pinterest_tag_id', '-') != '-' and _h.settings.getByUrl('pinterest_tag_id') != '' %}
+	<script type="text/javascript">
+	!function(e){if(!window.pintrk){window.pintrk=function(){window.pintrk.queue.push(
+	Array.prototype.slice.call(arguments))};var
+	n=window.pintrk;n.queue=[],n.version="3.0";var
+	 t=document.createElement("script");t.async=!0,t.src=e;var
+	r=document.getElementsByTagName("script")[0];r.parentNode.insertBefore(t,r)}}
+	("https://s.pinimg.com/ct/core.js"); pintrk('load', '{{ _h.settings.getByUrl('pinterest_tag_id') }}'); pintrk('page');
+	</script>
+	<noscript>
+	<img height="1" width="1" style="display:none;" alt="" src="https://ct.pinterest.com/v3/?tid={{ _h.settings.getByUrl('pinterest_tag_id') }}&noscript=1" />
+	</noscript>
+	 <script>
+	   pintrk('track', 'pagevisit');
+	 </script>
+	{% endif %}
+{% endmacro %}
+
+{% macro google_site_tag_script(_h) %}
+	{% if _h.settings.getByUrl('google_site_tag', '-') != '-' and _h.settings.getByUrl('google_site_tag') != '' %}
+	<script async src="https://www.googletagmanager.com/gtag/js?id={{ _h.settings.getByUrl('google_site_tag') }}"></script>
+	<script type="text/javascript">
+	gtag('js', new Date());
+	{% if _h.config('cookie_policy') == 'gdpr22' and (not(_h.cookie('statistiche')) and _h.settings.get('google_tag_manager_come_cookie_tecnici', '') == '') %}
+	gtag("consent", "default", {
+		ad_storage: "denied",
+		analytics_storage: "denied",
+		wait_for_update: 2000
+	});
+	{% endif %}
+	gtag('config', '{{ _h.settings.getByUrl('google_site_tag') }}'{% if _h.settings.getByUrl('google_analytics_anonymize_ip') %}, { 'anonymize_ip': true }{% endif %});
+	</script>
+	{% endif %}
+{% endmacro %}
+
+{% macro facebook_pixel_img(_h) %}
+	{% if _h.settings.getByUrl('facebook_pixel', '-') != '-' and _h.settings.getByUrl('facebook_pixel') != '' %}
+	<noscript>
+	<img height="1" width="1" src="https://www.facebook.com/tr?id={{ _h.settings.getByUrl('facebook_pixel') }}&ev=PageView&noscript=1"/>
+	</noscript>	
+	{% endif %}
+{% endmacro %}
+
+{% macro facebook_pixel_script(_h, consent_track) %}
+	{% if _h.settings.getByUrl('facebook_pixel', '-') != '-' and _h.settings.getByUrl('facebook_pixel') != '' %}
+	<!-- Facebook Pixel Code -->
+	<script>
+	!function(f,b,e,v,n,t,s)
+	{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+	n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+	if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+	n.queue=[];t=b.createElement(e);t.async=!0;
+	t.src=v;s=b.getElementsByTagName(e)[0];
+	s.parentNode.insertBefore(t,s)}(window,document,'script',
+	'https://connect.facebook.net/en_US/fbevents.js');
+	{% if consent_track %}
+	fbq('consent', 'grant');
+	{% else %}
+	fbq('consent', 'revoke');
+	{% endif %}
+	fbq('init', '{{ _h.settings.getByUrl('facebook_pixel') }}');
+	{% if _h.requestActivity == 'item-articolo' %}
+	fbq('track', 'ViewContent', {
+			content_ids: ['{{_h.input('id')}}'],
+			content_type: 'product'
+		});
+	{% else %}
+	fbq('track', 'PageView');
+	{% endif %}
+	</script>	
+	<!-- End Facebook Pixel Code -->
+	{% endif %}
+{% endmacro %}
+		
+{% macro google_analytics_script(_h) %}
+	{% if _h.settings.getByUrl('google_analytics_key', '-') != '-' and _h.settings.getByUrl('google_analytics_key') != '' %}
+	<script>
+	window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+	ga('create', '{{ _h.settings.getByUrl('google_analytics_key') }}', 'auto');
+	{% if _h.session.isAuth and _h.session.profile == 'guest' %}
+		{% if _h.settings.getByUrl('google_analytics_monitor_user_id') %}
+		ga('set', 'userId', '{{ _h.session.params.user.id }}');
+		{% endif %}
+	{% endif %}
+	{% if _h.settings.getByUrl('google_analytics_anonymize_ip') or (not(_h.cookie('statistiche')) and _h.settings.get('google_analytics_come_cookie_tecnici', '') != '') %}
+	 ga('set', 'anonymizeIp', true);
+	{% endif %}
+	ga('require', 'ec');
+	ga('send', 'pageview');
+	</script>
+	<script async src='https://www.google-analytics.com/analytics.js'></script>
+	{% endif %}
+{% endmacro %}
+
+{% macro pagamento_scalapay(_h) %}
+	<form name="form_pagamento_scalapay" id="form_pagamento_scalapay" class="form_pagamento_scalapay" method="post" action="{{ _h.xurl('cart/checkout/cc/scalapay/pay') }}">
+	</form>
+{% endmacro %}
+{% macro pagamento_satispay(_h) %}
+	<form name="form_pagamento_satispay" id="form_pagamento_satispay" class="form_pagamento_satispay" method="post" action="{{ _h.xurl('cart/checkout/cc/satispay/pay') }}">
+	</form>
+{% endmacro %}
+
+{% macro pagamento_cc_payplug(_h) %}
+<form name="form_pagamento_cc" id="form_pagamento_cc" class="form_pagamento_cc">
+<input type="hidden" data-type="cc_mac" class="redirect" name="maccode" value="">
+</form>
+{% endmacro %}
+
+{% macro pagamento_bancontact(_h) %}
+<form name="form_pagamento_bancontact" id="form_pagamento_bancontact" class="form_pagamento_bancontact">
+</form>
+{% endmacro %}
+{% macro pagamento_oney(_h) %}
+<form name="form_pagamento_oney" id="form_pagamento_oney" class="form_pagamento_oney">
+</form>
+{% endmacro %}
+{% macro pagamento_18app(_h) %}
+<form name="form_pagamento_18app" id="form_pagamento_18app" class="form_pagamento_18app" method="post" action="{{ _h.xurl('cart/checkout/cc/18app/pay') }}">
+<input type="hidden" data-type="cc_mac" name="token" value="">
+</form>
+{% endmacro %}
+{% macro pagamento_punti(_h) %}
+<form name="form_pagamento_punti" id="form_pagamento_punti" class="form_pagamento_punti" method="post" action="{{ _h.xurl('cart/checkout/cc/punti/pay') }}">
+<input type="hidden" data-type="cc_mac" name="token" value="">
+</form>
+{% endmacro %}
+
+{% macro pagamento_cc_monetaweb(_h) %}
+<form name="form_pagamento_cc" id="form_pagamento_cc" class="form_pagamento_cc">
+<input type="hidden" data-type="cc_mac" class="redirect" name="maccode" value="">
+</form>
+{% endmacro %}
+
+{% macro pagamento_cc_tgp(_h) %}
+<form name="form_pagamento_cc" id="form_pagamento_cc" class="form_pagamento_cc">
+<input type="hidden" data-type="cc_mac" class="redirect" name="maccode" value="">
+</form>
+{% endmacro %}
+
+{% macro pagamento_cc_stripe(_h) %}
+<form name="form_pagamento_cc" id="form_pagamento_cc" class="form_pagamento_cc" method="post" action="{{ _h.xurl('cart/checkout/cc/stripe/pay') }}">
+<input type="hidden" data-type="cc_mac" name="token" value="">
+</form>
+{% endmacro %}
+
+{% macro pagamento_cc_paytabs(_h) %}
+<form name="form_pagamento_cc" id="form_pagamento_cc" class="form_pagamento_cc">
+<input type="hidden" data-type="cc_mac" name="cc_mac" value="" class="redirect">
+</form>
+{% endmacro %}
+
+{% macro pagamento_cc_payway(_h) %}
+<form name="form_pagamento_cc" id="form_pagamento_cc" class="form_pagamento_cc">
+<input type="hidden" data-type="cc_mac" class="redirect" name="maccode" value="">
+</form>
+{% endmacro %}
+
+{% macro pagamento_cc_pagonline(_h) %}
+<form name="form_pagamento_cc" id="form_pagamento_cc" class="form_pagamento_cc">
+<input type="hidden" data-type="cc_mac" class="redirect" name="maccode" value="">
+</form>
+{% endmacro %}
+
+{% macro pagamento_cc_plainplay(_h, label, esercente, abi, total_ordine, currency, email) %}
+{% if _h.config('checkout_cc_test', false) %}
+<form name="form_pagamento_cc" id="form_pagamento_cc" class="form_pagamento_cc" method="post" action="https://virtualcommercetest.sba.bcc.it/simplyEComm/">
+{% else %}
+<form name="form_pagamento_cc" id="form_pagamento_cc" class="form_pagamento_cc" method="post" action="https://virtualcommerce.sba.bcc.it/simplyEComm/ecommerce.jsp">
+{% endif %}
+{% if not(currency) %}
+	{% set currency = 'eur' %}
+{% endif %}
+<input type="hidden" name="esercente" value="{{ esercente }}">
+<input type="hidden" data-type="codice_transazione" name="ordine" value="">
+<input type="hidden" name="importo" value="{{ _h.util.euro(total_ordine) }}">
+<input type="hidden" name="divisa" value="{{ currency|upper }}">
+<input type="hidden" name="abi" value="{{ abi }}">
+<input type="hidden" name="email" value="{{ email }}">
+<input type="hidden" name="righe" value="{{ label }}^{{ label }}^1^{{ _h.util.euro(total_ordine) }}^EUR;">
+<input type="hidden" data-type="cc_mac" name="maccode" value="">
+
+<input type="hidden" name="addressok" value="{{ _h.c_url('cart/thanks') }}">
+<input type="hidden" name="addressack" value="{{ _h.c_url('cart/checkout/cc/plainplay/ok') }}">
+<input type="hidden" name="addressko" value="{{ _h.c_url('cart/thanks-return-cc') }}">
+<input type="hidden" name="addressnack" value="{{ _h.c_url('cart/checkout/cc/plainplay/annulla') }}">
+</form>
+{% endmacro %}
+
+{% macro pagamento_cc_cartasi(_h, alias, ultimateCreditorName, address, total_ordine, currency, debtorName, mail, languageId, descrizione) %}
+{% if _h.config('checkout_cc_test', false) %}
+<form name="form_pagamento_cc" id="form_pagamento_cc" class="form_pagamento_cc" method="post" action="https://ecommerce.cartasi.it/ecomm/ecomm/DispatcherServlet">
+{% else %}
+<form name="form_pagamento_cc" id="form_pagamento_cc" class="form_pagamento_cc" method="post" action="https://ecommerce.keyclient.it/ecomm/ecomm/DispatcherServlet">
+{% endif %}
+{% if not(currency) %}
+	{% set currency = 'eur' %}
+{% endif %}
+<input type="hidden" data-type="codice" name="mandateId" value="">
+<input type="hidden" data-type="codice_transazione" name="mandateRequestId" value="">
+<input type="hidden" name="alias" value="{{ alias }}">
+<input type="hidden" name="importo" value="{{ _h.util.centesimi(total_ordine) }}">
+<input type="hidden" name="debtorName" value="{{ debtorName }}">
+<input type="hidden" name="address" value="{{ address }}">
+<input type="hidden" name="ultimateCreditorName" value="{{ ultimateCreditorName }}">
+<input type="hidden" name="mail" value="{{ mail }}">
+<input type="hidden" name="descrizione" value="{{ descrizione }}">
+<input type="hidden" name="languageId" value="{{ languageId }}">
+
+<input type="hidden" name="country" value="ITA">
+<input type="hidden" name="sequenceType" value="OOFF">
+<input type="hidden" name="divisa" value="{{ currency|upper }}">
+<input type="hidden" name="messageNameIdType" value="pain.009.001.03">
+
+<input type="hidden" data-type="codice_transazione" name="codTrans" value="">
+<input type="hidden" data-type="cc_mac" name="mac" value="">
+
+<input type="hidden" name="url" value="{{ _h.c_url('cart/checkout/cc/cartasi/ok') }}">
+<input type="hidden" name="url_back" value="{{ _h.c_url('cart/checkout/cc/cartasi/annulla') }}">
+</form>
+{% endmacro %}
+
+{% macro pagamento_cc_axepta(_h) %}
+<form name="form_pagamento_cc" id="form_pagamento_cc" class="form_pagamento_cc" method="post" action="https://ecpay.bnlpositivity.it/paymentpage/paymentPage.aspx">
+<input type="hidden" name="MerchantID" value="{{ _h.config('checkout_cc_merchant', '') }}">
+<input type="hidden" data-type="cc_data" name="Data" value="">
+<input type="hidden" data-type="cc_len" name="Len" value="">
+<input type="hidden" name="PayType" value="0">
+</form>
+{% endmacro %}
+
+{% macro pagamento_cc_nexi(_h, alias, ultimateCreditorName, address, total_ordine, currency, debtorName, mail, languageId, descrizione) %}
+{% if _h.config('checkout_cc_test', false) %}
+<form name="form_pagamento_cc" id="form_pagamento_cc" class="form_pagamento_cc" method="post" action="https://int-ecommerce.nexi.it/ecomm/ecomm/DispatcherServlet">
+{% else %}
+<form name="form_pagamento_cc" id="form_pagamento_cc" class="form_pagamento_cc" method="post" action="https://ecommerce.nexi.it/ecomm/ecomm/DispatcherServlet">
+{% endif %}
+{% if not(currency) %}
+	{% set currency = 'eur' %}
+{% endif %}
+<input type="hidden" data-type="codice" name="mandateId" value="">
+<input type="hidden" data-type="codice_transazione" name="mandateRequestId" value="">
+<input type="hidden" name="alias" value="{{ alias }}">
+<input type="hidden" name="importo" value="{{ _h.util.centesimi(total_ordine) }}">
+<input type="hidden" name="debtorName" value="{{ debtorName }}">
+<input type="hidden" name="address" value="{{ address }}">
+<input type="hidden" name="ultimateCreditorName" value="{{ ultimateCreditorName }}">
+<input type="hidden" name="mail" value="{{ mail }}">
+<input type="hidden" name="descrizione" value="{{ descrizione }}">
+<input type="hidden" name="languageId" value="{{ languageId }}">
+
+<input type="hidden" name="TCONTAB" value="I">
+
+<input type="hidden" name="country" value="ITA">
+<input type="hidden" name="divisa" value="{{ currency|upper }}">
+
+<input type="hidden" data-type="codice_transazione" name="codTrans" value="">
+<input type="hidden" data-type="cc_mac" name="mac" value="">
+
+<input type="hidden" name="url" value="{{ _h.c_url('cart/checkout/cc/nexi/ok') }}">
+<input type="hidden" name="url_back" value="{{ _h.c_url('cart/checkout/cc/nexi/annulla') }}">
+</form>
+{% endmacro %}
+
+{% macro pagamento_paypal(_h, business, item_name, total_ordine) %}
+{% if _h.config('paypal_api', 1) == 3 %}
+	<form name="form_pagamento_paypal" id="form_pagamento_paypal" class="form_pagamento_paypal" method="post" action="{{ _h.xurl('cart/checkout/cc/paypal3/pay') }}">
+	</form>
+{% elseif _h.config('paypal_api', 1) == 2 %}
+	<form name="form_pagamento_paypal" id="form_pagamento_paypal" class="form_pagamento_paypal" method="post" action="{{ _h.xurl('cart/checkout/cc/paypal2/pay') }}">
+	</form>
+{% elseif _h.config('paypal_api', 1) == 1 %}
+	{% if _h.config('checkout_paypal_email') %}
+		{% set business = _h.config('checkout_paypal_email') %}
+	{% endif %}
+	<form name="form_pagamento_paypal" id="form_pagamento_paypal" class="form_pagamento_paypal" method="post" action="https://www.paypal.com/cgi-bin/webscr">
+
+	<input type="hidden" name="cmd" value="_xclick">
+	<input type="hidden" name="business" value="{{ business }}">
+	<input type="hidden" data-type="total_ordine" name="amount" value="{{ _h.util.floatValue(total_ordine, 2) }}">
+	<input type="hidden" name="currency_code" value="{{ _h.config('checkout_paypal_currency', 'eur')|upper }}">
+	<input type="hidden" data-type="codice" name="custom" value="">
+	<input type="hidden" name="item_name" value="{{ item_name }}">
+	{% if _h.settings.get('checkout_pagamento_paypal_con_autorizzazione', '') == '' %}
+	<input type="hidden" name="paymentaction" value="sale">
+	{% else %}
+	<input type="hidden" name="paymentaction" value="authorization">
+	{% endif %}
+	{% if _h.settings.get('checkout_pagamento_paypal_spedizione', '') != '' %}
+		<input type="hidden" data-type="spedizione_nome" name="first_name" value="">
+		<input type="hidden" data-type="spedizione_cognome" name="last_name" value="">
+		<input type="hidden" data-type="spedizione_indirizzo1" name="address1" value="">
+		<input type="hidden" data-type="spedizione_indirizzo2" name="address2" value="">
+		<input type="hidden" data-type="spedizione_citta" name="city" value="">
+		<input type="hidden" data-type="spedizione_stato2" name="state" value="">
+		<input type="hidden" data-type="spedizione_cap" name="zip" value="">
+		<input type="hidden" data-type="spedizione_email" name="email" value="">
+		{% if _h.settings.get('checkout_pagamento_paypal_spedizione_sovrascrivi', '') != '' %}
+		<!--<input type="hidden" name="address_override" value="1">-->
+		{% endif %}
+	{% endif %}
+	{% if _h.settings.get('checkout_pagamento_paypal_spedizione_visualizza', '') == '' %}
+	<input type="hidden" name="showShippingAddress" value="false">
+	{% else %}
+	<input type="hidden" name="showShippingAddress" value="true">
+	{% endif %}
+	<input type="hidden" name="rm" value="2">
+	<input type="hidden" name="notify_url" value="{{ _h.c_url('cart/checkout/cc/paypal/ipn') }}" />
+	<input type="hidden" name="return" value="{{ _h.c_url('cart/thanks') }}">
+	<input type="hidden" name="cancel_return" value="{{ _h.c_url('cart/thanks-return-paypal') }}">
+	</form>
+{% else %}
+	<form name="form_pagamento_paypal" id="form_pagamento_paypal" class="form_pagamento_paypal" method="post" action="https://securepayments.paypal.com/webapps/HostedSoleSolutionApp/webflow/sparta/hostedSoleSolutionProcess">
+
+	<input type="hidden" name="cmd" value="_hosted-payment">
+	<input type="hidden" name="business" value="{{ business }}">
+	<input type="hidden" data-type="total_ordine" name="subtotal" value="{{ _h.util.floatValue(total_ordine, 2) }}">
+	{% if _h.settings.get('checkout_pagamento_paypal_con_autorizzazione', '') == '' %}
+	<input type="hidden" name="paymentaction" value="sale">
+	{% else %}
+	<input type="hidden" name="paymentaction" value="authorization">
+	{% endif %}
+	<input type="hidden" name="currency_code" value="{{ _h.config('checkout_paypal_currency', 'eur')|upper }}">
+	<input type="hidden" data-type="codice" name="custom" value="">
+	<input type="hidden" name="item_name" value="{{ item_name }}">
+	{% if _h.settings.get('checkout_pagamento_paypal_spedizione', '') != '' %}
+		<input type="hidden" data-type="spedizione_nome" name="first_name" value="">
+		<input type="hidden" data-type="spedizione_cognome" name="last_name" value="">
+		<input type="hidden" data-type="spedizione_indirizzo1" name="address1" value="">
+		<input type="hidden" data-type="spedizione_indirizzo2" name="address2" value="">
+		<input type="hidden" data-type="spedizione_citta" name="city" value="">
+		<input type="hidden" data-type="spedizione_stato2" name="state" value="">
+		<input type="hidden" data-type="spedizione_cap" name="zip" value="">
+		<input type="hidden" data-type="spedizione_email" name="email" value="">
+		{% if _h.settings.get('checkout_pagamento_paypal_spedizione_sovrascrivi', '') != '' %}
+		<!--<input type="hidden" name="address_override" value="1">-->
+		{% endif %}
+	{% endif %}
+	{% if _h.settings.get('checkout_pagamento_paypal_spedizione_visualizza', '') == '' %}
+	<input type="hidden" name="showShippingAddress" value="false">
+	{% else %}
+	<input type="hidden" name="showShippingAddress" value="true">
+	{% endif %}
+	<input type="hidden" name="bn" value="CC_Partner_H3S">
+	<input type="hidden" name="notify_url" value="{{ _h.c_url('cart/checkout/cc/paypal/ipn') }}" />
+	<input type="hidden" name="return" value="{{ _h.c_url('cart/thanks') }}">
+	<input type="hidden" name="cancel_return" value="{{ _h.c_url('cart/thanks-return-paypal') }}">
+	</form>
+{% endif %}
+{% endmacro %}
+
+{% macro glossario_list(_h, list) %}
+<ul class="glossario-list">
+{% for item in list %}
+<li>
+	<a href="{{ item.url }}" title="{{ item.get('nome') }}">{{ item.get('nome') }}</a>
+</li>
+{% endfor %}
+</ul>
+{% endmacro %}
+
+{% macro faq_list(_h, list) %}
+<ul class="faq-list">
+{% for item in list %}
+<li>
+	<a href="javascript:void(0)">{{ item.get('domanda') }}</a>
+	<div class="html">{{ item.getTestoHtmlFormattato('risposta') }}</div>
+</li>
+{% endfor %}
+</ul>
+{% endmacro %}
+
+{% macro link(_h, url, title, label, selected, blank, nofollow) %}
+{% if label == null %}
+	{% set label = title%}
+{% endif %}
+<a href="{{ url }}" {% if _h.requestUrl == url or selected %}class="selected"{% endif %} title="{{ title }}"{% if blank %} target="_blank"{% endif %}{% if nofollow %} rel="nofollow"{% endif %}>{{ label }}</a>
+{% endmacro %}
+
+{% macro item_descrizione(item, key, label) %}
+{% set val = item.get(key) %}
+{% if val %}
+	<p class="descrizione">
+	{% if label %}
+	<strong>{{ label }}:</strong>
+	{% endif %}
+	{{ item.get(key)}}
+	</p>
+{% endif %}
+{% endmacro %}
+
+{% macro item_value(item, key, label, seffix) %}
+{% set value = item.get(key) %}
+{% if value %}
+<div class="value">
+	<span>{{ label }}:</span> <strong>{{ value }}{{ seffix }}</strong>
+</div>
+{% endif %}
+{% endmacro %}
+
+{% macro item_articolo_small_vr(_h, item, showAzienda) %}
+	{{ _self.item_articolo_small('vr', _h, item, showAzienda) }}
+{% endmacro %}
+
+{% macro item_articolo_small_or(_h, item) %}
+	{{ _self.item_articolo_small('or', _h, item, showAzienda) }}
+{% endmacro %}
+
+{% macro sublist_articolo(_h, tipo, label, list, showAzienda, urlAll) %}
+	{% if list|length > 0 %}
+	<div class="list-subtitle sublist-arrow">{{ label }}</div>
+	<div class="list-box">
+	{% for art in list %}
+		{{ _self.item_articolo_small(tipo, _h, art, showAzienda) }}
+	{% endfor %}
+	{% if urlAll %}
+	<a href="{{ urlAll }}" title="guarda tutti" class="show-all">guarda tutti</a>
+	{% endif %}
+	</div>
+	{% endif %}
+{% endmacro %}
+
+{% macro item_price_link(_h, item) %}
+<a class="item-price" href="{{ item.url }}" title="{{ item.get('nome') }} {{ item.get('nome_simbolico') }}">
+	{{ _self.item_price(_h, item) }}
+</a>
+{% endmacro %}
+
+{% macro item_price_ext(_h, item, hide_item_buy) %}
+	{% set _lblc = _h.labels.get('checkout') %}
+	{% set iva = true %}
+	{% if (_h.session.params.user.prezzo_senza_iva or _h.config('prezzi_senza_iva', false)) %}
+		{% set iva = false %}
+	{% endif %}
+	<span class="price item-buy-price">{{ item.prezzo('e', iva) }}</span>	
+	{% if iva %}
+	<em class="info-iva info-iva-incl">({{ _lblc.prezzo_iva_incl }})</em>
+	{% else %}
+	<em class="info-iva info-iva-escl">({{ _lblc.prezzo_iva_escl }})</em>
+	{% endif %}
+	{% if item.isSconto %}
+	<span class="sconto">{{ _lblc.sconto }} -{{ item.sconto }}%</span>
+	<span class="price-old">{{ item.prezzoOriginale('e', iva) }}</span>
+	{% endif %}	
+{% endmacro %}
+
+{% macro item_price(_h, item, hide_item_buy) %}
+	{% set _lblc = _h.labels.get('checkout') %}
+	{% set cls_item_buy = ' item-buy-price' %}
+	{% if hide_item_buy %}
+		{% set cls_item_buy = '' %}
+	{% endif %}
+	{% set iva = true %}
+	{% if (_h.session.params.user.prezzo_senza_iva or _h.config('prezzi_senza_iva', false)) %}
+		{% set iva = false %}
+	{% endif %}
+	<span class="price{{ cls_item_buy }}">{{ item.prezzo('e', iva) }}</span>
+	<span class="price-old">
+	{% if item.isSconto %}
+	{{ item.prezzoOriginale('e', iva) }}
+	{% endif %}
+	</span>
+	{% if (_h.session.params.user.prezzo_senza_iva or _h.config('prezzi_senza_iva', false)) %}
+	<em class="info-iva info-iva-escl">{{ _lblc.prezzo_iva_escl_small }}</em>
+	{% else %}
+	<em class="info-iva info-iva-incl">{{ _lblc.prezzo_iva_incl_small }}</em>
+	{% endif %}
+{% endmacro %}
+
+{% macro item_details(_h, item) %}
+<div class="item-details item-buy-acquisto{% if item.isSconto %} sconto{% endif %}">
+	<div class="item-price">
+		{{ _self.item_price(_h, item) }}
+	</div>
+
+	{% set _lblc = _h.labels.get('checkout') %}
+	{% if item.get('esaurito') %}
+	<span class="item-esaurito">{{ _lblc.esaurito }}</span>
+	{% else %}
+	<a class="item-buy button-buy" data-id="{{ item.id }}" href="javascript:void(0)" title="{{ _lblc.btn_acquista }} {{ item.get('nome') }}">{{ _lblc.btn_acquista }}</a>
+	{% endif %}
+</div>
+{% endmacro %}
+
+{% macro footer_newsletter(_h, tag, hide_section) %}
+{% if not(tag) %}
+{% set tag = 'h4' %}
+{% endif %}
+{% set _lblg = _h.labels.get('global') %}
+{% set _lblf = _h.labels.get('form') %}
+{% set _lblm = _h.labels.get('my') %}
+{% if not(hide_section) %}
+<section class="nav nav-footer newsletter">
+{% endif %}
+	<{{tag}} class="sublist-arrow">{{ _lblg.title_newsletter }}</{{tag}}>
+	<form>
+		<div class="field-text">
+			{{ _lblg.descr_newsletter }}
+			{% if _h.settings.get('sconto_newsletter_abilitato', '') != '' %}
+				{% if _h.settings.get('sconto_newsletter_codice_riutilizzabile', '') == '' %}
+				{{ _lblm.descr_iscrizione_newsletter_2a }}
+				{% else %}
+				{{ _lblm.descr_iscrizione_newsletter_2b }}
+				{% endif %}
+				<strong>{{ _h.settings.get('sconto_newsletter_sconto') }}{% if _h.settings.get('sconto_newsletter_tipo', '') == '1' or _h.settings.get('sconto_newsletter_tipo', '') == '2' %}%{% else %}{% endif %}</strong>
+			{% endif %}
+		</div>
+		<div class="form-error-message"></div>
+		<div class="field-line">
+			<div class="field">
+				<label>{{ _lblf.field_email }}</label>
+				<input type="text" name="e_mail" class="valida-required valida-email">
+			</div>
+		</div>
+		<a class="button-red button submit-form" href="javascript:void(0)" title="{{ _lblf.btn_iscriviti }}" data-action='{"method": "post", "url": "{{ _h.url('account/newsletter') }}"}'><span>{{ _lblf.btn_iscriviti }}</span></a>
+	</form>
+{% if not(hide_section) %}
+</section>
+{% endif %}
+{% endmacro %}
+
+{% macro footer_descrizione(_h, tag, hide_section) %}
+{% if not(tag) %}
+{% set tag = 'h4' %}
+{% endif %}
+{% if not(hide_section) %}
+	<section class="nav nav-footer descrizione-azienda">
+{% endif %}
+		<{{tag}} class="sublist-arrow">{{ _h.settings.get('footer_titolo') }}</{{tag}}>
+		<p>{{ _h.settings.get('footer_descrizione') }}</p>
+{% if not(hide_section) %}
+	</section>
+{% endif %}
+{% endmacro %}
+
+{% macro footer_recapiti(_h, tag, hide_section) %}
+{% if not(tag) %}
+{% set tag = 'h4' %}
+{% endif %}
+{% set _lblg = _h.labels.get('global') %}
+{% if not(hide_section) %}
+<section class="nav nav-footer recapito">
+{% endif %}
+	<{{tag}} class="sublist-arrow">{{ _lblg.title_recapiti }}</{{tag}}>
+	<ul>
+		<li class="indirizzo"><a href="{{ _h.xurl('servizio-clienti') }}" title="{{ _lblg.alt_servizio_clienti }}">{{ _h.settings.get('recapito_via') }}<br>{{ _h.settings.get('recapito_citta') }}</a></li>
+		<li class="telefono"><a href="{{ _h.xurl('servizio-clienti') }}" title="{{ _lblg.alt_servizio_clienti }}">
+			{% if _h.settings.get('recapito_messaggio') %}
+			<strong>{{ _h.settings.get('recapito_messaggio') }}</strong>
+			{% endif %}			
+			{% if _h.settings.get('recapito_telefono_1') %}
+			<span><em>{{ _lblg.telefono_small}}</em> {{ _h.settings.get('recapito_telefono_1') }}</span>
+			{% endif %}			
+			{% if _h.settings.get('recapito_telefono_2') %}
+			<span><em>{{ _lblg.telefono_small}}</em> {{ _h.settings.get('recapito_telefono_2') }}</span>
+			{% endif %}			
+			{% if _h.settings.get('recapito_fax') %}
+			<span><em>{{ _lblg.fax}}</em> {{ _h.settings.get('recapito_fax') }}</span>
+			{% endif %}
+		</a></li>
+		<li class="email"><a href="{{ _h.xurl('scrivi-servizio-clienti') }}" title="{{ _lblg.alt_scrivi_servizio_clienti }}">{{ _h.settings.get('email_info') }}</a></li>
+	</ul>
+{% if not(hide_section) %}
+</section>
+{% endif %}
+{% endmacro %}
+
+{% macro footer_myaccount(_h, tag, hide_section, no_sublist) %}
+{% if not(tag) %}
+{% set tag = 'h4' %}
+{% endif %}
+{% set _lblg = _h.labels.get('global') %}
+{% if not(hide_section) %}
+<section class="nav nav-footer">
+{% endif %}
+	<{{tag}} {% if not(no_sublist) %}class="sublist-arrow"{% endif %}>{{ _lblg.title_my_account }}</{{tag}}>
+	<ul>
+		{% if _h.session.isAuth and _h.session.profile == 'guest' %}
+			{% if _h.session.params.user.tipo == 'agente' %}
+			<li>{{ mc.link(_h, _h.url('/account/my/agente/index'), _lblg.btn_seleziona_cliente) }}</li>
+			<li>{{ mc.link(_h, _h.url('/account/my/ordini/index-clienti'), _lblg.btn_miei_ordini) }}</li>
+			{% else %}
+			<li>{{ _self.link(_h, _h.url('/account/my/ordini/index'), _lblg.btn_miei_ordini) }}</li>
+			{% endif %}
+			{% if _h.config('gestione_preventivi', false) %}
+			<li>{{ _self.link(_h, _h.url('account/my/preventivi/index'), _lblg.btn_miei_preventivi) }}</li>
+			{% endif %}
+			{% if _h.session.params.user.tipo != 'agente' %}
+			<li>{{ _self.link(_h, _h.url('/account/my/indirizzi/index'), _lblg.btn_indirizzi_spedizione) }}</li>
+			<li>{{ _self.link(_h, _h.url('/account/my/fatturazione/index'), _lblg.btn_dati_fatturazione) }}</li>
+			<li>{{ _self.link(_h, _h.url('/account/my/dati-personali'), _lblg.btn_dati_personali) }}</li>
+			{% endif %}
+			<li>{{ _self.link(_h, _h.url('/account/my/modifica-password'), _lblg.btn_modifica_password) }}</li>
+			<li>{{ _self.link(_h, _h.url('/account/my/modifica-email'), _lblg.btn_modifica_email) }}</li>
+			{% if _h.session.params.user.tipo != 'agente' %}
+			<li>{{ _self.link(_h, _h.url('/account/my/elimina-account'), _lblg.btn_elimina_account) }}</li>
+			{% endif %}
+			<li>{{ _self.link(_h, _h.url('/account/logout'), _lblg.btn_esci) }}</li>
+		{% else %}
+			<li>{{ _self.link(_h, _h.url('/account/login'), _lblg.btn_login) }}</li>
+			<li>{{ _self.link(_h, _h.url('/account/registrazione'), _lblg.btn_registrati) }}</li>
+			<li>{{ _self.link(_h, _h.url('/account/recupero-password'), _lblg.btn_recupero_password) }}</li>
+			<li>{{ _self.link(_h, _h.url('/account/recupero-codice'), _lblg.btn_recupero_codice_attivazione) }}</li>
+			<li>{{ _self.link(_h, _h.url('/account/newsletter'), _lblg.btn_newsletter) }}</li>
+			<li>{{ _self.link(_h, _h.url('/account/recupero-info-ordine'), _lblg.btn_info_ordine) }}</li>
+		{% endif %}
+	</ul>
+{% if not(hide_section) %}
+</section>
+{% endif %}
+{% endmacro %}
+
+{% macro utente_benvenuto(_h) %}
+	{% set _lbl = _h.labels.get('global') %}
+	{% if primo_accesso and _h.session.isAuth %}
+	<div class="benvenuto">
+	{{ _lbl.ciao }} <strong>{{ _h.session.params.user.nome }}</strong>,<br>
+	{{ _lbl.benvenuto }} {{ _self.link(_h, _h.xurl('servizio-clienti'), mapPagine.servizio_clienti.get('titolo')) }}
+	</div>
+	{% endif %}
+{% endmacro %}
+
+{% macro footer_informazioni(_h, mapPagine, tag, hide_section, no_sublist) %}
+{% if not(tag) %}
+{% set tag = 'h4' %}
+{% endif %}
+{% set _lblg = _h.labels.get('global') %}
+{% if not(hide_section) %}
+<section class="nav nav-footer">
+{% endif %}
+	<{{tag}} {% if not(no_sublist) %}class="sublist-arrow"{% endif %}>{{ _lblg.title_informazioni }}</{{tag}}>
+	<ul>
+		{% if mapPagine.termini_condizioni %}
+		<li>{{ _self.link(_h, mapPagine.termini_condizioni.url, mapPagine.termini_condizioni.get('titolo')) }}</li>
+		{% endif %}
+		{% if mapPagine.modalita_pagamento %}
+		<li>{{ _self.link(_h, _h.url('modalita-pagamento'), mapPagine.modalita_pagamento.get('titolo')) }}</li>
+		{% endif %}
+		{% if mapPagine.spedizioni %}
+		<li>{{ _self.link(_h, mapPagine.spedizioni.url, mapPagine.spedizioni.get('titolo')) }}</li>
+		{% endif %}
+		{% if _h.config('visualizza_tabella_spedizioni', true) and mapPagine.modalita_pagamento %}
+		<li>{{ _self.link(_h, _h.url('spese-spedizione'), _lblg.btn_spese_spedizione) }}</li>
+		{% endif %}
+		{% if mapPagine.diritti_recesso %}
+		<li>{{ _self.link(_h, mapPagine.diritti_recesso.url, mapPagine.diritti_recesso.get('titolo')) }}</li>
+		{% endif %}
+		{% if mapPagine.privacy %}
+		<li>{{ _self.link(_h, mapPagine.privacy.url, mapPagine.privacy.get('titolo')) }}</li>
+		{% endif %}
+		{% if mapPagine.cookie_policy %}
+		<li>{{ _self.link(_h, mapPagine.cookie_policy.url, mapPagine.cookie_policy.get('titolo')) }}</li>
+		{% endif %}
+	</ul>
+{% if not(hide_section) %}
+</section>
+{% endif %}
+{% endmacro %}
+
+{% macro script(_h, key)%}
+	{% set result = _h.view('result') %}
+	{% set item = _h.view('item') %}
+	{% set testo = _h.view('testo') %}
+	
+	{% if result and result.collezione %}
+		{{ _h.template_string(result.collezione.get(key)) }}
+	{% elseif item %}
+		{{ _h.template_string(item.get(key)) }}
+	{% elseif testo %}
+		{{ _h.template_string(testo.get(key)) }}
+	{% endif %}
+{% endmacro%}
+
+{% macro meta_info(_h)%}
+	{% set url_meta = _h.context().urlMeta() %}
+	{% if url_meta %}
+		{% set meta_title = url_meta.title %}
+		{% set meta_description = url_meta.description %}		
+	{% else %}
+		{% set mymetainfo = _h.view('mymetainfo') %}
+		{% set result = _h.view('result') %}
+		{% set item = _h.view('item') %}
+		{% set item_base = _h.view('item_base') %}
+		{% set testo = _h.view('testo') %}
+		
+		{% set meta_title = _h.view.get('meta_title') %}
+		{% if not(meta_title) %}	
+			 {% set meta_title = _h.settings.get('meta_title') %}
+		{% endif %}
+
+		{% set meta_description = _h.view.get('meta_description') %}
+		{% if not(meta_description) %}	
+			 {% set meta_description = _h.settings.get('meta_description') %}
+		{% endif %}
+		
+		{% set meta_description = _h.settings.get('meta_description') %}
+		{% if mymetainfo %}
+			{% if testo and testo.geto('metainfo') %}
+				{% set meta_title = testo.geto('metainfo').get('title', meta_title) %}
+				{% set meta_description = testo.geto('metainfo').get('description', meta_description) %}
+			{% elseif result %}
+				{% if item and item.geto('metainfo') %}
+					{% set meta_title = item.geto('metainfo').get('title', meta_title) %}
+					{% set meta_description = item.geto('metainfo').get('description', meta_description) %}
+				{% elseif result.collezione %}
+					{% set meta_title = result.collezione.geto('metainfo').get('title', meta_title) %}
+					{% set meta_description = result.collezione.geto('metainfo').get('description', meta_description) %}
+				{% elseif result.azienda %}
+					{% set meta_title = result.azienda.geto('metainfo').get('title', meta_title) %}
+					{% set meta_description = result.azienda.geto('metainfo').get('description', meta_description) %}
+				{% endif %}
+			{% elseif _h.view('metainfo_item_base') and item_base and item_base.geto('metainfo') %}
+				{% set meta_title = item_base.geto('metainfo').get('title', meta_title) %}
+				{% set meta_description = item_base.geto('metainfo').get('description', meta_description) %}
+			{% elseif item and item.geto('metainfo') %}
+				{% set meta_title = item.geto('metainfo').get('title', meta_title) %}
+				{% set meta_description = item.geto('metainfo').get('description', meta_description) %}		
+			{% endif %}
+		{% endif %}
+	{% endif %}
+{% if meta_title %}
+	{% set meta_title = meta_title|replace({'>' : '&gt;', '<': '&lt;'}) %}
+{% endif %}
+<title>{{ meta_title }}</title>
+<meta name="description" content="{{ meta_description|escape }}">
+{% endmacro %}
+
+{% macro item_attributo_template(_h, item, list, dim_image) %}
+	{% for attr in list %}
+		{% set key = 'id_dynamic_type_' ~ attr.tipo %}
+		{% if item.get(key) and item.get(key)|length > 0 %}
+		<div class="item-select-list-dynamic clear">
+			<label>{{ attr.nome }}:</label>
+			<ul class="select-list-base">
+			{% for art in item.get(key) %}
+				{% set elem = attr.map.get(art) %}
+				<li data-attribute-type="dynamic_type_{{ attr.tipo }}" data-attribute-label="{{ attr.nome }}" data-attribute-description="{{ elem.get('nome') }}" data-id="{{ elem.id }}" class="item-buy-attribute dynamic-type-aspetto-{{ attr.aspetto }} cambia-dynamic-type{% if loop.index == 1 %} current item-buy-attribute-selected{% endif %}"><a href="javascript:void(0)" title="{{ attr.nome }}: {{ elem.get('nome') }}">
+				{% if attr.aspetto == 1 or attr.aspetto == 2 %}
+					<span class="aspetto-img"><img src="{{ elem.imageUrl(dim_image) }}"></span>
+				{% endif %}
+				{% if attr.aspetto == 0 or attr.aspetto == 2 %}
+					<span class="aspetto-text">{{ elem.get('nome') }}</span>
+				{% endif %}
+				</a></li>
+			{% endfor %}
+			</ul>
+		</div>			
+		{% endif %}
+	{% endfor %}
+{% endmacro %}
+
+{% macro item_variante_articolo(_h, item, listArticoloVariante)%}
+	{% if listArticoloVariante|length > 1 %}
+	{% set _lblw = _h.labels.get('website') %}
+	<div class="item-varianti item-select-list-dynamic">
+		<strong>{{ _lblw.seleziona_variante_articolo }}:</strong>
+		<ul class="select-list-base">
+		{% for art in listArticoloVariante %}
+			<li class="cambia-variante{% if art.id == item.id %} current{% endif %}" data-id="{{ art.id }}"><a href="javascript:void(0)" title="{{ _lblw.seleziona_variante_articolo }}: {{ art.codice }}, {{ art.get('nome') }}">
+				<span class="codice">{{ art.get('nome') }} <em>({{ art.codice }})</em></span>
+				{{ _self.item_price(_h, art, true) }}
+			</a>
+			</li>
+		{% endfor %}
+		</ul>
+	</div>
+	{% endif %}
+{% endmacro %}
+
+{% macro field_registrazione(_h, key, item) %}
+	{% set _lblf = _h.labels.get('form') %}
+	
+	{% set field_nome = _h.settings.get('form_campo_' ~ key ~ '_nome', '') %}
+	{% set field_nome_required = _h.settings.get('form_campo_required_' ~ key ~ '_nome', '') %}
+	{% set field_cognome = _h.settings.get('form_campo_' ~ key ~ '_cognome', '') %}
+	{% set field_cognome_required = _h.settings.get('form_campo_required_' ~ key ~ '_cognome', '') %}
+	{% set field_sesso = _h.settings.get('form_campo_' ~ key ~ '_sesso', '') %}
+	{% set field_sesso_required = _h.settings.get('form_campo_required_' ~ key ~ '_sesso', '') %}
+	{% set field_data_nascita = _h.settings.get('form_campo_' ~ key ~ '_data_nascita', '') %}
+	{% set field_data_nascita_required = _h.settings.get('form_campo_required_' ~ key ~ '_data_nascita', '') %}
+	{% set field_anno_nascita = _h.settings.get('form_campo_' ~ key ~ '_anno_nascita', '') %}
+	{% set field_anno_nascita_required = _h.settings.get('form_campo_required_' ~ key ~ '_anno_nascita', '') %}
+	
+	{% if field_nome != '' or field_cognome != '' %}
+	<div class="field-line-50-50">
+		{% if field_nome != '' %}
+		<div class="field-line">
+			<div class="field">
+				<label>{{ _lblf.field_nome }}{% if field_nome_required != '' %} <span>*</span>{% endif %}</label>
+				<input type="text" name="nome" class="{% if field_nome_required != '' %}valida-required{% endif %}" maxlength="50" value="{{ item.get('nome') }}">
+			</div>
+		</div>
+		{% endif %}
+		{% if field_cognome != '' %}
+		<div class="field-line">
+			<div class="field">
+				<label>{{ _lblf.field_cognome }}{% if field_cognome_required != '' %} <span>*</span>{% endif %}</label>
+				<input type="text" name="cognome" class="{% if field_cognome_required != '' %}valida-required{% endif %}" maxlength="50" value="{{ item.get('cognome') }}">
+			</div>
+		</div>
+		{% endif %}
+	</div>
+	{% endif %}
+	
+	{% if field_data_nascita != '' %}
+	<div class="field-line-50-50">
+		<div class="field-line">
+			<div class="field">
+				<label>{{ _lblf.field_data_nascita }}{% if field_data_nascita_required != '' %} <span>*</span>{% endif %}</label>
+				<input type="text" name="data_nascita" class="input-datepicker valida-datasimple {% if field_data_nascita_required != '' %}valida-required{% endif %}" maxlength="10" data-date-viewmode="years" data-date-minviewmode="days" value="{{ item.getDate('data_nascita') }}" {% if item.getDate('data_nascita') %}readonly="true"{% endif %}>
+			</div>
+		</div>
+	</div>
+	{% endif %}
+	
+	{% if field_anno_nascita != '' %}
+	<div class="field-line-50-50">
+		<div class="field-line">
+			<div class="field">
+				<label>{{ _lblf.field_anno_nascita }}{% if field_anno_nascita_required != '' %} <span>*</span>{% endif %}</label>
+				<select name="anno_nascita" class="{% if field_anno_nascita_required != '' %}valida-required{% endif %}">
+				<option></option>
+				{% for a in 1920.._h.util.currentYear %}
+				<option value="{{ a }}" {% if item.get('anno_nascita') == a %}selected="true"{% endif %}>{{ a }}</option>
+				{% endfor %}
+				</select>
+			</div>
+		</div>
+	</div>
+	{% endif %}
+	
+	{% if field_sesso != '' %}
+	<div class="field-line-50-50">
+		<div class="field-line">
+			<div class="field">
+				<label>{{ _lblf.field_sesso }}{% if field_sesso_required != '' %} <span>*</span>{% endif %}</label>
+				<select name="sesso" class="{% if field_sesso_required != '' %}valida-required{% endif %}">
+				<option></option>
+				<option value="1" {% if item.get('sesso') == 1 %}selected="true"{% endif %}>{{ _lblf.field_sesso_uomo }}</option>
+				<option value="2" {% if item.get('sesso') == 2 %}selected="true"{% endif %}>{{ _lblf.field_sesso_donna }}</option>
+				<option value="3" {% if item.get('sesso') == 3 %}selected="true"{% endif %}>{{ _lblf.field_sesso_altro }}</option>
+				</select>
+			</div>
+		</div>
+	</div>
+	{% endif %}
+{% endmacro %}
+
+{% macro field_registrazione_extra(_h, item) %}
+{% endmacro %}
+
+{% macro field_newsletter_gruppo_extra(_h) %}
+{% endmacro %}
+
+{% macro breadcrumbs_home(_h) %}
+<a href="/" class="home" title="home">&#x2302;</a>
+{% endmacro %}
+
+{% macro breadcrumbs_separatore(_h) %}
+<span class="breadcrumbs-separatore">/</span>
+{% endmacro %}
+
+{% macro newsletter(_h) %}
+	{% from '_macro_base.html' import _newsletter %}
+	{{ _newsletter(_h) }}
+{% endmacro %}
+
+{% macro item_articolo_carrello_thanks(_h, elem) %}
+	{% from '_macro_base.html' import _item_articolo_carrello_thanks %}
+	{{ _item_articolo_carrello_thanks(_h, elem, '50x75') }}
+{% endmacro %}
+
+{% macro item_articolo_carrello_list(_h, elem) %}
+	{% from '_macro_base.html' import _item_articolo_carrello_list %}
+	{{ _item_articolo_carrello_list(_h, elem, '200x300') }}
+{% endmacro %}
+
+{% macro item_articolo_carrello_riepilogo(_h, elem) %}
+	{% from '_macro_base.html' import _item_articolo_carrello_riepilogo %}
+	{{ _item_articolo_carrello_riepilogo(_h, elem, '200x300') }}
+{% endmacro %}
+
+{% macro item_articolo_carrello(_h, elem) %}
+	{% from '_macro_base.html' import _item_articolo_carrello %}
+	{{ _item_articolo_carrello(_h, elem, '200x300') }}
+{% endmacro %}
+
+{% macro item_articolo_carrello_pagamento(_h, elem) %}
+	{% from '_macro_base.html' import _item_articolo_carrello_pagamento %}
+	{{ _item_articolo_carrello_pagamento(_h, elem, '200x300') }}
+{% endmacro %}
+
+{% macro oney_plugin(_h, importo) %}
+	{% if _h.settings.get('checkout_pagamento_oney') != '' %}
+		{% if importo >= _h.settings.get('checkout_pagamento_oney_min') and importo <= _h.settings.get('checkout_pagamento_oney_max') %}
+		<div class="oney-plugin">
+			<div class="oney-plugin-logo">
+				<img src="/assets/website/img/checkout-oney{{ _h.settings.get('checkout_pagamento_oney_rate') }}.png" alt="oney">
+			</div>
+			<div class="oney-plugin-details">
+				<div class="oney-plugin-details-value">{{ _h.settings.get('checkout_pagamento_oney_rate') }}x {{ _h.util.euro(importo / _h.settings.get('checkout_pagamento_oney_rate'))}} &euro;</div>
+				<div class="oney-plugin-details-description">{{ _h.labels.get('global').oney_nessuna_commissione }}</div>
+			</div>
+			<div class="oney-plugin-info">
+				<div class="oney-plugin-info-icon">i</div>
+			</div>
+		</div>
+		{% endif %}
+	{% endif %}
+{% endmacro %}
+
+{% macro item_articolo(_h, item) %}
+{% endmacro %}
+
+{% macro item_articolo_checkout(_h, item) %}
+	{{ _self.item_articolo(_h, item) }}
+{% endmacro %}

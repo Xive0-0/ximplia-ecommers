@@ -1,0 +1,34 @@
+{% import _h.template('manager/_macro.html') as mc %}
+{% import _h.template('manager/_macro_items.html') as mci %}
+{{ mc.slideBoxHeader(_h, 'Seleziona collezione') }}
+			<div class="h-tab">
+				<div data-tab-rif="categoria" data-action='{"clear_checkbox": true}'>Categoria</div>
+				<div data-tab-rif="selezione" data-action='{"clear_checkbox": true}'>Selezione</div>
+				{% include _h.template('manager/myarea/banner/_seleziona_collezione.html') %}
+				<div data-tab="categoria">
+					<div class="tree h-list h-list-slingle-selection">
+					{% for elem in listCategoria %}		
+						{{ mci.item_attributoTree(_h, elem, true) }}
+					{% endfor %}
+					</div>
+				</div>
+				<div data-tab="selezione">
+					<div class="tree h-list h-list-slingle-selection">
+					{% for elem in listSelezione %}		
+						{{ mci.item_attributoTree(_h, elem, true) }}
+					{% endfor %}
+					</div>
+				</div>
+				
+			</div>
+
+		</fieldset>
+	</div>
+
+	<div class="h-layout-bottombar">
+		<div class="h-layout-content-wrapper">
+			<a href="javascript:void(0);" class="h-bar-button h-bar-button-gray h-close-box">Annulla</a>
+			<a href="javascript:void(0);" class="h-bar-button h-bar-button-blu h-action-seleziona-risorsa-banner-collezione">Seleziona</a>
+		</div>
+	</div>
+</form>

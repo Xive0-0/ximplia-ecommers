@@ -1,0 +1,15 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Script') }}
+<input type="hidden" name="table" value="{{ table }}">
+<input type="hidden" name="id" value="{{ item.id }}">
+<p class="field-line field-400">
+	<label>Snippet in sezione &lt;HEAD&gt;:</label>
+	<textarea name="snippet_head" class="field">{{ item.get('snippet_head') }}</textarea>
+</p>
+<p class="field-line field-400">
+	<label>Snippet prima della chiusura tag  &lt;BODY&gt;:</label>
+	<textarea name="snippet_body" class="field">{{ item.get('snippet_body') }}</textarea>
+</p>
+
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/metainfo/ex-edit-script'), '"none": true') }}	

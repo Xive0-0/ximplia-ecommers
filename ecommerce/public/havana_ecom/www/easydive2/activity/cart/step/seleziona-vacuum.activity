@@ -1,0 +1,9 @@
+{
+	"on:begin": [
+		{"name": "cart/step/load-item", "params": {"codice": "ACC/VACUUM/SYSTE"}}
+	],
+	"on:view": {
+		"template": "cart/step/seleziona_vacuum",
+		"extra": false
+	}
+}

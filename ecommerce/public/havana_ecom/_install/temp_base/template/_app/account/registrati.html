@@ -1,0 +1,75 @@
+{% set _lblf = _h.labels('form') %}
+<div class="window" id="pagina_base">
+	<a class="window-close" href="{{ _h.xurl('index') }}"><img src="/assets/website/img/ico-close.png"></a>
+	<div class="window-header" style="margin-top: 40px;">
+		<img src="/assets/website/img/logo-app.png">
+	</div>
+	<div class="window-body">
+		<h1>Registrati</h1>
+		<form>
+			<p>Compila i campi per creare il tuo account</p>
+			<div class="form-error-message"></div>
+			<div class="field-line">
+				<div class="field">
+					<label>Nome</label>
+					<input type="text" name="nome" class="valida-required">
+				</div>
+			</div>
+			<div class="field-line">
+				<div class="field">
+					<label>Cognome</label>
+					<input type="text" name="cognome" class="valida-required">
+				</div>
+			</div>
+			<div class="field-line">
+				<div class="field">
+					<label>E-Mail</label>
+					<input type="text" name="e_mail" class="valida-required valida-email">
+				</div>
+			</div>
+			<div class="field-line">
+				<div class="field">
+					<label>Password</label>
+					<input type="password" name="password" class="valida-required input-return-submit">
+				</div>
+			</div>
+			<div class="field-line-checkbox">
+				<div class="field-checkbox-description">
+					{{ _lblf.descr_dichiarazione_letto_privacy }} <a href="{{ mapPagine.privacy.url }}" title="{{ _lblf.alt_btn_ulteriori_informazioni_privacy }}" target="_blank">{{ _lblf.btn_ulteriori_informazioni_privacy }}</a>
+				</div>
+				<div class="field-checkbox-check">
+					<span class="checkbox" data-value="1"><input type="hidden" name="accetto_privacy" value=""></span>
+					<span class="checkbox-label"><span>{{ _lblf.btn_acconsento_uso_dati }}</span></span>
+				</div>
+			</div>
+			<div class="field-button">
+				<a class="button-red button submit-form" href="javascript:void(0)" data-action='{"url": "{{ _h.xurl('_app/registrati') }}", "onComplete": {"type": "show", "show": "#pagina_otp", "hide": "#pagina_base", "fill_field": ["token"]}}'><span>Crea account</span></a>
+			</div>
+		</form>	
+	</div>
+</div>
+<div class="window" id="pagina_otp" style="display: none;">
+	<a class="window-close" href="{{ _h.xurl('index') }}"><img src="/assets/website/img/ico-close.png"></a>
+	<div class="window-header">
+		<img src="/assets/website/img/logo-app.png">
+	</div>
+	<div class="window-body">
+		<h1>Conferma il tuo account</h1>
+		<form>
+			<input type="hidden" name="token">
+			<input type="hidden" name="servizio" value="registrati">
+			<p>Inserisci il codice che ti è stato inviato tramite e-mail per confermare il tuo account</p>
+			<div class="form-error-message"></div>
+			<div class="field-line">
+				<div class="field">
+					<label>Codice</label>
+					<input type="text" name="otp" class="valida-required input-return-submit" maxlength="10">
+				</div>
+			</div>
+			<div class="field-button">
+				<a class="button-red button submit-form" href="javascript:void(0)" data-action='{"url": "{{ _h.xurl('_app/otp') }}"}'><span>Conferma</span></a>
+			</div>
+		</form>	
+	</div>
+</div>
+</script>

@@ -1,0 +1,4 @@
+{% import _h.template('manager/_macro_items.html') as mc %}
+{% for item in list %}
+{{ mc.item_agente(_h, item) }}
+{% endfor %}

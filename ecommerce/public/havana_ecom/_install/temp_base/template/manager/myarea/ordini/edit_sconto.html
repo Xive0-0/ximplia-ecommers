@@ -1,0 +1,13 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% set ordine = item.dettaglio.ordine %}
+{{ mc.slideBoxHeader(_h, 'Modifica sconto ordine') }}
+<input type="hidden" name="id" value="{{ item.id }}">
+<p class="field-line field-100">
+	<label>Sconto (in {{ item.get('currency')|upper }})<span>*</span>:</label>
+	<input type="text" name="sconto" class="field valida-euro" value="" maxlength="10"> {{ item.get('currency')|upper }}
+</p>
+
+{{ mc.labelCampiObbligatori() }}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/ordini/ex-edit-sconto'), '"reload": ["#h-layout-center-content", "#dettaglio-content"]') }}	
+

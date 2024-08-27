@@ -1,0 +1,10 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Gestione country da selezione') }}
+<input type="hidden" name="id" value="{{ _h.input('id') }}">
+<p class="field-line field-200">
+	<label>Nazione abilitata per country (se più valori separare con virgola, usare * per indicare tutte le country):</label>
+	<input type="text" name="list_country" class="field" value="" maxlength="250">
+</p>
+
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/nazione/ex-edit-country-selezione')) }}	

@@ -1,0 +1,46 @@
+{% import _h.template('_macro.html') as mc %}
+{% set _lblm = _h.labels.get('my') %}
+{% set _lblf = _h.labels.get('form') %}
+{% set _lblg = _h.labels.get('global') %}
+
+<div class="breadcrumbs clear">
+	{{ mc.breadcrumbs_home(_h) }}
+	{{ mc.breadcrumbs_separatore() }}
+	<a>{{ _lblm.title_recupero_info_ordine }}</a>
+</div>
+
+<form id="pagina" class="block-margin">
+	<h1><span>{{ _lblm.title_recupero_info_ordine }}</span></h1>
+	<div class="field-text">
+		<p>{{ _lblm.descr_recupero_info_ordine_1 }}</p>
+		<p>{{ _lblm.descr_recupero_info_ordine_2 }}</p>
+		<p>{{ _lblm.descr_se_non_visualizzi_email }} {{ _lblg.descr_help }} <a href="{{ _h.xurl('servizio-clienti') }}" title="{{ _lblg.alt_servizio_clienti }}">{{ _lblg.btn_servizio_clienti }}</a>.</p>
+	</div>
+	<div class="form-error-message"></div>
+	<div class="field-line">
+		<div class="field">
+			<label>{{ _lblf.field_numero_ordine }} <span>*</span></label>
+			<input type="text" name="codice" class="valida-required" maxlength="30">
+		</div>
+	</div>
+	<div class="field-line">
+		<div class="field">
+			<label>{{ _lblf.field_email }} <span>*</span></label>
+			<input type="text" name="e_mail" class="valida-required valida-email" maxlength="100">
+		</div>
+	</div>
+	<div class="field-text-obbligatori">{{ _lblf.campi_obbligatori }}</div>
+	{{ mc.google_recaptcha(_h, 'ordine') }}
+	<div class="field-button field-button-left">
+		<a class="button-red button submit-form" href="javascript:void(0)" title="{{ _lblf.btn_recupera }}" data-action='{"url": "{{ _h.url('account/ex-recupera-info-ordine') }}", "onComplete": {"type": "show", "show": "#conferma_pagina", "hide": "#pagina"}}'><span>{{ _lblf.btn_recupera }}</span></a>
+	</div>
+	<div class="field-text field-text-servizio-clienti">
+		<a href="{{ _h.xurl('scrivi-servizio-clienti') }}" class="link" title="{{ _lblf.btn_bisogno_di_aiuto }}">{{ _lblf.btn_bisogno_di_aiuto }}</a>
+	</div>
+</form>
+
+<div id="conferma_pagina" class="hide-block block-margin">
+	<div class="hide-block-title">{{ _lblm.title_grazie }}</div>
+	<p>{{ _lblm.descr_conf_recupero_info_ordine }}</p>
+	<p>{{ _h.settings.get('staff_firma') }}.</p>
+</div>

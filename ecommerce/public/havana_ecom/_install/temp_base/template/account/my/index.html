@@ -1,0 +1,7 @@
+{% set _lblm = _h.labels.get('my') %}
+{% set _lblg = _h.labels.get('global') %}
+
+<h2>{{ _lblm.title_my_account }}</h2>
+<p>{{ _lbl.descr_my_account }} <strong>{{ _h.settings.get('staff_indirizzo') }}</strong></p>
+<p>&nbsp;</p>
+<p>{{ _lblg.descr_help }} <a href="{{ _h.xurl('servizio-clienti') }}" title="{{ _lblg.alt_servizio_clienti }}">{{ _lblg.btn_servizio_clienti }}</a>.</p>

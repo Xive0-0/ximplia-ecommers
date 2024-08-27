@@ -1,0 +1,13 @@
+{% set _lbl = _h.labels.get('global') %}
+{% import _h.template('_macro.html') as mc %}
+<div class="breadcrumbs clear">
+	{{ mc.breadcrumbs_home(_h) }}
+	{{ mc.breadcrumbs_separatore() }}
+	<a>{{ _lbl.title_azione_non_disponibile }}</a>
+</div>
+
+<div class="block-margin">
+<h2>{{ _lbl.title_azione_non_disponibile }}</h2>
+<p>{{ _lbl.descr_azione_non_disponibile }}</p>
+<p>{{ _lbl.descr_help }} <a href="{{ _h.xurl('servizio-clienti') }}" title="{{ _lbl.alt_servizio_clienti }}">{{ _lbl.btn_servizio_clienti }}</a>.</p>
+</div>

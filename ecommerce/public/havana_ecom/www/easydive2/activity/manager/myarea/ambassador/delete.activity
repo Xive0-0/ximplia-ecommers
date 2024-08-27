@@ -1,0 +1,6 @@
+{
+	"input": {"name": "id", "required": true},
+	"on:": [
+		"manager/myarea/ambassador/delete"
+	]
+}

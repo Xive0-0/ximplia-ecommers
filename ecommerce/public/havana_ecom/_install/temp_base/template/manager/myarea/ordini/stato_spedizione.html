@@ -1,0 +1,48 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Imposta spedizione') }}
+<input type="hidden" name="id" value="{{ _h.input('id') }}">
+<input type="hidden" name="stato" value="2">
+{% set corriere_spedizione = _h.settings.get('corriere_default', '') %}
+{% set integrazione_articoli = '' %}
+{% if list|length == 1 %}
+	{% set item = list[0] %}
+	{% if item.get('corriere_spedizione') %}
+		{% set corriere_spedizione = item.get('corriere_spedizione') %}
+	{% endif %}
+	{% if item.get('integrazione_articoli') %}
+		{% set integrazione_articoli = 1 %}
+	{% endif %}
+	<p class="field-line">
+	Spedizione ordine: <strong>{{ item.get('codice') }}</strong>
+	</p>
+	<p class="field-line field-line-left field-150">
+		<label>Order traking:</label>
+		<input type="text" name="traking" class="field" value="{{ item.get('traking') }}">
+	</p>
+	<p class="field-line field-line-left field-150">
+		<label>DDT per traking:</label>
+		<input type="text" name="traking_ddt" class="field" value="{{ item.get('traking_ddt') }}">
+	</p>
+	<div class="clear"></div>
+{% endif %}
+<p class="field-line field-line-left field-150">
+	<label>Corriere:</label>
+	<select name="corriere" class="field">
+		<option value=""></option>
+	{% set elenco_corrieri = _h.context('checkout_util').elencoCorrieri %}
+	{% for c in elenco_corrieri %}
+		<option value="{{ c.label }}"{% if c.label == corriere_spedizione %}selected{% endif %}>{{ c.label }}</option>
+	{% endfor %}
+	</select>
+</p>
+<div class="field-line-left field-150">
+{{ mc.checkbox(integrazione_articoli, 1, 'integrazione_articoli', 'Integrazione articoli') }}
+</div>
+<div class="clear"></div>
+<p class="field-line field-400">
+	<label>Eventuale comunicazione al cliente:</label>
+	<textarea name="testo" class="field"></textarea>
+</p>
+{{ mc.checkbox(1, 1, 'testo_extra', 'Aggiungi testo extra') }}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/ordini/ex-stato-spedizione'), '"reload": ["#h-layout-center-content", "#dettaglio-content"]', '', '', 'Spedisci') }}

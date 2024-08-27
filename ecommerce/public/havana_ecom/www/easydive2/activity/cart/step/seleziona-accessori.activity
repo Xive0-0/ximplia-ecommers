@@ -1,0 +1,9 @@
+{
+	"on:begin": [
+		{"name": "cart/step/list-item", "params": {"codice": "accessori_configuratore"}}
+	],
+	"on:view": {
+		"template": "cart/step/seleziona_accessori",
+		"extra": false
+	}
+}

@@ -1,0 +1,32 @@
+{% set _lbl = _h.labels.get('step_acquisto') %}
+<div class="step step-no-clear" data-step="">
+	<h3>{{ _lbl.step_batterie_titolo }}</h3>
+	<p class="evidenzia">{{ _lbl.step_batterie_descrizione }}</p>
+
+	{% for item in list %}
+	<div class="step-item-accessorio{% if item.get('consigliato') %} step-item-accessorio-consigliato{% endif %}">
+		<div class="step-item-accessorio-consigliato-text">{{ _lbl.consigliato_easydive }}</div>
+		<div class="clear">
+			<div class="step-item-accessorio-img">
+				<img src="{{ item.imageUrl('300x300') }}">
+			</div>
+			<div class="step-item-accessorio-nome">
+			<div class="step-item-accessorio-nome-inner">
+				<div class="step-item-accessorio-descrizione">{{ item.get('nome') }}</div>
+				{% if item.get('step_acquisto_testo') %}
+				<div class="step-item-accessorio-descrizione-dettaglio">{{ item.get('step_acquisto_testo') }}</div>
+				{% endif %}
+				<div class="step-item-accessorio-prezzo">{{ item.prezzo('e', false) }}</div>
+				<button class="add-item" data-id="{{ item.id }}" data-callback="accessorio_batteria" data-type="accessorio_batteria" data-url="seleziona-accessori-video" data-nome="{{ item.get('nome') }}" data-img="{{ item.imageUrl('300x300') }}" data-prezzo="{{ item.prezzo('', false) }}" data-prezzo-euro="{{ item.prezzo('e', false) }}">{{ _lbl.btn_aggiungi }}</button>
+			</div>
+			</div>
+		</div>
+	</div>
+	{% endfor %}
+	
+	<button class="next light" data-url="seleziona-accessori-video">{{ _lbl.btn_procedi_senza }}</button>
+	<div class="clear step-bottombar">
+		<a class="prev">&lt; {{  _lbl.btn_torna_indietro }}</a>
+		<a class="item-acquista-step-close">{{ _lbl.btn_annulla }}</a>
+	</div>
+</div>

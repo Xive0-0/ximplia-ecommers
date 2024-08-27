@@ -1,0 +1,9 @@
+{
+	"on:": [
+		{"name": "manager/myarea/attributo/list", "params": {"tipo": 9}}
+	],
+	"on:view": {
+		"template": "manager/myarea/attributo/list",
+		"extra": false
+	}
+}

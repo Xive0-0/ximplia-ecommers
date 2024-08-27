@@ -1,0 +1,19 @@
+{
+	"put": {
+		"input": [
+			{"css_body": "store"}
+		]
+	},
+	"on:": [
+		{"name": "list-banner", "params": {"list": "listBanner"}},
+		{"name": "list-item", "params": {"number": 4, "list": "listInSconto", "orderby": "random", "type": "sconto"}},
+		{"name": "list-articolo-attributo", "params": {"number": 10, "list": "listUltimiCaricati", "id_attributo": 11}},
+		{"name": "list-item-blog", "params": {"number": 3, "list": "listLastBlog"}}
+	],
+	"on:view": {
+		"template": "index",
+		"params": {
+			"primo_accesso": true
+		}
+	}
+}

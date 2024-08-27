@@ -1,0 +1,89 @@
+{% import _h.template('manager/_macro.html') as mc %}
+{% import _h.template('manager/_my_macro.html') as mymc %}
+
+{{ mc.index_page_header(_h, 'Ordini', 'ordini') }}
+	{% if _h.session.params.user.accesso >= 5 or  (_h.config('gestione_azienda_account_full', false) and _h.session.params.user.accesso == 3) %}
+	{{ mc.navButton(_h, 'stato ordine', 'confirm', 'click', 'h-action-selected-open-window', '{"select": {"from":"#h-layout-center-content", "check": 0, "errorMessage": "Selezionare almeno una voce"}, "window": {"type": "layer", "url": "' ~ _h.url('manager/myarea/ordini/stato-ordine') ~ '", "overlay": true, "width": 400, "height": 400}}') }}
+	{{ mc.navButton(_h, 'stato pagamento', 'euro', 'click', 'h-action-selected-open-window', '{"select": {"from":"#h-layout-center-content", "check": 0, "errorMessage": "Selezionare almeno una voce"}, "window": {"type": "layer", "url": "' ~ _h.url('manager/myarea/ordini/stato-pagamento') ~ '", "overlay": true, "width": 500, "height": 400}}') }}
+	{{ mc.navButton(_h, 'stato spedizione', 'car', 'click', 'h-action-selected-open-window', '{"select": {"from":"#h-layout-center-content", "check": 0, "errorMessage": "Selezionare almeno una voce"}, "window": {"type": "layer", "url": "' ~ _h.url('manager/myarea/ordini/stato-spedizione') ~ '", "overlay": true, "width": 500, "height": 400}}') }}
+	{{ mc.navSeparatore() }}
+	<div class="h-nav-button-wrapper">
+		<a href="javascript:void(0);" class="h-nav-button h-action-popup-menu h-action-alttext" data-alttext="fattura/ricevuta">
+			<img src="/assets/manager/havana-js/img/icon/ico-calcolatrice.svg" align="top" />
+			<span>Fattura / Ricevuta</span>
+		</a>
+		<div class="h-popup-content h-popup-menu">
+			<a href="javascript:void(0);" class="h-action-selected-open-window h-action-close-popup-menu" data-action='{"select": {"from":"#h-layout-center-content", "check": 1, "errorMessage": "Selezionare una voce"}, "window": {"type": "layer", "url": "{{ _h.url('manager/myarea/ordini/documenti/genera-fattura') }}", "overlay": true, "width": 400, "height": 450}}'>Crea fattura/ricevuta PDF</a>
+			<a href="javascript:void(0);" class="h-action-selected-open-window h-action-close-popup-menu" data-action='{"select": {"from":"#h-layout-center-content", "check": 1, "errorMessage": "Selezionare una voce"}, "window": {"type": "layer", "url": "{{ _h.url('manager/myarea/ordini/documenti/genera-fattura-xml') }}", "overlay": true, "width": 400, "height": 450}}'>Crea fattura XML</a>
+			<a href="javascript:void(0);" class="h-action-selected-open-window h-action-close-popup-menu" data-action='{"select": {"from":"#h-layout-center-content", "check": 1, "errorMessage": "Selezionare una voce"}, "window": {"type": "layer", "url": "{{ _h.url('manager/myarea/ordini/documenti/genera-fattura-proforma') }}", "overlay": true, "width": 400, "height": 450}}'>Crea fattura proforma PDF</a>
+			<a href="javascript:void(0);" class="h-action-selected-open-window h-action-close-popup-menu" data-action='{"select": {"from":"#h-layout-center-content", "check": 1, "errorMessage": "Selezionare una voce"}, "window": {"type": "layer", "url": "{{ _h.url('manager/myarea/ordini/documenti/genera-ddt') }}", "overlay": true, "width": 400, "height": 400}}'>Crea DDT</a>
+			<a href="javascript:void(0);" class="h-action-selected-open-window h-action-close-popup-menu" data-action='{"select": {"from":"#h-layout-center-content", "check": 1, "errorMessage": "Selezionare una voce"}, "window": {"type": "layer", "url": "{{ _h.url('manager/myarea/ordini/invia-fattura') }}", "overlay": true, "width": 500, "height": 300}}'>Invia Fattura/Ricevuta tramite e-mail</a>
+		</div>
+	</div>
+	{{ mc.navButton(_h, 'scrivi', 'message', 'click', 'h-action-selected-open-window', '{"select": {"from":"#h-layout-center-content", "check": 1, "errorMessage": "Selezionare una voce"}, "window": {"type": "layer", "url": "' ~ _h.url('manager/myarea/ordini/scrivi') ~ '", "overlay": true, "width": 550, "height": 600}}') }}
+	{{ mc.navButton(_h, 'stampa', 'print', 'click', 'h-action-selected-open-window', '{"select": {"from":"#h-layout-center-content", "check": 1, "errorMessage": "Selezionare una voce"}, "window": {"type": "window", "url": "' ~ _h.url('manager/myarea/ordini/stampa/ordine') ~ '"}}') }}
+	{{ mc.navSeparatore() }}
+
+	<div class="h-nav-button-wrapper">
+		<a href="javascript:void(0);" class="h-nav-button h-action-popup-menu h-action-alttext" data-alttext="esporta dati">
+			<img src="/assets/manager/havana-js/img/icon/ico-disk.svg" align="top" />
+			<span>Esporta</span>
+		</a>
+		<div class="h-popup-content h-popup-menu">
+			<a href="javascript:void(0);" class="h-action-selected-open-window h-action-close-popup-menu" data-action='{"window": {"overlay": true, "width": 400, "height": 410, "type": "layer", "url": "{{ _h.url('manager/myarea/ordini/esporta') }}"}}'>Esporta dati contabili</a>
+			<a href="javascript:void(0);" class="h-action-selected-open-window h-action-close-popup-menu" data-action='{"window": {"overlay": true, "width": 400, "height": 350, "type": "layer", "url": "{{ _h.url('manager/myarea/ordini/esporta-info') }}"}}'>Esporta info ordini</a>
+			<a href="javascript:void(0);" class="h-action-selected-open-window h-action-close-popup-menu" data-action='{"window": {"overlay": true, "width": 400, "height": 350, "type": "layer", "url": "{{ _h.url('manager/myarea/ordini/esporta-info-dettaglio') }}"}}'>Esporta ordini con dettaglio</a>
+			<a href="javascript:void(0);" class="h-action-selected-open-window h-action-close-popup-menu" data-action='{"window": {"overlay": true, "width": 400, "height": 350, "type": "layer", "url": "{{ _h.url('manager/myarea/ordini/esporta-info-semplice') }}"}}'>Esporta info ordini semplice</a>
+			<a href="javascript:void(0);" class="h-action-selected-open-window h-action-close-popup-menu" data-action='{"window": {"overlay": true, "width": 400, "height": 350, "type": "layer", "url": "{{ _h.url('manager/myarea/ordini/esporta-info-cliente') }}"}}'>Esporta info clienti</a>
+			<a href="javascript:void(0);" class="h-action-selected-open-window h-action-close-popup-menu" data-action='{"window": {"overlay": true, "width": 400, "height": 350, "type": "layer", "url": "{{ _h.url('manager/myarea/ordini/esporta-fatture') }}"}}'>Esporta fatture/ricevute</a>
+			<a href="javascript:void(0);" class="h-action-selected-open-window h-action-close-popup-menu" data-action='{"window": {"overlay": true, "width": 400, "height": 350, "type": "layer", "url": "{{ _h.url('manager/myarea/ordini/esporta-dati-fattura') }}"}}'>Esporta dati fatturazione</a>
+			<a href="javascript:void(0);" class="h-action-selected-open-window h-action-close-popup-menu" data-action='{"window": {"overlay": true, "width": 400, "height": 350, "type": "layer", "url": "{{ _h.url('manager/myarea/ordini/esporta-dati-fattura-xml') }}"}}'>Genera ed esporta XML fatturazione</a>
+			<a href="javascript:void(0);" class="h-action-selected-open-window h-action-close-popup-menu" data-action='{"window": {"overlay": true, "width": 400, "height": 350, "type": "layer", "url": "{{ _h.url('manager/myarea/ordini/esporta-info-prodotto') }}"}}'>Esporta ordini con info prodotto</a>
+			{{ mymc.menuEsportaOrdiniManager(_h) }}
+		</div>
+	</div>	
+	
+	<div class="h-nav-button-wrapper">
+		<a href="javascript:void(0);" class="h-nav-button h-action-popup-menu h-action-alttext" data-alttext="esporta indirizzi spedizione">
+			<img src="/assets/manager/havana-js/img/icon/ico-fascetta.svg" align="top" />
+			<span>Esporta per spedizione</span>
+		</a>
+		<div class="h-popup-content h-popup-menu">
+			<a href="javascript:void(0);" class="h-action-download h-action-close-popup-menu" data-action='{"select": {"from":"#h-layout-center-content", "check": 0, "errorMessage": "Selezionare almeno una voce"}, "url": "{{ _h.url('manager/myarea/ordini/export-indirizzi') }}"}'>Esporta indirizzi</a>
+			<a href="javascript:void(0);" class="h-action-download h-action-close-popup-menu" data-action='{"select": {"from":"#h-layout-center-content", "check": 0, "errorMessage": "Selezionare almeno una voce"}, "url": "{{ _h.url('manager/myarea/ordini/export-indirizzi-gls') }}"}'>Esporta indirizzi per GLS Italia</a>
+			<a href="javascript:void(0);" class="h-action-download h-action-close-popup-menu" data-action='{"select": {"from":"#h-layout-center-content", "check": 0, "errorMessage": "Selezionare almeno una voce"}, "url": "{{ _h.url('manager/myarea/ordini/export-indirizzi-gls-e') }}"}'>Esporta indirizzi per GLS Estero</a>
+			<a href="javascript:void(0);" class="h-action-selected-open-window h-action-close-popup-menu" data-action='{"select": {"from":"#h-layout-center-content", "check": -1}, "window": {"width": 600, "height": 600, "overlay": true, "type": "layer","url": "{{ _h.url('manager/myarea/ordini/colli-richiesta-spedizioni-gls') }}"}}'>Crea segnacollo per GLS</a>
+			<a href="javascript:void(0);" class="h-action-window h-action-close-popup-menu" data-action='{"width": 950, "height": 600, "overlay": true, "type": "layer","url": "{{ _h.url('manager/myarea/ordini/workdaygls/index') }}"}'>Chiusura work day per GLS</a>	
+			<a href="javascript:void(0);" class="h-action-window h-action-close-popup-menu" data-action='{"width": 950, "height": 600, "overlay": true, "type": "layer","url": "{{ _h.url('manager/myarea/ordini/extraindirizzo/index') }}"}'>Indirizzi extra per segnacollo</a>	
+			<a href="javascript:void(0);" class="h-action-download h-action-close-popup-menu" data-action='{"select": {"from":"#h-layout-center-content", "check": 0, "errorMessage": "Selezionare almeno una voce"}, "url": "{{ _h.url('manager/myarea/ordini/export-indirizzi-brt') }}"}'>Esporta indirizzi per BRT</a>
+			<a href="javascript:void(0);" class="h-action-download h-action-close-popup-menu" data-action='{"select": {"from":"#h-layout-center-content", "check": 0, "errorMessage": "Selezionare almeno una voce"}, "url": "{{ _h.url('manager/myarea/ordini/export-indirizzi-nexive') }}"}'>Esporta indirizzi per NEXIVE</a>
+			<a href="javascript:void(0);" class="h-action-download h-action-close-popup-menu" data-action='{"select": {"from":"#h-layout-center-content", "check": 0, "errorMessage": "Selezionare almeno una voce"}, "url": "{{ _h.url('manager/myarea/ordini/export-indirizzi-tnt') }}"}'>Esporta indirizzi per TNT</a>
+			<a href="javascript:void(0);" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"select": {"from":"#h-layout-center-content", "check": 0, "errorMessage": "Selezionare almeno una voce"}, "url": "{{ _h.url('manager/myarea/ordini/export-indirizzi-tnt-ftp') }}"}'>Invia indirizzi a TNT tramite FTP</a>
+		</div>
+	</div>
+	{{ mc.navButton(_h, 'duplica ordine', 'copia', 'click', 'h-action-selected-execute', '{"select": {"from":"#h-layout-center-content", "check": 1}, "confirm": "Procedere con la duplicazione?", "url": "' ~ _h.url('manager/myarea/ordini/duplica') ~ '", "reload": "#h-layout-center-content"}') }}	
+	{{ mc.navSeparatore() }}	
+	{{ mc.navButtonPromemoria(_h, 'cliente_ordini') }}
+	{% endif %}
+	{{ mc.navButton(_h, 'ticket', 'info', 'click', 'h-action-selected-open-window', '{"select": {"from":"#h-layout-center-content", "check": 1, "errorMessage": "Selezionare una voce"}, "window": {"overlay": true, "type": "layer", "url": "' ~ _h.url('manager/myarea/ordini/log/index') ~ '"}}') }}
+	
+{% if _h.session.params.user.accesso >= 10  or (_h.config('gestione_azienda_account_full', false) and _h.session.params.user.accesso == 3) %}
+	{{ mc.navSeparatore() }}	
+	{{ mc.navButton(_h, 'abbina ordine', 'user', 'click', 'h-action-selected-execute', '{"select": {"from":"#h-layout-center-content", "check": -1}, "confirm": "Abbinare gli ordini senza clienti agli utenti già registrati a parità di e-mail?", "url": "' ~ _h.url('manager/myarea/ordini/ex-abbina-cliente-ordine') ~ '", "reload": "#h-layout-center-content"}') }}	
+	{{ mc.navButtonDelete(_h, 'elimina ordine', 'ordini') }}	
+{% endif %}
+	<div class="h-list-right h-nav-button-group" id="filtri-attivita">
+	{{ mc.navButton(_h, 'filtra', 'filter', 'arrow', 'h-load-in-window', '{"show": ["details-right"], "loadIn": "#h-layout-filtro", "url": "' ~ _h.url('manager/myarea/ordini/filtro') ~ '"}') }}
+	</div>
+	<div class="h-list-right" id="azzera-filtro">
+	{{ mc.navButton(_h, 'azzera filtro', 'reset', 'click', 'h-action-reset-filter', '{"load": "#h-layout-center-content", "reset": "#filtri-attivita"}') }}
+	</div>
+
+	{{ mc.filtro_list() }}
+	
+{{ mc.index_page_footer(_h, result, 'ordini') }}
+
+<div id="h-layout-details-right" class="h-layout h-layout-middle">
+	<div class="h-layout-content-wrapper" id="h-layout-filtro">
+	</div>
+</div>

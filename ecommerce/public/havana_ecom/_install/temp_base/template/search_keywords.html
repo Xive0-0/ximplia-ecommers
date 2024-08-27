@@ -1,0 +1,26 @@
+{% import _h.template('_macro.html') as mc %}
+<div class="search-key-item-list">
+{% for item in list %}
+	<div class="search-key-item" data-url="{{ item.url }}" data-nome="{{ item.get('nome') }}">
+		<div class="search-key-item-inner clear">
+			<div class="search-key-item-image">
+				<img src="{{ item.imageUrl(_h.config('template').web.item_image_dim) }}" alt="{{ item.get('nome') }} {{ item.get('nome_simbolico') }}">
+				{% if item.isSconto %}
+				<div class="block-sale">
+					<span class="on-sale">-{{ item.sconto }}%</span>
+				</div>
+				{% endif %}
+			</div>
+			<div class="search-key-item-details">
+				<div class="search-key-item-nome">
+					<strong>{{ item.get('nome') }}</strong>
+					<span>{{ item.get('nome_simbolico') }}</span>
+				</div>
+				<div class="search-key-item-price">
+					{{ mc.item_price(_h, item) }}
+				</div>
+			</div>
+		</div>
+	</div>
+{% endfor %}
+</div>

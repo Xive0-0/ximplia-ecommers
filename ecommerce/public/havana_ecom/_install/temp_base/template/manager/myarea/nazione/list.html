@@ -1,0 +1,25 @@
+{% import _h.template('manager/_macro_items.html') as mci %}
+{% set lt = _h.view('listCostiSpedizione') %}
+<table class="h-list item-autoload-total h-fixed-header-table" cellpadding="0" cellspacing="0" border="0" data-total="{{ result.total }}">
+<thead>
+<tr class="h-list-header">
+	<th style="width: 10px; padding: 0; overflow: hidden;">&nbsp;</th>
+	<th style="width: 20px;">&nbsp;</th>
+	<th style="width: 45px;" data-order="id" data-order-type="{{ result.order_type_id }}">COD</th>
+	<th style="width: 45px;" data-order="cee" data-order-type="{{ result.order_type_cee }}">CEE</th>
+	<th style="width: 20px;" data-order="stato,nome" data-order-type="{{ result.order_type_stato_nome }}">{{ _h.config('manager_valuta', '&euro;') }}</th>
+	<th data-order="nome" data-order-type="{{ result.order_type_nome }}">Nome</th>
+	<th style="width: 30px;" data-order="iva_privati" data-order-type="{{ result.order_type_iva_privati }}">P</th>
+	<th style="width: 30px;" data-order="iva_piva" data-order-type="{{ result.order_type_iva_piva }}">D</th>
+	<th style="width: 60px;" >Min. sped. gratis</th>
+	{% for type in lt %}
+	<th style="width: 60px;" >{{ type.label_small }}</th>
+	{% endfor %}
+</tr>
+</thead>
+<tbody>
+{% for item in result.list %}		
+	{{ mci.item_nazione(_h, item, lt) }}
+{% endfor %}
+</tbody>
+</table>

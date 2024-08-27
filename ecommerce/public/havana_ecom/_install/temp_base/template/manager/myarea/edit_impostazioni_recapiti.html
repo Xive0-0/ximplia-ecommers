@@ -1,0 +1,54 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Impostazioni recapiti') }}
+<p class="field-line field-400">
+	<label>E-mail info<span>*</span>:</label>
+	<input type="text" name="email_info" class="field valida-required valida-email" value="{{ _h.settings.get('email_info') }}">
+</p>
+<p class="field-line field-400">
+	<label>Via e num civico<span>*</span>:</label>
+	<input type="text" name="recapito_via" class="field valida-required" value="{{ _h.settings.get('recapito_via') }}">
+</p>
+<p class="field-line field-400">
+	<label>CAP e Città<span>*</span>:</label>
+	<input type="text" name="recapito_citta" class="field valida-required" value="{{ _h.settings.get('recapito_citta') }}">
+</p>
+<p class="field-line field-200">
+	<label>Latitudine<span>*</span>:</label>
+	<input type="text" name="recapito_latitudine" class="field valida-required" value="{{ _h.settings.get('recapito_latitudine') }}">
+</p>
+<p class="field-line field-200">
+	<label>Longitudine<span>*</span>:</label>
+	<input type="text" name="recapito_longitudine" class="field valida-required" value="{{ _h.settings.get('recapito_longitudine') }}">
+</p>
+<p class="field-line field-200">
+	<label>Telefono 1<span>*</span>:</label>
+	<input type="text" name="recapito_telefono_1" class="field valida-required" value="{{ _h.settings.get('recapito_telefono_1') }}">
+</p>
+<p class="field-line field-200">
+	<label>Telefono 2:</label>
+	<input type="text" name="recapito_telefono_2" class="field" value="{{ _h.settings.get('recapito_telefono_2') }}">
+</p>
+<p class="field-line field-200">
+	<label>Fax:</label>
+	<input type="text" name="recapito_fax" class="field" value="{{ _h.settings.get('recapito_fax') }}">
+</p>
+<p class="field-line field-400">
+	<label>P.IVA footer sito<span>*</span>:</label>
+	<input type="text" name="footer_p_iva" class="field valida-required" value="{{ _h.settings.get('footer_p_iva') }}">
+</p>
+<p class="field-line field-400">
+	<label>Copy footer sito<span>*</span>:</label>
+	<input type="text" name="footer_copy" class="field valida-required" value="{{ _h.settings.get('footer_copy') }}">
+</p>
+<p class="field-line field-400">
+	<label>Firma/nome sito staff:</label>
+	<input type="text" name="staff_firma" class="field" value="{{ _h.settings.get('staff_firma') }}">
+</p>
+<p class="field-line field-400">
+	<label>Firma "nome del sito":</label>
+	<input type="text" name="staff_indirizzo" class="field" value="{{ _h.settings.get('staff_indirizzo') }}">
+</p>
+{{ mc.labelCampiObbligatori() }}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/ex-edit-impostazioni-recapiti')) }}	
+

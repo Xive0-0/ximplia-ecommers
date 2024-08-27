@@ -1,0 +1,8 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Modifica Categoria') }}
+<input type="hidden" name="id" value="{{ _h.input('id') }}">
+
+{{ mc.dynamicMultipleTreeSelect(_h, 'Categoria', list, item, 'id_categoria', 'categoria', true, true) }}
+
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/articolo/ex-edit-categoria')) }}	

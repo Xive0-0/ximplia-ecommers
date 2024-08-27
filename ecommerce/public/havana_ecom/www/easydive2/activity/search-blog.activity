@@ -1,0 +1,22 @@
+{
+	"put": {
+		"view": [
+			{"mymetainfo": true},
+			{"banner_header": true}
+		]
+	},
+	"on:": [
+		{"name": "testo", "params": {"codice": "testo_blog", "item": "testo_blog"}},
+		{"name": "list-all-attributo-type", "params": {"type": "categoria_blog", "map": "map_categoria"}},
+		{"name": "search-blog", "params": {"order": "ordine", "order_type": "desc", "attributo_all": true}},
+		{"name": "list-hreflang", "params": {"tipo": "collezione"}, "check": "({input}[[autoload]]==null)"}
+	],
+	"on:view": {
+		"template": "search_blog",
+		"params": {
+			"js": [
+				"blog"
+			]
+		}
+	}
+}

@@ -1,0 +1,51 @@
+{% import _h.template('manager/_macro.html') as mc %}
+{% import _h.template('manager/_my_macro.html') as mymc %}
+
+{% if item %}
+	{{ mc.slideBoxHeaderToolbar(_h, 'ordine: ' ~ item.get('codice'), true) }}
+		{{ mc.navButton(_h, 'scrivi', 'message', 'click', 'h-action-window', '{"type": "layer", "url": "' ~ _h.url('manager/myarea/ordini/scrivi') ~ '", "overlay": true, "width": 500, "height": 300, "params": {"id": ' ~ item.id ~ '}}') }}
+		<div class="h-nav-button-wrapper" style="width: 2px; overflow: hidden;"><div class="h-nav-separator"></div></div>
+		
+		<div class="h-nav-button-wrapper">
+			<a href="javascript:void(0);" class="h-nav-button h-action-popup-menu h-action-alttext" data-alttext="invio e-mail">
+				<img src="/assets/manager/havana-js/img/icon/ico-reload.svg" align="top" />
+				<span>E-Mail</span>
+			</a>
+			<div class="h-popup-content h-popup-menu">
+				<a href="javascript:void(0);" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"confirm": "Inviare e-mail al cliente con riepilogo preventivo?", "url": "{{ _h.url('manager/myarea/preventivi/ex-invia-email-riepilogo') }}", "params": {"id": {{ item.id }}}}'>invia e-mail riepilogo al cliente</a>
+			</div>
+		</div>
+
+		{% set list = _h.config('enabled_languages') %}
+		{% if not(list) or list|length == 1 %}
+		{{ mc.navButton(_h, 'stampa', 'print', 'click', 'h-action-window', '{"type": "window", "url": "' ~ _h.url('cartprev/pdf') ~ '", "params": {"id": ' ~ item.id ~ '}}') }}
+		{% else %}
+		<div class="h-nav-button-wrapper">
+			<a href="javascript:void(0);" class="h-nav-button h-action-popup-menu h-action-alttext" data-alttext="stampa">
+				<img src="/assets/manager/havana-js/img/icon/ico-print.svg" align="top" />
+				<span>Stampa</span>
+			</a>
+			<div class="h-popup-content h-popup-menu">
+				{% for lang in list %}
+				<a href="javascript:void(0);" class="h-action-window h-action-close-popup-menu" data-action='{"type": "window", "url": "{{ _h.url('cartprev/pdf') }}", "params": {"id": "{{ item.id }}", "lang": "{{ lang }}"}}'>stampa {{ lang|upper }}</a>
+				{% endfor %}
+			</div>
+		</div>
+		{% endif  %}
+		<div class="h-nav-button-wrapper" style="width: 2px; overflow: hidden;"><div class="h-nav-separator"></div></div>
+		{{ mc.navButton(_h, 'ticket', 'report', 'click', 'h-action-window', '{"type": "layer", "url": "' ~ _h.url('manager/myarea/ordini/log/index') ~ '", "overlay": true, "width": 800, "height": 500, "params": {"id": ' ~ item.id ~ '}}') }}
+		{{ mc.navButton(_h, 'esporta det. preventivo', 'disk', 'click', 'h-action-download', '{"url": "' ~ _h.url('manager/myarea/preventivi/esporta-dettaglio') ~ '", "params": {"id": "' ~ item.id ~ '"}}') }}
+		
+		{% if item.get('id_cliente') > 0 %}
+		{{ mc.navButton(_h, 'info cliente', 'user', 'click', 'h-action-window', '{"type": "layer", "url": "' ~ _h.url('manager/myarea/cliente/dettaglio') ~ '", "overlay": true, "width": 650, "height": 600, "params": {"id": ' ~ item.get('id_cliente') ~ '}}') }}
+		{% endif %}
+	{{ mc.slideBoxHeaderToolbarEnd() }}
+{% else %}
+	{{ mc.slideBoxHeader(_h, 'ordine', true) }}
+{% endif %}
+
+	<fieldset id="dettaglio-content" data-action='{"url": "{{ _h.url('manager/myarea/preventivi/dettaglio-data') }}"}' data-load-params='{"id": {{ item.id }}}'>
+		{% include _h.template('manager/myarea/preventivi/dettaglio_data.html') %}	
+	</fieldset>	
+</div>
+</form>

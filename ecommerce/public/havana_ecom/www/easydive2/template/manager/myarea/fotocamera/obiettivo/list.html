@@ -1,0 +1,23 @@
+{% import _h.template('manager/_macro_items.html') as mci %}
+<table class="h-list item-autoload-total h-fixed-header-table h-list-slingle-selection" cellpadding="0" cellspacing="0" border="0" data-total="{{ result.total }}">
+<thead>
+<tr class="h-list-header">
+	<th style="width: 10px; padding: 0; overflow: hidden;">&nbsp;</th>
+	<th style="width: 20px;">&nbsp;</th>
+	<th style="width: 150px;">Brand</th>
+	<th style="width: 150px;">Codice</th>
+	<th data-order="nome" data-order-type="{{ result.order_type_nome }}">Nome</th>
+	<th style="width: 200px;">Mount lens</th>
+	<th style="width: 80px;">Angle Min</th>
+	<th style="width: 80px;">Angle Max</th>
+	<th style="width: 80px;">Ring</th>
+	<th style="width: 80px;">Length (mm)</th>
+	<th style="width: 80px;">Diameter (mm)</th>
+</tr>
+</thead>
+<tbody>
+{% for item in result.list %}		
+	{{ mci.item_fotocamera_obiettivo(_h, item) }}
+{% endfor %}
+</tbody>
+</table>

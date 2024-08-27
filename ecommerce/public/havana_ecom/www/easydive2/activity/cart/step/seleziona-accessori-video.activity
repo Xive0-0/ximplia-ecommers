@@ -1,0 +1,9 @@
+{
+	"on:begin": [
+		{"name": "cart/step/list-relazione-item", "params": {"tipo": "55"}}
+	],
+	"on:view": {
+		"template": "cart/step/seleziona_accessori_video",
+		"extra": false
+	}
+}

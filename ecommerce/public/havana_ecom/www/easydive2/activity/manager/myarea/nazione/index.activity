@@ -1,0 +1,16 @@
+{
+	"on:": [
+		"manager/myarea/nazione/list",
+		{"name": "manager/myarea/nazione/list-type", "params": {"corriere": "default"}}
+	],
+	"on:view": {
+		"template": "manager/myarea/nazione/index",
+		"params": {
+			"js": [
+				"havana-js/js/plugin/jquery.ui.widget",
+				"havana-js/js/plugin/jquery.fileupload",
+				"havana-js/js/plugin/jquery.iframe-transport"
+			]
+		}
+	}
+}

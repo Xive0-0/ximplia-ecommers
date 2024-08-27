@@ -1,0 +1,44 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Esporta dati fatturazione') }}
+<p class="field-line field-line-left field-100">
+	<label>Data dal:</label>
+	<input type="text" name="data_dal" class="field valida-datasimple input-datepicker" value="">
+</p>
+<p class="field-line field-line-left field-100">
+	<label>Data al:</label>
+	<input type="text" name="data_al" class="field valida-datasimple input-datepicker" value="">
+</p>
+<div class="clear-line"></div>
+<div class="field-line field-300">
+	<div class="h-checkbox-wrapper"><span class="h-checkbox h-checkbox-checked" data-value="1"><input type="hidden" name="solo_ordini_conclusi" value="1" /></span> <strong>Solo ordini pagati e non annullati</strong></div>
+</div>
+<div class="field-line field-300">
+	<label>Tipo pagamento:</label>
+	<select name="tipo_pagamento" class="field">
+	<option value="">Tutti</option>
+	<option value="1">Carta di Credito</option>
+	<option value="2">PayPal</option>
+	<option value="3">Bonifico Bancario</option>
+	<option value="4">Contrassegno</option>
+	<option value="5">PostePay</option>
+	<option value="6">Ricarica Cellulare</option>
+	<option value="7">Pagamento presso la sede contestualmente al ritiro</option>
+	<option value="9">Scalapay</option>
+	<option value="20">Satispay</option>
+	<option value="21">Bancontact</option>
+	<option value="22">Carta giovani</option>
+	<option value="23">Oney</option>
+	<option value="1000">Punti</option>
+	</select>
+</div>
+		<fieldset>
+	</div>
+	<div class="h-layout-bottombar">
+		<div class="h-layout-content-wrapper">
+			<a href="javascript:void(0);" class="h-bar-button h-bar-button-gray h-close-box">Annulla</a>
+			<a href="javascript:void(0);" class="h-bar-button h-bar-button-blu h-action-submit" data-action='{"method": "get", "target": "_blank", "url":"{{ _h.url('manager/myarea/ordini/ex-esporta-dati-fattura') }}", "onComplete": {"closeWin": true}, "loadinMessage": "generazione in corso..."}'>Esporta</a>
+		</div>
+	</div>
+	</form>
+</div>

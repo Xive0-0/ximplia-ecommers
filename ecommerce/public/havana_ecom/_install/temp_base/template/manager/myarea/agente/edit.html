@@ -1,0 +1,86 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% if item == null %}
+	{% set title = 'Nuovo agente' %}
+{% else %}
+	{% set title = 'Modifica agente' %}
+{% endif %}
+{{ mc.slideBoxHeader(_h, title) }}
+<input type="hidden" name="id" value="{{ item.id }}">
+
+<div class="h-tab">
+<div data-tab-rif="base">Agente</div>
+<div data-tab-rif="clienti">Clienti associati</div>
+
+<div data-tab="base">
+
+<div class="field-line field-200">
+	{% if item.abilitato() or item == null %} 
+		{% set cssClass = ' h-checkbox-checked' %}
+		{% set value = 1 %}
+	{% else %}
+		{% set cssClass = '' %}
+		{% set value = '' %}
+	{% endif %}
+	<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="abilitato" value="{{ value }}" /></span> <strong>Abilitato</strong></div>
+</div>
+<p class="field-line field-400">
+	<label>E-Mail<span>*</span>:</label>
+	<input type="text" name="e_mail" class="field valida-required valida-email" value="{{ item.get('e_mail') }}" maxlength="100">
+</p>
+{% if item == null %}
+<p class="field-line field-line-left">
+	<label>Password<span>*</span>:</label>
+	<input type="password" name="password" class="field valida-required valida-password" value="" maxlength="30">
+</p>
+<p class="field-line">
+	<label>Conferma password<span>*</span>:</label>
+	<input type="password" name="conferma_password" class="field valida-required valida-password" value="" maxlength="30">
+</p>
+{% endif %}
+
+<p class="field-line clear field-line-left">
+	<label>Nome<span>*</span>:</label>
+	<input type="text" name="nome" class="field valida-required" value="{{ item.get('nome') }}" maxlength="30">
+</p>
+<p class="field-line">
+	<label>Cognome<span>*</span>:</label>
+	<input type="text" name="cognome" class="field valida-required" value="{{ item.get('cognome') }}" maxlength="30">
+</p>
+<div class="field-line field-400">
+	{% if item.get('agente_uso_sconto') %} 
+		{% set cssClass = ' h-checkbox-checked' %}
+		{% set value = 1 %}
+	{% else %}
+		{% set cssClass = '' %}
+		{% set value = '' %}
+	{% endif %}
+	<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="agente_uso_sconto" value="{{ value }}" /></span> <strong>Possibilità di inserire sconti aggiuntivi durante la fase di ordine</strong></div>
+</div>
+{{ mc.labelCampiObbligatori() }}
+</div>
+
+<div data-tab="clienti">
+	<p class="field-line field-400">
+		<label>Cerca e aggiungi cliente:</label>
+		<input type="hidden" name="relazione_id" value="">
+		<input type="text" name="nome" class="field autocomplete" value="" data-action='{"url": "{{ _h.url('manager/myarea/cliente/list-autocomplete') }}", "add_item_to": "#elenco_clienti", "add_item_id": "id_cliente"}'>
+	</p>
+	<br><br>
+	Clienti selezionati:
+	<div id="elenco_clienti">
+		{% for cliente in list_clienti %}
+			<div class="autocomplete-content-value-block hrow remove-current-element-wrapper">
+			<input type="hidden" name="id_cliente[]" value="{{ cliente.id() }}">
+			<em class="action-remove-current-element"></em>
+			<div class="autocomplete-content-value-details"><strong>#{{ cliente.id() }}</strong>
+			<span>{{ cliente.get('e_mail') }}, {{ cliente.get('nome') }} {{ cliente.get('cognome') }}</span>
+			</div></div>
+		{% endfor %}
+	</div>
+</div>
+
+</div>
+
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/agente/ex-edit'), item) }}	
+

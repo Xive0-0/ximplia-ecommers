@@ -1,0 +1,88 @@
+{% set _lblm = _h.labels.get('my') %}
+{% set _lblf = _h.labels.get('form') %}
+{% set _lblc = _h.labels.get('checkout') %}
+<h2>{{ _lblm.title_modifica_pagamento }}</h2>
+
+<form id="pagina">
+	<div class="field-text">
+		{{ _lblm.descr_modifica_pagamento }}
+	</div>
+	<div class="form-error-message"></div>
+	<div class="clear checkbox-group">
+	{% if _h.settings.get('checkout_pagamento_cc') != '' %}
+		<div class="field-checkbox-check">
+			<span class="checkbox{% if item.get('pagamento_default') == 1 %} checkbox-checked{% endif %}" data-value="1"><input type="hidden" name="pagamento_default" value="{% if item.get('pagamento_default') == 1 %}1{% endif %}"></span>
+			<span class="checkbox-label"><span>{{  _lblc.tipo_pag_carta_credito }}</span></span>
+		</div>
+	{% endif %}
+	{% if _h.settings.get('checkout_pagamento_paypal') != '' %}
+		<div class="field-checkbox-check">
+			<span class="checkbox{% if item.get('pagamento_default') == 2 %} checkbox-checked{% endif %}" data-value="2"><input type="hidden" name="pagamento_default" value="{% if item.get('pagamento_default') == 2 %}2{% endif %}"></span>
+			<span class="checkbox-label"><span>{{  _lblc.tipo_pag_paypal }}</span></span>
+		</div>
+	{% endif %}	
+	{% if _h.settings.get('checkout_pagamento_contrassegno') != '' %}
+		<div class="field-checkbox-check">
+			<span class="checkbox{% if item.get('pagamento_default') == 4 %} checkbox-checked{% endif %}" data-value="4"><input type="hidden" name="pagamento_default" value="{% if item.get('pagamento_default') == 4 %}4{% endif %}"></span>
+			<span class="checkbox-label"><span>{{  _lblc.tipo_pag_contrassegno }}</span></span>
+		</div>
+	{% endif %}	
+	{% if _h.settings.get('checkout_pagamento_scalapay') != '' %}
+		<div class="field-checkbox-check">
+			<span class="checkbox{% if item.get('pagamento_default') == 9 %} checkbox-checked{% endif %}" data-value="9"><input type="hidden" name="pagamento_default" value="{% if item.get('pagamento_default') == 9 %}9{% endif %}"></span>
+			<span class="checkbox-label"><span>{{  _lblc.tipo_pag_scalapay }}</span></span>
+		</div>
+	{% endif %}
+	{% if _h.settings.get('checkout_pagamento_satispay') != '' %}
+		<div class="field-checkbox-check">
+			<span class="checkbox{% if item.get('pagamento_default') == 20 %} checkbox-checked{% endif %}" data-value="20"><input type="hidden" name="pagamento_default" value="{% if item.get('pagamento_default') == 20 %}20{% endif %}"></span>
+			<span class="checkbox-label"><span>{{  _lblc.tipo_pag_satispay }}</span></span>
+		</div>
+	{% endif %}
+	{% if _h.settings.get('checkout_pagamento_bancontact') != '' %}
+		<div class="field-checkbox-check">
+			<span class="checkbox{% if item.get('pagamento_default') == 21 %} checkbox-checked{% endif %}" data-value="21"><input type="hidden" name="pagamento_default" value="{% if item.get('pagamento_default') == 21 %}21{% endif %}"></span>
+			<span class="checkbox-label"><span>{{  _lblc.tipo_pag_bancontact }}</span></span>
+		</div>
+	{% endif %}
+	{% if _h.settings.get('checkout_pagamento_18app') != '' %}
+		<div class="field-checkbox-check">
+			<span class="checkbox{% if item.get('pagamento_default') == 22 %} checkbox-checked{% endif %}" data-value="22"><input type="hidden" name="pagamento_default" value="{% if item.get('pagamento_default') == 22 %}22{% endif %}"></span>
+			<span class="checkbox-label"><span>{{  _lblc.tipo_pag_18app }}</span></span>
+		</div>
+	{% endif %}
+	{% if _h.settings.get('checkout_pagamento_oney') != '' %}
+		<div class="field-checkbox-check">
+			<span class="checkbox{% if item.get('pagamento_default') == 23 %} checkbox-checked{% endif %}" data-value="23"><input type="hidden" name="pagamento_default" value="{% if item.get('pagamento_default') == 23 %}23{% endif %}"></span>
+			<span class="checkbox-label"><span>{{  _lblc.tipo_pag_oney }}</span></span>
+		</div>
+	{% endif %}
+	{% if _h.settings.get('checkout_pagamento_bonifico') != '' %}
+		<div class="field-checkbox-check">
+			<span class="checkbox{% if item.get('pagamento_default') == 3 %} checkbox-checked{% endif %}" data-value="3"><input type="hidden" name="pagamento_default" value="{% if item.get('pagamento_default') == 3 %}3{% endif %}"></span>
+			<span class="checkbox-label"><span>{{  _lblc.tipo_pag_bonifico }}</span></span>
+		</div>
+	{% endif %}
+	{% if _h.settings.get('checkout_pagamento_postepay') != '' %}
+		<div class="field-checkbox-check">
+			<span class="checkbox{% if item.get('pagamento_default') == 5 %} checkbox-checked{% endif %}" data-value="5"><input type="hidden" name="pagamento_default" value="{% if item.get('pagamento_default') == 5 %}5{% endif %}"></span>
+			<span class="checkbox-label"><span>{{  _lblc.tipo_pag_postepay }}</span></span>
+		</div>
+	{% endif %}
+	{% if _h.settings.get('checkout_pagamento_ricarica') != '' %}
+		<div class="field-checkbox-check">
+			<span class="checkbox{% if item.get('pagamento_default') == 6 %} checkbox-checked{% endif %}" data-value="6"><input type="hidden" name="pagamento_default" value="{% if item.get('pagamento_default') == 6 %}6{% endif %}"></span>
+			<span class="checkbox-label"><span>{{  _lblc.tipo_pag_ricarica }}</span></span>
+		</div>
+	{% endif %}
+	</div>
+	
+	<div class="field-button field-button-left">
+		<a class="button-red button submit-form" href="javascript:void(0)" title="{{ _lblf.btn_modifica }}" data-action='{"url": "{{ _h.url('account/my/ex-modifica-pagamento') }}", "onComplete": {"type": "show", "show": "#conferma_pagina", "hide": "#pagina"}}'><span>{{ _lblf.btn_modifica }}</span></a>
+	</div>
+
+</form>
+
+<div id="conferma_pagina" class="hide-block">
+	<p>{{ _lblm.descr_conf_dati_modificati }}</p>
+</div>

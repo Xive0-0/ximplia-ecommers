@@ -1,0 +1,12 @@
+{
+	"put": {
+		"view": [
+			{"noindex": true},
+			{"hide_newsletter": true}
+		]
+	},
+	"on:": [
+		"account/logout"
+	],
+	"on:view": "account/registrazione"
+}

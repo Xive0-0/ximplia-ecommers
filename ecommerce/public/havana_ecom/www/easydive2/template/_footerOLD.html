@@ -1,0 +1,426 @@
+{% set _lblm = _h.labels.get('my') %}
+{% set _lblg = _h.labels.get('global') %}
+{% set _lblw = _h.labels.get('website') %}
+{% set _lblf = _h.labels.get('form') %}
+
+{% import _h.template('_macro.html') as mc %}
+
+			<div class="clear"></div>
+		</div>
+		</div>
+		{% if listCategoriaBlog|length > 0 %}
+		<div style=" padding-top: 20px;">
+		<div class="anteprima-home-items categoria-blog-footer clear web">
+			{% for item in listCategoriaBlog %}
+				<div class="item">
+					<div class="item-inner">
+						<div class="item-dettaglio">
+							<h3 class="item-name">
+								{{ item.get('nome') }}
+							</h3>								
+						</div>
+						<a href="{{ item.url }}" class="item-img">
+							<img src="/assets/void_image.png" class="placeholder">
+							<img class="item-img-orig" src="{{ item.imageUrl('300x300') }}" alt="{{ item.imageAlt(item.get('nome')) }}" onload="image_articolo_loaded(this)" style="display: none;">
+						</a>
+						<div class="item-toolbar">
+							<a href="{{ item.url }}">{{ _lblw.vedi_tutti }}</a>							
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+		</div>
+		{% endif %}
+	<div id="middle" class="content web">
+		{% if _h.requestActivity != 'index' %}
+		<script src="https://apps.elfsight.com/p/platform.js" defer></script>
+		<div class="elfsight-app-11e860e8-c280-436b-aa68-1b35d67b01cb"></div>
+		{% endif %}
+	
+		<div class="inner-middle content">
+			{% if listFotocamera|length > 0 or listCellulare|length > 0 %}
+				<div class="list-azienda">
+					<h3>Brands</h3>
+					<div class="clear loghi">
+				{% for item in listFotocamera %}
+					{% if item.isImage() %}
+					<div class="item-azienda">
+						<div class="item-azienda-inner">
+							<img alt="{{ item.get('nome') }}" src="{{ item.imageUrl('300x150') }}">
+						</div>
+					</div>
+					{% endif %}
+				{% endfor %}
+				{% for item in listCellulare %}
+					{% if item.isImage() %}
+					<div class="item-azienda">
+						<div class="item-azienda-inner">
+							<img alt="{{ item.get('nome') }}" src="{{ item.imageUrl('300x150') }}">
+						</div>
+					</div>
+					{% endif %}
+				{% endfor %}
+					</div>
+				</div>
+			{% endif %}	
+				</div>
+			</div>
+		</div>
+		<form class="newsletter">
+			<div class="clear newsletter-box">
+				<h4>{{ _lblg.title_newsletter }}</h4>
+				<div class="field-line">
+					<div class="field">
+						<label>{{ _lblf.field_email }}</label>
+						<input type="text" name="e_mail" class="valida-required valida-email">
+					</div>
+				</div>
+				<a class="newsletter-button submit-form" href="javascript:void(0);" title="{{ _lblf.btn_iscriviti }}" data-action='{"method": "post", "url": "{{ _h.url('account/newsletter') }}"}'>{{ _lblf.btn_iscriviti }}</a>
+			</div>
+			<div class="clear">
+				<div class="form-error-message"></div>
+				<div class="field-text">
+					{{ _lblg.descr_newsletter }}
+					{% if _h.settings.get('sconto_newsletter_abilitato', '') != '' %}
+						{% if _h.settings.get('sconto_newsletter_codice_riutilizzabile', '') == '' %}
+						{{ _lblm.descr_iscrizione_newsletter_2a }}
+						{% else %}
+						{{ _lblm.descr_iscrizione_newsletter_2b }}
+						{% endif %}
+						<strong>{{ _h.settings.get('sconto_newsletter_sconto') }}{% if _h.settings.get('sconto_newsletter_tipo', '') == '1' or _h.settings.get('sconto_newsletter_tipo', '') == '2' %}%{% else %}&euro;{% endif %}</strong>
+					{% endif %}
+				</div>
+			</div>
+		</form>
+		<footer>
+			<a href="/{% if _h.lang != 'it' %}{{ _h.lang }}{% endif %}" title="Easydive Online Shop" class="logo-footer">
+			<img src="/assets/website/img/logo-easydive-footer.png" alt="Easydive Online Shop" >
+			<strong class="made-in-italy"><em class="made-in-italy-green"></em><em class="made-in-italy-white"></em><em class="made-in-italy-red"></em><span>Made in Italy</span></strong>
+			<em class="since">{{ _lblw.testo_since }}</em>
+			</a>
+			
+			<script type="text/javascript"> var zoorate_widget_server = "widget.zoorate.com"; var zoorate_api_key = "API_KEY"; var zoorate_widget_id = "afc48d5f4782d362";</script><script src="//widget.zoorate.com/widgets/v6/feed.js" async ></script><div class="zoorate_widget" data-ver="6.0.0" data-id="INCREMENT_ID" data-type="merchantsmall" data-variant="white" data-lang="all" data-gui="all" style="width: 250px; margin: auto;"></div>
+			
+			
+			<div class="menu">
+				<div class="clear">
+					<section>
+						<h4 class="line line-30">{{ _lblw.my_account }}</h4>
+						<ul>
+						{% if _h.session.isAuth and _h.session.profile == 'guest' %}
+						<li>{{ mc.link(_h, _h.xurl('account/my/ordini/index'), _lblg.btn_miei_ordini) }}</li>
+						<li>{{ mc.link(_h, _h.xurl('account/my/preferiti/index'), _lblg.btn_preferiti) }}</li>
+						<li>{{ mc.link(_h, _h.xurl('account/my/indirizzi/index'), _lblg.btn_indirizzi_spedizione) }}</li>
+						<li>{{ mc.link(_h, _h.xurl('account/my/fatturazione/index'), _lblg.btn_dati_fatturazione) }}</li>
+						<li>{{ mc.link(_h, _h.xurl('account/my/dati-personali'), _lblg.btn_dati_personali) }}</li>
+						<li>{{ mc.link(_h, _h.xurl('account/my/modifica-password'), _lblg.btn_modifica_password) }}</li>
+						<li>{{ mc.link(_h, _h.xurl('account/my/modifica-email'), _lblg.btn_modifica_email) }}</li>
+						<li>{{ mc.link(_h, _h.xurl('account/logout'), _lblg.btn_esci) }}</li>
+						{% else %}
+						<li>{{ mc.link(_h, _h.xurl('account/login'), _lblw.login) }}</li>
+						<li>{{ mc.link(_h, _h.xurl('account/login'), _lblg.btn_miei_ordini) }}</li>
+						<li>{{ mc.link(_h, _h.xurl('account/login'), _lblg.btn_dati_personali) }}</li>
+						<li>{{ mc.link(_h, _h.xurl('account/login'), _lblg.btn_preferiti) }}</li>
+						{% endif %}
+						</ul>
+					</section>
+					<section>
+						<h4 class="line line-30">{{ _lblw.menu }}</h4>
+						<ul class="uppercase">
+						{% if _h.lang == 'it' %}
+							{% set url_home = '/' %}
+						{% else %}
+							{% set url_home = _h.lang %}
+						{% endif %}
+						<li>{{ mc.link(_h, url_home, 'Home') }}</li>
+						<li>{{ mc.link(_h, mapPagine.chi_siamo.url, mapPagine.chi_siamo.get('titolo')) }}</li>
+						<li>{{ mc.link(_h, _h.xurl('shop'), _lblw.shop) }}</li>
+						<li>{{ mc.link(_h, _h.xurl('blog'), _lblw.blog) }}</li>
+						</ul>
+					</section>
+					<section>
+						<h4 class="line line-30">{{ _lblw.aiuto }}</h4>
+						<ul>
+						<li>{{ mc.link(_h, _h.xurl('servizio-clienti?page=termini_condizioni'), mapPagine.termini_condizioni.get('titolo')) }}</li>
+						<li>{{ mc.link(_h, _h.xurl('servizio-clienti?page=spedizioni'), mapPagine.spedizioni.get('titolo')) }}</li>
+						<li>{{ mc.link(_h, _h.xurl('info/faq'), _lblw.faq) }}</li>
+						</ul>
+					</section>
+					<section class="recapiti">
+						<h4 class="line line-30">{{ _lblw.contatti }}</h4>
+						<ul>
+						<li><img src="/assets/website/img/ico-phone.svg" alt="phone"> +39 0544 962923<br>
+							<em>{{ _lblw.telefono_orari }}</em>
+						</li>
+						<li><a href="https://api.whatsapp.com/send?phone=393389994219"><img src="/assets/website/img/ico-whatsapp.svg" alt="whatsapp"> +39 338 9994219</a></li>
+						<li><a href="skype:Easydive.it?call"><img src="/assets/website/img/ico-skype.svg" alt="skype"> Easydive.it</a></li>
+						<li><a href="{{ _h.xurl('scrivi-servizio-clienti') }}"><img src="/assets/website/img/ico-email.svg" alt="e-mail"> info@easydive.it</a></li>
+						</ul>
+					</section>
+				</div>
+			</div>
+			<div class="footer-social line">
+				<ul>
+					<li>
+						<a href="https://www.facebook.com/easydivefan/" title="Facebook" target="_blank">
+							<img src="/assets/website/img/facebook.svg" alt="facebook">
+						</a>
+					</li>
+					<li>
+						<a href="https://www.youtube.com/user/Easydivechannel" title="YouTube" target="_blank">
+							<img src="/assets/website/img/youtube.svg" alt="youtube">
+						</a>
+					</li>
+					<li>
+						<a href="https://vimeo.com/easydive" title="Vimeo" target="_blank">
+							<img src="/assets/website/img/vimeo.svg" alt="vimeo">
+						</a>
+					</li>
+					<li>
+						<a href="https://www.instagram.com/easydive/" title="Instagram" target="_blank">
+							<img src="/assets/website/img/instagram.svg" alt="instagram">
+						</a>
+					</li>
+					<li>
+						<a href="skype:Easydive.it" title="Skype" target="_blank">
+							<img src="/assets/website/img/skype.svg" alt="skype">
+						</a>
+					</li>
+				</ul>
+			</div>
+			<div class="policy">
+				{{ mc.link(_h, mapPagine.cookie_policy.url, mapPagine.cookie_policy.get('titolo')) }}
+				<span>/</span>
+				{{ mc.link(_h, mapPagine.privacy.url, mapPagine.privacy.get('titolo')) }}				
+				<span>/</span>
+				{{ mc.link(_h, mapPagine.por_fesr_2017.url, mapPagine.por_fesr_2017.get('titolo')) }}
+			</div>
+
+			<div class="copy-wrapper">
+				<section class="copy web">
+					&copy;2018 EASYDIVE S.R.L. con unico Socio - Part. IVA IT02665730392<br>
+					Via Dell'Industria 13 int.6 - 48015 Cervia (RA) Italy
+				</section>
+			</div>
+
+		</footer>
+	</div>
+	
+<div class="nav-menu-laterale-window">
+<div class="nav-menu-laterale">
+
+	<div class="footer-social">
+		<ul>
+			<li>
+				<a href="https://www.facebook.com/easydivefan/" title="Facebook" target="_blank">
+					<img src="/assets/website/img/ico-facebook.svg" alt="facebook">
+				</a>
+			</li>
+			<li>
+				<a href="https://www.youtube.com/user/Easydivechannel" title="YouTube" target="_blank">
+					<img src="/assets/website/img/ico-youtube.svg" alt="youtube">
+				</a>
+			</li>
+			<li>
+				<a href="https://www.instagram.com/easydive/" title="Instagram" target="_blank">
+					<img src="/assets/website/img/ico-instagram.svg" alt="instagram">
+				</a>
+			</li>
+			<li>
+				<a href="{{ mapPagine.plastic_free.url }}" title="Plastic free">
+					<img src="/assets/website/img/plastic-free2.gif" alt="plastic free">
+				</a>
+			</li>
+		</ul>
+	</div>
+
+	<ul>
+	<li class="menu-submenu"><a href="javascript:void(0);" class="menu-arrow">Easydive</a>
+		<ul>
+			<li>{{ mc.link(_h, mapPagine.plastic_free.url, mapPagine.plastic_free.get('titolo')) }}</li>
+			<li>{{ mc.link(_h, mapPagine.chi_siamo.url, mapPagine.chi_siamo.get('titolo')) }}
+				<ul>
+					<li>{{ mc.link(_h, mapPagine.perche_easydive.url, mapPagine.perche_easydive.get('titolo')) }}</li>
+					<li>{{ mc.link(_h, mapPagine.garanzia_easydive.url, mapPagine.garanzia_easydive.get('titolo')) }}</li>
+					<li>{{ mc.link(_h, mapPagine.must.url, mapPagine.must.get('titolo')) }}</li>
+					<li>{{ mc.link(_h, _h.xurl('info/faq'), 'FAQ') }}</li>
+				</ul>
+			</li>
+			<li>{{ mc.link(_h, _h.xurl('ambassador'), 'Ambassador') }}</li>
+			<li><a href="javascript:void(0);">{{ _lblw.blog }}</a>
+				<ul>
+					{% for c in listCategoriaBlog %}
+					<li>{{ mc.link(_h, c.url, c.get('nome')) }}</li>
+					{% endfor %}
+				</ul>
+			</li>
+		</ul>
+	</li>
+	<li><a href="https://www.youtube.com/user/Easydivechannel" target="_blank" class="btn-channel"><img src="/assets/website/img/ico-youtube.svg">Channel</a></li>
+	<li class="menu-submenu"><a href="javascript:void(0);" class="btn-shop-red">{{ _lblw.tutti_i_prodotti }}</a>
+		<ul>
+		{{ tree }}
+		</ul>
+	</li>
+	</ul>
+		
+	<ul>
+		<li><a href="{{ _h.xurl('scrivi-servizio-clienti') }}">
+			<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+				<defs>
+					<polygon id="path-1" points="0.0076251046 0.0205217391 15.9675916 0.0205217391 15.9675916 6.15384615 0.0076251046 6.15384615"></polygon>
+				</defs>
+				<g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+					<g id="Menu-/-normal" transform="translate(-1357.000000, -14.000000)">
+						<g id="user" transform="translate(1357.000000, 14.000000)">
+							<g id="Group-6">
+								<g id="Group-3" transform="translate(0.000000, 9.846154)">
+									<mask id="mask-2" fill="white">
+										<use xlink:href="#path-1"></use>
+									</mask>
+									<g id="Clip-2"></g>
+									<path d="M15.3537674,5.54052174 L0.621449372,5.54052174 L0.621449372,4.48814716 C0.621449372,2.3627291 2.35179247,0.633866221 4.47895565,0.633866221 L11.4962611,0.633866221 C13.6234243,0.633866221 15.3537674,2.3627291 15.3537674,4.48814716 L15.3537674,5.54052174 Z M11.4962611,0.0205217391 L4.47895565,0.0205217391 C2.0134159,0.0205217391 0.0076251046,2.02463545 0.0076251046,4.48814716 L0.0076251046,6.15386622 L15.9675916,6.15386622 L15.9675916,4.48814716 C15.9675916,2.02463545 13.9618008,0.0205217391 11.4962611,0.0205217391 Z" id="Fill-1" fill="#231F20" mask="url(#mask-2)"></path>
+								</g>
+								<path d="M8.00001678,0.615398997 C10.0360705,0.615398997 11.6922957,2.27176491 11.6922957,4.30769231 C11.6922957,6.34361971 10.0360705,8.00001918 8.00001678,8.00001918 C5.96392953,8.00001918 4.30770429,6.34361971 4.30770429,4.30769231 C4.30770429,2.27176491 5.96392953,0.615398997 8.00001678,0.615398997 M8.00001678,8.61538462 C10.3752953,8.61538462 12.3076923,6.68301364 12.3076923,4.30769231 C12.3076923,1.93240453 10.3752953,0 8.00001678,0 C5.62470469,0 3.69230769,1.93240453 3.69230769,4.30769231 C3.69230769,6.68301364 5.62470469,8.61538462 8.00001678,8.61538462" id="Fill-4" fill="#231F20"></path>
+							</g>
+						</g>
+					</g>
+				</g>
+			</svg>
+			{{ _lblw.contatti }}
+		</a></li>
+		<li><a href="https://tourmkr.com/F1RE4CPrby" target="blank">
+			{{ _lblw.virtual_tour }}
+		</a></li>
+	{% if _h.session.isAuth and _h.session.profile == 'guest' %}
+		<li class="menu-submenu"><a href="#">
+			<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+				<defs>
+					<polygon id="path-1" points="0.0076251046 0.0205217391 15.9675916 0.0205217391 15.9675916 6.15384615 0.0076251046 6.15384615"></polygon>
+				</defs>
+				<g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+					<g id="Menu-/-normal" transform="translate(-1357.000000, -14.000000)">
+						<g id="user" transform="translate(1357.000000, 14.000000)">
+							<g id="Group-6">
+								<g id="Group-3" transform="translate(0.000000, 9.846154)">
+									<mask id="mask-2" fill="white">
+										<use xlink:href="#path-1"></use>
+									</mask>
+									<g id="Clip-2"></g>
+									<path d="M15.3537674,5.54052174 L0.621449372,5.54052174 L0.621449372,4.48814716 C0.621449372,2.3627291 2.35179247,0.633866221 4.47895565,0.633866221 L11.4962611,0.633866221 C13.6234243,0.633866221 15.3537674,2.3627291 15.3537674,4.48814716 L15.3537674,5.54052174 Z M11.4962611,0.0205217391 L4.47895565,0.0205217391 C2.0134159,0.0205217391 0.0076251046,2.02463545 0.0076251046,4.48814716 L0.0076251046,6.15386622 L15.9675916,6.15386622 L15.9675916,4.48814716 C15.9675916,2.02463545 13.9618008,0.0205217391 11.4962611,0.0205217391 Z" id="Fill-1" fill="#231F20" mask="url(#mask-2)"></path>
+								</g>
+								<path d="M8.00001678,0.615398997 C10.0360705,0.615398997 11.6922957,2.27176491 11.6922957,4.30769231 C11.6922957,6.34361971 10.0360705,8.00001918 8.00001678,8.00001918 C5.96392953,8.00001918 4.30770429,6.34361971 4.30770429,4.30769231 C4.30770429,2.27176491 5.96392953,0.615398997 8.00001678,0.615398997 M8.00001678,8.61538462 C10.3752953,8.61538462 12.3076923,6.68301364 12.3076923,4.30769231 C12.3076923,1.93240453 10.3752953,0 8.00001678,0 C5.62470469,0 3.69230769,1.93240453 3.69230769,4.30769231 C3.69230769,6.68301364 5.62470469,8.61538462 8.00001678,8.61538462" id="Fill-4" fill="#231F20"></path>
+							</g>
+						</g>
+					</g>
+				</g>
+			</svg>
+			{{ _lblg.ciao }} <strong>{{ _h.session.params.user.nome }}</strong>
+			</a>
+			<ul>
+				<li>{{ mc.link(_h, _h.xurl('account/my/ordini/index'), _lblg.btn_miei_ordini) }}</li>
+				<li>{{ mc.link(_h, _h.xurl('account/my/file/index'), _lblg.btn_miei_files) }}</li>
+				<li>{{ mc.link(_h, _h.xurl('account/my/log/index'), _lblg.btn_comunicazioni) }}</li>
+				<li>{{ mc.link(_h, _h.xurl('account/my/preferiti/index'), _lblg.btn_preferiti) }}</li>
+				<li>{{ mc.link(_h, _h.xurl('account/my/indirizzi/index'), _lblg.btn_indirizzi_spedizione) }}</li>
+				<li>{{ mc.link(_h, _h.xurl('account/my/fatturazione/index'), _lblg.btn_dati_fatturazione) }}</li>
+				<li>{{ mc.link(_h, _h.xurl('account/my/dati-personali'), _lblg.btn_dati_personali) }}</li>
+				<li>{{ mc.link(_h, _h.xurl('account/my/modifica-password'), _lblg.btn_modifica_password) }}</li>
+				<li>{{ mc.link(_h, _h.xurl('account/my/modifica-email'), _lblg.btn_modifica_email) }}</li>
+				<li>{{ mc.link(_h, _h.xurl('account/logout'), _lblg.btn_esci) }}</li>
+			</ul>
+		</li>
+	</ul>
+	{% else %}
+		<li><a href="{{ _h.xurl('account/login') }}">
+			<svg width="18px" height="16px" viewBox="0 0 18 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+				<g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+					<g id="Menu-/-normal" transform="translate(-1492.000000, -14.000000)" fill="#000000">
+						<g id="Group-3" transform="translate(1492.000000, 14.000000)">
+							<path d="M11.4323396,7.81108962 L11.0501055,7.81108962 C7.59784533,7.81108962 4.1455302,7.81112886 0.693270061,7.81097189 C0.58763464,7.81097189 0.480954413,7.8157593 0.376528768,7.80720476 C0.126545102,7.78679943 -0.00460559017,7.67559039 0.000123533308,7.502616 C0.00479766698,7.3292492 0.142712105,7.22329846 0.394070517,7.20972107 C0.49915604,7.20403112 0.605231379,7.20736661 0.71092179,7.20736661 C4.16323692,7.20728813 7.61549705,7.20728813 11.0677572,7.20728813 L11.511195,7.20728813 C11.3879079,7.11157929 11.3163111,7.05110889 11.2377307,6.99562209 C10.561631,6.51825515 9.88591624,6.04061352 9.20640718,5.56567952 C9.00321984,5.42366629 8.92287974,5.27435423 9.12848663,5.10491153 C9.3125925,4.95324501 9.54321976,4.96584137 9.79947226,5.14387786 C10.8172236,5.8509617 11.8323905,6.55996835 12.8462925,7.26991678 C13.0578933,7.41805161 13.048875,7.60495657 12.8324901,7.75626992 C11.8345901,8.45393592 10.8396045,9.15376017 9.83340097,9.84530457 C9.71682258,9.92543472 9.53409145,10.0045446 9.38743363,9.99979644 C9.26381654,9.9958331 9.07404672,9.88038604 9.04831149,9.7938596 C9.01889194,9.69508997 9.0957127,9.54389434 9.20052328,9.46698195 C9.8553969,8.98659345 10.529407,8.51942917 11.2017674,8.05124463 C11.2920606,7.98834128 11.408474,7.94443058 11.5128447,7.89176914 C11.4860647,7.86484981 11.4591746,7.83800895 11.4323396,7.81108962" id="Fill-4"></path>
+							<path d="M9.76557847,0 C13.9893329,0.0299306517 17.283809,2.88243291 17.8995997,6.74082736 C18.5814824,11.0135271 15.7176218,15.1073575 11.5096277,15.8752335 C8.11397991,16.4948457 4.67480516,14.7632741 3.10748381,11.6448495 C3.09231001,11.6146807 3.0766278,11.58475 3.06239258,11.5541049 C2.95512001,11.3234324 2.98667997,11.1555985 3.15316167,11.0699746 C3.32159875,10.9833186 3.47486203,11.0527069 3.58921309,11.2804419 C4.00340329,12.1053608 4.53565978,12.8431077 5.22379977,13.4496996 C7.31692484,15.2946821 9.71634181,15.9052436 12.3585788,15.0143502 C15.0347613,14.1120641 16.7095508,12.185467 17.2535396,9.36706342 C18.0405831,5.28950832 15.3101972,1.38574154 11.2689586,0.707498681 C8.17033418,0.187443684 5.100845,1.7663848 3.64024871,4.63166911 C3.47415809,4.95745275 3.33004603,5.04494234 3.13982592,4.93546126 C2.96626572,4.83554687 2.95113102,4.6602898 3.11491429,4.35356017 C4.62142308,1.53225883 6.98196695,0.12444641 9.76557847,0" id="Fill-1"></path>
+						</g>
+					</g>
+				</g>
+			</svg>
+			{{ _lblw.login }}
+		</a></li>
+	</ul>
+	{% endif %}
+	
+	<ul>
+	{% if item_urlLang %}
+		{% set lang_it = item_urlLang['it'] %}
+		{% set lang_es = item_urlLang['es'] %}
+		{% set lang_de = item_urlLang['de'] %}
+		{% set lang_en = item_urlLang['en'] %}
+		{% set lang_fr = item_urlLang['fr'] %}
+	{% else %}
+		{% set lang_it = '/' %}
+		{% set lang_es = '/es' %}
+		{% set lang_de = '/de' %}
+		{% set lang_en = '/en' %}
+		{% set lang_fr = '/fr' %}		
+	{% endif %}
+	<li>
+		<a {% if _h.lang == 'it' %}class="selected"{% endif %} href="{{ lang_it }}" title="Italiano"><img src="/assets/website/img/ico-bandiera-italia.png" alt="Italiano" align="middle"></a>
+		<a {% if _h.lang == 'es' %}class="selected"{% endif %} href="{{ lang_es }}" title="Español"><img src="/assets/website/img/ico-bandiera-spagna.png" alt="Español" align="middle"></a>
+		<a {% if _h.lang == 'de' %}class="selected"{% endif %} href="{{ lang_de }}" title="Deutsch"><img src="/assets/website/img/ico-bandiera-germania.png" alt="Deutsch" align="middle"></a>
+		<a {% if _h.lang == 'en' %}class="selected"{% endif %} href="{{ lang_en }}" title="English"><img src="/assets/website/img/ico-bandiera-gran-bretagna.png" alt="English" align="middle"></a>
+		<a {% if _h.lang == 'fr' %}class="selected"{% endif %} href="{{ lang_fr }}" title="Français"><img src="/assets/website/img/ico-bandiera-francia.png" alt="Français" align="middle"></a>
+	</li>
+	</ul>
+
+</div>
+</div>
+<div class="search-window">
+	<div id="search">
+	<form autocomplete="off" action="{{ _h.url('find') }}" class="search-window-form">
+		<label>{{ _lblg.costa_stai_cercando }}</label>
+		<div class="field-input"><div><input name="query" autocomplete="off" type="text"></div></div>
+		<a href="javascript:void(0);" class="btn-submit">
+			<svg version="1.1" id="Livello_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+				 viewBox="0 0 32 32" style="enable-background:new 0 0 32 32;" xml:space="preserve">
+			<style type="text/css">
+				.st0{fill:none;stroke-width:2;stroke-miterlimit:10;}
+			</style>
+			<path class="st0" d="M4,13c0,4.97,4.03,9,9,9s9-4.03,9-9s-4.03-9-9-9S4,8.03,4,13z M19,19l9,9"/>
+			</svg>
+		</a>
+	</form>
+	</div>
+</div>
+
+<a class="etichetta-whatsapp" href="https://api.whatsapp.com/send?phone=393389994219">
+	<em class="etichetta-whatsapp-inner">
+		<span>
+			<strong>+39 338 9994219</strong>
+			{{ _lblw.numero_wapp_descrizione }}
+		</span>
+	</em>
+	<em class="etichetta-whatsapp-over"></em>
+</a>
+
+
+<script>
+  const dfLayerOptions = {
+	queryInput: "#search_query",
+	display: {
+		lang: "{{ _h.lang }}",
+		facets: {
+			attached: "left"
+		}
+	},
+	historyPlugin: true,
+    installationId: 'eb85ebd0-328c-406e-a886-4ed3d18ceaf4',
+    zone: 'eu1'
+  };
+  
+  (function (l, a, y, e, r, s) {
+    r = l.createElement(a); r.onload = e; r.async = 1; r.src = y;
+    s = l.getElementsByTagName(a)[0]; s.parentNode.insertBefore(r, s);
+  })(document, 'script', 'https://cdn.doofinder.com/livelayer/1/js/loader.min.js', function () {
+    doofinderLoader.load(dfLayerOptions);
+  });
+</script>

@@ -1,0 +1,23 @@
+{
+	"put": {
+		"view": [
+			{"css_page": "index"},
+			{"pre_main_include": "_index_banner.html"}
+		]
+	},
+	"on:": [
+		"check-index-url",
+		"list-hreflang",
+		"sorgente-traking-ordini",
+		{"name": "list-attributo", "params": {"type": "categoria_blog", "list": "listCategoriaBlog", "parent_id": 0, "show_home": true}},
+		{"name": "list-attributi-tipo-articolo", "params": {"number": 4, "list": "listSelezioni", "type": "selezione", "show_home": true}}
+	],
+	"on:view": {
+		"template": "index",
+		"params": {
+			"js": [
+				"index"
+			]
+		}
+	}
+}

@@ -1,0 +1,14 @@
+{% set _lbl = _h.labels('email', lang) %}
+{% import _h.template('_macro.html') as mc %}
+
+
+<p style="{{ mc.style_fontBase() }}">Messaggio da cliente</p>
+
+{{ mc.tableHeader() }}
+{{ mc.row('nome', nome) }}
+{{ mc.row('cognome', cognome) }}
+{{ mc.row('e-mail', e_mail) }}
+{{ mc.row('testo', testo) }}
+{{ mc.tableFooter() }}
+
+

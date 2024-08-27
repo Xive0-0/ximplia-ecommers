@@ -1,0 +1,8 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeaderToolbar(_h, 'label pagina: ' ~ item.get('titolo'), true) }}
+
+	{{ mc.navButton(_h, 'modifica', 'update', 'click', 'h-action-selected-open-window', '{"select": {"from":"#label-content", "check": 1, "errorMessage": "Selezionare una voce"}, "window": {"type": "layer", "url": "' ~ _h.url('manager/myarea/label/edit') ~ '", "width": 600, "height": 500, "overlay": true, "params": {"id_pagina":' ~ item.id ~ '}}}') }}
+	
+{{ mc.slideBoxHeaderToolbarEnd() }}
+{{ mc.box_footer(_h, 'label', 'pagina/label', list, '{"id": ' ~ item.id ~ '}') }}

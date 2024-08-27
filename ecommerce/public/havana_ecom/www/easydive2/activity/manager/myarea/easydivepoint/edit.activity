@@ -1,0 +1,11 @@
+{
+	"on:": [
+		"manager/myarea/list-lang",
+		{"name":"manager/myarea/attributo/list-all", "params": {"type": "categoria_easydivepoint", "list": "listCategoriaeasydivepoint"}},
+		{"name":"manager/myarea/easydivepoint/load", "check": "({input}[[id]]!=null)"}
+	],
+	"on:view": {
+		"template": "manager/myarea/easydivepoint/edit",
+		"extra": false
+	}
+}

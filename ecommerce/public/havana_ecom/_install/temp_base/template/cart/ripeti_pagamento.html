@@ -1,0 +1,203 @@
+{% import _h.template('_macro.html') as mc %}
+{% import _h.template('cart/_macro.html') as cmc %}
+{% set _lblc = _h.labels.get('checkout') %}
+
+<div class="thanks" id="pagina">
+{% if ordine_tempo_scaduto %}
+	<div class="riepilogo riepilogo-header">
+		<h1><span>{{ _lblc.title_tempo_scaduto_pagamento }}</span></h1>
+		<div>{{ _lblc.descr_tempo_scaduto_pagamento }}</div>
+	</div>
+{% else %}
+	{% if ordine %}
+		{% set ordine = ordine.ordine %}
+		<h1><span>{{ _lblc.title_pagamento_ordine }}</span></h1>
+		<p>{{ _lblc.descr_riferimento_ordine }}: <strong class="codice">{{ codice }}</strong></p>
+		<p>{{ _lblc.importo_da_pagare }}: <strong class="codice">{{ _h.util.valuta(ordine.total_ordine, ordine.currency) }}</strong> </p>
+		<p>&nbsp;</p>
+		<p>{{ _lblc.descr_pagamento_ordine }}:</p>
+
+		{% if _h.settings.get('checkout_pagamento_cc') != '' and (_h.context('gestione_automatica_pagamenti_abilitati', true) or _h.context('checkout_pagamento_cc', false)) %}
+			{% if ordine.tipo_spedizione == 1 or _h.config('checkout_cc', 'paypal') != 'paypal' %}
+			<div class="rientro">
+				<strong class="font-big">{{ _lblc.tipo_pag_carta_credito }}</strong>
+				<div style="padding: 15px 0">
+					{% if _h.config('checkout_cc') == 'cartasi' %}
+						{% set pagamento_type = 'cc' %}
+						{{ mc.pagamento_cc_cartasi(_h, 
+							_h.config('checkout_cc_alias'),  
+							_h.settings.get('checkout_cc_ultimateCreditorName'), 
+							_h.settings.get('checkout_cc_address'),  
+							ordine.total_ordine, ordine.currency, ordine.fattura.nome, ordine.e_mail, 'ITA', 
+							_h.settings.get('checkout_cc_descrizione')) }}
+					{% elseif _h.config('checkout_cc') == 'nexi' %}
+						{% set pagamento_type = 'cc' %}
+						{{ mc.pagamento_cc_nexi(_h, 
+							_h.config('checkout_cc_alias'),  
+							_h.settings.get('checkout_cc_ultimateCreditorName'), 
+							_h.settings.get('checkout_cc_address'),  
+							ordine.total_ordine, ordine.currency, ordine.fattura.nome, ordine.e_mail, 'ITA', 
+							_h.settings.get('checkout_cc_descrizione')) }}
+					{% elseif _h.config('checkout_cc') == 'tgp' %}
+						{{ mc.pagamento_cc_tgp(_h) }}
+						{% set pagamento_type = 'cc' %}	
+					{% elseif _h.config('checkout_cc') == 'payplug' %}
+						{{ mc.pagamento_cc_payplug(_h) }}
+						{% set pagamento_type = 'cc' %}	
+					{% elseif _h.config('checkout_cc') == 'pagonline' %}
+						{{ mc.pagamento_cc_pagonline(_h) }}
+						{% set pagamento_type = 'cc' %}	
+					{% elseif _h.config('checkout_cc') == 'payway' %}
+						{{ mc.pagamento_cc_payway(_h) }}
+						{% set pagamento_type = 'cc' %}	
+					{% elseif _h.config('checkout_cc') == 'stripe' %}
+						{{ mc.pagamento_cc_stripe(_h) }}
+						{% set pagamento_type = 'cc' %}	
+					{% elseif _h.config('checkout_cc') == 'paytabs' %}
+						{{ mc.pagamento_cc_paytabs(_h) }}
+						{% set pagamento_type = 'cc' %}	
+					{% elseif _h.config('checkout_cc') == 'axepta' %}
+						{{ mc.pagamento_cc_axepta(_h) }}
+						{% set pagamento_type = 'cc' %}	
+					{% elseif _h.config('checkout_cc') == 'monetaweb' %}
+						{{ mc.pagamento_cc_monetaweb(_h) }}
+						{% set pagamento_type = 'cc' %}			
+					{% elseif _h.config('checkout_cc') == 'plainplay' %}
+						{{ mc.pagamento_cc_plainplay(_h, 
+							_h.settings.get('checkout_cc_label'),  
+							_h.config('checkout_cc_alias'),  
+							_h.settings.get('checkout_cc_abi'), 
+							ordine.total_ordine, ordine.currency, ordine.e_mail) }}
+						{% set pagamento_type = 'cc' %}
+					{% else %}
+						{% set pagamento_type = 'paypal' %}
+						{% if _h.settings.get('checkout_pagamento_paypal') == '' %}
+						{{ mc.pagamento_paypal(_h, _h.settings.get('checkout_paypal_email'), _h.settings.get('checkout_paypal_intestazione'), ordine.total_ordine) }}
+						{% endif %}
+					{% endif %}
+					<div>
+						{{ _lblc.clicca_pagamento_carta_di_credito }} 
+						<div>
+							<a href="javascript:void(0)" title="{{ _lblc.paga_con_carta_di_credito }}" class="button button-red action-ripeti-pagamento" data-type="{{ pagamento_type }}" data-id="{{ id_ordine }}"><strong>{{ _lblc.paga_con_carta_di_credito }}</strong></a>
+						</div>
+					</div>
+				</div>
+			</div>
+			<br>
+			{% endif %}
+		{% endif %}
+		{% if ordine.tipo_spedizione == 1 and _h.settings.get('checkout_pagamento_paypal') != '' and (_h.context('gestione_automatica_pagamenti_abilitati', true) or _h.context('checkout_pagamento_paypal', false)) %}
+		<div class="rientro">
+			<strong class="font-big">{{ _lblc.tipo_pag_paypal }}</strong>
+			<div style="padding: 15px 0">
+				{{ _lblc.clicca_pagamento_paypal }} 
+				<div>
+					<a href="javascript:void(0)" title="{{ _lblc.paga_con_paypal }}" class="button button-red action-ripeti-pagamento" data-type="paypal" data-id="{{ id_ordine }}"><strong>{{ _lblc.paga_con_paypal }}</strong></a>
+				</div>
+				{{ mc.pagamento_paypal(_h, _h.settings.get('checkout_paypal_email'), _h.settings.get('checkout_paypal_intestazione'), ordine.total_ordine) }}
+			</div>
+		</div>
+		<br>
+		{% endif %}	
+
+		{% if _h.settings.get('checkout_pagamento_scalapay') != '' %}
+		<div class="rientro">
+			<strong class="font-big">{{ _lblc.tipo_pag_scalapay }}</strong>
+			<div style="padding: 15px 0">
+				{{ _lblc.clicca_pagamento_scalapay }} 
+				<div>
+					<a href="javascript:void(0)" title="{{ _lblc.tipo_pag_scalapay }}" class="button button-red action-ripeti-pagamento" data-type="scalapay" data-id="{{ id_ordine }}"><strong>{{ _lblc.paga_con_scalapay }}</strong></a>
+				</div>
+				{{ mc.pagamento_scalapay(_h) }}
+			</div>
+		</div>
+		<br>
+		{% endif %}
+		{% if _h.settings.get('checkout_pagamento_satispay') != '' %}
+		<div class="rientro">
+			<strong class="font-big">{{ _lblc.tipo_pag_satispay }}</strong>
+			<div style="padding: 15px 0">
+				{{ _lblc.clicca_pagamento_satispay }} 
+				<div>
+				<a href="javascript:void(0)" title="{{ _lblc.tipo_pag_satispay }}" class="button button-red action-ripeti-pagamento" data-type="satispay" data-id="{{ id_ordine }}"><strong>{{ _lblc.paga_con_satispay }}</strong></a>
+				</div>
+				{{ mc.pagamento_satispay(_h) }}
+			</div>
+		</div>
+		<br>
+		{% endif %}
+		{% if _h.settings.get('checkout_pagamento_bancontact') != '' %}
+		<div class="rientro">
+			<strong class="font-big">{{ _lblc.tipo_pag_bancontact }}</strong>
+			<div style="padding: 15px 0">
+				{{ _lblc.clicca_pagamento_bancontact }} 
+				<div>
+				<a href="javascript:void(0)" title="{{ _lblc.tipo_pag_bancontact }}" class="button button-red action-ripeti-pagamento" data-type="bancontact" data-id="{{ id_ordine }}"><strong>{{ _lblc.paga_con_bancontact }}</strong></a>
+				</div>
+				{{ mc.pagamento_bancontact(_h) }}
+			</div>
+		</div>
+		<br>
+		{% endif %}
+		{% if _h.settings.get('checkout_pagamento_18app') != '' %}
+		<div class="rientro">
+			<strong class="font-big">{{ _lblc.tipo_pag_18app }}</strong>
+			<div style="padding: 15px 0">
+				{{ _lblc.clicca_pagamento_18app }} 
+				<div>
+				<a href="javascript:void(0)" title="{{ _lblc.tipo_pag_18app }}" class="button button-red action-ripeti-pagamento" data-type="18app" data-id="{{ id_ordine }}"><strong>{{ _lblc.paga_con_18app }}</strong></a>
+				</div>
+				{{ mc.pagamento_18app(_h) }}
+			</div>
+		</div>
+		<br>
+		{% endif %}
+		{% if _h.settings.get('checkout_pagamento_oney') != '' %}
+		<div class="rientro">
+			<strong class="font-big">{{ _lblc.tipo_pag_oney }}</strong>
+			<div style="padding: 15px 0">
+				{{ _lblc.clicca_pagamento_oney }}
+				<div>
+				<a href="javascript:void(0)" title="{{ _lblc.tipo_pag_oney }}" class="button button-red action-ripeti-pagamento" data-type="oney" data-id="{{ id_ordine }}"><strong>{{ _lblc.paga_con_oney }}</strong></a>
+				</div>
+				{{ mc.pagamento_oney(_h) }}
+			</div>
+		</div>
+		<br>
+		{% endif %}
+		
+		{% if _h.settings.get('checkout_pagamento_bonifico') != '' and (_h.context('gestione_automatica_pagamenti_abilitati', true) or _h.context('checkout_pagamento_bonifico', false)) %}
+		<div class="rientro">
+			{{ cmc.pagamento(_h, 3) }}
+		</div>
+		<br>
+		{% endif %}
+		{% if _h.settings.get('checkout_pagamento_postepay') != '' and (_h.context('gestione_automatica_pagamenti_abilitati', true) or _h.context('checkout_pagamento_postepay', false)) %}
+		<div class="rientro">
+			{{ cmc.pagamento(_h, 5) }}
+		</div>
+		<br>
+		{% endif %}
+		{% if _h.settings.get('checkout_pagamento_ricarica') != '' and (_h.context('gestione_automatica_pagamenti_abilitati', true) or _h.context('checkout_pagamento_ricarica', false)) %}
+		<div class="rientro">
+			{{ cmc.pagamento(_h, 6) }}
+		</div>
+		<br>
+		{% endif %}
+
+	{% else %}
+		<div class="riepilogo">
+			<h2>{{ _lblc.title_ordine_non_trovato }}</h2>
+			<div>{{ _lblc.descr_ordine_non_trovato }}</div>
+		</div>
+	{% endif %}
+{% endif %}
+
+<div class="riepilogo">
+	<div class="item-faq">
+		<strong>{{ _lblc.title_serve_aiuto }}</strong>
+		{% set _lblg = _h.labels.get('global') %}
+		<p>{{ _lblg.descr_help }} <a href="{{ _h.xurl('servizio-clienti') }}" title="{{ _lblg.alt_servizio_clienti }}">{{ _lblg.btn_servizio_clienti }}</a></p>
+	</div>
+</div>
+</div>

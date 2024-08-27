@@ -1,0 +1,3 @@
+DATA;CODICE;NOMINATIVO;NAZIONE;TOTALE;
+{% for item in list %}{{ item.data_inserimento }};{{ item.codice }};{{ item.nome }};{{ item.nazione }};{{ item.totale_ordine }};
+{% endfor %}

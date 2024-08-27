@@ -1,0 +1,207 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Modifica costi spedizione') }}
+<input type="hidden" name="id" value="{{ item.id }}">
+
+<div class="h-tab">
+
+<div data-tab-rif="parametri">Parametri</div>
+
+{% for key,label in listCorrieri %}
+	<div data-tab-rif="{{ key }}">{{ label }}</div>
+{% endfor %}
+{% for key,label in listCorrieri %}
+	<div data-tab="{{ key }}">
+		{% set list = listCostiSpedizione[key] %}
+		{% for type in list %}
+		<p class="field-line field-100">
+			<label>{{ type.label }}:</label>
+			<input type="text" name="{{ type.id }}" class="field valida-euro" value="{{ item.euro(type.id) }}"> {{ _h.config('manager_valuta', '&euro;') }}
+		</p>
+		{% endfor %}
+	</div>
+{% endfor %}
+
+<div data-tab="parametri">
+<div class="field-line field-line-left field-150">
+	{% if item.abilitato() %} 
+		{% set cssClass = ' h-checkbox-checked' %}
+		{% set value = 1 %}
+	{% else %}
+		{% set cssClass = '' %}
+		{% set value = '' %}
+	{% endif %}
+	<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="abilitato" value="{{ value }}" /></span> <strong>Abilitato</strong></div>
+</div>
+<div class="field-line field-line-left field-150">
+	{% if item.get('indirizzo_semplice') %} 
+		{% set cssClass = ' h-checkbox-checked' %}
+		{% set value = 1 %}
+	{% else %}
+		{% set cssClass = '' %}
+		{% set value = '' %}
+	{% endif %}
+	<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="indirizzo_semplice" value="{{ value }}" /></span> <strong>Indirizzo semplice</strong></div>
+</div>
+<div class="clear"></div>
+<div class="fieldset-box" style="padding: 10px;">
+	<p class="field-line">Impostazioni esenzione IVA in fatturazione, spuntando le voci si indica l'applicazione dell'IVA</p>
+	<div class="field-line field-line-left" style="width: 150px">
+		{% if item.get('iva_piva') == 1 %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% else %}
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="iva_piva" value="{{ value }}" /></span> <strong>applica IVA ditte</strong></div>
+	</div>
+	<p class="field-line field-250">
+		<label>Descrizione/testo legge esenzione ditte:</label>
+		<input type="text" name="legge_piva" class="field" value="{{ item.get('legge_piva') }}" maxlength="250">
+	</p>
+	<div class="clear"></div>
+	<div class="field-line field-line-left" style="width: 150px">
+		{% if item.get('iva_privati') == 1 %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% else %}
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="iva_privati" value="{{ value }}" /></span> <strong>applica  IVA privati</strong></div>
+	</div>
+	<p class="field-line field-250">
+		<label>Descrizione/testo legge esenzione privati:</label>
+		<input type="text" name="legge_privati" class="field" value="{{ item.get('legge_privati') }}" maxlength="250">
+	</p>
+</div>
+<div class="clear"></div>
+<p class="field-line field-100 field-line-left">
+	<label>Spedizione gratuita a partire da acquisto (con 0 NON viene applicata):</label>
+	<input type="text" name="spedizione_gratuita" class="field valida-euro" value="{{ item.euro('spedizione_gratuita') }}"> {{ _h.config('manager_valuta', '&euro;') }}
+</p>
+<p class="field-line field-100 field-line-left">
+	<label>Importo minimo ordine (con 0 illimitato):</label>
+	<input type="text" name="importo_ordine_minimo" class="field valida-euro" value="{{ item.euro('importo_ordine_minimo') }}"> {{ _h.config('manager_valuta', '&euro;') }}
+</p>
+<div class="clear"></div>
+<p class="field-line field-400">
+	<label>Descrizione:</label>
+	<input type="text" name="descrizione" class="field" value="{{ item.get('descrizione') }}">
+</p>
+<fieldset class="fieldset-box">
+	<div class="field-line-text">
+	Metodi di pagamento abilitati<br>
+	(l'abilitazione vale SOLO se nelle impostazioni di pagamento la tipologia è abilitata se durante il checkout tutti gli articoli scelti hanno relativa abilitazione attiva)
+	</div>
+	<div class="field-line field-line-400">
+		{% if item.get('abilita_carta_credito') %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% else %}
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="abilita_carta_credito" value="{{ value }}" /></span> <strong>Pagamento con Carta di credito</strong></div>
+	</div>
+	<div class="field-line field-line-400">
+		{% if item.get('abilita_paypal') %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% else %}
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="abilita_paypal" value="{{ value }}" /></span> <strong>Pagamento con Paypal</strong></div>
+	</div>
+	<div class="field-line field-line-400">
+		{% if item.get('abilita_bonifico') %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% else %}
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="abilita_bonifico" value="{{ value }}" /></span> <strong>Pagamento con Bonifico Bancario</strong></div>
+	</div>
+	<div class="field-line field-line-400">
+		{% if item.get('abilita_postepay') %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% else %}
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="abilita_postepay" value="{{ value }}" /></span> <strong>Pagamento con Postepay</strong></div>
+	</div>
+	<div class="field-line field-line-400">
+		{% if item.get('abilita_ricarica_cellulare') %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% else %}
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="abilita_ricarica_cellulare" value="{{ value }}" /></span> <strong>Pagamento con Ricarica cellulare</strong></div>
+	</div>
+	<div class="field-line field-line-400">
+		{% if item.get('abilita_scalapay') %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% else %}
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="abilita_scalapay" value="{{ value }}" /></span> <strong>Pagamento con Scalapay</strong></div>
+	</div>
+	<div class="field-line field-line-400">
+		{% if item.get('abilita_satispay') %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% else %}
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="abilita_satispay" value="{{ value }}" /></span> <strong>Pagamento con Satispay</strong></div>
+	</div>
+	<div class="field-line field-line-400">
+		{% if item.get('abilita_bancontact') %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% else %}
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="abilita_bancontact" value="{{ value }}" /></span> <strong>Pagamento con Bancontact</strong></div>
+	</div>
+	<div class="field-line field-line-400">
+		{% if item.get('abilita_18app') %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% else %}
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="abilita_18app" value="{{ value }}" /></span> <strong>Pagamento con Carta giovani</strong></div>
+	</div>
+	<div class="field-line field-line-400">
+		{% if item.get('abilita_oney') %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% else %}
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="abilita_oney" value="{{ value }}" /></span> <strong>Pagamento con Oney</strong></div>
+	</div>
+</fieldset>	
+{% if _h.config('url_country', false) %}
+<p class="field-line field-400">
+	<label>Nazione abilitata per country (se più valori separare con virgola, usare * per indicare tutte le country):</label>
+	<input type="text" name="list_country" class="field" value="{{ item.get('country_abilitata') }}" maxlength="250">
+</p>
+{% endif %}
+</div>
+</div>
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/nazione/ex-edit')) }}	

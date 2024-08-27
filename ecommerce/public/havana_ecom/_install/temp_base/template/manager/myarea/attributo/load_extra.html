@@ -1,0 +1,10 @@
+{% import _h.template('manager/_macro.html') as mc %}
+<div>
+{% for attr in list %}
+<div data-block-id="{{attr.tipo}}">
+	<input type="hidden" name="dynamic_type[]" value="{{attr.tipo}}">
+	{{ mc.dynamicMultipleSelect(_h, attr.nome, attr.list, null, 'id_dynamic_type_' ~ attr.tipo, 'dynamic_type_' ~ attr.tipo, false, null, 'dynamic_type_' ~ attr.tipo) }}
+	<div class="data-block-elimina"><a href="javascript:;" class="link h-action-data-block-elimina">elimina</a></div><br><br>
+	</div>
+{% endfor %}
+</div>

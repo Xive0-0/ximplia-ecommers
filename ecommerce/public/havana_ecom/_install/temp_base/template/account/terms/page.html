@@ -1,0 +1,37 @@
+{% set _lblf = _h.labels.get('form') %}
+{% set _lblm = _h.labels.get('my') %}
+
+<div id="pagina_form" class="page page-terms">
+	<h1>{{ pagina.get('titolo') }}</h1>
+	<div class="html">
+	{{ pagina.getWithMerge('testo') }}
+	</div>
+	
+	<form>
+		<input type="hidden" name="ref_token" value="{{ ref_token }}">
+		<input type="hidden" name="ref_id" value="{{ ref_id }}">
+		<input type="hidden" name="contract" value="{{ contract }}">
+		<input type="hidden" name="type" value="{{ type }}">
+		<div class="field-button">
+		{% if contract == 'marketing_privacy' or contract == 'profile_privacy' %}
+			<a class="button-gray button submit-form" href="javascript:void(0)" title="{{ _lblf.btn_non_accetto_condizioni }}" data-action='{"url": "{{ _h.url('account/terms/ex-non-accetto') }}", "onComplete": {"type": "show", "show": "#conferma_pagina_no", "hide": "#pagina_form"}}'><span>{{ _lblf.btn_non_accetto_condizioni }}</span></a>
+		{% endif %}
+			<a class="button-red button submit-form" href="javascript:void(0)" title="{{ _lblf.btn_accetto_condizioni }}" data-action='{"url": "{{ _h.url('account/terms/ex-accetto') }}", "onComplete": {"type": "show", "show": "#conferma_pagina", "hide": "#pagina_form"}}'><span>{{ _lblf.btn_accetto_condizioni }}</span></a>
+		</div>
+	</form>
+	
+</div>
+
+<div id="conferma_pagina" class="hide-block block-margin">
+	<div class="hide-block-title">{{ _lblf.title_ringraziamento_accetto_condizioni }}</div>
+	<p>{{ _lblf.ringraziamento_accetto_condizioni }}</p>
+	<p>{{ _lblf.testo_link_condizioni }}: <a href="{{ _h.url('account/terms/view') }}">{{ _lblf.link_condizioni }}</a></p>
+	<p>{{ _lblm.descr_torna_al_sito }} <a href="{{ _h.url('index') }}">{{ _lblm.desc_link_home_page }}</a></p>
+</div>
+
+<div id="conferma_pagina_no" class="hide-block block-margin">
+	<div class="hide-block-title">{{ _lblf.title_ringraziamento_no_accetto_condizioni }}</div>
+	<p>{{ _lblf.ringraziamento_no_accetto_condizioni }}</p>
+	<p>{{ _lblf.testo_link_condizioni }}: <a href="{{ _h.url('account/terms/view') }}">{{ _lblf.link_condizioni }}</a></p>
+	<p>{{ _lblm.descr_torna_al_sito }} <a href="{{ _h.url('index') }}">{{ _lblm.desc_link_home_page }}</a></p>
+</div>

@@ -1,0 +1,13 @@
+{% import _h.template('_macro.html') as mc %}
+{% set _lblw = _h.labels.get('website') %}
+
+{% if _h.context.isApp() %}
+	{% include _h.template('_index_banner.html') %}
+{% else %}
+	<div class="index-background">
+		<!--banner footer-->
+		<div class="sub-info-card web p-0">
+			{{ mc.banner_item }}
+		</div>
+	</div>
+{% endif %}

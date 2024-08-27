@@ -1,0 +1,12 @@
+{
+	"input": [
+		{"name": "id", "required": true, "type": "int"}
+	],
+	"on:": [
+		"manager/myarea/articolo/recensione/list"
+	],
+	"on:view": {
+		"template": "manager/myarea/articolo/recensione/list",
+		"extra": false
+	}
+}

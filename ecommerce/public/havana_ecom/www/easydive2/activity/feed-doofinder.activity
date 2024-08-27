@@ -1,0 +1,11 @@
+{
+	"on:begin": [
+		{"name": "list-all-attributo-type", "params": {"type": "categoria", "map": "mapAttributo"}},
+		{"name": "list-all-item", "params": {"tipo": "0,1"}}
+	],
+	"on:view": {
+		"template": "feed_doofinder",
+		"extra": false,
+		"content_type": "application/xml"
+	}
+}

@@ -1,0 +1,22 @@
+{
+	"put": {
+		"view": [
+			{"mymetainfo": true},
+			{"banner_header": true}
+		]
+	},
+	"on:": [
+		{"name": "testo", "params": {"codice": "testo_ambassador", "item": "testo_blog"}},
+		{"name": "list-nazione", "params": {"list": "listNazione", "map": "mapNazione"}},
+		"search-ambassador",
+		{"name": "list-hreflang", "params": {"tipo": "collezione"}, "check": "({input}[[autoload]]==null)"}
+	],
+	"on:view": {
+		"template": "search_ambassador",
+		"params": {
+			"js": [
+				"blog"
+			]
+		}
+	}
+}

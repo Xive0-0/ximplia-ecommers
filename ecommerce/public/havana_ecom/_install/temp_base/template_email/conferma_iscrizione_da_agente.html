@@ -1,0 +1,16 @@
+{% set _lbl = _h.labels('email', lang) %}
+{% import _h.template('_macro.html') as mc %}
+
+<p style="{{ mc.style_fontBase() }}">{{ _lbl.gentile }} <strong>{{ nome }}</strong></p>
+<p style="{{ mc.style_fontBase() }}">{{ _lbl.descrizione_intestazione_iscrizione_da_agente }}</p>
+
+<p style="{{ mc.style_fontBase() }}">
+{{ _lbl.username }}: <strong>{{ e_mail }}</strong><br>
+{{ _lbl.password }}: <strong>{{ password }}</strong>
+</p>
+
+
+<p style="{{ mc.style_fontBase() }}">{{ _lbl.descrizione_piede_iscrizione_da_agente }}</p>
+
+
+

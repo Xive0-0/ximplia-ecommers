@@ -1,0 +1,61 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Modifica costi spedizione per Brand') }}
+
+<div class="h-tab">
+
+<div data-tab-rif="parametri">Parametri</div>
+{% for key,label in listCorrieri %}
+	<div data-tab-rif="{{ key }}">{{ label }}</div>
+	<div data-tab="{{ key }}">
+		{% set list = listCostiSpedizione[key] %}
+		{% for type in list %}
+		<p class="field-line field-100">
+			<label>{{ type.label }}:</label>
+			<input type="text" name="{{ type.id }}" class="field valida-euro" value="{{ item.euro(type.id) }}"> {{ _h.config('manager_valuta', '&euro;') }}
+		</p>
+		{% endfor %}
+	</div>
+{% endfor %}
+
+<div data-tab="parametri">
+{% if item %}
+	<input type="hidden" name="id_nazione" value="{{ item.get('id_nazione') }}">
+	{% if _h.session.params.user.id_azienda > 0 %}
+	<input type="hidden" name="id_azienda" value="{{ _h.session.params.user.id_azienda }}">
+	{% else %}
+	<input type="hidden" name="id_azienda" value="{{ item.get('id_azienda') }}">
+	<p class="field-line-text">
+		<em>Azienda:</em> <strong>{{ azienda.get('nome') }}</strong>
+	</p>
+	{% endif %}
+{% else %}
+	{% if _h.session.params.user.id_azienda > 0 %}
+		<input type="hidden" name="id_azienda" value="{{ _h.session.params.user.id_azienda }}">
+		<input type="hidden" name="id_nazione" value="{{ _h.input('id') }}">
+	{% else %}
+		<input type="hidden" name="id_nazione" value="{{ _h.input('id_nazione', _h.input('id')) }}">
+		<div class="field-line field-300">
+			<label>Azienda <span>*</span>:</label>
+			<select name="id_azienda" class="valida-required field">
+				<option value=""></option>
+			{% for i in listAzienda %}	
+				<option value="{{ i.id }}">{{ i.get('nome') }}</option>
+			{% endfor %}	
+			</select> 
+		</div>
+	{% endif %}
+{% endif %}
+
+<p class="field-line field-100">
+	<label>Spedizione gratuita a partire da acquisto da:</label>
+	<input type="text" name="spedizione_gratuita" class="field valida-euro" value="{{ item.euro('spedizione_gratuita', 0) }}"> {{ _h.config('manager_valuta', '&euro;') }}
+</p>
+
+</div>
+</div>
+{% if _h.session.params.user.id_azienda > 0 %}
+	{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/nazione/brand/ex-edit')) }}	
+{% else %}
+	{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/nazione/brand/ex-edit'), '"reload": "#nazione-content"') }}	
+{% endif %}

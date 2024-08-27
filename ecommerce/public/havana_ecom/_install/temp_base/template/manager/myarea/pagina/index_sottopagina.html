@@ -1,0 +1,19 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeaderToolbar(_h, 'sotto pagine: ' ~ item.get('titolo'), true) }}
+
+	{% if _h.session.params.user.accesso >= 5 %}
+	{{ mc.navButton(_h, 'nuova', 'new', 'click', 'h-action-selected-open-window', '{"window": {"type": "layer", "url": "' ~ _h.url('manager/myarea/pagina/edit-sottopagina') ~ '", "width": 600, "height": 600, "overlay": true, "params": {"id_pagina":' ~ item.id ~ '}}}') }}
+	{% endif %}
+	{{ mc.navButtonUpdateLang(_h, 'modifica', 'pagina', 'edit-sottopagina', 'pagina-content', '"type": "layer","width": 600, "height": 600, "overlay": true, ') }}
+	{% if _h.session.params.user.accesso >= 5 %}
+	{{ mc.navButton(_h, 'elimina', 'delete', 'click', 'h-action-selected-execute', '{"select": {"from":"#pagina-content", "check": 1, "errorMessage": "Selezionare una voce"}, "confirm": "Eliminare le voce selezionate?", "url": "' ~ _h.url('manager/myarea/pagina/delete') ~ '", "reload": ["#pagina-content"]}') }}
+	{{ mc.navSeparatore() }}
+	{{ mc.navButton(_h, 'immagine', 'image', 'click', 'h-action-upload-file', '{"select": {"from":"#pagina-content", "check": 1}, "url": "' ~ _h.url('manager/myarea/pagina/upload') ~ '", "fileType": ["jpg","png","gif","jpeg"], "onComplete": {"reload": "#pagina-content"}}') }}	
+	{{ mc.navButton(_h, 'gallery immagini', 'gallery', 'click', 'h-action-selected-open-window', '{"select": {"from":"#pagina-content", "check": 1}, "window": {"type": "layer", "width": 500, "height": 500, "overlay": true, "url": "' ~ _h.url('manager/myarea/galleryimmagini/index') ~ '", "params": {"tipo_entita": "pagina"}}}') }}
+	{% endif %}
+	{{ mc.navSeparatore() }}
+	{{ mc.navButtonMetaInfo(_h, 'pagina', '#pagina-content') }}
+
+{{ mc.slideBoxHeaderToolbarEnd() }}
+{{ mc.box_footer(_h, 'pagina', 'pagina', list, '{"id": ' ~ item.id ~ '}', 'sottopagina') }}

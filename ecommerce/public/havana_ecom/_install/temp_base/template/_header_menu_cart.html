@@ -1,0 +1,38 @@
+<div class="clear">
+	<div class="step-block{% if not(_h.config('checkout_block_riepilogo_finale', true)) %} step-block-4{% endif %}">
+		<div class="step-block-inner">
+			{% if _h.config('checkout_4_accorpato_in_2', false) %}
+				<div class="step" data-num="1"><a href="javascript:void(0)" data-step="1" title="{{ _lblc.step_1_alt }}"><strong></strong><em></em><span>{{ _lblc.step_1 }}</span></a></div>
+				<div class="step" data-num="2"><a href="javascript:void(0)" data-step="2" title="{{ _lblc.step_4 }}"><strong></strong><em></em><span>
+				{% if cart.solo_digitali %}
+					{{ _lblc.step_4_digitali }}
+					{% else %}
+					{{ _lblc.step_4 }}
+					{% endif %}
+				</span></a></div>
+				<div class="step" data-num="3"><a href="javascript:void(0)" data-step="3" title="{{ _lblc.step_3 }}"><strong></strong>{% if _h.config('checkout_block_riepilogo_finale', true) %}<em></em>{% endif %}<span>{{ _lblc.step_3 }}</span></a></div>
+			{% else %}
+				{% if _h.session.params.user.tipo == 'agente' %}
+				<div class="step" data-num="1"><a href="javascript:void(0)" data-step="1" title="{{ _lblc.step_1_agente_alt }}"><strong></strong><em></em><span>{{ _lblc.step_1_agente }}</span></a></div>
+				{% else %}
+				<div class="step" data-num="1"><a href="javascript:void(0)" data-step="1" title="{{ _lblc.step_1_alt }}"><strong></strong><em></em><span>{{ _lblc.step_1 }}</span></a></div>
+				{% endif %}
+				{% if not(_h.config('checkout_block_nazione', true)) or (cart.solo_digitali and _h.config('checkout_block_nazione_no_con_solo_digitali', false)) %}
+				{% else %}
+				<div class="step" data-num="2"><a href="javascript:void(0)" data-step="2" title="{{ _lblc.step_2_alt }}"><strong></strong><em></em><span>{{ _lblc.step_2 }}</span></a></div>
+				{% endif %}
+				<div class="step" data-num="3"><a href="javascript:void(0)" data-step="3" title="{{ _lblc.step_3 }}"><strong></strong><em></em><span>{{ _lblc.step_3 }}</span></a></div>
+				<div class="step" data-num="4"><a href="javascript:void(0)" data-step="4" title="{{ _lblc.step_4 }}"><strong></strong>{% if _h.config('checkout_block_riepilogo_finale', true) %}<em></em>{% endif %}<span>
+					{% if cart.solo_digitali %}
+					{{ _lblc.step_4_digitali }}
+					{% else %}
+					{{ _lblc.step_4 }}
+					{% endif %}
+				</span></a></div>
+			{% endif %}
+			{% if _h.config('checkout_block_riepilogo_finale', true) %}
+				<div class="step" data-num="5"><a href="javascript:void(0)" data-step="5" title="{{ _lblc.step_5 }}"><strong></strong><span>{{ _lblc.step_5 }}</span></a></div>
+			{% endif %}
+		</div>
+	</div>
+</div>

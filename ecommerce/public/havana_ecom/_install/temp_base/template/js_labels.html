@@ -1,0 +1,15 @@
+{% set lbl = _h.labels.get('js') %}
+{% set lblc = _h.labels.get('calendario') %}
+var Label = {
+{% for key, value in lbl %}
+"{{ key }}": "{{ value }}",
+{% endfor %}
+"current_lang_label": "{{ _h.lang }}",
+"calendario": {
+	"days": ["{{ lblc.domenica }}", "{{ lblc.lunedi }}", "{{ lblc.martedi }}", "{{ lblc.mercoledi }}", "{{ lblc.giovedi }}", "{{ lblc.venerdi }}", "{{ lblc.sabato }}", "{{ lblc.domenica }}"],
+	"daysShort": ["{{ lblc.domenica_short }}", "{{ lblc.lunedi_short }}", "{{ lblc.martedi_short }}", "{{ lblc.mercoledi_short }}", "{{ lblc.giovedi_short }}", "{{ lblc.venerdi_short }}", "{{ lblc.sabato_short }}", "{{ lblc.domenica_short }}"],
+	"daysMin": ["{{ lblc.domenica_min }}", "{{ lblc.lunedi_min }}", "{{ lblc.martedi_min }}", "{{ lblc.mercoledi_min }}", "{{ lblc.giovedi_min }}", "{{ lblc.venerdi_min }}", "{{ lblc.sabato_min }}", "{{ lblc.domenica_min }}"],
+	"months": ["{{ lblc.gennaio }}", "{{ lblc.febbraio }}", "{{ lblc.marzo }}", "{{ lblc.aprile }}", "{{ lblc.maggio }}", "{{ lblc.giugno }}", "{{ lblc.luglio }}", "{{ lblc.agosto }}", "{{ lblc.settembre }}", "{{ lblc.ottobre }}", "{{ lblc.novembre }}", "{{ lblc.dicembre }}"],
+	"monthsShort": ["{{ lblc.gennaio_short }}", "{{ lblc.febbraio_short }}", "{{ lblc.marzo_short }}", "{{ lblc.aprile_short }}", "{{ lblc.maggio_short }}", "{{ lblc.giugno_short }}", "{{ lblc.luglio_short }}", "{{ lblc.agosto_short }}", "{{ lblc.settembre_short }}", "{{ lblc.ottobre_short }}", "{{ lblc.novembre_short }}", "{{ lblc.dicembre_short }}"]
+}
+};

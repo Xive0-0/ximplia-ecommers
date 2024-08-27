@@ -1,0 +1,85 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% if item == null %}
+	{% set title = 'Nuova Mappatura' %}
+{% else %}
+	{% set title = 'Modifica Mappatura' %}
+{% endif %}
+{{ mc.slideBoxHeader(_h, title) }}
+<input type="hidden" name="id" value="{{ item.id }}">
+<p class="field-line">
+Gli indirizzi devono essere relativi.
+</p>
+<p class="field-line field-100">
+	<label>Lang<span>*</span>:</label>
+	<select name="lang" class="field valida-required">
+	<option value="*"{% if '*' == item.get('lang') %} selected="true"{% endif %}>carica da label</option>
+	{% for l in listLang %}
+	<option value="{{ l }}"{% if l == item.get('lang') %} selected="true"{% endif %}>{{ l|upper }}</option>
+	{% endfor %}
+	</select>
+</p>
+<p class="field-line field-400">
+	<label>Activity<span>*</span>:</label>
+	<input type="text" name="activity" class="field valida-required" value="{{ item.get('activity') }}">
+</p>
+<p class="field-line field-400">
+	<label>URL/label<span>*</span>:</label>
+	<input type="text" name="url" class="field valida-required" value="{{ item.get('url') }}">
+</p>
+
+
+<div>
+	<div class="h-nav-button-wrapper">
+		<a href="javascript:void(0);" class="h-nav-button h-nav-button-click h-action-alttext h-action-add-extra-wrapper" data-alttext="nuovo parametro" data-action='{"params": {"content": "#elenco_parametri_form"}}'>
+			<img src="/assets/manager/havana-js/img/icon/ico-new.svg" align="top" />
+		</a>
+	</div>	
+	<strong class="h-nav-button-wrapper" style="line-height: 40px;">Aggiungi parametro</strong>
+</div>
+<div class="clear"></div>
+<div id="elenco_parametri_form" class="h-table-parametri-extra-wrapper">
+	<textarea class="h-table-parametri-extra-template">
+		<tr data-key="%id%" class="new-extra-param">
+			<td class="chiave"><div class="field-line"><label></label><input type="text" class="field valida-digitnickname valida-required" name="new_chiave_%id%"></div></td>
+			<td class="valore"><div class="field-line"><input type="text" class="field" name="new_valore_%id%"></div></td>
+			<td class="azione">
+				<div class="h-nav-button-wrapper">
+					<a href="javascript:void(0);" class="h-nav-button h-nav-button-click h-action-rem-extra-wrapper">
+						<img src="/assets/manager/havana-js/img/icon/ico-delete.svg" align="top" />
+					</a>
+				</div>
+			</td>
+		</tr>
+	</textarea>
+	{% set params = item.parametriDinamici('params') %}
+	<input type="hidden" name="parametri_extra" value="{{ params|keys|join(',') }}">
+	<input type="hidden" name="parametri_extra_new" value="">
+	<table class="h-table-parametri-extra form" border="0" cellspacing="0" cellpadding="0">
+		<thead>
+		<tr>
+			<th class="chiave">Chiave</th>
+			<th class="valore">Valore</th>
+			<th class="azione"></th>
+		</tr>
+		</thead>
+		<tbody>
+		{% for k, v in params %}
+		<tr data-key="{{k}}">
+			<td class="chiave"><div class="chiave-details">{{k}}</div></td>
+			<td class="valore"><div class="field-line"><input type="text" class="field" name="valore_{{k}}" value="{{ v }}"></div></td>
+			<td class="azione">
+				<div class="h-nav-button-wrapper">
+					<a href="javascript:void(0);" class="h-nav-button h-nav-button-click h-action-rem-extra-wrapper">
+						<img src="/assets/manager/havana-js/img/icon/ico-delete.svg" align="top" />
+					</a>
+				</div>
+			</td>
+		</tr>
+		{% endfor %}
+		</tbody>
+	</table>
+</div>
+
+{{ mc.labelCampiObbligatori() }}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/mapping/ex-edit')) }}	

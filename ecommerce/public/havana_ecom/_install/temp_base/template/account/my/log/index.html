@@ -1,0 +1,20 @@
+{% set _lblm = _h.labels.get('my') %}
+{% set _lblf = _h.labels.get('form') %}
+
+<h2>{{ _lblm.title_log }}</h2>
+
+{% if utente_abilitato_scrivere %}
+<form class="list-log-form">
+	<div class="field-line">
+		<div class="field">
+			<label>{{ _lblf.field_testo }}</label>
+			<input type="text" name="testo" class="valida-required" maxlength="500">
+		</div>
+	</div>
+	<div class="field-button field-button-left">
+		<a class="button-red button submit-form" href="javascript:void(0)" title="{{ _lblf.btn_scrivi }}" data-action='{"url": "{{ _h.url('account/my/log/ex-invia') }}", "onComplete": {"type": "reset", "event": "update-log-user"}}'><span>{{ _lblf.btn_invia }}</span></a>
+	</div>
+</form>
+{% endif %}
+
+<div class="list-log-content" data-action="{"url": "{{ _h.url('account/my/log/list') }}"}"></div>

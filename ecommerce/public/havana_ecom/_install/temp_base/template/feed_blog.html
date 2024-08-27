@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:wfw="http://wellformedweb.org/CommentAPI/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:sy="http://purl.org/rss/1.0/modules/syndication/" xmlns:slash="http://purl.org/rss/1.0/modules/slash/">
+    <channel>
+        <title>{{ _h.settings(lang).get('firma_copy') }}</title>
+        <description>{{ _h.settings(lang).get('firma_copy') }}</description>
+        <atom:link href="{{ _h.webAppUrl }}/feed-blog" rel="self" type="application/rss+xml" />
+		<link>{{ _h.webAppUrl }}</link>
+		<lastBuildDate>{{ list|last.getDateFormat('data_modifica', 'D, d M Y H:i:s O') }}</lastBuildDate>
+        <language>it-IT</language>
+		
+		{% for item in list %}
+		<item>
+			<title><![CDATA[{{ item.get('titolo') }}{% if item.get('sottotitolo') %} - {{ item.get('sottotitolo') }}{% endif %}]]></title>
+			<link>{{ _h.webAppUrl }}{{ item.url }}</link>
+			<guid>{{ _h.webAppUrl }}{{ item.url }}</guid>
+			<pubDate>{{ item.getDateFormat('data_modifica', 'D, d M Y H:i:s O') }}</pubDate>
+			{% for item in listCategoriaTree %}
+			<category><![CDATA[{{item.get('titolo')}}]]></category>
+			{% endfor %}
+			<description><![CDATA[{{ item.get('descrizione_breve') }}]]></description>                                                            
+            <media:content url="{{ _h.webAppUrl }}{{ item.imageUrl( _h.config('template').web.blog_image_dim) }}" type="image/jpeg" />
+        </item>
+		{% endfor %}
+    </channel>
+</rss>
+
+

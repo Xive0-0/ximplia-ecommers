@@ -1,0 +1,13 @@
+{% import _h.template('manager/_macro.html') as mc %}
+{{ mc.index_page_header(_h, 'FAQ', 'faq') }}
+	
+	{% if _h.session.params.user.accesso >= 5 %}
+	{{ mc.navButtonNew(_h, 'nuova', 'faq') }}
+	{% endif %}
+	{{ mc.navButtonUpdateLang(_h, 'modifica', 'faq') }}
+	{% if _h.session.params.user.accesso >= 5 %}
+	{{ mc.navButton(_h, 'duplica', 'copia', 'click', 'h-action-selected-execute', '{"select": {"from":"#h-layout-center-content", "check": 0}, "url": "/manager/myarea/faq/ex-duplica", "confirm":"Procedere con la duplicazione?", "params": {}, "reload": "#h-layout-center-content"}') }}
+	{{ mc.navButtonDelete(_h, 'elimina', 'faq') }}
+	{% endif %}
+	
+{{ mc.index_page_footer(_h, result, 'faq') }}

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="{{ _h.lang }}">
+<head>
+<meta charset="utf-8">  
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" media="screen" href="{{ html_to_pdf_www_path }}/assets/website/css/layout.css{{ _build }}" />
+<link rel="stylesheet" media="screen" href="{{ html_to_pdf_www_path }}/assets/website/css/form.css{{ _build }}" />
+<link rel="stylesheet" media="screen" href="{{ html_to_pdf_www_path }}/assets/website/css/cart.css{{ _build }}" />
+<link rel="stylesheet" media="screen" href="{{ html_to_pdf_www_path }}/assets/website/css/html_to_pdf.css{{ _build }}" />
+</head>
+<body>
+	{% if articolo.get('voucher_template') %}
+		{% include 'manager/myarea/ordini/voucher/' ~ articolo.get('voucher_template') ~ '.html' %}
+	{% else %}
+		{% if articolo.get('voucher_immagine') %}
+		<img src="{{ html_to_pdf_image_path }}/{{ articolo.get('voucher_immagine') }}" style="max-width: 100%">
+		{% endif %}
+		<center>
+			<div><img src="{{ path_qrcode }}" width="250" height="250"></div>
+			<strong>{{ codice|upper }}</strong>
+		</center>
+		<br>
+		{{ articolo.get('voucher_descrizione') }}
+	{% endif %}
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+	"put": {
+		"view": [
+			{"mymetainfo": true}
+		]
+	},
+	"on:": [
+		"item-azienda",
+		"list-item-articolo-azienda"
+	],
+	"on:view": "item_azienda"
+}

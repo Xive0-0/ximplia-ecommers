@@ -1,0 +1,9 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Integrazioni Robots') }}
+<p class="field-line field-400">
+	<label>Robots:</label>
+	<textarea name="script_robots" class="field">{{ _h.settings.get('script_robots') }}</textarea>
+</p>
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/ex-edit-impostazioni-robots')) }}	
+

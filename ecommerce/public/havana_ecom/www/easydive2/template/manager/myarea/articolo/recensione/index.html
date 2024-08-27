@@ -1,0 +1,9 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeaderToolbar(_h, 'recensione: ' ~ item.get('nome'), true) }}
+	{{ mc.navButton(_h, 'nuovo', 'new', 'click', 'h-action-selected-open-window', '{"window": {"type": "layer", "url": "' ~ _h.url('manager/myarea/articolo/recensione/edit') ~ '", "width": 500, "height": 500, "overlay": true, "params": {"id_articolo":' ~ item.id ~ '}}}') }}
+	{{ mc.navButton(_h, 'modifica', 'update', 'click', 'h-action-selected-open-window', '{"select": {"from":"#recensione-content", "check": 1, "errorMessage": "Selezionare un recensione"}, "window": {"type": "layer", "url": "' ~ _h.url('manager/myarea/articolo/recensione/edit') ~ '", "width": 500, "height": 400, "overlay": true, "params": {"id":' ~ item.id ~ '}}}') }}
+	{{ mc.navButton(_h, 'elimina', 'delete', 'click', 'h-action-selected-execute', '{"select": {"from":"#recensione-content", "check": 0, "errorMessage": "Selezionare almeno un recensione"}, "confirm": "Eliminare la voce selezionata?", "params": {"id_articolo":' ~ item.id ~ '}, "url": "' ~ _h.url('manager/myarea/articolo/recensione/delete') ~ '", "reload": ["#recensione-content", "#h-layout-center-content"]}') }}
+{{ mc.slideBoxHeaderToolbarEnd() }}
+
+{{ mc.box_footer(_h, 'recensione', 'articolo/recensione', list, '{"id": ' ~ item.id ~ '}') }}

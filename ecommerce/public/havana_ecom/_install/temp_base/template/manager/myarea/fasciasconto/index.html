@@ -1,0 +1,15 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+
+{{ mc.slideBoxHeaderToolbar(_h, 'Fasce Sconto', true) }}
+		{{ mc.navButton(_h, 'nuovo', 'new', 'click', 'h-action-window', '{"type": "layer", "url": "' ~ _h.url('manager/myarea/fasciasconto/edit') ~ '", "overlay": true, "width": 400, "height": 350}') }}
+		{{ mc.navButton(_h, 'modifica', 'update', 'click', 'h-action-selected-open-window', '{"select": {"from":"#fasciasconto-content", "check": 1}, "window": {"type": "layer", "url": "' ~ _h.url('manager/myarea/fasciasconto/edit') ~ '", "overlay": true, "width": 400, "height": 350}}') }}
+		{{ mc.navButton(_h, 'elimina', 'delete', 'click', 'h-action-selected-execute', '{"select": {"from":"#fasciasconto-content", "check": 1}, "confirm": "Eliminare il fascia?", "url": "' ~ _h.url('manager/myarea/fasciasconto/delete') ~ '", "reload": "#fasciasconto-content"}') }}
+{{ mc.slideBoxHeaderToolbarEnd() }}
+
+	<div id="fasciasconto-content" data-action='{"url": "{{ _h.url('manager/myarea/fasciasconto/list') }}"}'>
+		{% include _h.template('manager/myarea/fasciasconto/list.html') %}	
+	</div>
+	</fieldset>		
+</div>
+</form>

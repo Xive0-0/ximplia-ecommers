@@ -1,0 +1,14 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% if _h.input('type') == 1 %}
+	{% set title = 'Correlati a ' %}
+{% elseif _h.input('type') == 2 %}
+	{% set title = 'Accessori di ' %}
+{% endif %}
+
+{{ mc.slideBoxHeaderToolbar(_h, title ~ item.get('nome'), true) }}
+	{{ mc.navButton(_h, 'nuovo', 'new', 'click', 'h-action-selected-open-window', '{"window": {"type": "layer", "url": "' ~ _h.url('manager/myarea/articolo/relazione/edit-new') ~ '", "width": 500, "height": 320, "overlay": true, "params": {"relazione_id":' ~ item.id ~ ', "type":' ~ _h.input('type') ~ '}}}') }}
+	{{ mc.navButton(_h, 'modifica', 'update', 'click', 'h-action-selected-open-window', '{"select": {"from":"#relazione-content", "check": 1, "errorMessage": "Selezionare una voce"}, "window": {"type": "layer", "url": "' ~ _h.url('manager/myarea/articolo/relazione/edit-update') ~ '", "width": 500, "height": 270, "overlay": true, "params": {"relazione_id":' ~ item.id ~ ', "type":' ~ _h.input('type') ~ '}}}') }}
+	{{ mc.navButton(_h, 'elimina', 'delete', 'click', 'h-action-selected-execute', '{"select": {"from":"#relazione-content", "check": 1, "errorMessage": "Selezionare una voce"}, "confirm": "Eliminare la voce selezionata?", "params": {"relazione_id":' ~ item.id ~ ', "type":' ~ _h.input('type') ~ '}, "url": "' ~ _h.url('manager/myarea/articolo/relazione/delete') ~ '", "reload": "#relazione-content"}') }}
+{{ mc.slideBoxHeaderToolbarEnd() }}
+{{ mc.box_footer(_h, 'relazione', 'articolo/relazione', list, '{"id": ' ~ item.id ~ ', "type":' ~ _h.input('type') ~ '}') }}

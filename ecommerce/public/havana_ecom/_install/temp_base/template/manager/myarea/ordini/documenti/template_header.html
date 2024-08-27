@@ -1,0 +1,196 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"> 
+<style type="text/css">
+* {
+	font-family: 'Helvetica', 'Arial', sans-serif;
+	font-size: 11pt;
+}
+.header-dati {
+	border-bottom: 1px solid #888888;
+	font-size: 9pt;
+}
+.header-logo {
+	font-size: 8pt;
+	text-align: center;
+}
+.ragione-sociale {
+	font-weight: bold;
+}
+.header-dati div{
+	margin-top: 2px;
+}
+.intestazione-fattura {
+	border: 1px dashed #888888;
+}
+.intestazione-fattura .title {
+	font-size: 9pt;
+	font-style: italic;
+}
+.intestazione-fattura .riga{
+	margin-top: 2pt;
+	margin-left: 10pt;
+}
+.dati-intestazione-fattura .riga{
+	margin-bottom: 10pt;
+}
+.dati-intestazione-fattura span {
+	font-size: 9pt;
+	font-style: italic;
+}
+
+.intestazione-spedizione {
+	border: 1px dashed #888888;
+}
+.intestazione-spedizione em {
+	font-size: 8pt;
+	font-style: italic;
+}
+.intestazione-spedizione .title{
+	font-size: 9pt;
+	font-style: italic;
+}
+.intestazione-spedizione .riga {
+margin-top: 2pt;
+	margin-left: 10pt;
+}
+.dati-intestazione-fattura .riga-big {
+	font-weight: bold;
+	margin-bottom: 20pt;
+	font-size: 18pt;
+	margin-bottom: 10pt;
+}
+.dati-intestazione-spedizione .riga-big span {
+	font-size: 14pt;
+}
+.dati-intestazione-spedizione .riga {
+	margin-bottom: 10pt;
+}
+.dati-intestazione-spedizione span {
+	font-size: 8pt;
+	font-style: italic;
+}
+
+.fattura-intestazione td .valore {
+	font-size: 10pt;
+}
+.fattura-intestazione td {
+	font-weight: bold;
+	background: #efefef;
+}
+.fattura-linea td .valore,
+.fattura-linea td {
+	font-size: 11pt;
+}
+.fattura-intestazione td .valore {
+	margin: 4pt 7pt;
+}
+.fattura-linea td .valore {
+	margin: 6pt 7pt;
+}
+.fattura td {
+	border-bottom: 1px solid #cccccc;
+	border-left: 1px solid #cccccc;
+}
+.fattura .euro .valore {
+	text-align: right;
+}
+.fattura .col-codice {
+	width: 20%;
+}
+.fattura .col-descrizione-ddt {
+	width: 74%;
+}
+.fattura .col-descrizione {
+	width: 35%;
+}
+.fattura .col-prezzo {
+	width: 14%;
+}
+.fattura .col-iva {
+	width: 8%;
+}
+.fattura .col-quantita {
+	width: 6%;
+}
+.fattura .col-subtotale {
+	width: 17%;
+}
+.fattura .col-riepilogo {
+	width: 55%;
+}
+.fattura .col-riepilogo {
+	border: none;
+}
+.fattura .col-testo {
+	width: 18%;
+	border-left: none;
+	border-bottom: none;
+}
+.fattura .col-testo .valore {
+	text-align: right;
+}
+.fattura .small {
+	font-size: 7pt;
+}
+.fattura .prezzo-old {
+	text-decoration: line-through;
+}
+.fattura em {
+	font-size: 7pt;
+}
+.fattura-linea-subtotale .col-subtotale {
+	border-left: none;
+}
+.fattura-linea-totale td {
+	font-weight: bold;
+}
+.fattura .col-riepilogo {
+	vertical-align: top;
+}
+.fattura .col-riepilogo .riga{
+	margin-bottom: 5px;
+}
+.fattura .col-riepilogo span {
+	font-size: 9pt;
+}
+</style>
+</head>
+<body>
+	<table border="0" cellpadding="0" cellspacing="0" style="width: 100%">
+	<tr>
+		<td  style="width: 40%" class="header-logo">
+			<img src="{{ path_logo }}" style="height: 90px;">
+			{% if _h.settings.get('fatturazione_slogan') %}
+			<br>{{ _h.settings.get('fatturazione_slogan') }}
+			{% endif %}
+		</td>
+		<td style="width: 5%">&nbsp;</td>
+		<td style="width: 55%" class="header-dati">
+			<div style="margin: 7pt 10pt;">
+	{% if ordine.spedizione.id_nazione == 108 or ordine.spedizione.id_nazione == 188 %}
+		{% set _lbl = _h.labels('fattura', 'it') %}
+	{% else %}
+		{% set _lbl = _h.labels('fattura', 'en') %}
+	{% endif %}
+	
+				<div class="ragione-sociale">{{ _h.settings.get('fatturazione_ragione_sociale') }}</div>
+				{% if _h.settings.get('fatturazione_ragione_sociale_2') %}
+				<div class="ragione-sociale">{{ _h.settings.get('fatturazione_ragione_sociale_2') }}</div>
+				{% endif %}
+				<div class="riga">{{ _h.settings.get('fatturazione_via') }}, {{ _h.settings.get('fatturazione_num_civico') }}</div>
+				<div class="riga">{{ _h.settings.get('fatturazione_cap') }} {{ _h.settings.get('fatturazione_localita') }} ({{ _h.settings.get('fatturazione_provincia') }})</div>
+				{% if _h.settings.get('fatturazione_piva') %}
+				<div class="riga">{{ _lbl.piva }} {{ _h.settings.get('fatturazione_piva') }}</div>
+				{% endif %}
+				{% if _h.settings.get('fatturazione_cf') %}
+				<div class="riga">{{ _lbl.codice_fiscale }} {{ _h.settings.get('fatturazione_cf') }}</div>
+				{% endif %}
+				{% if _h.settings.get('fatturazione_email') %}
+				<div class="riga">{{ _lbl.e_mail }} {{ _h.settings.get('fatturazione_email') }}</div>
+				{% endif %}
+			</div>
+		</td>
+	</tr>
+	</table>
+	<br><br>

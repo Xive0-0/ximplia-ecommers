@@ -1,0 +1,13 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeaderToolbar(_h, 'Log privacy/contratti', true) }}
+
+{{ mc.slideBoxHeaderToolbarEnd() }}
+	
+	<fieldset id="log-content" data-action='{"url": "{{ _h.url('manager/myarea/logprivacy/list') }}"}' data-load-params='{"id": {{ _h.input('id') }}}'>
+		{% include _h.template('manager/myarea/logprivacy/list.html') %}	
+	</fieldset>	
+	
+	</fieldset>		
+</div>
+</form>

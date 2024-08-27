@@ -1,0 +1,15 @@
+{% import _h.template('_macro.html') as mc %}
+{% set _lblm = _h.labels.get('my') %}
+{% set _lblf = _h.labels.get('form') %}
+
+<div class="breadcrumbs clear">
+	{{ mc.breadcrumbs_home(_h) }}
+	{{ mc.breadcrumbs_separatore() }}
+	<a>{{ _lblm.title_registrazione }}</a>
+</div>
+
+<div class="col-center">
+	<div class="col-inner">
+	{% include _h.template('account/_registrazione.html') with {'include_in_page': true} %}
+	</div>
+</div>

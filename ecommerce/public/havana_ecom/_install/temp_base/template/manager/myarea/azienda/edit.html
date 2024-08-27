@@ -1,0 +1,203 @@
+{% import _h.template('manager/_macro.html') as mc %}
+{% set _lbl = _h.labels.get('manager') %}
+
+{% set lang = _h.input('lang', _h.config('default_language', 'it')) %}
+
+{% if item == null %}
+	{% set title = _lbl.title_add_azienda_brand %}
+{% else %}
+	{% set title = _lbl.title_edit_azienda_brand %}
+{% endif %}
+{{ mc.slideBoxHeader(_h, title) }}
+<input type="hidden" name="lang" value="{{ lang }}">
+<input type="hidden" name="id" value="{{ item.id }}">
+<div class="h-tab{% if edit_lang %} edit-lang-wrapper{% endif %}">
+
+	<div data-tab-rif="base" class="edit-lang">Scheda</div>
+	{% if _h.config('gestione_azienda_account', false) %}
+	<div data-tab-rif="account">Account</div>
+	{% endif %}
+	<div data-tab-rif="sede">Indirizzo sede</div>
+	{% if _h.config('gestione_azienda_categorie', true) %}
+		<div data-tab-rif="categoria">{{ _lbl.azienda_brand_categoria }}</div>
+	{% endif %}
+	{% if item and _h.config('gestione_azienda_articoli', true) %}
+		<div data-tab-rif="selezione_articoli">Selezione articoli</div>
+	{% endif %}
+	{% include _h.template('manager/myarea/azienda/_edit_tabs.html') %}
+	
+	<div data-tab="base" class="edit-lang">
+	{{ mc.contenutiInLingua(lang) }}
+	<div class="field-line field-line-left field-200">
+		{% set cssClass = ' h-checkbox-checked' %}
+		{% set value = 1 %}
+		{% if item %} 
+			{% if item.abilitato() %} 
+
+			{% else %}
+				{% set cssClass = '' %}
+				{% set value = '' %}
+			{% endif %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="abilitato" value="{{ value }}" /></span> <strong>Abilitato</strong></div>
+	</div>
+	<div class="field-line field-line-left field-200">
+		{% if item.get('show_home') %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% else %}
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="show_home" value="{{ value }}" /></span> <strong>Visualizza in home</strong></div>
+	</div>
+	<p class="field-line field-line-left field-100">
+		<label>Peso/posizione<span>*</span>:</label>
+		<input type="text" name="ordine" class="field valida-required valida-digitnumber" value="{% if item %}{{ item.get('ordine') }}{% else %}0{% endif %}">
+	</p>
+	<p class="field-line field-line-left field-150">
+		<label>Codice:</label>
+		<input type="text" name="codice" class="field" value="{{ item.get('codice') }}" maxlength="50">
+	</p>
+	<div class="clear"></div>
+	{% if _h.config('gestione_condividi_altri_in_scheda_articolo', true) %}
+	<div class="field-line">
+		{% if item.get('visualizza_in_condivisione') %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% else %}
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="visualizza_in_condivisione" value="{{ value }}" /></span> <strong>Visualizza in condivisione su Amazon / EBay / Google / Trova prezzi</strong></div>
+	</div>
+	{% endif %}
+	<p class="field-line field-350">
+		<label>Ragione sociale/Nome<span>*</span>:</label>
+		<input type="text" name="nome" class="field valida-required" value="{{ item.get('nome') }}" maxlength="100">
+	</p>
+	{{ mc.upload_immagine(_h, 'Logo/immagine', item.imageAnteprima()) }}
+	{{ mc.upload_immagine(_h, 'Banner', item.imageAnteprima('b'), 'banner') }}
+	<div class="field-line field-400 edit-lang">
+		<label>{{ mc.labelLang(lang) }} Descrizione breve:</label>
+		<textarea name="descrizione_breve" class="visual-editor">{{ item.get('descrizione_breve') }}</textarea>
+	</div>
+	<div class="field-line field-400 edit-lang">
+		<label>{{ mc.labelLang(lang) }} Descrizione:</label>
+		<textarea name="descrizione" class="visual-editor">{{ item.get('descrizione') }}</textarea>
+	</div>		
+	{{ mc.labelCampiObbligatori() }}
+	</div>
+
+	{% if _h.config('gestione_azienda_account', false) %}
+	<div data-tab="account">
+		<div class="field-line field-400">
+			{% set checkbox_css = '' %}
+			{% set checkbox_value = '' %}
+			{% if item_account.get('abilitato') %} 
+				{% set checkbox_css = ' h-checkbox-checked' %}
+				{% set checkbox_value = 1 %}
+			{% endif %}
+			<div class="h-checkbox-wrapper"><span class="h-checkbox{{ checkbox_css }}" data-value="1"><input type="hidden" name="account_abilitato" value="{{ checkbox_value }}" /></span> <strong>Abilitato all'accesso</strong></div>
+		</div>
+		<p class="field-line field-400">
+			<label>E-Mail:</label>
+			<input type="text" name="account_e_mail" class="field valida-email" value="{{ item_account.get('e_mail') }}" maxlength="100">
+		</p>
+		{% if item_account == null %}
+		<p class="field-line field-line-left">
+			<label>Password:</label>
+			<input type="password" name="account_password" class="field valida-password" value="" maxlength="30">
+		</p>
+		<p class="field-line">
+			<label>Conferma password:</label>
+			<input type="password" name="account_conferma_password" class="field valida-password" value="" maxlength="30">
+		</p>
+		{% endif %}
+	</div>
+	{% endif %}
+
+	<div data-tab="sede">
+	{{ mc.dynamicSelect(_h, 'Regione/Nazione', listRegione, item, 'id_regione', 'regione', false) }}
+	<p class="field-line field-line-left">
+		<label>Via:</label>
+		<input type="text" name="via" class="field" value="{{ item.get('via') }}" maxlength="100">
+	</p>
+	<p class="field-line field-50">
+		<label>Num. civico:</label>
+		<input type="text" name="num_civico" class="field" value="{{ item.get('num_civico') }}" maxlength="10">
+	</p>
+	<p class="clear field-line clear field-line-left field-50">
+		<label>CAP:</label>
+		<input type="text" name="cap" class="field valida-digitnumber" value="{{ item.get('cap') }}" maxlength="5">
+	</p>
+	<p class="field-line">
+		<label>Località:</label>
+		<input type="text" name="localita" class="field" value="{{ item.get('localita') }}" maxlength="50">
+	</p>
+	<p class="clear field-line">
+		<label>Provincia:</label>
+		<input type="text" name="provincia" class="field" value="{{ item.get('provincia') }}" maxlength="50">
+	</p>
+	<p class="field-line">
+		<label>Telefono:</label>
+		<input type="text" name="telefono" class="field" value="{{ item.get('telefono') }}" maxlength="20">
+	</p>
+	<p class="field-line field-350">
+		<label>E-Mail:</label>
+		<input type="text" name="e_mail" class="field valida-email" value="{{ item.get('e_mail') }}" maxlength="100">
+	</p>
+	<p class="field-line field-350">
+		<label>Sito web:</label>
+		<input type="text" name="sito_web" class="field valida-url" value="{{ item.get('sito_web') }}" maxlength="100">
+	</p>
+	<p class="field-line field-350">
+		<label>Pagina facebook:</label>
+		<input type="text" name="url_facebook" class="field valida-url" value="{{ item.get('url_facebook') }}">
+	</p>
+	<p class="field-line field-350">
+		<label>Pagina linkedin:</label>
+		<input type="text" name="url_linkedin" class="field valida-url" value="{{ item.get('url_linkedin') }}">
+	</p>
+	<p class="field-line field-350">
+		<label>Pagina twitter:</label>
+		<input type="text" name="url_twitter" class="field valida-url" value="{{ item.get('url_twitter') }}">
+	</p>
+	<p class="field-line field-350">
+		<label>Pagina youtube:</label>
+		<input type="text" name="url_youtube" class="field valida-url" value="{{ item.get('url_youtube') }}">
+	</p>
+	<p class="field-line field-350">
+		<label>Pagina instagram:</label>
+		<input type="text" name="url_instagram" class="field valida-url" value="{{ item.get('url_instagram') }}">
+	</p>
+
+	</div>
+	
+	<div data-tab="categoria">
+	{{ mc.dynamicMultipleSelect(_h, _lbl.azienda_brand_categoria, listCategoria, item, 'id_categoria') }}
+	</div>
+	{% if item %}
+	<div data-tab="selezione_articoli">	
+		<p class="field-line field-400">
+			<label>Cerca e aggiungi articolo per selezione:</label>
+			<input type="hidden" name="relazione_id" value="">
+			<input type="text" name="relazione_nome" class="field autocomplete" value="" data-action='{"url": "{{ _h.url('manager/myarea/articolo/list-autocomplete') }}", "params": {"id_azienda": {{ item.id }}}, "add_item_to": "#elenco_articoli_correlati", "add_item_id": "id_articolo_selezione"}'>
+		</p>
+		<br><br>
+		Articoli selezionati:
+		<div id="elenco_articoli_correlati">
+		{% for elem in listSelezione %}
+			<div class="autocomplete-content-value-block hrow remove-current-element-wrapper">
+				<input type="hidden" name="id_articolo_selezione[]" value="{{ elem.id }}">
+				<em class="action-remove-current-element"></em>
+				<div class="autocomplete-content-value-details"><strong>{{ elem.codice }}</strong>
+				<span>{{ elem.get('nome') }}</span>
+				</div>
+			</div>
+		{% endfor %}
+		</div>
+	</div>
+	{% endif %}
+</div>
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/azienda/ex-edit'), item) }}	

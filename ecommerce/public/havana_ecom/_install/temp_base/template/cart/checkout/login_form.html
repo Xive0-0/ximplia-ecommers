@@ -1,0 +1,39 @@
+{% import _h.template('_macro.html') as mc %}
+{% set _lblm = _h.labels.get('my') %}
+{% set _lblf = _h.labels.get('form') %}
+<form>
+	<input type="hidden" name="on_layer" value="1">
+	<input type="hidden" name="utilizza_credito_in_ordine" value="1">
+	<input type="hidden" name="checkout" value="1">
+	<h1>{{ _lblm.title_area_riservata }}</h1>
+	{% if _lblm.accedi_indirizzo_email %}
+	<div class="field-text field-text-email">
+		{{ _lblm.accedi_indirizzo_email }}
+	</div>
+	{% endif %}
+	<div class="form-error-message"></div>
+	<div class="field-line">
+		<div class="field">
+			<label>{{ _lblf.field_email }}</label>
+			<input type="text" name="e_mail" class="valida-required valida-email input-return-submit" readonly="true" value="{{ e_mail }}">
+		</div>
+	</div>
+	<div class="field-line">
+		<div class="field">
+			<label>{{ _lblf.field_password }}</label>
+			<input type="password" name="password" class="valida-required input-return-submit action-show-password">
+		</div>
+	</div>
+	
+	{{ mc.google_recaptcha(_h, 'login') }}
+
+	<div class="field-text field-text-dimenticato-password">
+		<a href="{{ _h.url('account/recupero-password') }}" class="link" target="_blank" title="{{ _lblf.alt_btn_dimenticato_password }}">{{ _lblf.btn_dimenticato_password }}</a>
+	</div>
+	<div class="field-button field-button-right">
+		<a class="button-red button submit-form" onclick="_ga('send', 'event', 'login', 'entra', 'login_entra')" href="javascript:void(0)" title="{{ _lblf.btn_entra }}" data-action='{"url": "{{ _h.url('account/ex-login') }}", "onComplete": {"event": "checkout-login-complete"}}'}}'><span>{{ _lblf.btn_entra }}</span></a>
+	</div>
+	<div class="field-text field-text-dimenticato-password field-text-dimenticato-password-after">
+		<a href="{{ _h.url('account/recupero-password') }}" class="link" target="_blank" title="{{ _lblf.alt_btn_dimenticato_password }}">{{ _lblf.btn_dimenticato_password }}</a>
+	</div>
+</form>

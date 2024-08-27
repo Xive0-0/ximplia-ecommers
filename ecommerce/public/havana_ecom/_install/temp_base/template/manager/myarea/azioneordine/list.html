@@ -1,0 +1,19 @@
+{% import _h.template('manager/_macro_items.html') as mci %}
+<table class="h-list item-autoload-total h-fixed-header-table" cellpadding="0" cellspacing="0" border="0" data-total="{{ result.total }}">
+<thead>
+<tr class="h-list-header">
+	<th style="width: 10px; padding: 0; overflow: hidden;">&nbsp;</th>
+	<th style="width: 20px;">&nbsp;</th>
+	<th data-order="descrizione" data-order-type="{{ result.order_type_descrizione }}">Descrizione</th>
+	<th style="width: 150px;" data-order="totale_ordine" data-order-type="{{ result.order_type_totale_ordine }}">Acquisto da</th>
+	<th style="width: 60px;" data-order="numero_giorni_dopo" data-order-type="{{ result.order_type_numero_giorni_dopo }}">GG</th>
+	<th style="width: 110px;" data-order="data_dal" data-order-type="{{ result.order_type_data_dal }}">Data dal</th>
+	<th style="width: 110px;" data-order="data_al" data-order-type="{{ result.order_type_data_al }}">Data al</th>
+</tr>
+</thead>
+<tbody>
+{% for item in result.list %}		
+	{{ mci.item_azione_ordine(_h, item) }}
+{% endfor %}
+</tbody>
+</table>

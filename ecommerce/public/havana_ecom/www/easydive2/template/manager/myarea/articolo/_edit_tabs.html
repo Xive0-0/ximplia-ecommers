@@ -1,0 +1,89 @@
+<div data-tab-rif="descrizione">Descrizione</div>
+<div data-tab-rif="categoria">Categoria</div>
+<div data-tab-rif="selezione">Selezione</div>
+<div data-tab-rif="fotocamera">Compatibile con fotocamera</div>
+<div data-tab-rif="cellulare">Compatibile con cellulare</div>
+<div data-tab-rif="valori_configuratore">Valori configuratore</div>
+
+<div data-tab="descrizione">
+	<div class="field-line field-400">
+		{% if item.get('consigliato', '') != '' %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% else %}
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="consigliato" value="{{ value }}" /></span> <strong>Articolo consigliato Easydive</strong></div>
+	</div>
+	<div class="field-line field-100">
+		<label>Peso/ordine in configuratore:</label>
+		<input name="ordine_configuratore" class="field valida-digitint" value="{{ item.get('ordine_configuratore', 0) }}">
+	</div>
+
+	<div class="field-line field-400">
+		<label>{{ mc.labelLang(lang) }} Testo garanzia:</label>
+		<input name="garanzia" class="field" value="{{ item.get('garanzia') }}">
+	</div>
+	
+	<div class="field-line field-line-textarea field-400">
+		<label>{{ mc.labelLang(lang) }} Testo descrittivo del prodotto all'interno del configuratore:</label>
+		<textarea name="step_acquisto_testo">{{ item.get('step_acquisto_testo') }}</textarea>
+	</div>
+	<div class="field-line field-400">
+		<label>{{ mc.labelLang(lang) }} Descrizione breve:</label>
+		<textarea name="descrizione_breve" class="visual-editor">{{ item.get('descrizione_breve') }}</textarea>
+	</div>
+	<div class="field-line field-400">
+		<label>{{ mc.labelLang(lang) }} Descrizione o dettaglio del prodotto:</label>
+		<textarea name="descrizione" class="visual-editor">{{ item.get('descrizione') }}</textarea>
+	</div>
+	<div class="field-line field-400">
+		<label>{{ mc.labelLang(lang) }} Scheda tecnica:</label>
+		<textarea name="scheda_tecnica" class="visual-editor">{{ item.get('scheda_tecnica') }}</textarea>
+	</div>
+	<div class="field-line field-line-textarea field-400">
+		<label>{{ mc.labelLang(lang) }} Testo indicazioni:</label>
+		<textarea name="testo_indicazioni">{{ item.get('testo_indicazioni') }}</textarea>
+	</div>
+</div>
+
+<div data-tab="categoria">
+{{ mc.dynamicMultipleTreeSelect(_h, 'Categoria', listCategoria, item, 'id_categoria', 'categoria', true, true, item.get('id_categoria_principale')) }}
+</div>
+<div data-tab="selezione">
+{{ mc.dynamicMultipleSelect(_h, 'Selezione', listSelezione, item, 'id_selezione', 'selezione') }}
+</div>
+
+<div data-tab="fotocamera">
+{{ mc.dynamicMultipleTreeSelect(_h, 'Compatibilità con fotocamere', listFotocamera, item, 'id_fotocamera', 'fotocamera') }}
+</div>
+<div data-tab="cellulare">
+{{ mc.dynamicMultipleTreeSelect(_h, 'Compatibilità con cellulare', listCellulare, item, 'id_cellulare', 'cellulare') }}
+</div>
+<div data-tab="valori_configuratore">
+	<div style="border: 1px solid #efefef; padding: 10px;">
+		<div><strong>Parametri per oblò</strong></div>
+		<div class="field-line field-line-left field-100">
+			<label>Angolo minimo:</label>
+			<input name="obiettivo_angolo_minimo" class="field valida-digitint" value="{{ item.get('obiettivo_angolo_minimo') }}">
+		</div>
+		<div class="field-line field-line-left field-100">
+			<label>Angolo massimo:</label>
+			<input name="obiettivo_angolo_massimo" class="field valida-digitint" value="{{ item.get('obiettivo_angolo_massimo') }}">
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div style="border: 1px solid #efefef; padding: 10px;">
+		<div><strong>Parametri per extension</strong></div>
+		<div class="field-line field-line-left field-100">
+			<label>Lunghezza dal:</label>
+			<input name="extension_lunghezza_dal" class="field valida-digitint" value="{{ item.get('extension_lunghezza_dal') }}">
+		</div>
+		<div class="field-line field-line-left field-100">
+			<label>Lunghezza al:</label>
+			<input name="extension_lunghezza_al" class="field valida-digitint" value="{{ item.get('extension_lunghezza_al') }}">
+		</div>
+		<div class="clear"></div>
+	</div>
+</div>

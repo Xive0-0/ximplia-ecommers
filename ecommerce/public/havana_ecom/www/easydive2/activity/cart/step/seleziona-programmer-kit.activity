@@ -1,0 +1,9 @@
+{
+	"on:begin": [
+		{"name": "cart/step/load-item", "params": {"codice": "L3/KIT/PROG"}}
+	],
+	"on:view": {
+		"template": "cart/step/seleziona_programmer_kit",
+		"extra": false
+	}
+}

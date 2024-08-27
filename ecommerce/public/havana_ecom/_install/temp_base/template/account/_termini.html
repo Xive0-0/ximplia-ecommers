@@ -1,0 +1,32 @@
+{% import _h.template('_macro.html') as mc %}
+{% set _lblf = _h.labels.get('form') %}
+	<div class="field-line-checkbox">
+		<div class="field-checkbox-description">
+			{{ _lblf.dichiarazione_letto }} <a href="{{ mapPagine.termini_condizioni.url }}" title="{{ _lblf.alt_btn_termini_condizioni }}" target="_blank">{{ _lblf.btn_termini_condizioni }}</a>.
+		</div>
+		<div class="field-checkbox-check-acconsento clear checkbox-group">
+			<div class="field-checkbox-check">
+				<span class="checkbox" data-value="1"><input type="hidden" name="accetto_termini_condizioni" value=""></span>
+				<span class="checkbox-label"><span>{{ _lblf.btn_accetto }}</span></span>
+			</div>
+			<div class="field-checkbox-check">
+				<span class="checkbox" data-value="1"><input type="hidden" name="no_accetto_termini_condizioni" value="1"></span>
+				<span class="checkbox-label"><span>{{ _lblf.btn_non_accetto }}</span></span>
+			</div>
+		</div>
+	</div>
+	<div class="field-line-checkbox">
+		<div class="field-checkbox-description">
+			{{ _lblf.descr_dichiarazione_letto_privacy }} <a href="{{ mapPagine.privacy.url }}" title="{{ _lblf.alt_btn_ulteriori_informazioni_privacy }}" target="_blank">{{ _lblf.btn_ulteriori_informazioni_privacy }}</a>
+		</div>
+		<div class="field-checkbox-check-acconsento clear checkbox-group">
+			<div class="field-checkbox-check">
+				<span class="checkbox" data-value="1"><input type="hidden" name="accetto_privacy" value=""></span>
+				<span class="checkbox-label"><span>{{ _lblf.btn_acconsento_uso_dati }}</span>
+			</div>
+			<div class="field-checkbox-check">
+				<span class="checkbox" data-value="1"><input type="hidden" name="no_accetto_privacy" value="1"></span>
+				<span class="checkbox-label"><span>{{ _lblf.btn_non_acconsento }}</span></span>
+			</div>
+		</div>
+	</div>

@@ -1,0 +1,45 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Impostazioni firma e-mail') }}
+
+<div class="h-tab">
+
+<div data-tab-rif="base">Riferimenti</div>
+
+{% for l in listLang %}
+<div data-tab-rif="{{ l }}">{{ l|upper }}</div>
+{% endfor %}
+
+<div data-tab="base">
+<p class="field-line field-400">
+	<label>Nome in oggetto newsletter<span>*</span>:</label>
+	<input type="text" name="oggetto_newsletter" class="field valida-required" value="{{ _h.settings.get('oggetto_newsletter') }}">
+</p>
+<p class="field-line field-400">
+	<label>E-mail supporto<span>*</span>:</label>
+	<input type="text" name="firma_email" class="field valida-required valida-email" value="{{ _h.settings.get('firma_email') }}">
+</p>
+<p class="field-line field-200">
+	<label>Copy<span>*</span>:</label>
+	<input type="text" name="firma_copy" class="field valida-required" value="{{ _h.settings.get('firma_copy') }}">
+</p>
+{{ mc.labelCampiObbligatori() }}
+</div>
+
+{% for l in listLang %}
+<div data-tab="{{ l }}">
+{{ mc.contenutiInLingua(l) }}
+<p class="field-line field-400">
+	<label>{{ mc.labelLang(l) }} Messaggio:</label>
+	<input type="text" name="firma_messaggio_{{ l }}" class="field" value="{{ _h.settings(l).get('firma_messaggio') }}">
+</p>
+<p class="field-line field-400">
+	<label>{{ mc.labelLang(l) }} Testo firma<span>*</span>:</label>
+	<input type="text" name="firma_testo_{{ l }}" class="field valida-required" value="{{ _h.settings(l).get('firma_testo') }}">
+</p>
+{{ mc.labelCampiObbligatori() }}
+</div>
+{% endfor %}
+</div>
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/ex-edit-impostazioni-firma-email')) }}	
+

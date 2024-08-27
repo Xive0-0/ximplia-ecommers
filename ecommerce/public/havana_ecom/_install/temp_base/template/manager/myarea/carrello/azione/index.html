@@ -1,0 +1,9 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeaderToolbar(_h, 'Azioni carrelli persi', true) }}
+	{{ mc.navButton(_h, 'nuovo', 'new', 'click', 'h-action-selected-open-window', '{"window": {"type": "layer", "url": "' ~ _h.url('manager/myarea/carrello/azione/edit') ~ '", "width": 600, "height": 500, "overlay": true}}') }}
+	{{ mc.navButton(_h, 'modifica', 'update', 'click', 'h-action-selected-open-window', '{"select": {"from":"#azione-content", "check": 1, "errorMessage": "Selezionare una voce"}, "window": {"type": "layer", "url": "' ~ _h.url('manager/myarea/carrello/azione/edit') ~ '", "width": 600, "height": 500, "overlay": true}}') }}
+	{{ mc.navButton(_h, 'elimina', 'delete', 'click', 'h-action-selected-execute', '{"select": {"from":"#azione-content", "check": 1, "errorMessage": "Selezionare una voce"}, "confirm": "Eliminare la voce selezionata?", "url": "' ~ _h.url('manager/myarea/carrello/azione/delete') ~ '", "reload": "#azione-content"}') }}
+{{ mc.slideBoxHeaderToolbarEnd() }}
+
+{{ mc.box_footer(_h, 'azione', 'carrello/azione', list) }}

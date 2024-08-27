@@ -1,0 +1,118 @@
+{% if testo %}
+	<div class="html clear">{{ testo.getWithMerge('testo') }}</div>
+{% endif %}
+
+<div class="checkout-main clear" data-page="1">
+{% set _lblc = _h.labels.get('checkout_preventivo') %}
+{% set _lblf = _h.labels.get('form') %}
+
+{% if e_mail %}
+	<div class="col-box-100 tab-selected">
+		<div class="tab-title"><span>{{ _lblc.email_riferimento }}</span></div>
+		<div class="tab-content clear">
+		<form class="checkout-margin">
+			<h2>{{ _lblc.email_riferimento }}</h2>
+			<div class="field-text field-text-header">
+			{{ _lblc.descr_email_riferimento }}
+			</div>
+			<div class="form-error-message"></div>
+			<div class="field-line">
+				<div class="field">
+					<label>{{ _lblf.field_email }}</label>
+					<input type="text" name="e_mail" class="valida-required valida-email" value="{{ e_mail }}">
+				</div>
+			</div>
+			<div class="field-button field-button-right">
+				<a class="button-next action-next-page" onclick="_ga('send', 'event', 'checkout_preventivo', 'fase1', 'checkout_fase1_procedi_con_email')" href="javascript:void(0)" title="{{ _lblc.btn_procedi_con_acquisto }}"><span>{{ _lblc.btn_procedi_con_acquisto }}</span></a>
+			</div>
+		</form>
+		</div>
+	</div>
+{% else %}
+{% if _h.settings.get('acquisto_solo_con_login') == '' %}
+<div class="col-box-50 tab-selected">
+	<div class="tab-title"><span>{{ _lblc.title_procedi_con_registrazione }}</span></div>
+	<div class="tab-content clear">
+	<h2>{{ _lblc.title_procedi_con_registrazione }}</h2>
+
+	<form class="box-login">
+		<fieldset class="fieldset-box">
+			<div class="field-text field-text-header">
+			{{ _lblc.descr_procedi_con_registrazione_1 }}
+			</div>
+			<div class="form-error-message"></div>
+			<div class="field-line">
+				<div class="field">
+					<label>{{ _lblf.field_email }}</label>
+					<input type="text" name="e_mail" class="valida-required valida-email">
+				</div>
+			</div>
+			<div class="field-line field-line-void">&nbsp;</div>
+			<div class="field-button field-button-right">
+				<a class="button-next action-next-page" onclick="_ga('send', 'event', 'checkout_preventivo', 'fase1', 'checkout_fase1_procedi_con_email')" href="javascript:void(0)" title="{{ _lblc.btn_procedi_con_acquisto }}"><span>{{ _lblc.btn_procedi_con_acquisto }}</span></a>
+			</div>
+			<div class="field-text">
+			
+			</div>
+		</fieldset>
+	</form>
+	</div>
+</div>
+<div class="col-box-50">
+{% else %}
+<div class="col-box-100 tab-selected">
+{% endif %}
+	<div class="tab-title"><span>{{ _lblc.title_utente_registrato }}</span></div>
+	<div class="tab-content clear">
+	<h2>{{ _lblc.title_utente_registrato }}</h2>
+
+	<form class="box-login">
+		<fieldset class="fieldset-box">		
+			<input type="hidden" name="checkout_prev" value="1">
+			<div class="field-text field-text-header">
+				{{ _lblc.descr_utente_registrato_1 }}<br>
+				<strong>{{ _lblc.descr_utente_registrato_2 }}:</strong>
+			</div>
+			<div class="form-error-message"></div>
+			<div class="field-line">
+				<div class="field">
+					<label>{{ _lblf.field_email }}</label>
+					<input type="text" name="e_mail" class="valida-required valida-email">
+				</div>
+			</div>
+			<div class="field-line">
+				<div class="field">
+					<label>{{ _lblf.field_password }}</label>
+					<input type="password" name="password" class="valida-required">
+				</div>
+			</div>
+			<div class="field-text">
+				<a href="{{ _h.url('account/recupero-password') }}" class="link" title="{{ _lblf.alt_btn_dimenticato_password }}">{{ _lblf.btn_dimenticato_password }}</a>
+			</div>
+			<div class="field-button field-button-right">
+				<a class="button-next submit-form" onclick="_ga('send', 'event', 'checkout_preventivo', 'fase1', 'checkout_fase1_entra')" href="javascript:void(0)" title="{{ _lblf.btn_entra }}" data-action='{"url": "{{ _h.url('account/ex-login') }}"}'><span>{{ _lblf.btn_entra }}</span></a>
+			</div>
+			<div class="field-text">&nbsp;</div>
+			<div class="field-text">
+				<strong><a href="{{ _h.url('account/registrazione') }}?checkout_prev=1" class="link bottone-registrati" title="{{ _lblf.btn_registrati }} {{ _h.settings.get('staff_indirizzo') }}">{{ _lblf.btn_registrati }}</a></strong>
+			</div>
+			{% if _h.settings.get('disabilita_registrazione_tramite_social', '') == '' %}
+			<div class="field-text">
+				<strong>{{ _lblc.descr_utente_registrato_3 }}:</strong>
+			</div>
+			<div class="field-button-social">
+				<a class="button-red button button-facebook" onclick="_ga('send', 'event', 'checkout_preventivo', 'fase1', 'checkout_fase1_accedi_con_facebook')" href="{{ _h.url('account/login-facebook') }}?checkout=1" title="{{ _lblc.btn_accedi_facebook }}">{{ _lblc.btn_accedi_facebook }}</a>
+			</div>
+			{% endif %}
+		</fieldset>
+	</form>
+	</div>
+</div>
+{% endif %}
+
+</div>
+{% if not(_h.context.isApp()) %}
+<div class="checkout-footer clear">
+<a href="{{ _h.config('url_home_store', _h.url('/') )}}" title="{{ _lblc.btn_continua_shopping }}" class="button-prev">{{ _lblc.btn_continua_shopping }}</a>
+</div>
+{% endif %}

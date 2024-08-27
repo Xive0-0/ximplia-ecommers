@@ -1,0 +1,100 @@
+{% set _lblc = _h.labels.get('checkout') %}
+{% set _lblm = _h.labels.get('my') %}
+{% set _lblf = _h.labels.get('form') %}
+
+<h2>{{ _lblm.title_miei_ordini }}</h2>
+
+<form>
+	<div class="field-line">
+		<div class="field">
+			<label>{{ _lblf.field_cliente }}</label>
+			<select name="id_cliente" class="valida-required" onchange="">
+			<option value=""></option>
+			{% for cliente in list_clienti %}
+			<option value="{{ cliente.id }}"{% if _h.input('id_cliente') == cliente.id %} selected="true"{% endif %}>#{{ cliente.id }} - {{ cliente.get('nome') }} {{ cliente.get('cognome') }}</option>
+			{% endfor %}		
+			</select>
+		</div>
+	</div>
+</form>
+<script>
+$('select[name="id_cliente"]').on('change', function() {
+	var url = location.href + '';
+	var i = url.indexOf('?');
+	if (i > 0) {
+		url = url.substr(0, url.indexOf('?'));
+	}
+	url += '?id_cliente=' + $(this).val();
+	location.href = url;
+});
+</script>
+<table class="table-list table-list-ordine" cellpadding="0" cellspacing="0" border="0">
+<tr>
+	<th class="ordine-codice">{{ _lblc.codice }}</th>	
+	<th class="ordine-data">{{ _lblc.data_inserimento_small }}</th>
+	<th class="ordine-pagamento">{{ _lblc.cliente }}</th>
+	<th class="ordine-pagamento">{{ _lblc.stato }}</th>
+</tr>
+{% for item in list %}
+<tr data-id="{{ item.id }}">
+	<td class="ordine-codice">
+		<a href="{{ _h.url('account/my/ordini/item') }}?id={{ item.id }}">{{ item.get('codice') }}</a>
+	</td>	
+	<td class="ordine-data">
+		<div>{{ item.getDateTime('data_inserimento') }}</div>
+	</td>
+	<td class="ordine-pagamento">
+		{% set ordine = item.dettaglio.ordine %}
+		{{ ordine.spedizione.nome }} {{ ordine.spedizione.cognome }}
+	</td>
+	<td class="ordine-pagamento">
+		<div class="line">
+			<em>{{ _lblc.stato }}: </em>
+			{% if item.get('stato') == 0 %}	
+			{{ _lblc.stato_preso_in_carico }}
+			{% elseif item.get('stato') >= 100 and item.get('stato') < 200 %}	
+			{{ _lblc.stato_lavorazione }}
+			{% elseif item.get('stato') >= 200 and item.get('stato') < 300 %}
+				{{ _lblc.stato_pronto }}
+			{% elseif item.get('stato') >= 800 and item.get('stato') < 900 %}
+				{% if item.get('stato') == 800 %}
+					{{ _lblc.stato_annullato }}
+				{% else %}
+					{{ _lblc.stato_rimborsato }}
+				{% endif %}
+			{% elseif item.get('stato') >= 900 and item.get('stato') < 1000 %}
+			{{ _lblc.stato_reso_cambio }}
+			{% endif %}
+		</div>
+		<div class="line">
+		<em>{{ _lblc.spedizione }}: </em>
+		{% if item.get('stato_spedizione') == 2 %}
+		{{ _lblc.stato_spedito }}
+		{% elseif item.get('stato_spedizione') == 3 %}
+		{{ _lblc.consegnato }}
+		{% else %}
+		{{ _lblc.stato_sp_non_spedito }}
+		{% endif %}
+		</div>
+		<div class="line">
+		<em>{{ _lblc.metodo }}: </em>
+		{{ _h.context('checkout_util').getPagamento(item.get('tipo_pagamento')) }}
+		</div>
+		<div class="line">
+		<em></em>
+		{% if item.get('stato_pagamento') == 0 %}	
+		{{ _lblc.stato_pg_non_pagato }}
+		{% elseif item.get('stato_pagamento') == 1  %}	
+		{{ _lblc.stato_pg_bonifico_comunicato_cro }}
+		{% elseif item.get('stato_pagamento') == 2 %}
+		{{ _lblc.stato_pg_pagato_acconto }}
+		{% elseif item.get('stato_pagamento') == 3 %}
+		{{ _lblc.stato_pg_pagato }} 
+		{% elseif item.get('stato_pagamento') == 10 %}
+		{{ _lblc.stato_pg_annullato }}
+		{% endif %}
+		</div>
+	</td>
+</tr>
+{% endfor %}
+</table>

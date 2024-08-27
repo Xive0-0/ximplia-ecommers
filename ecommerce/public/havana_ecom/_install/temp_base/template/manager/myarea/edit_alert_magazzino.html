@@ -1,0 +1,44 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Alert magazzino') }}
+<div class="select-content-wrapper" style="padding: 10px 15px; margin-bottom: 20px;">
+	<p class="field-line-text">
+		<strong>Avviso magazzino</strong>
+	</p>
+	{{ mc.checkbox(_h.settings.get('alert_magazzino_email_abilitato'), 1, 'alert_magazzino_email_abilitato', 'Abilita') }}
+	<p class="field-line field-50">
+		<label>Avvisami quando la quantità articoli scende a:</label>
+		<input type="text" name="alert_magazzino_email_quantita" class="field valida-required valida-digitnumber" value="{{ _h.settings.get('alert_magazzino_email_quantita', 0) }}" maxlength="10">
+	</p>
+	<p class="clear field-line field-400">
+		<label>Invia notifica a questa e-mail:</label>
+		<input type="text" name="alert_magazzino_email" class="field valida-email" value="{{ _h.settings.get('alert_magazzino_email') }}" maxlength="100">
+	</p>
+</div>
+<div class="select-content-wrapper" style="padding: 10px 15px">
+	<p class="field-line-text">
+		<strong>Modifica scheda prodotto</strong>
+	</p>
+	<p class="field-line field-50">
+		<label>Modifica scheda prodotto quando la quantità scende a:</label>
+		<input type="text" name="alert_magazzino_scheda_quantita" class="field valida-required valida-digitnumber" value="{{ _h.settings.get('alert_magazzino_scheda_quantita', 0) }}" maxlength="10">
+	</p>
+	<p class="field-line field-400">
+		<label>Azione su scheda prodotto:</label>
+		<select name="alert_magazzino_scheda" class="field">
+			{% set value = _h.settings.get('alert_magazzino_scheda', '') %}
+			{{ mc.listComboOptions([{'id': 1, 'text': 'imposta come esaurito'},
+				{'id': 2, 'text': 'disabilita scheda'},
+				{'id': 3, 'text': 'visualizza etichetta scarsa disponibilità/tempi spedizione lunghi'},
+				{'id': 10, 'text': 'Non eseguire azioni'}], value) }}
+		</select>
+	</p>
+	{{ mc.checkbox(_h.settings.get('alert_magazzino_scheda_abilitato'), 1, 'alert_magazzino_scheda_abilitato', 'Abilita') }}
+	<p class="clear field-line field-400">
+		<label>Invia notifica alla modifica a questa e-mail:</label>
+		<input type="text" name="alert_magazzino_scheda_email" class="field valida-email" value="{{ _h.settings.get('alert_magazzino_scheda_email') }}" maxlength="100">
+	</p>
+</div>
+{{ mc.labelCampiObbligatori() }}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/ex-edit-alert-magazzino')) }}	
+

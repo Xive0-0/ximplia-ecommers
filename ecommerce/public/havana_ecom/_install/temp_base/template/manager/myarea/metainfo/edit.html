@@ -1,0 +1,69 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% set lang = _h.input('lang', _h.config('default_language', 'it')) %}
+
+{{ mc.slideBoxHeader(_h, 'Meta info') }}
+<input type="hidden" name="lang" value="{{ lang }}">
+<input type="hidden" name="table" value="{{ table }}">
+<input type="hidden" name="id" value="{{ item.id }}">
+{{ mc.contenutiInLingua(lang) }}
+<p class="field-line field-400">
+	<label>{{ mc.labelLang(lang) }} Titolo:</label>
+	<input type="text" name="title_template" class="field" value="{{ item.geto('metainfo').get('title_template') }}">
+	<em class="form-current-value">{{ item.geto('metainfo').get('title') }}</em>
+</p>
+<p class="field-line field-400">
+	<label>{{ mc.labelLang(lang) }} Meta description:</label>
+	<textarea name="description_template" class="field">{{ item.geto('metainfo').get('description_template') }}</textarea>
+	<em class="form-current-value">{{ item.geto('metainfo').get('description') }}</em>
+</p>
+<div class="h-show-if-content">
+<p class="field-line field-400">
+	<label>URL mapping:</label>
+	<select name="url_mapping"  class="field h-show-if" data-action='{"map": [{"key": "0", "cont": [".url_mapping_no"]}, {"key": "1", "cont": [".url_mapping"]}]}'>
+		{{ mc.listComboOptions([{'id': '0', 'text': 'NON mappare'}, {'id': '1', 'text': 'esegui mappatura'}], item.get('url_mapping')) }}
+	</select>
+</p>	
+<div class="url_mapping">
+<p class="field-line field-400">
+	<label>{{ mc.labelLang(lang) }} URL:</label>
+	<input type="text" name="url" class="field valida-suburl" value="{{ item.geto('metainfo').get('url') }}">
+	<em class="form-current-value">{{ item.url }}</em>
+</p>
+<p class="field-line field-400">
+	<label>{{ mc.labelLang(lang) }} Canonical:</label>
+	<input type="text" name="canonical" class="field" value="{{ item.geto('metainfo').get('canonical') }}">
+	<em class="form-current-value">{{ item.geto('metainfo').get('canonical') }}</em>
+</p>
+</div>
+</div>
+{% if table == 'articolo' %}
+<p class="field-line field-200 field-line-left">
+	<label>Azione articolo non abilitato ed esaurito:</label>
+	<select name="azione_non_abilitato_esaurito" class="field">
+		<option value=""></option>
+		<option value="404" {% if item.get('azione_non_abilitato_esaurito') == '404' %}selected{% endif %}>404 - Not found</option>
+		<option value="410" {% if item.get('azione_non_abilitato_esaurito') == '410' %}selected{% endif %}>410 - Gone</option>
+	</select>
+</p>
+<p class="field-line field-200 field-line-left">
+	<label>Azione articolo non abilitato e non esaurito:</label>
+	<select name="azione_non_abilitato_non_esaurito" class="field">
+		<option value=""></option>
+		<option value="404" {% if item.get('azione_non_abilitato_non_esaurito') == '404' %}selected{% endif %}>404 - Not found</option>
+		<option value="410" {% if item.get('azione_non_abilitato_non_esaurito') == '410' %}selected{% endif %}>410 - Gone</option>
+	</select>
+</p>
+<div class="clear"></div>
+{% endif %}
+<p class="field-line field-400">
+	<label>{{ mc.labelLang(lang) }} OG Title:</label>
+	<input type="text" name="og_title_template" class="field" value="{{ item.geto('metainfo').get('og_title_template') }}">
+	<em class="form-current-value">{{ item.geto('metainfo').get('og_title') }}</em>
+</p>
+<p class="field-line field-400">
+	<label>{{ mc.labelLang(lang) }} OG Description:</label>
+	<textarea name="og_description_template" class="field">{{ item.geto('metainfo').get('og_description_template') }}</textarea>
+	<em class="form-current-value">{{ item.geto('metainfo').get('og_description') }}</em>
+</p>
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/metainfo/ex-edit'), '"none": true') }}	

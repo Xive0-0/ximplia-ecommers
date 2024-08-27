@@ -1,0 +1,45 @@
+{% set _lblm = _h.labels.get('my') %}
+{% set _lblf = _h.labels.get('form') %}
+
+<h2>{{ _lblm.title_dati_fatturazione }}</h2>
+<div class="account-toolbar">
+	<a href="{{ _h.url('account/my/fatturazione/edit') }}" title="{{ _lblm.alt_btn_aggiungi_fatturazione }}" class="btn-add">{{ _lblm.btn_aggiungi }}</a>
+</div>
+
+<table class="table-list" cellpadding="0" cellspacing="0" border="0">
+{% for item in list %}
+<tr data-id="{{ item.id }}">
+	<td class="action-bar action-bar-default">
+		<a href="{{ _h.url('account/my/fatturazione/principale') }}" title="{{ _lblm.imposta_default }}" class="action-default btn-default{% if item.get('principale') %} selected{% endif %}"></a>	
+	</td>	
+	<td class="details">
+		<strong>{{ item.get('nome') }}</strong>
+		{% if item.get('p_iva') %}
+		<small><em>{{ _lblf.field_p_iva }}:</em> {{ item.get('p_iva') }}</small>
+		{% endif %}
+		{% if item.get('codice_fiscale') %}
+		<small><em>{{ _lblf.field_codice_fiscale }}:</em> {{ item.get('codice_fiscale') }}</small>
+		{% endif %}
+		{% if item.get('data_nascita') %}
+		<small><em>{{ _lblf.field_data_nascita }}:</em> {{ item.get('data_nascita') }}</small>
+		{% endif %}
+		{% if item.get('luogo_nascita') %}
+		<small><em>{{ _lblf.field_luogo_nascita }}:</em> {{ item.get('luogo_nascita') }}</small>
+		{% endif %}
+		{% if item.get('pec') %}
+		<small><em>{{ _lblf.field_pec }}:</em> {{ item.get('pec') }}</small>
+		{% endif %}
+		{% if item.get('sdi') %}
+		<small><em>{{ _lblf.field_sdi }}:</em> {{ item.get('sdi') }}</small>
+		{% endif %}
+		<small>{{ item.get('via') }}, {{ item.get('num_civico') }}</small>
+		<small>{{ item.get('cap') }} {{ item.get('localita') }} ({{ item.get('provincia') }})</small>
+		<small>{{ mapNazione[item.get('nazione')].get('nome') }}</small>	
+	</td>
+	<td class="action-bar action-bar-base">
+		<a href="{{ _h.url('account/my/fatturazione/edit') }}?id={{ item.id }}" title="{{ _lblm.btn_modifica }}" class="btn-update"></a>	
+		<a href="{{ _h.url('account/my/fatturazione/delete') }}" title="{{ _lblm.btn_elimina }}" class="action-delete btn-delete"></a>	
+	</td>
+</tr>
+{% endfor %}
+</table>

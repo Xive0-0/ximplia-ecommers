@@ -1,0 +1,90 @@
+{% import _h.template('_macro.html') as mc %}
+{% set _lblw = _h.labels.get('website') %}
+
+{% macro field(_h, item, key) %}
+	{% set _lblw = _h.labels.get('website') %}
+	{% set keyf = 'form_field_' ~ key %}
+	{% if item.get('form_extra_tipo_' ~ key) %}
+		{% set required = keyf ~ '_required' %}
+		{% if item.get('form_extra_tipo_' ~ key) == 'file' %}
+			<div class="field-content field-line-file">
+		{% else %}
+			<div class="field-content field-line{% if item.get('form_extra_tipo_' ~ key) == 'testo' %} field-line-textarea{% endif %}">
+		{% endif %}
+		{% if item.get('form_extra_tipo_' ~ key) == 'checkbox' %}
+		<div class="field-line-checkbox field-text-obbligatori" style="padding: 0;">
+			<div>
+				<span class="checkbox" data-value="{{item.get('form_extra_valore_' ~ key, 1)}}"><input type="hidden" name="{{ keyf }}" value=""></span>
+				<span class="checkbox-label"><span>{{ item.get('form_extra_label_' ~ key) }}</span></span>
+			</div>
+		</div>
+		{% else %}
+		<div class="{% if item.get('form_extra_tipo_' ~ key) == 'file' %}field-file{% else %}field{% endif %}">
+			<label>{{ item.get('form_extra_label_' ~ key) }}{% if item.get('form_extra_required_' ~ key) %} <span>*</span>{% endif %}</label>
+			{% set valida = '' %}
+			{% if item.get('form_extra_tipo_' ~ key) == 'e-mail' %}
+				{% set valida = ' valida-email' %}
+			{% elseif item.get('form_extra_tipo_' ~ key) == 'data' %}
+				{% set valida = ' input-datepicker valida-datasimple' %}
+			{% endif %}
+			{% if item.get('form_extra_tipo_' ~ key) == 'file' %}
+				<input type="hidden" name="{{ keyf }}" class="field-file{% if item.get('form_extra_required_' ~ key) %} valida-required{% endif %}" value="">
+				<input type="hidden" name="{{ keyf }}_name" class="field-file-name">
+				<div class="field-anteprima"></div>
+				<div class="field-button">
+					<a class="action-upload-file" data-action='{"url": "/upload-temp-file"}'>{{ _lblw.carica_file }}</a>
+					<a class="action-upload-file-reset">{{ _lblw.cancella_file }}</a>
+				</div>
+			{% elseif item.get('form_extra_tipo_' ~ key) == 'testo' %}
+				<textarea name="{{ keyf }}" class="{% if item.get('form_extra_required_' ~ key) %}valida-required{% endif %}{{ valida }}">{{item.get('form_extra_valore_' ~ key)}}</textarea>
+			{% elseif item.get('form_extra_tipo_' ~ key) == 'lista' or item.get('form_extra_tipo_' ~ key) == 'newsletter' %}
+				<select name="{{ keyf }}" class="{% if item.get('form_extra_required_' ~ key) %}valida-required{% endif %}">
+				<option></option>
+				{% set list_valore = item.get('form_extra_valore_' ~ key)|split(',') %}
+				{% for v in list_valore %}
+				<option value="{{v}}">
+					{% if  item.get('form_extra_tipo_' ~ key) == 'newsletter' %}
+						{% set v = v|split('::')[0] %}
+					{% endif %}
+					{{v}}
+				</option>
+				{% endfor %}
+				</select>
+			{% else %}
+			<input type="text" name="{{ keyf }}" class="{% if item.get('form_extra_required_' ~ key) %}valida-required{% endif %}{{ valida }}" value="{{item.get('form_extra_valore_' ~ key)}}" {% if item.get('form_extra_tipo_' ~ key) == 'data' %}maxlength="10" data-date-viewmode="years" data-date-minviewmode="days" {% endif %}>
+			{% endif %}
+		</div>
+		{% endif %}
+	</div>
+	{% endif %}
+{% endmacro %}
+
+<form>
+	{% if item.get('form_titolo')  %}
+	<div class="field-text">
+		<strong>{{ item.get('form_titolo') }}</strong>
+	</div>
+	{% endif %}
+	{% if item.get('form_descrizione')  %}
+	<p>{{ item.get('form_descrizione') }}</p>
+	{% endif %}
+	<div class="form-error-message"></div>
+	{% set list_key = item.parametriExtra('form_').list %}
+	{% set is_upload_file = false %}
+	{% for key in list_key %}
+		{{ _self.field(_h, item, key) }}
+		{% if item.get('form_extra_tipo_' ~ key) == 'file' %}
+			{% set is_upload_file = true %}
+		{% endif %}
+	{% endfor %}	
+	
+	{% if is_upload_file %}
+		<script type="text/javascript" src="/assets/manager/havana-js/js/plugin/jquery.ui.widget.js?b=83-1"></script>
+		<script type="text/javascript" src="/assets/manager/havana-js/js/plugin/jquery.fileupload.js?b=83-1"></script>
+		<script type="text/javascript" src="/assets/manager/havana-js/js/plugin/jquery.iframe-transport.js?b=83-1"></script>
+	{% endif %}
+	<div class="field-button field-button-left">
+		<a class="button-gray button action-close-item-form" title="{{ item.get('form_label_pulsante_chiudi') }}" href="javascript:void(0)">{{ item.get('form_label_pulsante_chiudi') }}</a>
+		<a class="button-red button action-item-buy-form" href="javascript:void(0)" title="{{ item.get('form_label_pulsante') }}"><span>{{ item.get('form_label_pulsante') }}</span></a>
+	</div>
+</form>

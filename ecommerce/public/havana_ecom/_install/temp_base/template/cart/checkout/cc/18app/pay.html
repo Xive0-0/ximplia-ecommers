@@ -1,0 +1,92 @@
+{% set _build = '?b=1-' ~ _h.config('template').web.tmpl_build %}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title></title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+	<link rel="icon" href="{{ _h.res('assets/website/img/favicon.png') }}{{ _build }}" type="image/x-icon" >
+	<link rel="stylesheet" type="text/css" href="/assets/website/css/18app.css{{ _build }}" >
+</head>
+<body>
+{% include _h.template('cart/checkout/cc/18app/_header.html') %}	
+<div class="container-18app">
+	<div class="box-18app">
+		<div class="box-18app-inner">
+			<div class="box-18app-info">
+				Riferimento ordine per qualsiasi comunicazione: <strong>{{ item.get('codice') }}</strong><br>
+				Importo totale ordine <strong class="verde">{{ _h.util.euro(item.get('totale')) }} &euro;</strong>
+			</div>
+			<div id="box-18app-info-pagamento">
+				<div class="box-18app-info">
+					<ol>
+					<li>Generare il voucher del valore esatto del totale dell'ordine: <strong>{{ _h.util.euro(item.get('totale')) }} &euro;</strong></li>
+					<li>Copiare e incollare il codice generato senza modificare alcun carattere, nemmeno minuscole e maiuscole</li>
+					<li>Ricorda con "18 App" o con "Carta giovani" puoi acquistare, per ogni spettacolo, soltanto 1 biglietto intestato a te stesso</li>
+					</ol>
+				</div>
+				<form class="box-18app-form" id="box-18app-form" method="post" onsubmit="return false;">
+					<input type="hidden" value="{{ _h.input('token') }}" name="token">
+					<input type="hidden" value="" id="tipo-servizio" name="tipo_servizio">
+					<p>Seleziona il tipo di pagamento:</p>
+					<div class="box-18app-tipo-servizio">
+						<div class="box-18app-tipo-servizio-item" data-tipo-servizio="carta_giovani">
+							<div class="img" style="background-image: url(/assets/website/img/checkout-carta-giovani.png)"></div>
+							<strong>Carta giovani</strong>
+						</div>
+						<div class="box-18app-tipo-servizio-item" data-tipo-servizio="18app">
+							<div class="img" style="background-image: url(/assets/website/img/checkout-18app.png)"></div>
+							<strong>18 App</strong>
+						</div>
+					</div>
+					<p>Inserisci il codice generato:</p>
+					<input type="text" id="codice-voucher" name="codice" autocomplete="off" placeholder="Codice voucher"/>
+					<button value="button-submit" id="button-submit" class="button-submit">Paga ora</button>
+				</form>
+				<a href="{{ _h.xurl('cart/thanks-return-18app') }}" class="button-error">Annulla</a>
+			</div>
+			<div id="box-18app-info-pagamento-loading">
+				<img src="/assets/website/img/loading.gif">
+				<div>Verifica in corso...<br>Attendere il completamento senza aggiornare la pagina</div>
+			</div>
+		</div>
+		<div class="box-18app-copy">
+			stai effettuando un ordine su: {{ _h.config('url') }}
+		</div>
+	</div>
+</div>
+<script>
+const collection = document.getElementsByClassName('box-18app-tipo-servizio-item');
+for (let i = 0; i < collection.length; i++) {
+	collection[i].addEventListener('click', function() {
+		if (this.classList.contains('selected')) {
+			return;
+		}
+		for (let i = 0; i < collection.length; i++) {
+			collection[i].classList.remove('selected');
+		}
+		this.classList.add('selected');
+		document.getElementById('tipo-servizio').value = this.dataset.tipoServizio;
+	});
+}
+
+const button = document.getElementById('button-submit');
+button.addEventListener('click', function() {
+	if (document.getElementById('tipo-servizio').value == '') {
+		alert('Selezionare se viene utilizzato Carta giovani o 18 App');
+		return;
+	}
+	if (document.getElementById('codice-voucher').value == '') {
+		alert('Inserire il codice del voucher');
+		return;
+	}
+	document.getElementById('box-18app-info-pagamento').style.display = 'none';
+	document.getElementById('box-18app-info-pagamento-loading').style.display = 'block';
+	let form = document.getElementById('box-18app-form');
+	form.action = '{{ _h.xurl('cart/checkout/cc/18app/ex-pay') }}';
+	form.submit();
+});
+</script>
+{% include _h.template('cart/checkout/cc/18app/_footer.html') %}	
+</body>
+</html>

@@ -1,0 +1,9 @@
+{
+	"on:begin": [
+		"cart/step/list-kit-oblo"
+	],
+	"on:view": {
+		"template": "cart/step/seleziona_kit_oblo",
+		"extra": false
+	}
+}

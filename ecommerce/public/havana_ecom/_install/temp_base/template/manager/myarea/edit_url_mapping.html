@@ -1,0 +1,65 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% macro url(_h, tipo, title, required) %}
+<p class="field-line field-400">
+	<label>URL {{ title }}{% if required %}<span>*</span>{% endif %}:</label>
+	/<input type="text" name="url_{{ tipo }}" class="field{% if required %} valida-required{% endif %} valida-suburl" value="{{ _h.settings.get('url_' ~ tipo) }}">
+</p>
+{% endmacro %}
+
+{{ mc.slideBoxHeader(_h, 'Modifica Url Mapping') }}
+
+<p class="field-line field-175 field-line-left">
+	<label>Articolo non abilitato ed esaurito:</label>
+	<select name="azione_articolo_non_abilitato_esaurito" class="field">
+		<option value="404">404 - Not found</option>
+		<option value="410" {% if _h.settings.get('azione_articolo_non_abilitato_esaurito') == '410' %}selected{% endif %}>410 - Gone</option>
+	</select>
+</p>
+<p class="field-line field-175 field-line-left">
+	<label>Articolo non abilitato e non esaurito:</label>
+	<select name="azione_articolo_non_abilitato_non_esaurito" class="field">
+		<option value="404">404 - Not found</option>
+		<option value="410" {% if _h.settings.get('azione_articolo_non_abilitato_non_esaurito') == '410' %}selected{% endif %}>410 - Gone</option>
+	</select>
+</p>
+<p class="field-line field-175 field-line-left">
+	<label>Articolo eliminato:</label>
+	<select name="azione_articolo_eliminato" class="field">
+		<option value="404">404 - Not found</option>
+		<option value="410" {% if _h.settings.get('azione_articolo_eliminato') == '410' %}selected{% endif %}>410 - Gone</option>
+	</select>
+</p>
+<div class="clear"></div>
+<p class="field-line field-400">
+	<label>Azione entita modificata (articolo, pagina, categoria...):</label>
+	<select name="azione_articolo_modificato" class="field">
+		<option value="aggiorna_url" {% if _h.settings.get('azione_articolo_modificato', '') == '' or _h.settings.get('azione_articolo_modificato') == 'aggiorna_url' %}selected{% endif %}>Aggiorna URL</option>
+		<option value="non_aggiorna_url" {% if _h.settings.get('azione_articolo_modificato') == 'non_aggiorna_url' %}selected{% endif %}>Non aggiornare URL</option>
+	</select>
+</p>
+<p class="field-line field-400">
+	<label>Separatore (al posto degli spazi)<span>*</span>:</label>
+	<input type="text" name="url_separatore" class="field valida-required valida-suburl" value="{{ _h.settings.get('url_separatore') }}">
+</p>
+{{ _self.url(_h, 'articolo', 'articolo', true) }}
+{{ _self.url(_h, 'azienda', 'azienda') }}
+{{ _self.url(_h, 'regione', 'regione') }}
+{{ _self.url(_h, 'blog', 'articolo blog') }}
+{{ _self.url(_h, 'redattore_blog', 'redattore blog') }}
+{{ _self.url(_h, 'categoria_blog', 'categoria blog', true) }}
+{{ _self.url(_h, 'sotto_categoria_blog', 'sotto categoria blog', true) }}
+{{ _self.url(_h, 'evento_news', 'articolo evento/news') }}
+{{ _self.url(_h, 'categoria_evento_news', 'categoria eventi/news', true) }}
+{{ _self.url(_h, 'sotto_categoria_evento_news', 'sotto categoria eventi/news', true) }}
+{% for type in listImp %}
+	{{ _self.url(_h, type.key, type.label) }}
+{% endfor %}
+{{ _self.url(_h, 'pagina', 'pagina', true) }}
+{{ _self.url(_h, 'sotto_pagina', 'sotto pagina') }}
+{{ _self.url(_h, 'glossario', 'glossario') }}
+
+
+{{ mc.labelCampiObbligatori() }}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/ex-edit-url-mapping')) }}	
+

@@ -1,0 +1,89 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% set lang = _h.input('lang', _h.config('default_language', 'it')) %}
+
+{% if item == null %}
+	{% set title = 'Nuova Variante Articolo' %}
+{% else %}
+	{% set title = 'Modifica Variante Articolo' %}
+{% endif %}
+{{ mc.slideBoxHeader(_h, title) }}
+
+{% if _h.input('duplica') == 1 %}
+<input type="hidden" name="duplica" value="{{ item.id }}">
+{% else %}
+<input type="hidden" name="id" value="{{ item.id }}">
+{% endif %}
+<input type="hidden" name="lang" value="{{ lang }}">
+<input type="hidden" name="id_variante" value="{{ _h.input('variante_id') }}">
+
+<div class="block-tab">
+<div class="block-tab-header">
+	<div data-block-tab="scheda_base">Articolo</div>
+	<div data-block-tab="immagini">Immagini</div>
+</div>
+<div data-block-tab-body="scheda_base" class="block-tab-body">
+
+<div class="h-tab{% if edit_lang %} edit-lang-wrapper{% endif %}">
+
+<div data-tab-rif="base" class="edit-lang">Scheda</div>
+{% if _h.config('gestione_tag_articoli', false) %}
+<div data-tab-rif="tag">Tag</div>
+{% endif %}
+{% if _h.config('vendita_articoli_digitali', false) %}
+<div data-tab-rif="contenuto_digitale">Digitale</div>
+{% endif %}
+{% if _h.config('gestione_opzioni_articoli', false) %}
+<div data-tab-rif="opzioni_articoli">Opzioni</div>
+{% endif %}
+{% if _h.config('gestione_parametri_extra_articoli', false) %}
+<div data-tab-rif="parametri_extra_articoli">Extra</div>
+{% endif %}
+{% if listListino|length > 0 %}
+<div data-tab-rif="listini">Listino cliente</div>
+{% endif %}
+{% include _h.template('manager/myarea/articolo/variante/_edit_tabs.html') %}
+
+<div data-tab="base" class="edit-lang">
+{{ mc.articolo_dettaglio_header(_h, item, lang, 'ordine_variante', hide_prezzo) }}
+{% if hide_codice == null %}
+	{% if _h.config('template').manager.item.articolo.codice is defined %}
+		{% set hide_codice = not(_h.config('template').manager.item.articolo.codice) %}
+	{% else %}
+		{% set hide_codice = false %}
+	{% endif %}
+{% endif %}
+{{ mc.articolo_dettaglio_nome_prezzo(_h, item, lang, hide_codice, hide_magazzino, hide_prezzo) }}
+{% if _h.config('gestione_azienda_in_scheda_articolo_variante', false) %}
+<div class="field-line field-400">
+	<label>{{ _lbl.azienda_brand }} <span>*</span>:</label>
+	<select name="id_azienda" class="valida-required field">
+		<option value="0">- nessuna -</option>
+	{% for i in listAzienda %}
+		<option value="{{ i.id }}" {% if i.id == item.get('id_azienda') %}selected{% endif %}>{{ i.get('nome') }}</option>
+	{% endfor %}	
+	</select> 
+</div>
+{% endif %}
+{% include _h.template('manager/myarea/articolo/variante/_edit.html') %}
+</div>
+
+{{ mc.articolo_dettaglio_extra(_h, item, lang, listAttributoTipo, listListino, listTag, 'variante') }}
+</div>
+
+</div>
+{{ mc.tab_body_immagini(_h, item, '_variante') }}
+
+
+{% if _h.input('duplica') == 1 %}
+{% set item = null %}
+{% endif %}
+{{ mc.labelCampiObbligatori() }}
+{% if edit_lang %}
+	{% set url = 'manager/myarea/articolo/variante/ex-edit-lang' %}
+{% else %}
+	{% set url = 'manager/myarea/articolo/variante/ex-edit' %}
+{% endif %}
+</div>
+
+{{ mc.slideBoxFooter(_h, _h.url(url), '"reload": ["#variante-content", "#h-layout-center-content"]') }}	

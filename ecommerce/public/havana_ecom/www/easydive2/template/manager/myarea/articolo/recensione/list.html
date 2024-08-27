@@ -1,0 +1,25 @@
+{% import _h.template('manager/_macro_items.html') as mci %}
+<table class="h-list h-list-slingle-selection" cellpadding="0" cellspacing="0" border="0">
+<thead>
+<tr class="h-list-header">
+	<th style="width: 20px;">&nbsp;</th>
+	<th style="width: 40px;">Lang</th>
+	<th>Nome</th>
+</tr>
+</thead>
+<tbody>
+{% for item in list %}		
+	<tr data-id="{{ item.id }}">
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="image_id[]" value="" /></span></td>
+		<td>{{ item.get('lang')|upper }}</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					{{ item.get('nome') }}
+				</div>
+			</div>
+		</td>
+	</tr>
+{% endfor %}
+</tbody>
+</table>

@@ -1,0 +1,31 @@
+<table class="h-list" cellpadding="0" cellspacing="0" border="0">
+<thead>
+<tr class="h-list-header">
+	<th style="width: 100px;">Data</th>
+	<th style="width: 150px;">Azione</th>
+	<th>Contratto</th>
+	<th style="width: 70px;">Versione</th>
+	<th style="width: 100px;">Data Contratto</th>
+	<th style="width: 120px;">IP</th>
+	<th style="width: 200px;">Extra</th>
+</tr>
+</thead>
+<tbody>
+{% for elem in list %}
+	<tr>
+		<td>{{ elem.getDateTime('data_azione') }}</td>
+		<td>
+			<strong>{{ elem.get('azione') }}</strong>
+			{% if  elem.get('id_entita') > 0 %}
+			<div>{{ elem.get('tipo_entita') }}</div>
+			{% endif %}
+		</td>
+		<td>{{ elem.get('contratto') }}</td>
+		<td>{{ elem.get('versione') }}</td>
+		<td>{{ elem.getDateTime('data_inserimento') }}</td>
+		<td>{{ elem.get('ip') }}</td>
+		<td>{{ elem.get('extra') }}</td>
+	</tr>
+{% endfor %}
+</tbody>
+</table>

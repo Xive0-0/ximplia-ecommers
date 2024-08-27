@@ -1,0 +1,10 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Modifica Selezione') }}
+<input type="hidden" name="id" value="{{ _h.input('id') }}">
+
+{{ mc.checkbox('', 1, 'rimuovi', 'Rimuovi associazione') }}
+
+{{ mc.dynamicMultipleSelect(_h, 'Selezioni', list, item, 'id_attributo', 'selezione') }}
+
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/articolo/ex-edit-selezione')) }}	

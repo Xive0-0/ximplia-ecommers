@@ -1,0 +1,5 @@
+<a href="javascript:void(0);" class="btn-search-top" title="{{ _lblg.cerca }}"></a>
+<form autocomplete="off" action="{{ _h.url('find') }}">
+	<input name="query" autocomplete="off" type="text" placeholder="{{ _lblg.costa_stai_cercando }}" value="{{ result.query }}">
+	<a href="javascript:void(0);" title="{{ _lblg.cerca }}" class="btn-submit">{{ _lblg.cerca }}</a>
+</form>

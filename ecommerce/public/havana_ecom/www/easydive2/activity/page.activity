@@ -1,0 +1,16 @@
+{
+	"put": {
+		"view": [
+			{"mymetainfo": true}
+		]
+	},
+	"on:": [
+		"page",
+		{"name": "list-hreflang", "params": {"tipo": "pagina", "context": "id"}}
+	],
+	"on:view-no-extra": {
+		"template": "page_no_extra",
+		"extra": false
+	},
+	"on:view": "page"
+}

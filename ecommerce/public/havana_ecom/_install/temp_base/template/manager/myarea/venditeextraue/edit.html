@@ -1,0 +1,19 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Vendita extra ecommerce UE') }}
+<input type="hidden" name="id" value="{{ item.id }}">
+<p class="field-line field-line-left field-150">
+	<label>Importo &euro;<span>*</span>:</label>
+	<input type="text" name="importo" class="field valida-required valida-digiteuro" value="{{ item.euro('importo') }}"> &euro;
+</p>
+<p class="field-line field-100">
+	<label>Anno di riferimento<span>*</span>:</label>
+	<input type="text" name="anno_riferimento" class="field valida-required valida-digitint" value="{{ item.get('anno_riferimento') }}">
+</p>
+<div class="clear"></div>
+<p class="field-line field-400">
+	<label>Descrizione:</label>
+	<input type="text" name="descrizione" class="field" value="{{ item.get('descrizione') }}" maxlength="250">
+</p>
+{{ mc.labelCampiObbligatori() }}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/venditeextraue/ex-edit'), '"reload": "#venditeextraue-content"') }}	

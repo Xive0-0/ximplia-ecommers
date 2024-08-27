@@ -1,0 +1,22 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% if procedi %}
+{% set table = _h.input('table') %}
+{{ mc.slideBoxHeaderToolbar(_h, 'Promozioni', true) }}
+{% if table == 'attributo' %}
+	{{ mc.navButton(_h, 'nuovo', 'new', 'click', 'h-action-selected-open-window', '{"window": {"type": "layer", "url": "' ~ _h.url('manager/myarea/promozioni/edit-attributo') ~ '", "width": 500, "height": 500, "overlay": true, "params": {"table":"' ~ table ~ '", "id_entita":' ~ _h.input('id') ~ '}}}') }}
+	{{ mc.navButton(_h, 'modifica', 'update', 'click', 'h-action-selected-open-window', '{"select": {"from":"#promozione-content", "check": 1, "errorMessage": "Selezionare una promozione"}, "window": {"type": "layer", "url": "' ~ _h.url('manager/myarea/promozioni/edit-attributo') ~ '", "width": 500, "height": 500, "overlay": true}}') }}
+{% else %}
+	{{ mc.navButton(_h, 'nuovo', 'new', 'click', 'h-action-selected-open-window', '{"window": {"type": "layer", "url": "' ~ _h.url('manager/myarea/promozioni/edit') ~ '", "width": 500, "height": 500, "overlay": true, "params": {"table":"' ~ table ~ '", "id_entita":' ~ _h.input('id') ~ '}}}') }}
+	{{ mc.navButton(_h, 'modifica', 'update', 'click', 'h-action-selected-open-window', '{"select": {"from":"#promozione-content", "check": 1, "errorMessage": "Selezionare una promozione"}, "window": {"type": "layer", "url": "' ~ _h.url('manager/myarea/promozioni/edit') ~ '", "width": 500, "height": 500, "overlay": true}}') }}
+{% endif %}
+	{{ mc.navButton(_h, 'elimina', 'delete', 'click', 'h-action-selected-execute', '{"select": {"from":"#promozione-content", "check": 1, "errorMessage": "Selezionare una promozione"}, "confirm": "Eliminare la voce selezionata?", "url": "' ~ _h.url('manager/myarea/promozioni/delete') ~ '", "reload": ["#promozione-content"]}') }}
+{{ mc.slideBoxHeaderToolbarEnd() }}
+
+{{ mc.box_footer(_h, 'promozione', 'promozioni', list, '{"table": "' ~ table ~ '", "id": ' ~ _h.input('id') ~ '}') }}
+
+{% else %}
+	{{ mc.slideBoxHeader(_h, 'Promozioni') }}
+	<p class="field-line-text"><strong>ATTENZIONE!</strong><br>La gestione delle promozioni è disponibile solo per le categorie principali.</p>
+	{{ mc.slideBoxFooter() }}	
+{% endif %}

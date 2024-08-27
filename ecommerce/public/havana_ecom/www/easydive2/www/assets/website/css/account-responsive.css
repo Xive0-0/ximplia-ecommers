@@ -1,0 +1,42 @@
+@media screen and (max-width: 1240px) {
+.dettaglio-ordine {
+	margin: 0;
+}
+.dettaglio-ordine .block-margin {
+	margin: 0;
+}
+.dettaglio-ordine .col-dettaglio,
+.dettaglio-ordine .col-info {
+	float: none;
+	clear: both;
+	display: block;
+	width: auto;
+}
+.dettaglio-ordine .col-dettaglio {
+	margin-top: 30px;
+}
+.dettaglio-ordine .item-carrello-price {
+	width: 60px;
+}
+.dettaglio-ordine .item-carrello-details {
+	width: 150px;
+	font-size: 12px;
+}
+}
+@media screen and (max-width: 1000px) {
+.ordine-spedizione,
+.ordine-data {
+	display: none;
+}
+}
+@media screen and (max-width: 800px) {
+.ordine-azioni {
+	display: none;
+}
+}
+@media screen and (max-width: 600px) {
+
+}
+@media screen and (max-width: 440px) {
+
+}

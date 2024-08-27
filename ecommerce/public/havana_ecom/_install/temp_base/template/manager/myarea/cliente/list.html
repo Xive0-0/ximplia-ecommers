@@ -1,0 +1,32 @@
+{% import _h.template('manager/_macro_items.html') as mci %}
+<table class="h-list item-autoload-total h-fixed-header-table h-list-slingle-selection" cellpadding="0" cellspacing="0" border="0" data-total="{{ result.total }}">
+<thead>
+<tr class="h-list-header">
+	<th style="width: 10px; padding: 0; overflow: hidden;">&nbsp;</th>
+	<th style="width: 20px;">&nbsp;</th>
+	<th style="width: 30px;">&nbsp;</th>
+	<th style="width: 30px;">&nbsp;</th>
+	<th style="width: 30px;">&nbsp;</th>
+	<th style="width: 30px;" data-order="lang" data-order-type="{{ result.order_type_lang }}">L</th>
+	<th data-order="cognome,nome" data-order-type="{{ result.order_type_cognome_nome }}">Utente</th>
+	<th style="width: 80px;" data-order="data_inserimento" data-order-type="{{ result.order_type_data_inserimento }}">Iscriz.</th>
+	<th style="width: 80px;" data-order="ultimo_accesso" data-order-type="{{ result.order_type_ultimo_accesso }}">Ultimo ac.</th>
+	<th style="width: 40px;" data-order="prezzo_senza_iva" data-order-type="{{ result.order_type_prezzo_senza_iva }}">No IVA</th>
+	<th style="width: 40px;" data-order="spese_spedizione_gratis" data-order-type="{{ result.order_type_spese_spedizione_gratis }}">S.g.</th>
+	<th style="width: 40px;" data-order="pagamento_contrassegno" data-order-type="{{ result.order_type_pagamento_contrassegno }}">Contr.</th>
+	<th style="width: 40px;" data-order="speciale" data-order-type="{{ result.order_type_speciale }}">S.</th>
+	<th style="width: 40px;" data-order="gestione_admin" data-order-type="{{ result.order_type_gestione_admin }}">A.</th>
+	<th style="width: 120px;" data-order="nome_listino_cliente" data-order-type="{{ result.order_type_nome_listino_cliente }}">Listino</th>
+	<th style="width: 60px;" data-order="sconto" data-order-type="{{ result.order_type_sconto }}">Sconto</th>
+	<th style="width: 40px;" data-order="sconto_forzato" data-order-type="{{ result.order_type_sconto_forzato }}">S.F.</th>
+	<th style="width: 80px;" data-order="fascia_sconto" data-order-type="{{ result.order_type_fascia_sconto }}">F.S.</th>
+	<th style="width: 40px;" data-order="richiesta_cancellazione" data-order-type="{{ result.order_type_richiesta_cancellazione }}">C</th>
+	<th style="width: 40px;"></th>
+</tr>
+</thead>
+<tbody>
+{% for item in result.list %}		
+	{{ mci.item_cliente(_h, item) }}
+{% endfor %}
+</tbody>
+</table>

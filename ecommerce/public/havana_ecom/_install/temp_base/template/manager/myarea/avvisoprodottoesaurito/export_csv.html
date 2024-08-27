@@ -1,0 +1,4 @@
+GESTITO;E_MAIL;TELEFONO;LANG;DATA ISCRIZIONE;DATA RISPOSTA;ARTICOLO ID;ARTICOLO CODICE;ARTICOLO NOME;
+{% for item in list %}
+{% if item.get('stato') %}si{% else %}no{% endif %};{{ item.get('e_mail') }};{{ item.get('telefono') }};{{ item.get('lang') }};{{ item.getDateTime('data_inserimento') }};{{ item.getDateTime('data_risposta') }};{{ item.get('id') }};{{ item.get('codice') }};{{ item.get('nome') }};
+{% endfor %}

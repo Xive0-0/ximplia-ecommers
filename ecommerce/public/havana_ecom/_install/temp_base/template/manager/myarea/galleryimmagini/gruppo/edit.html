@@ -1,0 +1,20 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% set lang = _h.input('lang', _h.config('default_language', 'it')) %}
+
+{{ mc.slideBoxHeader(_h, 'Gruppo') }}
+
+<input type="hidden" name="id" value="{{ item.id }}">
+<input type="hidden" name="tipo_entita" value="{{ _h.input('tipo_entita') }}">
+<input type="hidden" name="lang" value="{{ lang }}">
+<p class="field-line field-100">
+	<label>Peso/posizione<span>*</span>:</label>
+	<input type="text" name="ordine" class="field valida-required valida-digitnumber" value="{{ item.get('ordine', 0) }}">
+</p>
+<p class="field-line field-250">
+	<label>{{ mc.labelLang(lang) }} Nome<span>*</span>:</label>
+	<input type="text" name="nome" class="field valida-required" value="{{ item.get('nome') }}" maxlength="50">
+</p>
+
+{{ mc.labelCampiObbligatori() }}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/galleryimmagini/gruppo/ex-edit'), '"reload": "#gruppo-content"') }}	

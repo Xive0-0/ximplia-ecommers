@@ -1,0 +1,203 @@
+{% import _h.template('manager/_macro.html') as mc %}
+{% import _h.template('manager/_my_macro.html') as mymc %}
+
+{% set toolbar = false %}
+{% if item %}
+	{% if item.get('e_mail') and item.get('e_mail') != '' %}
+		{% set toolbar = true %}
+		{{ mc.slideBoxHeaderToolbar(_h, 'carrello', true) }}
+		{{ mc.navButton(_h, 'scrivi', 'message', 'click', 'h-action-window', '{"type": "layer", "url": "' ~ _h.url('manager/myarea/carrello/scrivi') ~ '", "overlay": true, "width": 500, "height": 400, "params": {"id": "' ~ item.id ~ '"}}') }}
+		{{ mc.slideBoxHeaderToolbarEnd() }}
+	{% endif %}
+{% endif %}
+
+{% if not(toolbar) %}
+{{ mc.slideBoxHeader(_h, 'carrello', true) }}
+{% endif %}
+
+	<fieldset id="dettaglio-content">
+		
+{% if item %}
+{% set ordine = item.dettaglio %}
+
+	<div style="margin-bottom: 10px;"><em>lang: </em> <strong style="color: #ed4747;">{{ item.get('lang') }}</strong></div>
+	<div style="margin-bottom: 10px;"><em>data: </em> <strong style="color: #ed4747;">{{ item.getDateTime('data_inserimento') }}</strong></div>
+	{% if item.get('e_mail') and item.get('e_mail') != '' %}
+	<div style="margin-bottom: 10px;"><em>e-mail: </em>
+		<strong style="color: #ed4747;">
+			<a class="link h-action-window" data-action='{"type": "layer", "url": "{{ _h.url('manager/myarea/carrello/scrivi') }}", "overlay": true, "width": 500, "height": 400, "params": {"id": "{{ item.id }}"}}'>
+				{{ item.get('e_mail') }}
+			</a>
+		</strong>
+	</div>
+	{% else %}
+	&nbsp;
+	{% endif %}
+	<div class="separatore-linea"></div>
+{% if ordine.spedizione %}
+<table class="h-list" cellpadding="0" cellspacing="0" border="0">
+<thead>
+<tr class="h-list-header">
+	<th colspan="4" style="color: #ed4747">
+		<span class="h-nav-text">RECAPITI E SPEDIZIONE</span>
+	</th>
+</tr>
+<tr class="h-list-header">
+	<th>Indirizzo di spedizione</th>
+	<th style="width: 200px;">
+	<span class="h-nav-text">E-mail</span>
+	</th>
+	<th style="width: 150px;">Telefono</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+	<td>
+		{{ ordine.spedizione.nome }} {{ ordine.spedizione.cognome }}<br>
+		{% if ordine.spedizione.presso %}
+		<em>presso:</em> {{ ordine.spedizione.presso }}<br>
+		{% endif %}
+		{% if ordine.spedizione.nome_campanello %}
+		<em>nome camp.:</em> {{ ordine.spedizione.nome_campanello }}<br>
+		{% endif %}
+		{{ ordine.spedizione.via }}, {{ ordine.spedizione.num_civico }}<br>
+		{{ ordine.spedizione.cap }} {{ ordine.spedizione.localita }} ({{ ordine.spedizione.provincia }})<br>
+		{{ ordine.spedizione.nazione }}
+		{% if ordine.spedizione.indicazioni %}
+			<br><br><em>indicazioni:</em> {{ ordine.spedizione.indicazioni }}
+		{% endif %}
+	</td>
+	<td>
+		{% if item.get('e_mail') and item.get('e_mail') != '' %}
+		<div class="h-list-cell-auto-wrapper">
+			<div class="h-list-cell-auto h-action-alttext" data-alttext="{{ item.get('e_mail') }}">
+				<a class="link h-action-window" data-action='{"type": "layer", "url": "{{ _h.url('manager/myarea/carrello/scrivi') }}", "overlay": true, "width": 500, "height": 400, "params": {"id": "{{ item.id }}"}}'>
+					{{ item.get('e_mail') }}
+				</a>
+			</div>
+		</div>
+		{% else %}
+		&nbsp;
+		{% endif %}
+	</td>
+	<td>
+		<div class="h-list-cell-auto-wrapper">
+			<div class="h-list-cell-auto h-action-alttext" data-alttext="{{ ordine.spedizione.telefono }}">
+				{{ ordine.spedizione.telefono }}
+			</div>
+		</div>
+	</td>
+</tbody>
+</table>
+
+<div class="separatore-linea"></div>
+{% endif %}
+
+{% if ordine.fatturazione %}
+<table class="h-list" cellpadding="0" cellspacing="0" border="0">
+<thead>
+<tr class="h-list-header">
+	<th colspan="4" style="color: #ed4747">
+		<span class="h-nav-text">PAGAMENTO E FATTURAZIONE</span>
+	</th>
+</tr>
+<tr class="h-list-header">
+	<th>Fatturazione:</th>
+	<th style="width: 100px;">Documento</th>
+	<th style="width: 130px;">Tipo pagamento</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+	<td>
+		{{ ordine.fattura.nome }}<br>
+		{% if ordine.fattura.p_iva %}
+			<em>P.IVA</em> {{ ordine.fattura.p_iva }}<br>
+		{% endif %}
+		{% if ordine.fattura.codice_fiscale %}
+			<em>C.F.</em> {{ ordine.fattura.codice_fiscale }}<br>
+		{% endif %}			
+		{% if ordine.fattura.data_nascita %}
+			<em>Data nascita</em> {{ ordine.fattura.data_nascita }}<br>
+		{% endif %}	
+		{% if ordine.fattura.luogo_nascita %}
+			<em>Luogo nascita</em> {{ ordine.fattura.luogo_nascita }}<br>
+		{% endif %}			
+		{{ ordine.fattura.via }}, {{ ordine.fattura.num_civico }}<br>
+		{{ ordine.fattura.cap }} {{ ordine.fattura.localita }} ({{ ordine.fattura.provincia }})<br>
+		{{ ordine.fattura.nazione }}
+	</td>
+	<td>
+		{% if ordine.richiesta_fatturazione == 1 %}
+			fattura
+		{% else %}
+			ricevuta
+		{% endif %}
+	</td>
+	<td>
+		{{ _h.context('checkout_util').getPagamento(item.get('tipo_pagamento')) }}
+	</td>
+</tbody>
+</table>
+
+<div class="separatore-linea"></div>
+{% endif %}
+
+<table class="h-list" cellpadding="0" cellspacing="0" border="0">
+<thead>
+<tr class="h-list-header">
+	<th colspan="7" style="color: #ed4747">
+		<span class="h-nav-text">ARTICOLI IN CARRELLO</span>
+	</th>
+</tr>
+<tr class="h-list-header">
+	<th style="width: 60px;">&nbsp;</th>
+	<th style="width: 120px;">COD</th>
+	<th>Articolo</th>
+	<th style="width: 80px;">Prezzo unit.</th>
+	<th style="width: 40px;">Qta</th>
+</tr>
+</thead>
+<tbody>
+	{% set map = _h.context('mapAttributo') %}
+	{% set mapType = _h.context('mapAttributoType') %}
+	
+	{% for art in list_articolo %}
+		{% set prezzo_originale = art.item.prezzoOriginale %}
+		{% set prezzo = art.item.prezzo %}
+		{% set total = art.total %}
+	<tr>
+		<td><img src="/images/{{ _h.config('template').manager.item_image_dim }}/{{ art.item.imageName }}"></td>
+		<td>{{ art.item.codice }}</td>
+		<td>
+			<div><strong>{{ art.item.get('nome') }}</strong></div>
+			{% for attr in art.attr %}
+				{% if attr.id != 0 %}
+				{% set a = map.get(attr.id) %}
+				<div><em>{{ mapType.get(a.get('tipo')).nome }}:</em> {{ a.get('nome') }}</div>
+				{% endif %}
+			{% endfor %}
+			{{ mymc.dettaglio_articolo_ordine(_h, art) }}
+		</td>
+		<td style="text-align: right;">
+			<div>{{ _h.util.euro(prezzo) }} {{ _h.config('manager_valuta', '&euro;') }}</div>			
+			{% if art.item.is_pacchetto %}
+			<div style="color: #999; font-size: 12px;">{{ art.item.nome_pacchetto }}</div>
+			{% elseif art.item.is_sconto %}
+			<div style="color: #999; font-size: 12px;">-{{ art.item.sconto }}%</div>
+			<div style="color: #999; font-size: 12px; text-decoration: line-through">{{ _h.util.euro(prezzo_originale) }} {{ _h.config('manager_valuta', '&euro;') }}</div>
+			{% endif %}		
+		</td>
+		<td>{{ art.qta }}</td>
+	</tr>
+	{% endfor %}	
+</tbody>
+</table>
+{% else %}
+Carrello non trovato
+{% endif %}
+		
+	</fieldset>		
+	</fieldset>		
+</div>
+</form>

@@ -1,0 +1,13 @@
+{% if item.get('css_class_pagina') %}
+<div class="{{ item.get('css_class_pagina') }}">
+{% endif %}
+	{% if item.get('css_pagina') %}
+	<style>{{ item.get('css_pagina') }}</style>
+	{% endif %}
+		
+{% if item.get('css_class_pagina') %}
+</div>
+{% endif %}
+{% if item.get('script_pagina') %}
+<script>{{ item.get('script_pagina') }}</script>
+{% endif %}

@@ -1,0 +1,400 @@
+{% import _h.template('_macro.html') as mc %}
+{% set _lblg = _h.labels.get('global') %}
+{% set _lblc = _h.labels.get('checkout') %}
+{% set _lblcp = _h.labels.get('checkout_preventivo') %}
+<!DOCTYPE html>
+<html lang="{{ _h.langCountry }}" class="{% if _h.session.isAuth and _h.session.profile == 'guest' %}user-auth{% else%}user-no-auth{% endif%}">
+<head>
+<script type="text/javascript">
+window.dataLayer = window.dataLayer || [];
+function gtag() {
+	if (arguments.length >= 2 && 
+		arguments[0] == 'event') {
+		if (arguments.length >= 3 && typeof arguments[2] == 'object') {
+			var data = arguments[2];
+		}
+		else {
+			var data = {};
+		}
+		data.event = arguments[1];
+		dataLayer.push(data);
+	}
+	else {
+		dataLayer.push(arguments);
+	}
+}
+</script>
+{% set script_statistiche_enabled = true %}
+{% set google_tag_manager_come_cookie_tecnici = false %}
+{% set google_analytics_come_cookie_tecnici = false %}
+{% if _h.config('cookie_policy') == 'gdpr22' %}
+	{% if _h.settings.get('google_tag_manager_come_cookie_tecnici', '') != '' %} 
+		{% set google_tag_manager_come_cookie_tecnici = true %}
+	{% endif %}
+	{% if _h.settings.get('google_analytics_come_cookie_tecnici', '') != '' %} 
+		{% set google_analytics_come_cookie_tecnici = true %}
+	{% endif %}
+	{% if not(_h.cookie('statistiche')) %}
+		{% set script_statistiche_enabled = false %}
+	{% endif %}
+{% endif %}
+
+{% if not(html_to_pdf) %}
+	{% if script_statistiche_enabled or google_tag_manager_come_cookie_tecnici %}
+		{{ mc.google_tag_manager_script(_h) }}
+		{{ mc.google_site_tag_script(_h) }}
+		{{ mc.dataLayerGa4(_h) }}
+	{% endif %}
+	{% if script_statistiche_enabled or google_analytics_come_cookie_tecnici %}
+	{{ mc.google_analytics_script(_h) }}
+	{% endif %}
+	{{ mc.meta_info(_h) }}
+	{% include _h.template('_meta_share.html') %}
+{% endif %}
+
+{% if html_to_pdf %}
+	{% set _build = '' %}
+{% else %}
+	{% set _build = '?b=254-' ~ _h.config('template').web.tmpl_build %}
+{% endif %}
+
+{% macro jsLits(_h, list, build) %}
+	{% for item in list %}
+		{% if item|slice(0, 4) == 'http' %}
+		<script type="text/javascript" src="{{ item }}"></script>
+		{% else %}
+		<script type="text/javascript" src="{{ _h.view('html_to_pdf_www_path') }}/assets/website/js/{{ item }}.js{{ build }}"></script>
+		{% endif %}
+	{% endfor %}
+{% endmacro %}
+
+{% macro cssLits(_h, list, build) %}
+	{% for item in list %}
+		{% if item|slice(0, 4) == 'http' %}
+		<link rel="stylesheet" type="text/css" href="{{ item }}" >
+		{% else %}
+		<link rel="stylesheet" type="text/css" href="{{ _h.view('html_to_pdf_www_path') }}/assets/website/css/{{ item }}.css{{ build }}" >
+		{% endif %}
+	{% endfor %}	
+{% endmacro %}
+<meta charset="utf-8">  
+{% if not(html_to_pdf) and not(_h.context.isApp()) %}
+	{% if head_include %}
+		{% include _h.template(head_include) %}
+	{% endif %}
+	{% if _h.settings.getByUrl('google_site_verification') %}
+	<meta name="google-site-verification" content="{{ _h.settings.getByUrl('google_site_verification') }}" />
+	{% endif %}
+	{% if _h.settings.getByUrl('facebook_site_verification') %}
+	<meta name="facebook-domain-verification" content="{{ _h.settings.getByUrl('facebook_site_verification') }}" />
+	{% endif %}
+	{% if _h.settings.getByUrl('pinterest_site_verification') %}
+	<meta name="p:domain_verify" content="{{ _h.settings.getByUrl('pinterest_site_verification') }}"/>
+	{% endif %}
+	{% if noindex or _h.input('noindex', '') != '' or _h.input('__ct', '') != '' or _h.requestActivity == 'activity-not-found' or _h.requestActivity == 'data-not-found' %}
+	<meta name="robots" content="noindex, nofollow">
+	{% endif %}  
+{% endif %}  
+{% if _h.context.isApp() and not(_h.context.isWebApp()) %}  
+<meta name="robots" content="noindex, nofollow">
+{% endif %}  
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<link rel="icon" href="{{ _h.res('assets/website/img/favicon.png') }}{{ _build }}" type="image/x-icon" >
+<meta name="author" content="{{ _h.settings.get('website_meta_author', _h.config('template').web.copy) }}">
+<meta name="copyright" content="{{ _h.settings.get('website_meta_copy', _h.config('template').web.copy) }}" >
+
+<meta name="format-detection" content="telephone=no">
+{% if not(_h.context.isApp()) and _h.config('template').web.font %}
+	{% if _h.config('template').web.font is iterable %}
+		{% set fonts = _h.config('template').web.font %}
+	{% else %}
+		{% set fonts = [_h.config('template').web.font] %}
+	{% endif %}
+	{% for f in fonts %}
+	<link rel="stylesheet" {% if not(html_to_pdf) %}media="screen"{% endif %} href="{{ f }}" />
+	{% endfor %}
+{% endif %}
+<link rel="stylesheet" {% if not(html_to_pdf) %}media="screen"{% endif %} href="{{ html_to_pdf_www_path }}/assets/website/css/layout.css{{ _build }}" />
+{% if not(html_to_pdf) %}
+<link rel="stylesheet" {% if not(html_to_pdf) %}media="screen"{% endif %} href="{{ html_to_pdf_www_path }}/assets/website/css/cookie-policy.css{{ _build }}" />
+{% endif %}
+<link rel="stylesheet" {% if not(html_to_pdf) %}media="screen"{% endif %} href="{{ html_to_pdf_www_path }}/assets/website/css/form.css{{ _build }}" />
+<link rel="stylesheet" {% if not(html_to_pdf) %}media="screen"{% endif %} href="{{ html_to_pdf_www_path }}/assets/website/css/cart.css{{ _build }}" />
+{% if collezione_template %}
+<link rel="stylesheet" {% if not(html_to_pdf) %}media="screen"{% endif %} href="{{ html_to_pdf_www_path }}/assets/website/css/template.css{{ _build }}" />
+{% endif %}
+{% if _h.config('gestione_preventivi', false) %}
+<link rel="stylesheet" {% if not(html_to_pdf) %}media="screen"{% endif %} href="{{ html_to_pdf_www_path }}/assets/website/css/cartprev.css{{ _build }}" />
+{% endif %}
+{% if not(_h.istanza.isMaster()) %}
+<link rel="stylesheet" {% if not(html_to_pdf) %}media="screen"{% endif %} href="{{ html_to_pdf_www_path }}/assets/website/css/layout_{{ _h.istanza.name() }}.css{{ _build }}" />
+{% endif %}
+{% if not(html_to_pdf) %}
+	<link rel="stylesheet" {% if not(html_to_pdf) %}media="screen"{% endif %} href="/css-labels{{ _build }}&_lang={{ _h.lang }}" />
+	{% if not(_h.context.isApp()) %}
+		{% set url_meta = _h.context().urlMeta() %}
+		{% if url_meta and url_meta.canonical %}
+			{% set canonical = url_meta.canonical %}
+		{% elseif url_canonical %}
+			{% set canonical = url_canonical %}
+		{% else %}
+			{% set canonical = '' %}
+			{% if _h.requestActivity == 'item-articolo' %}
+				{% set canonical = item.geto('metainfo').get('canonical', item.url) %}
+			{% elseif _h.requestActivity == 'item-blog' %}
+				{% set canonical = item.geto('metainfo').get('canonical', item.url) %}
+			{% elseif _h.requestActivity == 'item-evento-news' %}
+				{% set canonical = item.geto('metainfo').get('canonical', item.url) %}
+			{% elseif _h.requestActivity == 'page' %}
+				{% set canonical = item.geto('metainfo').get('canonical', item.url) %}
+			{% elseif _h.requestActivity == 'search' or _h.requestActivity == 'find' or _h.requestActivity == 'search-blog' or _h.requestActivity == 'search-evento-news' or _h.requestActivity == 'item-azienda' %}
+				{% set search_url = _h.requestUrl %}
+				{% if result.collezione %}
+					{% set categoria_url = result.collezione.url %}
+					{% set base_url = '/' ~ _h.lang %}
+					{% if categoria_url != '/' and categoria_url != base_url %}
+						{% set search_url = categoria_url %}
+					{% endif %}
+				{% else %}
+					{% if _h.requestActivity == 'item-azienda' and _h.input('start', '') == '' %}
+						{% set search_url = item.geto('metainfo').get('canonical', item.url) %}
+					{% endif %}
+				{% endif %}
+				{% if _h.input('start', '') %}
+					<link rel="canonical" href="{{ _h.c_url(search_url) }}"/>
+					{% if result.prevStart >= 0 and result.prevStart != _h.input('start', 0) %}
+						{% if result.prevStart > 0 %}
+						<link rel="prev" href="{{ _h.c_url(search_url) }}?start={{ result.prevStart }}"/>
+						{% else %}
+						<link rel="prev" href="{{ _h.c_url(search_url) }}"/>
+						{% endif %}
+					{% endif %}
+				{% else %}
+					<link rel="canonical" href="{{ _h.c_url(search_url) }}"/>
+				{% endif %}
+				{% if result.nextStart >= 0 and result.nextStart != _h.input('start', 0) and result.nextStart < result.total %}
+				<link rel="next" href="{{ _h.c_url(search_url) }}?start={{ result.nextStart }}"/>
+				{% endif %}
+			{% else %}
+				{% if not(_h.requestActivity starts with 'cart/') and
+						 not(_h.requestActivity starts with 'cartprev/') and
+						  not(_h.requestActivity starts with 'account/') %}
+					{% set canonical = _h.requestUrl %}
+				{% endif %}
+			{% endif %}
+		{% endif %}
+		{% if canonical %}
+		<link rel="canonical" href="{{ _h.c_url(canonical) }}">
+		{% endif %}
+		{% for item in hreflangList %}
+		<link rel="alternate" hreflang="{{ item.lang }}" href="{{ item.url }}" />
+		{% endfor %}
+	{% endif %}
+{% endif %}
+{{ _self.cssLits(_h, css_global, _build) }}
+{{ _self.cssLits(_h, css, _build) }}
+{% if html_to_pdf %}
+	<link rel="stylesheet" {% if not(html_to_pdf) %}media="screen"{% endif %} href="{{ html_to_pdf_www_path }}/assets/website/css/html_to_pdf.css{{ _build }}" />
+{% else %}
+	{% if _h.context.isApp() %}
+		<link rel="stylesheet" {% if not(html_to_pdf) %}media="screen"{% endif %} href="/assets/website/css/app-mobile.css{{ _build }}" />
+	{% endif %}
+	{% if _h.context.isWebApp() %}
+		<link rel="stylesheet" {% if not(html_to_pdf) %}media="screen"{% endif %} href="/assets/website/css/webapp-mobile.css{{ _build }}" />
+	{% endif %}
+	<link rel="stylesheet" {% if not(html_to_pdf) %}media="screen"{% endif %} href="/assets/website/css/responsive.css{{ _build }}" />	
+	<script src="/assets/website/js/plugin/jquery-1.11.1.min.js{{ _build }}"></script>
+	<script src="/assets/website/js/plugin/json2.js{{ _build }}"></script>
+	<script src="{% if _h.config('url_prefix') %}/{{ _h.config('url_prefix') }}{% endif %}/js-labels{{ _build }}&_lang={{ _h.lang }}"></script>
+	<script src="{% if _h.config('url_prefix') %}/{{ _h.config('url_prefix') }}{% endif %}/js-params{{ _build }}&_lang={{ _h.lang }}"></script>
+	<script src="/assets/website/js/cookie-policy.js{{ _build }}"></script>
+	<script src="/assets/website/js/utility.js{{ _build }}"></script>
+	<script src="/assets/website/js/country-phone.js{{ _build }}"></script>
+	<script src="/assets/website/js/validator.js{{ _build }}"></script>
+	<script src="/assets/website/js/form.js{{ _build }}"></script>
+	<script src="/assets/website/js/website.js{{ _build }}"></script>
+	<script src="/assets/website/js/cart.js{{ _build }}"></script>
+	
+	{% if _h.settings.get('checkout_pagamento_scalapay') != '' %}
+	<script src="https://cdn.scalapay.com/js/scalapay-widget/webcomponents-bundle.js"></script>
+	<script src="https://cdn.scalapay.com/js/scalapay-widget/scalapay-widget.js"></script>
+	{% endif %}
+	
+	{% if _h.settings.getByUrl('google_recaptcha_client_key') != '' %}
+	<script src="https://www.google.com/recaptcha/api.js?hl={{ _h.lang }}" async="" defer=""></script>
+	{% endif %}
+	
+	<script src="/assets/website/js/popup.js{{ _build }}"></script>
+	{% if _h.config('gestione_preventivi', false) %}
+	<script src="/assets/website/js/cartprev.js{{ _build }}"></script>
+	{% endif %}
+	{% if _h.context.isApp() %}
+		<script src="/assets/website/js/app-mobile.js{{ _build }}"></script>
+	{% endif %}
+	
+	{% if _h.settings.get('cookiebot_id', '') != '' %} 
+		<script id="Cookiebot" src="https://consent.cookiebot.com/uc.js" data-cbid="{{ _h.settings.get('cookiebot_id', '') }}" data-blockingmode="auto" type="text/javascript"></script>
+	{% endif %}
+	
+	{{ _self.jsLits(_h, js_global, _build) }}
+	{{ _self.jsLits(_h, js, _build) }}
+	{% include _h.template('_meta.html') %}
+	{% include _h.template('_script.html') %}
+	
+	{% if noscript or _h.input('noscript', '') != '' %}
+	{% else %}
+		{% if not(_h.context.isApp()) or _h.config('force_script_in_app', false) %}
+			{% if _h.settings.get('iubenda_site_id', '') != '' %}
+				{% if _h.settings.get('iubenda_site_id_script', '') == '' %}
+				<script type="text/javascript">
+				var _iub = _iub || [];
+				_iub.csConfiguration = {"consentOnScroll":false,"consentOnLinkAndButton":false,"lang":"it","siteId":{{_h.settings.get('iubenda_site_id', '')}},"cookiePolicyId":{{_h.settings.get('iubenda_cookie_id', '')}}, "banner":{ "acceptButtonDisplay":true,"customizeButtonDisplay":true,"position":"float-top-center" }};
+				</script><script type="text/javascript" src="//cdn.iubenda.com/cs/iubenda_cs.js" charset="UTF-8" async></script>
+					{% if _h.settings.get('iubenda_consent_solution_api_key', '') != '' %}
+					<script type="text/javascript">var _iub = _iub || {}; _iub.cons_instructions = _iub.cons_instructions || []; _iub.cons_instructions.push(["init", {api_key: "{{ _h.settings.get('iubenda_consent_solution_api_key', '') }}"}]);</script><script type="text/javascript" src="https://cdn.iubenda.com/cons/iubenda_cons.js" async></script>
+					{% endif %}
+				{% endif %}
+			{% endif %}
+		
+			{% if _h.config('cookie_policy') == 'gdpr22' %}
+				{{ _h.cookieScript('head') }}
+			{% else %}
+				{{ _h.template_string(_h.settings.get('script_all_pages_head')) }}
+			{% endif %}
+
+			{% if thanks_page %}
+				{% if cancel_return %}
+				{% else %}
+					{% set trova_prezzi = _h.settings.get('trova_prezzi_key') %}
+					{% if (script_statistiche_enabled or google_tag_manager_come_cookie_tecnici) and trova_prezzi %}
+					<script type="text/javascript" src="https://tracking.trovaprezzi.it/javascripts/tracking.min.js" async="true"></script>
+					<script type="text/javascript">
+						window._tt = window._tt || [];
+						window._tt.push({ event: 'setAccount', id: '{{ trova_prezzi }}' });
+						window._tt.push({ event: 'setOrderId', order_id: '{{ codice }}' });
+						window._tt.push({ event: 'setEmail', email: '{{ ordine.ordine.e_mail }}' });
+						{% for art in ordine.ordine.list_items %}
+						window._tt.push({ event: 'addItem', sku: '{{ art.item.codice }}', product_name: "{{ art.item.nome }}" });
+						{% endfor %}
+						window._tt.push({ event: 'setAmount', amount: '{{ ordine.ordine.total_ordine }}' });
+						window._tt.push({ event: 'orderSubmit'});
+					</script>
+					{% endif %}
+				{% endif %}
+			{% endif %}
+
+			{{ mc.facebook_pixel_script(_h, script_statistiche_enabled) }}
+			{{ mc.pinterest_tag_script(_h, script_statistiche_enabled) }}
+		{% endif %}
+	{% endif %}
+	{% include _h.template('_head.html') %}
+{% endif %}
+</head>
+<body data-activity="{{ _h.requestActivity }}" data-collezione-template="{{ collezione_template }}" data-page="{{ codice_page }}" data-popup="{{ codice_popup }}" data-device="{{ _h.device.type }}" {% if not(_h.context.isApp()) %}data-cookie-policy="{{ _h.config('cookie_policy') }}"{% endif %} class="{% if _h.cookieNeedUpdate() and not(_h.context.isApp()) %}cookie-policy-need-update {% endif %}lang-{{ _h.lang }} {% if _h.device.isMobile() %}mobile {% endif%}nojq {{ css_page }} {{ _h.input('css_body') }}{% if not(checkout) %}{% else %} checkout-step-page{% endif%} {% if _h.session.isAuth and _h.session.profile == 'guest' %}user-login user-login-{{ _h.session.params.user.tipo }}{% if _h.session.params.user.speciale %} user-login-speciale{% endif %}{% else %}user-no-login{% endif %}{% if html_to_pdf %} html-to-pdf{% endif %}{% if hide_header_footer %} page-hide-header-footer{% endif %}">
+	{% if not(html_to_pdf) and not(_h.context.isApp()) %}
+		{{ mc.microdata(_h) }}
+		{{ _h.cookieScript('body_header') }}
+		
+		{% if _h.config('template').web.share %}
+			{% set _lbls = _h.labels.get('global') %}
+			<img alt="{{ _lbls.share_nome_sito }}" src="{{ _h.config('template').web.share.image_url }}" style="position: absolute; top: -10000px;">
+		{% endif %}
+		<img src="/assets/void_image.png" alt="{{ _h.config('template').web.logo_name }}" class="placeholder-base-image">
+		
+		{% if script_statistiche_enabled or google_tag_manager_come_cookie_tecnici %}
+			{{ mc.google_tag_manager_img(_h) }}
+		{% endif %}
+		{% if script_statistiche_enabled %}
+			{{ mc.facebook_pixel_img(_h) }}
+		{% endif %}
+		{% include _h.template('_pre_header.html') %}
+	{% endif %}
+		<div id="wrapper" class="content">
+			{% if _h.context.isApp() %}
+				{% include _h.template('_header_app_mobile.html') %}
+			{% endif %}
+			<div id="main">
+		{% if not(_h.context.isApp()) %}
+			{% if html_to_pdf %}
+				{% include _h.template('_header_html_to_pdf.html') %}
+			{% else %}
+				{% if not(hide_header_footer) %}
+					<header class="content">
+						{% include _h.template('_header.html') %}
+						<div class="header-content">
+						<div class="inner-header">
+						<div class="web">
+							{% include _h.template('_logo.html') %}
+							{% include _h.template('_toolbar.html') %}
+							<div class="nav-sublist-header">
+								<section class="nav nav-generic nav-header">
+									<ul>
+										{% include _h.template('_header_menu_generic.html') %}
+										<li id="cart-link-cassa" {% if cart.number == 0 %}style="display: none;"{% endif %}>{{ mc.link(_h, _h.url('cart/checkout/index'), _lblc.btn_vai_alla_cassa) }}</li>
+									</ul>
+								</section>
+								{% include _h.template('_header_user.html') %}
+								{% include _h.template('_header_sublist.html') %}
+							</div>
+							<section id="search">
+								{% include _h.template('_search.html') %}
+								{% include _h.template('_header_cerca_add.html') %}
+							</section>
+							{% include _h.template('_header_preferiti.html') %}
+							<section id="cart" data-number="{{ cart.number }}">
+							{% if no_cart %}
+							{% else %}
+								{% include _h.template('_cart_button.html') %}
+								{% if not(checkout) %}
+									{% include _h.template('_cart_details.html') %}
+								{% else %}
+									<span class="cassa">{{ _lblc.cassa }}</span>
+								{% endif %}
+							{% endif %}
+							</section>
+							{% if _h.config('gestione_preventivi', false) %}
+							<section id="cart-preventivo">
+							{% if no_cart %}
+							{% else %}
+								{% if not(checkout) %}
+									<a href="javascript:void(0);" class="cart-preventivo-button"><span class="details"><span class="label-carrello">{{ _lblcp.carrello }}</span> <span class="item-number-wrapper"><span class="item-number-parentesi">(</span><span class="item-number">{{ cart_prev.number_qta }}</span><span class="item-number-items">{{ cart_prev.number_qta }}</span><span class="item-number-parentesi">)</span></span><span class="arrow"></span></span></a>
+									{% include _h.template('_cart_preventivo_details.html') %}
+								{% endif %}
+							{% endif %}
+							</section>
+							{% endif %}
+							{% include _h.template('_header_inner_header.html') %}
+						</div>
+						</div>
+						{% include _h.template('_pre_header_menu_categorie.html') %}
+						<div class="inner-header-site">
+							<div class="web">
+								<nav class="nav nav-site">
+									{% include _h.template('_header_menu_categorie.html') %}
+								</nav>
+							</div>
+						</div>
+						</div>
+					</header>
+				{% endif %}
+			{% endif %}
+		
+			{% include _h.template('_pre_main.html') %}
+			{% if pre_main_include %}
+				{% include _h.template(pre_main_include) %}
+			{% endif %}
+			{% include _h.template('_pre_middle.html') %}
+			<div id="middle" class="content web middle-base">
+				<div class="inner-middle content">
+				{% if checkout %}
+				<nav class="checkout-nav">
+					{% if checkout_preventivo %}
+					{% include _h.template('_header_menu_cart_preventivo.html') %}
+					{% else %}
+					{% include _h.template('_header_menu_cart.html') %}
+					{% endif %}
+				</nav>
+				{% else %}
+					{% include _h.template('_middle.html') %}
+				{% endif %}
+		{% endif %}

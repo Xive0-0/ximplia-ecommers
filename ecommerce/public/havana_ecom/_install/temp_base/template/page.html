@@ -1,0 +1,36 @@
+
+{% if item.get('contenuto_pagina') == 3 and item.get('template') %}
+	<h1>{{ item.get('titolo') }}</h1>
+	{% include _h.template('_page/' ~ item.get('template') ~ '.html') %}
+{% else %}
+	{% if item.get('form') %}
+	<div class="clear">
+		<div class="page-col-html">
+			<div class="page-col-html-inner">
+				<h1>{{ item.get('titolo') }}</h1>
+				<div class="html">
+					{% if item.get('contenuto_pagina') == 0 %}
+					{{ item.getWithMerge('testo') }}
+					{% else %}
+					{{ item.getWithMerge('html') }}
+					{% endif %}
+				</div>
+			</div>
+		</div>
+		<div class="page-col-form">
+			{{ form_pagina }}
+		</div>
+	</div>
+	{% else %}
+	<div class="page">
+		<h1>{{ item.get('titolo') }}</h1>
+		<div class="html">
+		{% if item.get('contenuto_pagina') == 0 %}
+		{{ item.getWithMerge('testo') }}
+		{% else %}
+		{{ item.getWithMerge('html') }}
+		{% endif %}
+		</div>
+	</div>
+	{% endif %}
+{% endif %}

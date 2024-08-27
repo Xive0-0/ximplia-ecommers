@@ -1,0 +1,19 @@
+{% import _h.template('manager/_macro.html') as mc %}
+<table class="h-list h-list-slingle-selection item-autoload-total h-fixed-header-table h-list-slingle-selection" cellpadding="0" cellspacing="0" border="0" data-total="{{ result.total }}">
+<tr class="h-list-header">
+	<td style="width: 120px;">Data ultima</td>
+	<td style="width: 50px;">Numero</td>
+	<td>Query</td>
+</tr>
+{% for item in result.list %}		
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td>{{ item.getDateTime('data_utilizzo') }}</td>
+		<td>{{ item.get('num') }}</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto h-action-alttext" data-alttext="{{ item.get('query') }}">{{ item.get('query') }}</div>
+			</div>		
+		</td>
+	</tr>
+{% endfor %}
+</table>

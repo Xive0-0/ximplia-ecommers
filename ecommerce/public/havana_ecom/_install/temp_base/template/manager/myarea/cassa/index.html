@@ -1,0 +1,42 @@
+<div class="h-layout-content-wrapper h-layout-show-topbar cassa">
+	<div class="h-layout-topbar h-layout-topbar-cassa">
+		<div class="h-layout-content-wrapper">
+			Cassa
+			
+			<div class="cassa-find-articolo">
+				<div class="field-line-left field-150">
+					<input type="text" name="codice" class="field aggiungi-articolo-cassa-codice" placeholder="codice" value="" data-action='{"url": "{{ _h.url('manager/myarea/articolo/load-from-codice') }}"}'>
+				</div>
+				<div class="field-line-left field-300" id="cerca_fields" style="margin-right: 0;">
+					<input type="hidden" name="id" value="">
+					<input type="text" name="relazione_nome" id="cerca_autocomplete_fields" class="field autocomplete" placeholder="cerca" value="" data-action='{"url": "{{ _h.url('manager/myarea/articolo/list-autocomplete') }}"}'>
+				</div>
+				<div class="field-line-left field-50" id="quantita_fields" style="margin-right: 0;">
+					<input type="text" name="quantita" class="field valida-digitnumber" value="1" maxlength="3">
+				</div>
+				<a href="javascript:void(0);" class="h-bar-button h-bar-button-blu-scuro aggiungi-articolo-cassa">Aggiungi</a>
+				<a href="javascript:void(0);" class="h-bar-button h-bar-button-gray aggiungi-articolo-virtuale-cassa">Virtuale</a>
+				<a href="javascript:void(0);" class="h-bar-button h-bar-button-gray azzera-filtro-cassa">Azzera</a>
+				<a href="javascript:void(0);" class="h-bar-button h-bar-button-gray ordina-fornitore-cassa">Ordina a fornitore</a>
+			</div>
+			
+			<a href="javascript:void(0);" class="h-close-box"></a>
+		</div>
+	</div>
+	<div class="h-layout-content h-layout-content-cassa" data-url="{{ _h.url('manager/myarea/cassa/list-articoli') }}">
+	</div>
+	<div class="h-layout-content-riepilogo">
+		<div class="line-totale-ordine"><span class="totale-ordine">0,00</span> {{ _h.config('manager_valuta', '&euro;') }}</div>
+		<div class="line-totale-sconto">sconto: -<input type="text" class="valida-digitnumber totale-sconto" maxlength="2" value="0"> %</div>
+		<div class="line-totale-ordine-finale"><span class="totale-ordine-finale">0,00</span> {{ _h.config('manager_valuta', '&euro;') }}</div>
+		<div>
+			<a href="javascript:void(0);" class="h-bar-button h-bar-button-gray cancella-cassa">Cancella</a>
+			<a href="javascript:void(0);" class="h-bar-button h-bar-button-blu ricalcola-cassa">Ricalcola</a>
+		</div>		
+		<div class="clear line-intestazione-riepilogo"><input type="text" placeholder="Intestazione" value="" style="margin-left: 10px; margin-top: 30px;width: 250px"></div>
+		<div class="clear">
+			<a style="margin-top: 30px; width: 250px;" href="javascript:void(0);" class="h-bar-button h-bar-button-red stampa-cassa" data-url="{{ _h.url('manager/myarea/cassa/download-riepilogo') }}?magazzino=1">Stampa ordine</a>
+			<a style="margin-top: 10px; width: 250px;" href="javascript:void(0);" class="h-bar-button h-bar-button-blu stampa-cassa" data-url="{{ _h.url('manager/myarea/cassa/download-riepilogo') }}">Stampa documento di riepilogo</a>
+		</div>
+	</div>
+</div>

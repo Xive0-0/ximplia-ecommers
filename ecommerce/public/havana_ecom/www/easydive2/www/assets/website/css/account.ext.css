@@ -1,0 +1,41 @@
+.account-toolbar a:hover {
+	border: 1px solid #61646b;
+}
+.details em {
+	color: #898989;
+}
+.table-list-ordine em{
+	color: #898989;
+}
+.dettaglio-ordine .codice {
+	color: #61646b;
+}
+.dettaglio-ordine .label {
+	color: #898989;
+}
+.dettaglio-ordine .item-carrello-details span {
+	color: #898989;
+}
+.dettaglio-ordine .item-carrello-info em {
+	color: #898989;
+}
+.dettaglio-ordine .line-label em{
+	color: #898989;
+}
+.dettaglio-ordine .item-carrello img {
+	width: 45px;
+	height: 45px;
+}
+
+.table-list-log td.log-from-0 {
+	border-right: 3px solid #ed1c24;
+}
+.table-list-log td.log-from-1 {
+	border-right: 3px solid #000;
+}
+.table-list-log td.log-from-0 svg {
+	fill: #ed1c24;
+}
+.table-list-log td.log-from-1 svg {
+	fill: #000;
+}

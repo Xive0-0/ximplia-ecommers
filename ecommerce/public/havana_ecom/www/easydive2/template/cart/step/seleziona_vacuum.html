@@ -1,0 +1,30 @@
+{% set _lbl = _h.labels.get('step_acquisto') %}
+<div class="step" data-step="">
+	<h3>{{ _lbl.step_vacuum_titolo }}</h3>
+	<p class="evidenzia">{{ _lbl.step_vacuum_descrizione }}</p>
+	
+	<div class="clear">
+		<div class="step-item-accessorio-img">
+			<img src="{{ item.imageUrl('300x300') }}">
+		</div>
+		<div class="step-item-accessorio-nome">
+		<div class="step-item-accessorio-nome-inner">
+			<div class="step-item-accessorio-descrizione">{{ item.get('nome') }}</div>
+			{% if item.get('step_acquisto_testo') %}
+			<div class="step-item-accessorio-descrizione-dettaglio">{{ item.get('step_acquisto_testo') }}</div>
+			{% endif %}
+			<div class="step-item-accessorio-prezzo">{{ item.prezzo('e', false) }}</div>
+		</div>
+		</div>
+	</div>
+	
+	<button class="next" data-url="seleziona-accessori" data-callback="add-item">{{ _lbl.step_vacuum_btn_aggiungi }}</button>
+	<button class="next light" data-url="seleziona-accessori">{{ _lbl.btn_procedi_senza }}</button>
+	<div class="clear step-bottombar">
+		<a class="prev">&lt; {{  _lbl.btn_torna_indietro }}</a>
+		<a class="item-acquista-step-close">{{ _lbl.btn_annulla }}</a>
+	</div>
+	<div class="hidden-elem">
+		<div class="item-data"  data-id="{{ item.id }}" data-type="vacuum" data-img="{{ item.imageUrl('300x300') }}" data-prezzo="{{ item.prezzo('', false) }}" data-prezzo-euro="{{ item.prezzo('e', false) }}">{{ item.get('nome') }}</div>
+	</div>
+</div>

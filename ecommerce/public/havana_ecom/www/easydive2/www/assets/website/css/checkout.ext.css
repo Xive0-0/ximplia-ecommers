@@ -1,0 +1,309 @@
+#checkout {
+	min-height: 250px;
+	position: relative;
+}
+
+.ck-checkbox-button:hover {
+	border: none;
+}
+.cassa {
+	display: none;
+}
+.col-box-faq {
+	display: none;
+}
+.col-box-100 {
+	float: none;
+}
+.ck-line-extend .ck-line-last,
+.ck-line-light .ck-checkbox-descrizione-1 {
+	border-bottom: none;
+}
+.ck-checkbox-button {
+	padding: 10px 0;
+	background: #fff;
+	color: #202020;
+	font-size: 12px;
+	font-weight: normal;
+	text-transform: uppercase;
+}
+.ck-checkbox-button,
+.ck-checkbox-button-selected:hover, 
+.ck-checkbox-button-selected {
+	border: none;
+	background: #fff;
+}
+.ck-checkbox-button-selected:hover, 
+.ck-checkbox-button-selected {
+	color: #202020;
+}
+.ck-checkbox-button .checkbox-label {
+	margin-left: -30px;
+}
+.button-next:after {
+	content: '\276F';
+	margin-left: 5px;
+}
+.ck-codice-promozionale .button-next,
+.button-prev,
+.button-next {
+	border-radius: 15px;
+	display: inline-block;
+	color: #fff;
+	text-transform: uppercase;
+	text-align: center;
+	height: 30px;
+	line-height: 30px;
+	border: 2px solid #202020;
+	padding: 0 30px;
+	text-decoration: none;
+	font-size: 12px;
+	font-weight: 600;
+}
+.ck-footer .ck-cell {
+	line-height: 30px;
+	font-weight: normal;
+}
+.label-simple {
+	font-size: 12px;
+}
+.label-title {
+	font-size: 12px;
+	color: #202020;
+	text-transform: uppercase;
+}
+.button-prev {
+	background: #999;
+	border-color: #999;
+}
+.button-next {
+	background: #202020;
+	border-color: #202020;
+}
+.button-prev:hover {
+	color: #999;
+}
+.button-next:hover {
+	color: #202020;
+}
+.button-prev:hover,
+.button-next:hover {
+	background: #fff;
+}
+.checkout-nav {
+	margin-bottom: 20px;
+}
+
+.checkout-nav .current span {
+	color: #202020;
+}
+.checkout-nav .current strong {
+	background-color: #202020;
+	border-color: #202020;
+}
+.checkout-nav .ok span {
+	color: #202020;
+}
+.checkout-nav .ok em,
+.checkout-nav .ok strong {
+	background-color: #202020;
+	border-color: #202020;
+}
+.checkout-nav .ok strong:after {
+	color: #202020;
+}
+
+.col-box-faq .faq-list a {
+	color: #000 ;
+}
+
+.riepilogo-cart .header{ 
+	background: #f0f0f0;
+	color: #202020;
+}
+.riepilogo-cart .label em {
+	color: #202020;
+}
+.riepilogo-main .riepilogo-dati-carrello {
+	border-right: 1px solid #202020;
+}
+.item-carrello-details {
+	color: #202020;
+}
+.item-carrello-details strong {
+	color: #202020;
+}
+
+.riepilogo-dati-carrello .label-total {
+	border-top: 1px solid #202020;
+}
+.riepilogo-dati-carrello .label-total em {
+	color: #202020;
+}
+.riepilogo-dati-carrello .label-total span {
+	color: #202020;
+}
+.checkout-title {
+	border-bottom: none; 
+	color: #202020;
+	background: #f0f0f0;
+	font-style: normal;
+	text-align: center;
+}
+.ck-header {
+	border-bottom: 1px solid #202020;
+}
+
+.ck-prezzo-unitario .price {
+	color: #202020;
+}
+.item-carrello-price-total strong,
+.ck-footer .ck-descrizione,
+.ck-footer .ck-prezzo-totale {
+	color: #202020;
+}
+
+.ck-prezzo-totale span {
+	right: 10px;
+}
+.label-subtitle {
+	display: none;
+}
+.ck-cell em {
+	color: #202020;
+}
+.ck-evidenza {
+	color: #202020;
+}
+.ck-totale-ordine {
+	margin-top: 20px;
+}
+.ck-totale-ordine .checkout-title {
+	display: none;
+}
+.ck-footer {
+	border-top: none;
+}
+.ck-totale-ordine .ck-footer {
+	border-top: none;
+	background: #f0f0f0;
+	margin-top: 0;
+}
+.ck-codice-inserito {
+	color: #202020;
+}
+.checkout-controlla-banca em{
+	color: #202020;
+}
+.checkout-riepilogo-block {
+	border: 1px solid #d4d4d4;
+}
+.checkout-riepilogo-block div {
+	color: #202020;
+}
+.checkout-riepilogo-block span {
+	color: #a4a4a4;
+}
+.ck-image {
+	text-align: center;
+}
+.ck-image img {
+	max-width: 65px;
+	max-height: 90px;
+}
+.ck-line-articolo .ck-cell {
+	height: 90px;
+}
+.ck-quantita input {
+	box-shadow: none;
+}
+.action-elimina,
+.ck-quantita input,
+.ck-prezzo-unitario .price {
+	margin-top: 10px;
+}
+.riepilogo-cart .body{
+	background: #f0f0f0;
+}
+.item-carrello img{
+	max-width: 45px;
+	max-height: 68px;
+}
+
+.item-carrello {
+	border-right: 1px dashed #202020;
+	width: 150px;
+	margin-right: 10px;
+}
+
+.riepilogo-cart .header span {
+	background: url('../img/ico-plus-black.png') no-repeat right center;
+	text-transform: capitalize;
+}
+.riepilogo-cart .header.show span {
+	background: url('../img/ico-line-black.png') no-repeat right center;
+}
+
+.checkbox-group-pagamento .ck-footer,
+.checkbox-group-pagamento .ck-prezzo-totale,
+.checkbox-group-pagamento .ck-checkbox-descrizione-2 {
+	display: none;
+}
+
+.ck-azioni {
+	visibility: hidden;
+}
+.block-articolo-speciale-list .item .item-action a svg {
+	margin-right: 5px;
+}
+.block-articolo-speciale-list .item .item-action a.button-buy {
+	display: flex;
+	width: 100%;
+	align-items: center;
+	color: #000;
+	height: 24px;
+	justify-content: center;
+	margin: 0;
+}
+.block-articolo-speciale-list .item .item-buy-on-hover,
+.block-articolo-speciale-list .item .item-action a,
+.block-articolo-speciale-list .item .item-promozione {
+	display: none;
+}
+.block-articolo-speciale-list .item {
+	text-align: center;
+	font-size: 12px;
+}
+.block-articolo-speciale-list .item img {
+	max-width: 130px;
+	margin: auto;
+}
+.block-articolo-speciale-list .item .item-info {
+	margin-top: 0;
+}
+.block-articolo-speciale-list .item-info-inner {
+	padding-bottom: 20px;
+}
+
+.checkbox-group-list-corriere {
+	display: none;
+}
+
+.ck-checkbox-descrizione-1-opzione {
+	display: flex;
+	align-items: center;
+}
+
+.ck-checkbox-descrizione-1-opzione img {
+	max-width: 100px;
+	max-height: 25px;
+	margin-right: 10px;
+}
+
+.ck-checkbox-descrizione-1-opzione strong span {
+	font-weight: normal;
+	font-style: italic;
+}
+.ck-checkbox-descrizione-1-opzione strong {
+	display: block;
+}

@@ -1,0 +1,156 @@
+{% import _h.template('manager/_macro.html') as mc %}
+{% set _lbl = _h.labels.get('manager') %}
+
+<div class="h-layout-content-wrapper h-layout-show-topbar h-layout-show-bottombar">
+	<div class="h-layout-topbar">
+		<div class="h-layout-content-wrapper">
+			Filtra
+		</div>
+	</div>
+	<form>
+	<div class="h-layout-content">
+		<fieldset>
+
+<div class="h-tab">
+
+<div data-tab-rif="base">Cerca</div>
+{% if _h.input('fornitore') %}
+<div data-tab-rif="fornitore">Fornitore</div>
+{% endif %}
+{% if _h.session.params.user.accesso != 3 %}
+<div data-tab-rif="azienda">{{_lbl.azienda_brand}}</div>
+{% endif %}
+{% if _h.session.params.user.accesso >= 5 %}
+{% include _h.template('manager/myarea/articolo/_filtro_tabs.html') %}
+{% endif %}
+<div data-tab="base">
+	<div class="clear field-200">
+		<div class="h-checkbox-wrapper"><span class="h-checkbox" data-value="1"><input type="hidden" name="articolo_abilitato" value="" /></span> <strong>Articolo abilitato</strong></div>
+	</div>
+	<div class="clear field-200">
+		<div class="h-checkbox-wrapper"><span class="h-checkbox" data-value="1"><input type="hidden" name="articolo_non_abilitato" value="" /></span> <strong>Articolo NON abilitato</strong></div>
+	</div>
+	<div class="clear field-200">
+		<div class="h-checkbox-wrapper"><span class="h-checkbox" data-value="1"><input type="hidden" name="articolo_esaurito" value="" /></span> <strong>Articolo esaurito</strong></div>
+	</div>
+	<div class="clear field-200">
+		<div class="h-checkbox-wrapper"><span class="h-checkbox" data-value="1"><input type="hidden" name="fasce_sconto_attive" value="" /></span> <strong>Fasce sconto attive</strong></div>
+	</div>
+	<div class="clear field-200">
+		<div class="h-checkbox-wrapper"><span class="h-checkbox" data-value="1"><input type="hidden" name="codice_sconto_non_utilizzabile" value="" /></span> <strong>Codice sconto NON utilizzabile</strong></div>
+	</div>
+	<div class="clear field-200">
+		<div class="h-checkbox-wrapper"><span class="h-checkbox" data-value="1"><input type="hidden" name="sconto_cliente_non_utilizzabile" value="" /></span> <strong>Sconto cliente NON valido</strong></div>
+	</div>
+	<div class="clear field-200">
+		<div class="h-checkbox-wrapper"><span class="h-checkbox" data-value="1"><input type="hidden" name="visibile_in_checkout" value="" /></span> <strong>Visibile in checkout</strong></div>
+	</div>
+	<div class="clear field-200">
+		<div class="h-checkbox-wrapper"><span class="h-checkbox" data-value="1"><input type="hidden" name="con_iva_zero" value="" /></span> <strong>Con IVA UE a zero</strong></div>
+	</div>
+	{% if _h.config('gestione_magazzino', false) %}
+	<div class="clear field-200">
+		<div class="h-checkbox-wrapper"><span class="h-checkbox" data-value="1"><input type="hidden" name="acquisto_max_disp_magazzino" value="" /></span> <strong>Acquistabile solo se dis. QTA a mag.</strong></div>
+	</div>
+	{% endif %}
+	<p class="field-line field-200">
+		<label>HID (sku interno):</label>
+		<input type="text" name="hid" class="field valida-digitnum" maxlength="10">
+	</p>
+	<p class="field-line field-200">
+		<label>Filtra per parola chiave:</label>
+		<input type="text" name="query" class="field" maxlength="50">
+	</p>
+	<p class="field-line field-200">
+		<label>Filtra per codice (inserire * come carattere jolly ad inizio o fine codice):</label>
+		<input type="text" name="codice" class="field" maxlength="50">
+	</p>
+	<p class="field-line field-200">
+		<label>Filtra per codice fornitore (inserire * come carattere jolly ad inizio o fine codice):</label>
+		<input type="text" name="codice_fornitore" class="field" maxlength="50">
+	</p>
+	
+	<div class="select-content-wrapper" style="padding-left: 10px; margin: 15px 0;">
+		<div class="clear">
+			<div class="h-checkbox-wrapper"><span class="h-checkbox" data-value="1"><input type="hidden" name="con_promozioni" value="" /></span> <strong>Con promozioni</strong></div>
+		</div>
+		<div class="clear">
+			<div class="h-checkbox-wrapper"><span class="h-checkbox" data-value="1"><input type="hidden" name="con_promozioni_categoria" value="" /></span> <strong>Con promozioni in categoria</strong></div>
+		</div>
+		<div class="clear">
+			<div class="h-checkbox-wrapper"><span class="h-checkbox" data-value="1"><input type="hidden" name="con_promozioni_brand" value="" /></span> <strong>Con promozioni nel brand</strong></div>
+		</div>
+		<div class="clear">
+			<div class="h-checkbox-wrapper"><span class="h-checkbox" data-value="1"><input type="hidden" name="con_pacchetti" value="" /></span> <strong>Con pacchetti</strong></div>
+		</div>
+		<div class="clear">
+			<div class="h-checkbox-wrapper"><span class="h-checkbox" data-value="1"><input type="hidden" name="con_pacchetti_promozioni_attive" value="" /></span> <strong>Considera solo attivi a livello di date</strong></div>
+		</div>
+	</div>
+	
+	{% if _h.config('url_country', false) %}
+	<p class="field-line field-100">
+		<label>Abilitato visibilità in country:</label>
+		<input type="text" name="visibilita_country" class="field" value="" maxlength="2">
+	</p>
+	{% endif %}
+	{% if _h.config('gestione_magazzino', false) %}
+	<p class="field-line field-75 field-line-left">
+		<label>Qta. mag. da:</label>
+		<input type="text" name="quantita_magazzino_da" class="field valida-digitnum" maxlength="10">
+	</p>
+	<p class="field-line field-75 field-line-left">
+		<label>Qta. mag. a:</label>
+		<input type="text" name="quantita_magazzino_a" class="field valida-digitnum" maxlength="10">
+	</p>
+	<div class="clear"></div>
+	{% endif %}
+{% include _h.template('manager/myarea/articolo/_filtro.html') %}
+{% if _h.config('gestione_condividi_altri_in_scheda_articolo', false) %}
+	<div class="clear field-200">
+		<div class="h-checkbox-wrapper"><span class="h-checkbox" data-value="1"><input type="hidden" name="condiviso_amazon" value="" /></span> <strong>Condiviso con Amazon</strong></div>
+	</div>
+	<div class="clear field-200">
+		<div class="h-checkbox-wrapper"><span class="h-checkbox" data-value="1"><input type="hidden" name="condiviso_ebay" value="" /></span> <strong>Condiviso con EBay</strong></div>
+	</div>
+	<div class="clear field-200">
+		<div class="h-checkbox-wrapper"><span class="h-checkbox" data-value="1"><input type="hidden" name="condiviso_google" value="" /></span> <strong>Condiviso con Google</strong></div>
+	</div>
+	<div class="clear field-200">
+		<div class="h-checkbox-wrapper"><span class="h-checkbox" data-value="1"><input type="hidden" name="condiviso_trova_prezzi" value="" /></span> <strong>Condiviso con Trova prezzi</strong></div>
+	</div>
+{% endif %}
+</div>
+{% if _h.input('fornitore') %}
+<div data-tab="fornitore">
+	<div class="field-line field-select-add">
+		<label>Fornitore:</label>
+		<div class="select-content-wrapper">
+			<table class="select-content" style="width: 100%;">
+				{% for i in listFornitore %}	
+					<tr class="h-checkbox-wrapper">
+						<td style="padding-left: 15px;"><span class="h-checkbox" data-value="{{ i.id }}"><input type="hidden" name="id_fornitore[]" value="" /></span> <strong>{{ i.nome }}</strong></td>
+					</tr>
+				{% endfor %}
+			</table>
+		</div>	
+	</div>
+</div>
+{% endif %}
+{% if _h.session.params.user.accesso != 3 %}
+<div data-tab="azienda">
+	{{ mc.dynamicMultipleSelect(_h, _lbl.azienda_brand, listAzienda, null, 'az_id') }}
+</div>
+{% endif %}
+</div>
+		
+		
+		</fieldset>
+	</div>
+	<div class="h-layout-bottombar">
+		<div class="h-layout-content-wrapper">
+			<a href="javascript:void(0);" class="h-bar-button h-bar-button-blu h-action-filter" data-action='{"load": "#h-layout-center-content", "reset": "#azzera-filtro"}'>Filtra</a>
+		</div>
+	</div>
+	</form>
+</div>

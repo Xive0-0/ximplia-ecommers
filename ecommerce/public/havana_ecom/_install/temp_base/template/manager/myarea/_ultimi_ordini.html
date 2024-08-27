@@ -1,0 +1,23 @@
+<div id="h-layout-details-right" class="h-layout h-layout-middle" style="width: 550px;">
+	<div class="h-layout-content-wrapper">
+		<div class="h-layout-content">
+		
+<table id="list-pianificazione" class="h-list" cellpadding="0" cellspacing="0" border="0">
+<tr class="h-list-header">
+	<td colspan="5" style="background: #4285f4; color: #fff;">Ultimi ordini</td>
+</tr>
+<tr class="h-list-header">
+	<th style="width: 16px;">&nbsp;</th>
+	<th style="width: 80px;">Codice</th>
+	<th style="width: 100px;">Data ricezione</th>
+	<th>Provenienza</th>
+	<th style="width: 100px;" >Importo</th>
+</tr>
+{% for item in result.list %}		
+	{{ mci.item_ordine_simple(_h, item) }}
+{% endfor %}
+</table>
+	
+		</div>
+	</div>
+</div>

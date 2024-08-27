@@ -1,0 +1,60 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Indirizzi Spedizione') }}
+{% if item %}
+<input type="hidden" name="id" value="{{ item.id }}">
+<input type="hidden" name="id_cliente" value="{{ item.get('id_cliente') }}">
+{% else %}
+<input type="hidden" name="id_cliente" value="{{ _h.input('id_cliente') }}">
+{% endif %}
+
+<p class="field-line field-line-left field-150">
+	<label>Nome<span>*</span>:</label>
+	<input type="text" name="nome" class="field valida-required" value="{{ item.get('nome') }}" maxlength="50">
+</p>
+<p class="field-line field-150">
+	<label>Cognome<span>*</span>:</label>
+	<input type="text" name="cognome" class="field" value="{{ item.get('cognome') }}" maxlength="50">
+</p>
+<p class="field-line field-line-left field-150">
+	<label>C/O presso:</label>
+	<input type="text" name="presso" class="field" value="{{ item.get('presso') }}" maxlength="100">
+</p>
+<p class="field-line field-150">
+	<label>Nome sul campanello:</label>
+	<input type="text" name="nome_campanello" class="field" value="{{ item.get('nome_campanello') }}" maxlength="100">
+</p>
+<p class="clear field-line field-line-left field-250">
+	<label>Via<span>*</span>:</label>
+	<input type="text" name="via" class="field valida-required" value="{{ item.get('via') }}" maxlength="100">
+</p>
+<p class="field-line field-50">
+	<label>Num. civico<span>*</span>:</label>
+	<input type="text" name="num_civico" class="field valida-required" value="{{ item.get('num_civico') }}" maxlength="10">
+</p>
+<p class="clear field-line clear field-line-left field-50">
+	<label>CAP<span>*</span>:</label>
+	<input type="text" name="cap" class="field valida-digitnumber valida-required" value="{{ item.get('cap') }}" maxlength="5">
+</p>
+<p class="field-line field-250">
+	<label>Località<span>*</span>:</label>
+	<input type="text" name="localita" class="field valida-required" value="{{ item.get('localita') }}" maxlength="50">
+</p>
+<p class="clear field-line field-250">
+	<label>Provincia<span>*</span>:</label>
+	<input type="text" name="provincia" class="field valida-required" value="{{ item.get('provincia') }}" maxlength="50">
+</p>
+<p class="clear field-line field-250">
+	<label>Nazione<span>*</span>:</label>
+	<select name="nazione" class="field valida-required">
+		{% for n in list %}
+		<option value="{{ n.id }}" {% if item.get('nazione') == n.id %}selected="true"{% endif %}>{{ n.get('nome') }}</option>
+		{% endfor %}
+	</select>
+</p>
+<p class="field-line field-200">
+	<label>Telefono<span>*</span>:</label>
+	<input type="text" name="telefono" class="field valida-required" value="{{ item.get('telefono') }}" maxlength="20">
+</p>
+{{ mc.labelCampiObbligatori() }}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/cliente/spedizione/ex-edit'), '"reload": "#dati-content"') }}	

@@ -1,0 +1,1753 @@
+{% macro codiceIvaField(_h, listIvaPerNazione, item, requiredIt, key) %}
+{% if key == null %}
+	{% set key = 'codice_iva' %}
+{% endif %}
+<div class="field-wrapper-iva-content articolo-field-iva">
+	<div class="field-line field-100 field-line-left" style="margin-right: 5px">
+		<label>IVA <span style="color: #4285f4;">ITALIA</span>{% if requiredIt %}<span>*</span>{% endif %}:</label>
+		{% set listIva = listIvaPerNazione.it.list %}
+		<select name="{{ key }}_it" class="field{% if requiredIt %} valida-required{% endif %}">
+			<option value=""></option>
+			{% for iva in listIva %}
+				{% set sel = '' %}
+				{% if item.get(key ~ '_it') == iva.valore or (item == null and loop.index == 1) %}
+					{% set sel = 'selected' %}
+				{% endif %}
+				<option value="{{ iva.valore }}" {{ sel }}>{{ iva.label }} %</option>
+			{% endfor %}
+		</select>
+	</div>
+	{% if _h.config('gestione_iva_paese_ue', false) %}
+	<div class="field-wrapper-iva" style="display: none;">
+	{% for codice_iso,elem in listIvaPerNazione %}
+		{% if codice_iso != 'it' %}
+		<div class="field-line field-100 field-line-left" style="margin-right: 5px">
+			<label>{{ elem.nazione[0:9] }} <span style="color: #4285f4;">{{ codice_iso|upper }}</span>:</label>
+			<select name="{{ key }}_{{ codice_iso }}" class="field">
+				<option value=""></option>
+				{% for iva in elem.list %}
+					{% set sel = '' %}
+					{% if item.get(key ~ '_' ~ codice_iso) == iva.valore or (item == null and elem.list|length == 1) %}
+						{% set sel = 'selected' %}
+					{% endif %}
+					<option value="{{ iva.valore }}" {{ sel }}>{{ iva.label }} %</option>
+				{% endfor %}
+			</select>
+		</div>
+		{% endif %}
+	{% endfor %}
+	</div>
+	<div class="field-line field-100 field-line-left action-visualizza-codici-iva" style="padding-top: 25px; cursor: pointer; color: #4285f4;">
+		Visualizza tutti i codici IVA per nazione
+	</div>
+	<div class="field-line field-100 field-line-left action-nascondi-codici-iva" style="padding-top: 25px; display: none; cursor: pointer; color: #4285f4;">
+		Nascondi i codici
+	</div>
+	{% endif %}
+	<div class="clear"></div>
+</div>
+{% endmacro %}
+
+{% macro anteprimaPromemoria(_h, list, tipo, title) %}
+{% if list and list|length > 0 %}
+	<div class="anteprima-promemoria anteprima-promemoria-{{ tipo }} h-miniwin">
+		<div class="anteprima-promemoria-title">promemoria: {{ title }}<a class="anteprima-promemoria-close h-miniwin-close"></a></div>
+		<div class="anteprima-promemoria-inner">
+		{% for item in list %}
+			<div class="anteprima-promemoria-item">
+			{% if tipo != 'oggi' %}
+				<span>{{ item.getDateTime('data_ora') }}</span>
+			{% else %}
+				<span>{{ item.getTime('data_ora') }}</span>
+			{% endif %}
+				<p>{{ item.get('descrizione') }}</p>
+				<small>{{ item.get('anteprima') }}</small>
+			</div>
+		{% endfor %}
+		</div>
+	</div>
+{% endif %}
+{% endmacro %}
+
+{% macro tab_body_immagini_extra(_h, item) %}
+{% endmacro %}
+
+{% macro tab_body_immagini(_h, item, suffix) %}
+<div data-block-tab-body="immagini" class="block-tab-body">
+	<div class="h-tab">
+		<div data-tab-rif="immagini_principali">Principali</div>
+		<div data-tab-rif="immagini_elenco">Elenco</div>
+		<div data-tab="immagini_principali">	
+		<div class="field-line-text">Le immagini devono avere una proporzione: {{ _h.config('template').manager.proporzioni_image_articolo }}px</div>
+		{{ _self.upload_immagine(_h, 'Immagine principale', item.imageAnteprima(), 'immagine_principale') }}
+		{{ _self.upload_immagine(_h, 'Immagine secondaria', item.imageAnteprima('s'), 'immagine_secondaria') }}
+		{{ _self.tab_body_immagini_extra(_h, item) }}
+		</div>
+		<div data-tab="immagini_elenco" class="h-add-image-wrapper">
+			<div>
+				<div class="h-nav-button-wrapper">
+					<a href="javascript:void(0);" class="h-nav-button h-nav-button-click h-action-alttext h-action-add-image" data-alttext="nuova immagine" data-action='{"params": {"content": "#elenco_immagini{{ suffix }}"}}'>
+						<img src="/assets/manager/havana-js/img/icon/ico-new.svg" align="top" />
+					</a>
+				</div>	
+				<strong class="h-nav-button-wrapper" style="line-height: 40px;">Aggiungi immagine</strong>
+			</div>	
+			<div class="clear"></div>
+			<div id="elenco_immagini{{ suffix }}">
+				<textarea class="h-add-image-template">
+					<div class="field-line field-line-image elabora-foto-wrapper" data-file="" data-key="%id%">
+						<input type="hidden" name="%id%immagine_file" class="field-file" value="">
+						<input type="hidden" name="%id%immagine_file_nome" class="field-file-name" value="">
+						<label></label>
+						<div class="field-wrap-anteprima anteprima-scatta-foto">
+						<img class="field-anteprima" src="">
+						</div>
+						<div class="field-button" style="float: left; width: 260px;">
+							<a style="margin-left: 0" class="h-bar-button h-bar-button-blu h-action-upload-file" data-action='{"url": "{{ _h.url('manager/myarea/upload-temp-file') }}", "fileType": ["jpg", "jpeg", "png", "gif"], "anteprima": true}'>carica immagine</a>
+							<a class="h-bar-button h-bar-button-gray h-add-image-delete">Cancella</a>
+							<div class="field-line clear">
+								<div class="ruota-scatta-foto">
+									<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+								</div>
+							</div>							
+							<div class="field-line field-50 clear">
+								<label>Peso/ordine:</label>
+								<input type="text" name="%id%ordine_file" class="field valida-required valida-digitnumber" value="0" maxlength="5">
+							</div>
+						</div>
+						<div class="clear"></div>
+					</div>
+				</textarea>
+			
+				{% set listImmagini_key = _h.view('listImmagini_key') %}
+				<input type="hidden" name="elenco_immagini" value="{{ listImmagini_key }}">
+				{% set listImmagini = _h.view('listImmagini') %}
+				<div class="h-add-image-list">
+					{% for elem in listImmagini %}
+						<div class="field-line field-line-image" data-file="{{ elem.file }}" data-key="{{ elem.key }}">
+							<input type="hidden" name="{{ elem.key }}immagine_file" class="field-file" value="{{ elem.file }}">
+							<input type="hidden" name="{{ elem.key }}immagine_file_nome" class="field-file-name" value="">
+							<label></label>
+							<div class="field-wrap-anteprima">
+							<img class="field-anteprima" src="{{ elem.anteprima }}">
+							</div>
+							<div class="field-button" style="float: left; width: 260px;">
+								<a style="margin-left: 0" class="h-bar-button h-bar-button-blu h-action-upload-file" data-action='{"url": "{{ _h.url('manager/myarea/upload-temp-file') }}", "fileType": ["jpg", "jpeg", "png", "gif"], "anteprima": true}'>carica immagine</a>
+								<a class="h-bar-button h-bar-button-gray h-add-image-delete">Cancella</a>
+								<div class="field-line field-50 clear">
+									<label>Peso/ordine:</label>
+									<input type="text" name="{{ elem.key }}ordine_file" class="field valida-required valida-digitnumber" value="{{ elem.ordine }}" maxlength="5">
+								</div>
+							</div>
+							<div class="clear"></div>
+						</div>
+					{% endfor %}
+				</div>
+			</div>
+			
+		</div>
+	</div>
+</div>
+{% endmacro %}
+
+{% macro filtro_list() %}
+	<div style="position:absolute; top: -34px; right: 5px;" class="h-filter-list-wrapper">
+		<div class="field-line-left field-300" style="margin-right: 0;">
+			<input type="text" name="filter_list" style="height: 27px;" class="field h-action-filter-list" placeholder="cerca" value="" data-action='{"load": "#h-layout-center-content"}'>
+		</div>
+		<a style="margin: 0 0 0 2px; padding: 0;" href="javascript:void(0);" class="h-bar-button h-bar-button-gray h-action-filter-list-azzera">Azzera</a>
+	</div>	
+{% endmacro %}
+
+{% macro upload_file(_h, label, item, key, prefix) %}
+<fieldset class="fieldset-box">
+	{% set id = item.get(key ~ '_id', 0) %}
+	{% if id <= 0 %}
+		{% set id = '' %}
+	{% endif  %}
+	<div class="field-line field-line-file" data-file="{{ id }}">
+		<input type="hidden" name="{{ prefix }}file_data" class="field-file" value="{{ id }}">
+		<input type="hidden" name="{{ prefix }}file_data_name" class="field-file-name">
+		<label>{{ label }}</label>
+		<div class="field-anteprima">
+		{{ item.get(key ~ '_nome') }}
+		</div>
+		<div class="field-button">
+			<a class="h-bar-button h-bar-button-blu h-action-upload-file" data-action='{"url": "{{ _h.url('manager/myarea/upload-temp-file') }}"}'>carica file</a>
+			<a class="h-bar-button h-bar-button-gray h-action-upload-file-reset">Cancella</a>
+		</div>
+		<div class="clear"></div>
+	</div>
+</fieldset>
+{% endmacro %}
+
+{% macro upload_immagine(_h, label, img, prefix, id_img) %}
+<div class="field-line field-line-image elabora-foto-wrapper" data-file="{{ img }}">
+	<input type="hidden" name="{{prefix}}file" class="field-file" value="{{ id_img }}">
+	{% if id_img %}
+	<input type="hidden" name="{{prefix}}file_nome" class="field-file-name" value="">
+	{% else %}
+	<input type="hidden" name="{{prefix}}file_nome" class="field-file-name" value="{{ img }}">
+	{% endif %}
+	<label>{{ label }}</label>
+	<div class="field-wrap-anteprima anteprima-scatta-foto">
+	{% if img == null or img == ''%}
+		{% set img = '/assets/void_image.jpg' %}
+	{% endif %}
+	<img class="field-anteprima" src="{{ img }}">
+	</div>
+	<div class="field-button">
+		<a class="h-bar-button h-bar-button-blu h-action-upload-file" data-action='{"url": "{{ _h.url('manager/myarea/upload-temp-file') }}", "fileType": ["jpg", "jpeg", "png", "gif"], "anteprima": true}'>carica immagine</a>
+		<a class="h-bar-button h-bar-button-gray h-action-upload-file-reset">Cancella</a>
+		<div class="field-line clear">
+			<div class="ruota-scatta-foto">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+			</div>
+		</div>
+	</div>
+	<div class="clear"></div>
+</div>
+{% endmacro %}
+
+{% macro gestione_file() %}
+<div><em>Per inserire file all'interno del testo, inserire un link così formattato: {{ '{{' }}codice{{ '}}' }} dove la parola "codice" corrisponde a quello associato al file desiderato. Clicca <a href="javascript:;" class="h-action-window" data-action='{"width": 600, "height": 400, "overlay": true, "type": "layer","url": "/manager/myarea/file/index-popup.php"}'>qui</a> per aprire la gestione dei file</em></div>
+{% endmacro %}
+
+{% macro articolo_dettaglio_header(_h, item, lang, key_ordine, hide_prezzo, tipo_articolo) %}
+	{% if key_ordine == null %}
+		{% set key_ordine = 'ordine' %}
+	{% endif %}
+	{% if item == null %}
+		{% set ordine = 0 %}
+	{% else %}
+		{% set ordine = item.get(key_ordine, 0) %}
+	{% endif %}
+	{{ _self.contenutiInLingua(lang) }}
+	<p class="field-line field-100 field-line-left articolo-field-ordine">
+		<label>Peso/posizione<span>*</span>:</label>
+		<input type="text" name="{{ key_ordine }}" class="field valida-required valida-digitnumber" value="{{ ordine }}">
+	</p>
+	<p class="field-line field-150 field-line-left articolo-field-giorni-scadenza">
+		<label>Num. giorni scad. promem./garanzia:</label>
+		<input type="text" name="giorni_scadenza" class="field valida-digitnumber" value="{{ item.get('giorni_scadenza') }}">
+	</p>
+	<div class="field-line field-150 field-line-left articolo-field-giorni-scadenza-ciclo" style="margin-right: 0;">
+		{% if item.get('giorni_scadenza_ciclo') %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% else %}
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% endif %}
+		<div class="h-checkbox-wrapper" style="margin-bottom: 0"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="giorni_scadenza_ciclo" value="{{ value }}" /></span> <strong>Scadenza verifica ciclica</strong></div>
+	</div>
+	<div class="clear"></div>
+	{% if item and item.get('esclusivo_cliente') %}
+	{% else %}
+	<div class="field-line field-120 field-line-left articolo-field-abilitato" style="margin-right: 0; margin-top: 0">
+		{% if item.abilitato() %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% else %}
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% endif %}
+		<div class="h-checkbox-wrapper" style="margin-bottom: 0"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="abilitato" value="{{ value }}" /></span> <strong>Abilitato</strong></div>
+	</div>
+	{% endif %}
+	<div class="field-line field-150 field-line-left articolo-field-non-visibile-categoria" style="margin-right: 0; margin-top: 0">
+		{% if item.get('non_visibile_in_categoria') %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% else %}
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% endif %}
+		<div class="h-checkbox-wrapper" style="margin-bottom: 0"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="non_visibile_in_categoria" value="{{ value }}" /></span> <strong>Non visibile in categoria/elenchi</strong></div>
+	</div>
+	{% if not(hide_prezzo) %}
+		<div class="field-line field-120 field-line-left" style="margin-right: 0; margin-top: 0">
+			{% if item.get('esaurito') %} 
+				{% set cssClass = ' h-checkbox-checked' %}
+				{% set value = 1 %}
+			{% else %}
+				{% set cssClass = '' %}
+				{% set value = '' %}
+			{% endif %}
+			<div class="h-checkbox-wrapper" color="red" style="margin-bottom: 0"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="esaurito" value="{{ value }}" /></span> <strong>Esaurito</strong></div>
+		</div>
+		<div class="field-line field-120 field-line-left articolo-field-fasce-sconto" style="margin-right: 0; margin-top: 0">
+			{% if item %}
+				{% if item.get('abilitato_fasce_sconto') %} 
+					{% set cssClass = ' h-checkbox-checked' %}
+					{% set value = 1 %}
+				{% else %}
+					{% set cssClass = '' %}
+					{% set value = '' %}
+				{% endif %}
+			{% else %}
+				{% set cssClass = ' h-checkbox-checked' %}
+				{% set value = 1 %}
+			{% endif %}
+			<div class="h-checkbox-wrapper" color="orange" style="margin-bottom: 0"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="abilitato_fasce_sconto" value="{{ value }}" /></span> <strong>Fasce sconto</strong></div>
+		</div>
+		<div class="field-line field-120 field-line-left articolo-field-codice-sconto-non-utilizzabile" style="margin-right: 0; margin-top: 0">
+			{% if item.get('codice_sconto_non_utilizzabile') %} 
+				{% set cssClass = ' h-checkbox-checked' %}
+				{% set value = 1 %}
+			{% else %}
+				{% set cssClass = '' %}
+				{% set value = '' %}
+			{% endif %}
+			<div class="h-checkbox-wrapper" style="margin-bottom: 0"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="codice_sconto_non_utilizzabile" value="{{ value }}" /></span> <strong>Codice sconto NON utilizzabile</strong></div>
+		</div>		
+		<div class="field-line field-150 field-line-left articolo-field-sconto-cliente-non-utilizzabile" style="margin-right: 0; margin-top: 0">
+			{% if item.get('sconto_cliente_non_utilizzabile') %} 
+				{% set cssClass = ' h-checkbox-checked' %}
+				{% set value = 1 %}
+			{% else %}
+				{% set cssClass = '' %}
+				{% set value = '' %}
+			{% endif %}
+			<div class="h-checkbox-wrapper" style="margin-bottom: 0"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="sconto_cliente_non_utilizzabile" value="{{ value }}" /></span> <strong>Sconto cliente NON valido</strong></div>
+		</div>
+
+		<div class="field-line field-120 field-line-left articolo-field-no-spese-spedizione" style="margin-right: 0; margin-top: 0">
+			{% if item.get('no_spese_spedizione') %} 
+				{% set cssClass = ' h-checkbox-checked' %}
+				{% set value = 1 %}
+			{% else %}
+				{% set cssClass = '' %}
+				{% set value = '' %}
+			{% endif %}
+			<div class="h-checkbox-wrapper" style="margin-bottom: 0"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="no_spese_spedizione" value="{{ value }}" /></span> <strong>NO spese spedizione</strong></div>
+		</div>
+		<div class="field-line field-100 field-line-left articolo-field-obbligo-fattura-acquisto" style="margin-right: 0; margin-top: 0">
+			{% if item.get('obbligo_fattura') %} 
+				{% set cssClass = ' h-checkbox-checked' %}
+				{% set value = 1 %}
+			{% else %}
+				{% set cssClass = '' %}
+				{% set value = '' %}
+			{% endif %}
+			<div class="h-checkbox-wrapper" style="margin-bottom: 0"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="obbligo_fattura" value="{{ value }}" /></span> <strong>Obbligo fattura</strong></div>
+		</div>
+		<div class="clear"></div>
+		<div class="field-line field-400 articolo-field-no-calcolo-spedizione-gratuita" style="margin-right: 0; margin-top: 0">
+			{% if item.get('non_considerare_in_spedizione_gratuita') %} 
+				{% set cssClass = ' h-checkbox-checked' %}
+				{% set value = 1 %}
+			{% else %}
+				{% set cssClass = '' %}
+				{% set value = '' %}
+			{% endif %}
+			<div class="h-checkbox-wrapper" style="margin-bottom: 0"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="non_considerare_in_spedizione_gratuita" value="{{ value }}" /></span> <strong>Non considerare nel calcolo per la spedizione gratuita</strong></div>
+		</div>
+	{% endif %}
+	<div class="clear-line"></div>
+	{% if _h.config('url_country', false) %}
+	<div class="field-line field-400">
+		<label>Abilitato visibilità in country (inserire i codici separati da una virgola oppure * per abilitare su tutte le country):</label>
+		<input type="text" name="visibilita_country" class="field" value="{{ item.get('visibilita_country') }}" maxlength="200">
+	</div>
+	{% endif %}
+	{% if _h.config('gestione_magazzino', false) %}
+	<div class="field-line field-400">
+		{% if item.get('acquisto_max_disp_magazzino') %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% else %}
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="acquisto_max_disp_magazzino" value="{{ value }}" /></span> <strong>Acquistabile solo se disponibile quantità a magazzino</strong></div>
+	</div>
+	{% endif %}
+{% endmacro %}
+
+{% macro articolo_dettaglio_nome_prezzo(_h, item, lang, hide_codice, hide_magazzino, hide_prezzo, tipo_articolo) %}
+<div class="clear-line"></div>
+	{{ _self.articolo_dettaglio_nome_prezzo_pre(_h, item, lang, tipo_articolo) }}
+{% if hide_prezzo %}
+<input type="hidden" name="prezzo" value="0">
+{% else %}
+<div class="field-line field-400 articolo-field-non-modificabile-porting">
+	{% if item %}
+		{% if item.get('no_modifica_prezzo_porting') %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% else %}
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% endif %}
+	{% else %}
+		{% set cssClass = ' h-checkbox-checked' %}
+		{% set value = 1 %}
+	{% endif %}
+	<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="no_modifica_prezzo_porting" value="{{ value }}" /></span> <strong>Non modificare il prezzo in fase di porting</strong></div>
+</div>
+<div class="h-calcolo-sconto-percentuale-euro-wrapper" style="border: 1px solid #d9d9d9; margin-top: 10px;" separatore-decimali="{{ _h.config('default_separatore_decimali', ',') }}" separatore-migliaia="{{ _h.config('default_separatore_migliaia', '.') }}">
+<div class="h-calcolo-sconto-percentuale-euro" style="padding: 5px;">
+	<p class="field-line field-100 field-line-left" style="width: 180px; margin-right: 15px; margin-top:0;">
+		<label>Prezzo in {{ _h.config('manager_valuta', '&euro;') }} (#,##) IVA {% if _h.config('prezzi_senza_iva', false) %}escl.{% else%}incl.{% endif%}<span>*</span>:</label>
+		<input data-type-sconto="prezzo" type="text" name="prezzo" data-num-dec="{{ _h.config('numero_decimali_prezzo', 2) }}" class="field valida-required valida-digitfloat valida-euro" value="{{ item.euro('prezzo') }}" maxlength="10"> {{ _h.config('manager_valuta', '&euro;') }}
+	</p>
+	<div style="float: left; width: 320px; background: #f3d8d8;">
+		<p class="field-line field-50 field-line-left" style="margin-top:5px; margin-right: 10px; margin-left: 5px; margin-bottom: 5px;">
+			<label>Sconto (%):</label>
+			<input data-type-sconto="sconto_percentuale" type="text" name="sconto" class="field valida-digitfloat valida-float" value="{{ item.get('sconto')|number_format(3, ',', '') }}" maxlength="7"> %
+		</p>
+		<p class="field-line field-75 field-line-left" style="margin-top:5px; margin-right: 10px; margin-bottom: 5px;">
+			<label>Sconto ({{ _h.config('manager_valuta', '&euro;') }}):</label>
+			<input data-type-sconto="sconto_euro" type="text" name="sconto_euro" class="field valida-digitfloat valida-float" value="" maxlength="10"> {{ _h.config('manager_valuta', '&euro;') }}
+		</p>
+		<p class="field-line field-75 field-line-left" style="margin-top:5px; margin-right: 0; margin-bottom: 5px;">
+			<label>Prezzo scontato:</label>
+			<input data-type-sconto="prezzo_scontato" type="text" name="prezzo_scontato" data-num-dec="{{ _h.config('numero_decimali_prezzo', 2) }}" class="field valida-digitfloat valida-euro" value="" maxlength="10"> {{ _h.config('manager_valuta', '&euro;') }}
+		</p>
+		<div class="clear-line"></div>
+	</div>
+	<div class="clear-line"></div>
+</div>
+<div class="h-calcolo-sconto-percentuale-euro articolo-blocco-prezzo-utente-login" style="padding: 5px; background: #dbf3d8;">
+	<p class="field-line field-100 field-line-left" style="width: 180px; margin-right: 15px; text-align: right; margin-top: 5px; font-size: 11px">Sconto in caso di utente autenticato, <strong>se lo sconto è zero viene preso lo sconto e quindi il prezzo base</strong></p>
+	<div style="float: left; width: 320px;">
+		<p class="field-line field-50 field-line-left" style="margin-top:5px; margin-right: 10px; margin-left: 5px;">
+			<label>Sconto (%):</label>
+			<input data-type-sconto="sconto_percentuale" type="text" name="sconto_login" class="field valida-digitfloat valida-float" value="{{ item.get('sconto_login')|number_format(3, ',', '') }}" maxlength="7"> %
+		</p>
+		<p class="field-line field-75 field-line-left" style="margin-top:5px; margin-right: 10px">
+			<label>Sconto ({{ _h.config('manager_valuta', '&euro;') }}):</label>
+			<input data-type-sconto="sconto_euro" type="text" name="sconto_euro_login" class="field valida-digitfloat valida-float" value="" maxlength="10"> {{ _h.config('manager_valuta', '&euro;') }}
+		</p>
+		<p class="field-line field-75 field-line-left" style="margin-top:5px; margin-right: 0">
+			<label>Prezzo scontato:</label>
+			<input data-type-sconto="prezzo_scontato" type="text" name="prezzo_scontato_login" data-num-dec="{{ _h.config('numero_decimali_prezzo', 2) }}" class="field valida-digitfloat valida-euro" value="" maxlength="10"> {{ _h.config('manager_valuta', '&euro;') }}
+		</p>
+		<div class="clear-line"></div>
+	</div>
+	<div class="clear-line"></div>
+</div>
+<div class="h-calcolo-sconto-percentuale-euro articolo-blocco-prezzo-utente-b2b" style="padding: 5px; background: #d8e2f3;">
+	<p class="field-line field-100 field-line-left" style="width: 180px; margin-right: 15px; text-align: right; margin-top: 5px; font-size: 11px">Sconto in caso di utente B2B autenticato, <strong>se lo sconto è zero viene preso lo sconto e quindi il prezzo base</strong></p>
+	<div style="float: left; width: 320px;">
+		<p class="field-line field-50 field-line-left" style="margin-top:5px; margin-right: 10px; margin-left: 5px;">
+			<label>Sconto (%):</label>
+			<input data-type-sconto="sconto_percentuale" type="text" name="sconto_login_b2b" class="field valida-digitfloat valida-float" value="{{ item.get('sconto_login_b2b')|number_format(3, ',', '') }}" maxlength="7"> %
+		</p>
+		<p class="field-line field-75 field-line-left" style="margin-top:5px; margin-right: 10px">
+			<label>Sconto ({{ _h.config('manager_valuta', '&euro;') }}):</label>
+			<input data-type-sconto="sconto_euro" type="text" name="sconto_euro_login_b2b" class="field valida-digitfloat valida-float" value="" maxlength="10"> {{ _h.config('manager_valuta', '&euro;') }}
+		</p>
+		<p class="field-line field-75 field-line-left" style="margin-top:5px; margin-right: 0">
+			<label>Prezzo scontato:</label>
+			<input data-type-sconto="prezzo_scontato" type="text" name="prezzo_scontato_login_b2b" data-num-dec="{{ _h.config('numero_decimali_prezzo', 2) }}" class="field valida-digitfloat valida-euro" value="" maxlength="10"> {{ _h.config('manager_valuta', '&euro;') }}
+		</p>
+		<div class="clear-line"></div>
+	</div>
+	<div class="clear-line"></div>
+</div>
+<em style="padding: 2px 5px; display: block;">i dati vengono in automatico ricalcolati cliccando fuori dal campo</em>
+</div>
+<div class="clear-line"></div>
+{% endif %}
+{{ _self.articolo_dettaglio_nome_prezzo_mid(_h, item, lang, tipo_articolo) }}
+{{ _self.articolo_dettaglio_gestione_magazzino(_h, item, lang, hide_magazzino) }}
+{% if not(hide_codice) %}
+	{{ _self.articolo_codice(_h, item, tipo_articolo) }}
+{% endif %}
+<p class="field-line field-350 edit-lang">
+	<label>{{ _self.labelLang(lang) }} Nome<span>*</span>:</label>
+	<input type="text" name="nome" class="field valida-required" value="{{ item.getEscape('nome') }}" maxlength="500">
+</p>
+<p class="field-line field-350 edit-lang">
+	<label>{{ _self.labelLang(lang) }} Nome secondario (sottotitolo):</label>
+	<input type="text" name="nome_simbolico" class="field" value="{{ item.getEscape('nome_simbolico') }}" maxlength="500">
+</p>
+<p class="field-line field-350 edit-lang">
+	<label>{{ _self.labelLang(lang) }} Descrizione per i microdati:</label>
+	<input type="text" name="descrizione_microdati" class="field" value="{{ item.getEscape('descrizione_microdati') }}" maxlength="500">
+</p>
+	{{ _self.articolo_dettaglio_nome_prezzo_post(_h, item, lang, tipo_articolo) }}
+<div class="clear-line"></div>
+{% endmacro %}
+
+{% macro articolo_dettaglio_nome_prezzo_pre(_h, item, lang, tipo_articolo) %}
+{% endmacro %}
+
+{% macro articolo_dettaglio_nome_prezzo_mid(_h, item, lang, tipo_articolo) %}
+{% endmacro %}
+
+{% macro articolo_dettaglio_gestione_magazzino(_h, item, lang, hide_magazzino) %}
+{% if _h.config('gestione_magazzino', false) and not(hide_magazzino) %}
+	<div class="hide-on-change">
+		<p class="field-line field-150 field-line-left articolo-field-prezzo-acquisto">
+			<label>Prezzo acquisto(#,##) IVA esclusa:</label>
+			<input type="text" name="prezzo_acquisto" class="field valida-euro" data-num-dec="{{ _h.config('numero_decimali_prezzo', 2) }}" value="{{ item.euro('prezzo_acquisto') }}" maxlength="10"> {{ _h.config('manager_valuta', '&euro;') }}
+		</p>
+		<p class="field-line field-100 field-line-left quantita-magazzino" {% if item.get('magazzino_su_attributo') %}style="display:none;"{% endif %}>
+			<label>Qta magazzino<span>*</span>:</label>
+			<input type="text" name="quantita_magazzino" class="field valida-digitnumber{% if not(item.get('magazzino_su_attributo')) %} valida-required{% endif %}" value="{{ item.get('quantita_magazzino', 0) }}" maxlength="10">
+		</p>
+		{% if _h.config('gestione_manazzino_attributo', false) %}
+			<div class="field-line field-line-left field-150">
+				<label>Magazzino su:</label>
+				<select name="magazzino_su_attributo" class="field" data-hide-on-change=".quantita-magazzino">
+					<option value=""></option>
+				{% set list_gestione_manazzino_attributo = _h.view('list_gestione_manazzino_attributo') %}
+				{% for attr in list_gestione_manazzino_attributo %}
+					<option value="{{ attr.id }}" {% if attr.id == item.get('magazzino_su_attributo') %}selected{% endif %}>{{ attr.nome }}</option>
+				{% endfor %}	
+				</select> 
+			</div>		
+		{% endif %}
+	</div>
+	<div class="clear-line"></div>
+{% endif %}
+{% endmacro %}
+
+{% macro articolo_dettaglio_nome_prezzo_post(_h, item, lang, tipo_articolo) %}
+{% endmacro %}
+
+{% macro articolo_codice(_h, item, tipo_articolo) %}
+	{% if _h.config('gestione_codice_in_scheda_articolo', true) %}
+	<p class="field-line field-200">
+		<label>Codice<span>*</span>:</label>
+		<input type="text" name="codice" class="field valida-required" value="{{ item.get('codice') }}" maxlength="250">
+	</p>
+	{% endif %}
+	{% if _h.config('gestione_codice_fornitore_in_scheda_articolo', true) %}
+	<p class="field-line field-200">
+		<label>Codice fornitore:</label>
+		<input type="text" name="codice_fornitore" class="field" value="{{ item.get('codice_fornitore') }}" maxlength="250">
+	</p>
+	{% endif %}
+{% endmacro %}
+
+{% macro articolo_contenuto_digitale(_h, item, lang) %}
+	<div data-tab="contenuto_digitale">
+		<fieldset class="fieldset-box file-digitale-box">
+			<strong>File digitale</strong>
+			<div class="field-line field-line-file">
+				<input type="hidden" name="file" class="field-file" value="{{ item.get('documento_digitale_id') }}">
+				<input type="hidden" name="file_name" class="field-file-name">
+				<label>{{ _self.labelLang(lang) }} Contenuto digitale dell'articolo, inviato al completamento acquisto</label>
+				<div class="field-anteprima" data-download="articolo/download-file-digitale">
+				{{ item.get('documento_digitale_nome') }}
+				</div>
+				<div class="field-button">
+					<a class="h-bar-button h-bar-button-blu h-action-upload-file" data-action='{"url": "{{ _h.url('manager/myarea/upload-temp-file') }}"}'>carica file</a>
+					<a class="h-bar-button h-bar-button-gray h-action-upload-file-reset">Cancella</a>
+				</div>
+				<div class="clear"></div>
+			</div>
+		</fieldset>	
+		{% if _h.config('vendita_voucher', false) %}
+		<fieldset class="fieldset-box voucher-box">
+			<div class="field-line-text"><strong>Voucher</strong></div>
+			<div class="field-line field-line-left field-75">
+				<label>Prefisso:</label>
+				<input type="text" name="voucher_prefisso" class="field" value="{{ item.get('voucher_prefisso') }}" maxlength="10">
+			</div>
+			<div class="field-line field-line-left field-100">
+				<label>Numero disponibili:</label>
+				<input type="text" name="voucher_numero_disponibili" class="field valida-digitint" value="{{ item.get('voucher_numero_disponibili') }}" maxlength="5">
+			</div>
+			<div class="field-line field-line-left field-75">
+				<label>Giorni validità:</label>
+				<input type="text" name="voucher_giorni_valido" class="field valida-digitint" value="{{ item.get('voucher_giorni_valido') }}" maxlength="5">
+			</div>	
+
+			<div class="field-line field-line-left field-100">
+				<label>Data scadenza:</label>
+				<input type="text" name="voucher_data_scadenza" class="field input-datepicker valida-datasimple" value="{{ item.getDate('voucher_data_scadenza') }}" maxlength="5">
+			</div>
+			<div class="clear"></div>
+			<div class="field-line field-400">
+				<label>Template voucher:</label>
+				<select name="voucher_template" class="field">
+					<option value=""></option>
+				{% set listVoucherTemplate = _h.view('listVoucherTemplate') %}
+				{% for i in listVoucherTemplate %}
+					<option value="{{ i.id }}" {% if i.id == item.get('voucher_template') %}selected{% endif %}>{{ i.nome }}</option>
+				{% endfor %}	
+				</select> 
+			</div>		
+			{{ _self.upload_immagine(_h, 'Immagine in template', item.extraImageAnteprima('voucher_immagine'), 'voucher_immagine', item.get('voucher_immagine')) }}
+			<div class="field-line field-400 edit-lang">
+				<label>{{ mc.labelLang(lang) }} Descrizione:</label>
+				<textarea name="voucher_descrizione" class="visual-editor">{{ item.get('voucher_descrizione') }}</textarea>
+			</div>
+		</fieldset>	
+		{% endif %}
+	</div>
+{% endmacro %}
+
+{% macro articolo_dettaglio_extra(_h, item, lang, listAttributoTipo, listListino, listTag, id_wrapper) %}
+<div data-tab="tag">
+{{ _self.dynamicMultipleSelect(_h, 'Tag per indicizzazione', listTag, item, 'id_tag') }}
+</div>
+{% if _h.config('vendita_articoli_digitali', false) %}
+	{{ _self.articolo_contenuto_digitale(_h, item, lang) }}
+{% endif %}
+
+{% if _h.config('gestione_opzioni_articoli', false) %}
+<div data-tab="opzioni_articoli">
+	<div>
+		<div class="h-nav-button-wrapper">
+			<a href="javascript:void(0);" class="h-nav-button h-nav-button-click h-action-alttext h-action-add-block-wrapper" data-alttext="nuovo gruppo opzioni" data-action='{"url": "{{ _h.url('manager/myarea/attributo/attributo-extra') }}", "params": {"content": "#elenco_opzioni_articoli{{id_wrapper}}"}}'>
+				<img src="/assets/manager/havana-js/img/icon/ico-new.svg" align="top" />
+			</a>
+		</div>	
+		<strong class="h-nav-button-wrapper" style="line-height: 40px;">Opzioni</strong>
+	</div>
+	<div class="clear"></div>
+	<div id="elenco_opzioni_articoli{{id_wrapper}}">
+	{% for attr in listAttributoTipo %}
+		<div data-block-id="{{attr.tipo}}">
+		<input type="hidden" name="dynamic_type[]" value="{{attr.tipo}}">
+		{{ _self.dynamicMultipleSelect(_h, attr.nome, attr.list, item, 'id_dynamic_type_' ~ attr.tipo, 'dynamic_type_' ~ attr.tipo, false, null, 'dynamic_type_' ~ attr.tipo) }}
+		<div class="data-block-elimina"><a href="javascript:;" class="link h-action-data-block-elimina">elimina</a></div><br><br>
+		</div>
+	{% endfor %}
+	</div>
+</div>
+{% endif %}
+
+{% if _h.config('gestione_parametri_extra_articoli', false) %}
+<div data-tab="parametri_extra_articoli">
+	<div>
+		<div class="h-nav-button-wrapper">
+			<a href="javascript:void(0);" class="h-nav-button h-nav-button-click h-action-alttext h-action-add-extra-wrapper" data-alttext="nuovo parametro extra" data-action='{"params": {"content": "#elenco_parametri_extra_articoli{{id_wrapper}}"}}'>
+				<img src="/assets/manager/havana-js/img/icon/ico-new.svg" align="top" />
+			</a>
+		</div>	
+		<strong class="h-nav-button-wrapper" style="line-height: 40px;">Aggiungi parametro</strong>
+	</div>
+	<div class="clear"></div>
+	<div id="elenco_parametri_extra_articoli{{id_wrapper}}" class="h-table-parametri-extra-wrapper">
+		<textarea class="h-table-parametri-extra-template">
+			<tr data-key="%id%" class="new-extra-param">
+				<td class="chiave"><div class="field-line"><label></label><input type="text" class="field valida-digitalphanum valida-required" name="extra_new_chiave_%id%"></div></td>
+				<td class="label"><div class="field-line"><label></label><input type="text" class="field valida-required" name="extra_new_label_%id%"></div></td>
+				<td class="valore"><div class="field-line"><input type="text" class="field" name="extra_new_valore_%id%"></div></td>
+				<td class="azione">
+					<div class="h-nav-button-wrapper">
+						<a href="javascript:void(0);" class="h-nav-button h-nav-button-click h-action-rem-extra-wrapper">
+							<img src="/assets/manager/havana-js/img/icon/ico-delete.svg" align="top" />
+						</a>
+					</div>
+				</td>
+			</tr>
+		</textarea>
+	
+		<input type="hidden" name="parametri_extra" value="{{ item.parametriExtra.keys }}">
+		<input type="hidden" name="parametri_extra_new" value="">
+		<table class="h-table-parametri-extra" border="0" cellspacing="0" cellpadding="0">
+			<tr>
+				<th class="chiave">Chiave <span class="required">*</span></th>
+				<th class="label">Label {{ _self.labelLang(lang) }} <span class="required">*</span></th>
+				<th class="valore">Valore</th>
+				<th class="azione"></th>
+			</tr>
+			{% for k in item.parametriExtra.list %}
+				{% if k != '' %}
+				<tr data-key="{{k}}">
+					<td class="chiave"><div class="chiave-details">{{k}}</div></td>
+					<td class="label"><div class="field-line"><label></label><input type="text" class="field valida-required" name="extra_label_{{k}}" value="{{ item.get('extra_label_' ~ k) }}"></div></td>
+					<td class="valore"><div class="field-line"><input type="text" class="field" name="extra_valore_{{k}}" value="{{ item.get('extra_valore_' ~ k) }}"></div></td>
+					<td class="azione">
+						<div class="h-nav-button-wrapper">
+							<a href="javascript:void(0);" class="h-nav-button h-nav-button-click h-action-rem-extra-wrapper">
+								<img src="/assets/manager/havana-js/img/icon/ico-delete.svg" align="top" />
+							</a>
+						</div>
+					</td>
+				</tr>
+				{% endif %}
+			{% endfor %}
+		</table>
+	</div>
+</div>
+{% endif %}
+
+{% if listListino|length > 0 %}
+<div data-tab="listini">
+<p style="margin-bottom: 20px;">Inserire -1 per lo sconto in caso debba essere considerato quello di default dell'articolo</p>
+{% set listino_cliente = item.geto('listino_cliente') %}
+{% for ls in listListino %}
+	{% set key_listino = 'listino_' ~ ls.id %}
+<div style="margin-bottom: 20px; border-bottom: 1px solid #efefef; padding-bottom: 5px;">
+	<div style="float: left; width: 200px; margin-right: 10px;">
+		<div><strong>{% if ls.get('tipo') == 0 %}{{ ls.get('nome') }}{% else %}{{ ls.get('url')|upper }}</strong> <small>{{ ls.get('nome') }}</small>{% endif %}</div>
+		{% if ls.get('con_iva') %}
+		<div style="color: #4285f4; font-style: italic;"><small>prezzi IVA inclusa</small></div>
+		{% else %}
+		<div style="color: #ed4747; font-style: italic;"><small>prezzi IVA esclusa</small></div>
+		{% endif %}
+		<div style="font-style: italic;">{% if ls.abilitato %}
+		<small>listino abilitato
+		{% else %}
+		listino NON abilitato
+		{% endif %}</small></div>
+	</div>
+	<p class="field-line field-100 field-line-left" style="margin-top: 0">
+		<label>Prezzo in euro (#,##):</label>
+		<input type="text" name="{{ key_listino }}_prezzo" class="field valida-euro" value="{{ _h.util.euro(listino_cliente.get(key_listino).prezzo) }}" maxlength="10"> {{ _h.config('manager_valuta', '&euro;') }}
+	</p>
+	<p class="field-line field-50 field-line-left" style="margin-top: 0">
+		<label>Sconto (percentuale):</label>
+		<input type="text" name="{{ key_listino }}_sconto" class="field valida-digitnumberneg" value="{{ listino_cliente.get(key_listino).sconto }}" maxlength="2"> %
+	</p>
+	<div class="clear-line"></div>
+</div>
+{% endfor %}
+</div>
+{% endif %}
+{% endmacro %}
+
+{% macro labelLang(lang) %}
+<em>[{{ lang }}]</em>
+{% endmacro %}
+
+{% macro contenutiInLingua(lang) %}
+<p class="field-line"><em>Contenuti in lingua <span class="lingua">{{ lang }}</span>.</em></p>
+{% endmacro %}
+
+{% macro selezione_attributo(list, item, key, label) %}
+{% if item.get(key)|length > 0 %}
+<p class="field-line field-300">
+	<label>{{ label }}:</label>
+	<select name="{{ key }}">
+	{% for elem in list %}
+	<option value="{{ elem.id }}">{{ elem.get('nome') }}</option>
+	{% endfor %}
+	</select>
+</p>
+{% endif %}
+{% endmacro %}
+
+{% macro checkbox(itemValue, checkValue, key, label, baseValue) %}
+	{% if not(baseValue) %}
+		{% set baseValue = 1 %}
+	{% endif %}
+	<div class="field-line">
+		{% if itemValue == checkValue %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = baseValue %}
+		{% else %}
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="{{ baseValue }}"><input type="hidden" name="{{ key }}" value="{{ value }}" /></span> <strong>{{ label }}</strong></div>
+	</div>
+{% endmacro %}
+
+{% macro navSeparatore() %}
+<div class="h-nav-button-wrapper" style="width: 2px; overflow: hidden;"><div class="h-nav-separator"></div></div>
+{% endmacro %}
+
+{% macro index_page_header_simple(_h, titolo) %}
+<div id="h-layout-navigation" class="h-layout">
+	<div class="h-layout-content-wrapper">
+	{{ _self.navButton(_h, 'torna alla dashboard', 'back', 'noborder', 'h-action-window', '{"url": "/manager/myarea/index.php"}') }}
+	<div class="h-nav-button-wrapper">
+		<a href="javascript:void(0);" class="h-nav-button">
+			{{ titolo }}
+		</a>
+	</div>		
+{% endmacro %}
+
+
+{% macro index_page_header(_h, titolo, selected) %}
+	{{ _self.index_page_header_top(_h, titolo, selected) }}
+	{{ _self.index_page_header_bot() }}
+{% endmacro %}
+
+{% macro index_page_header_top(_h, titolo, selected) %}
+<div id="h-layout-navigation" class="h-layout h-layout-navigation-with-toolbar">
+	<div class="h-layout-content-wrapper">
+		{{ _self.navMenu(_h, selected) }}
+		<div class="h-nav-title" style="margin-right: 50px;">
+		{{ titolo }}
+		</div>
+{% endmacro %}
+
+{% macro index_page_header_bot() %}
+		<div class="h-layout-navigation-toolbar h-nav-button-text">
+{% endmacro %}
+
+{% macro index_page_header_gestione(_h, titolo) %}
+<div id="h-layout-navigation" class="h-layout h-layout-navigation-with-toolbar h-nav-white">
+	<div class="h-layout-content-wrapper">
+		{{ _self.navMenu(_h) }}
+		<div class="h-nav-title" style="margin-right: 50px;">
+		{{ titolo }}
+		</div>
+		{{ _self.navMenuGestione(_h) }}
+		<div class="h-layout-navigation-toolbar h-nav-button-text">
+{% endmacro %}
+
+{% macro index_page_header_ordine_fornitore(_h, titolo) %}
+<div id="h-layout-navigation" class="h-layout h-layout-navigation-with-toolbar h-nav-white">
+	<div class="h-layout-content-wrapper">
+		{{ _self.navMenu(_h) }}
+		<div class="h-nav-title" style="margin-right: 50px;">
+		{{ titolo }}
+		</div>
+		<div class="h-nav-button-wrapper">
+			<a href="javascript:void(0);" class="h-nav-button h-action-popup-menu">
+				Visualizza
+			</a>
+			<div class="h-popup-content h-popup-menu">
+				<a href="{{ _h.url('manager/myarea/fornitorearticolo/index') }}">Ordini ai fornitori</a>
+				<a href="{{ _h.url('manager/myarea/fornitorearticolo/storico/index') }}">Storico movimentazione</a>
+			</div>
+		</div>
+		<div class="h-layout-navigation-toolbar h-nav-button-text">
+{% endmacro %}
+
+
+{% macro box_footer(_h, content, tipo, list, addParams, tipoSpec, tipoServizioSpec) %}
+		{% if tipoSpec %}
+			{% set template = 'list_' ~ tipoSpec ~ '.html' %}
+			{% if tipoServizioSpec %}
+				{% set servizio = 'list-' ~ tipoServizioSpec %}
+			{% else %}
+				{% set servizio = 'list-' ~ tipoSpec %}
+			{% endif %}
+		{% else %}
+			{% set template = 'list.html' %}
+			{% set servizio = 'list' %}
+		{% endif %}
+		<div id="{{ content }}-content" data-action='{"url": "{{ _h.url('manager/myarea/' ~ tipo ~ '/' ~ servizio) }}"}' data-load-params='{{ addParams }}'>
+			{% include _h.template('manager/myarea/' ~ tipo ~ '/' ~ template) %}
+		</div>		
+	</div>
+	</form>
+</div>
+		
+{% endmacro %}
+
+
+{% macro index_page_footer(_h, result, tipo, edit_table) %}
+			{{ _self.navTotalItemSimple(_h, result.total) }}
+		</div>
+	</div>	
+</div>
+<div id="h-layout-center" class="h-layout h-layout-middle h-layout-center" data-action='{"show": ["header", "navigation"]}'>
+	<div class="h-layout-content-wrapper h-action-auto-update-wrapper h-scroll-content" id="h-layout-center-content" data-action='{"url": "{{ _h.url('manager/myarea/' ~ tipo ~ '/list') }}?lang={{_h.input('lang')}}&tipo={{_h.input('tipo')}}{% if _h.input('stat_anno') %}&stat_anno={{_h.input('stat_anno')}}{% endif %}"{% if edit_table %}, "params": {"edit": 1}{% endif %}}' data-load-order="{{ result.order_by }}" data-load-order-type="{{ result.order_type }}">
+	{% include _h.template('manager/myarea/' ~ tipo ~ '/list.html') %}
+	</div>
+</div>
+		
+{% endmacro %}
+
+
+{% macro comboOptionsFromList(list, id, name, selected, add, selectIfOne) %}
+	{% for item in list %}
+		{% set sel = '' %}
+		{% if item.get(id) == selected or (selectIfOne and list|length == 1) %}
+			{% set sel = 'selected' %}
+		{% endif %}
+		<option value="{{ item.get(id) }}" {{ sel }}>{{ item.get(name) }}{{ add }}</option>
+	{% endfor %}
+{% endmacro %}
+
+{% macro listComboOptions(list, selected) %}
+	{% for item in list %}
+		{% set sel = '' %}
+		{% if item.id == selected %}
+			{% set sel = 'selected' %}
+		{% endif %}
+		<option value="{{ item.id }}" {{ sel }}>{{ item.text }}</option>
+	{% endfor %}
+{% endmacro %}
+
+{% macro labelCampiObbligatori() %}
+<p class="field-line"><em>I campi con <span class="required">*</span> (asterisco) sono obbligatori.</em></p>
+{% endmacro %}
+
+{% macro navButtonNew(_h, title, url, suburl) %}
+	{% if suburl == false %}
+		{% set suburl = 'edit' %}
+	{% endif %}	
+	{{ _self.navButton(_h, title, 'new', 'click', 'h-action-window', '{"type": "slide-right", "url": "' ~ _h.url('manager/myarea/' ~ url ~ '/' ~ suburl) ~ '"}') }}
+{% endmacro %}
+
+{% macro navButtonUpdate(_h, title, url, suburl, content, params) %}
+	{% if suburl == false %}
+		{% set suburl = 'edit' %}
+	{% endif %}
+	{% if content == false %}
+		{% set content = 'h-layout-center-content' %}
+	{% endif %}	
+	{% if params == false %}
+		{% set params = '"type": "slide-right",' %}
+	{% endif %}
+
+	{{ _self.navButton(_h, title, 'update', 'click', 'h-action-selected-open-window', '{"select": {"from":"#' ~ content ~ '", "check": 1}, "window": {' ~ params ~ '"url": "' ~ _h.url('manager/myarea/' ~ url ~ '/' ~ suburl) ~ '"}}') }}
+{% endmacro %}
+
+{% macro navButtonFasciaSconto(_h, table) %}
+	{{ _self.navButton(_h, 'Fascia Sconto', 'fascetta', 'click', 'h-action-selected-open-window', '{"select": {"from":"#h-layout-center-content", "check": 1}, "window": {"type": "slide-right", "url": "' ~ _h.url('manager/myarea/fasciasconto/edit-entita') ~ '", "params": {"table": "' ~ table ~ '"}}}') }}
+{% endmacro %}
+
+{% macro navButtonPromozioni(_h, table) %}
+	{{ _self.navButton(_h, 'Promozioni', 'stella', 'click', 'h-action-selected-open-window', '{"select": {"from":"#h-layout-center-content", "check": 1}, "window": {"type": "slide-right", "url": "' ~ _h.url('manager/myarea/promozioni/index') ~ '", "params": {"table": "' ~ table ~ '"}}}') }}
+{% endmacro %}
+{% macro navButtonPunti(_h, table) %}
+	{{ _self.navButton(_h, 'Punti', 'ticket', 'click', 'h-action-selected-open-window', '{"select": {"from":"#h-layout-center-content", "check": 1}, "window": {"type": "slide-right", "url": "' ~ _h.url('manager/myarea/punti/index') ~ '", "params": {"table": "' ~ table ~ '"}}}') }}
+{% endmacro %}
+{% macro navButtonPromemoria(_h, table, id) %}
+	{% if id %}
+		{{ _self.navButton(_h, 'Promemoria', 'calendar', 'click', 'h-action-window', '{"type": "layer", "overlay": true, "width": 500, "height": 450, "url": "' ~ _h.url('manager/myarea/promemoria/edit-new') ~ '", "params": {"tipo_entita": "' ~ table ~ '", "id_entita": "' ~ id ~ '"}}') }}
+	{% else %}
+		{{ _self.navButton(_h, 'Promemoria', 'calendar', 'click', 'h-action-selected-open-window', '{"select": {"from":"#h-layout-center-content", "check": 1}, "window": {"type": "layer", "overlay": true, "width": 500, "height": 450, "url": "' ~ _h.url('manager/myarea/promemoria/edit-new') ~ '", "params": {"tipo_entita": "' ~ table ~ '"}}}') }}
+	{% endif %}
+{% endmacro %}
+
+{% macro navButtonMetaInfo(_h, table, from) %}
+	{% if from %}
+		{% set openwin = 'layer' %}
+		{% set window_add = ',"overlay": true, "width": 500, "height": 500' %}
+	{% else %}
+		{% set from = '#h-layout-center-content' %}
+		{% set openwin = 'slide-right' %}
+	{% endif %}
+	{% set list = _h.config('enabled_languages') %}
+	<div class="h-nav-button-wrapper">
+		<a href="javascript:void(0);" class="h-nav-button h-action-popup-menu">
+			<img src="/assets/manager/havana-js/img/icon/ico-metainfo.svg" align="top" />
+			<span>metainfo</span>
+		</a>
+		<div class="h-popup-content h-popup-menu">
+			{% if table == 'articolo' %}
+				<a href="javascript:void(0);" class="h-action-selected-open-window h-action-close-popup-menu" data-action='{"window": {"type": "slide-right", "url": "{{ _h.url('manager/myarea/metainfo/edit-articolo-categoria') }}"}}'>Modifica comulativa per categoria</a>
+			{% endif %}
+			{% if not(list) %}
+				{% set list = ['it']%}
+			{% endif %}
+			{% for lang in list %}
+				<a href="javascript:void(0);" class="h-action-selected-open-window h-action-close-popup-menu" data-action='{"select": {"from":"#h-layout-center-content", "check": 1}, "window": {"type": "slide-right", "url": "{{ _h.url('manager/myarea/metainfo/edit') }}", "params": {"lang": "{{ lang }}", "table": "{{ table }}"}}}'>{% if list|length == 1 %}Modifica{% else %}Modifica dati lingua {{ lang|upper }}{% endif %}</a>
+			{% endfor %}
+			{% for lang in list %}
+				<a href="javascript:void(0);" class="h-action-selected-open-window h-action-close-popup-menu" data-action='{"window": {"type": "layer", "overlay": true, "width": 400, "height": 400, "url": "{{ _h.url('manager/myarea/metainfo/upload') }}", "params": {"lang": "{{ lang }}", "table": "{{ table }}"}}}'>{% if list|length == 1 %}Importa da file{% else %}Importa da file dati lingua {{ lang|upper }}{% endif %}</a>
+			{% endfor %}
+		</div>
+	</div>	
+	{% if _h.session.params.user.accesso >= 5 %}
+		{% if _h.config('cookie_policy') == 'gdpr22' %}
+		{{ _self.navButton(_h, 'script', 'settings', 'click', 'h-action-selected-open-window', '{"select": {"from":"' ~ from ~ '", "check": 1}, "window": {"type": "' ~ openwin ~ '", "url": "' ~ _h.url('manager/myarea/cookiepolicy/index') ~ '", "params": {"table": "' ~ table ~ '"}' ~ window_add ~ '}}') }}
+		{% else %}
+		{{ _self.navButton(_h, 'script', 'settings', 'click', 'h-action-selected-open-window', '{"select": {"from":"' ~ from ~ '", "check": 1}, "window": {"type": "' ~ openwin ~ '", "url": "' ~ _h.url('manager/myarea/metainfo/edit-script') ~ '", "params": {"table": "' ~ table ~ '"}' ~ window_add ~ '}}') }}
+		{% endif %}
+	{% endif %}
+{% endmacro %}
+
+{% macro navButtonUpdateLang(_h, title, url, suburl, content, params) %}
+	{% set list = _h.config('enabled_languages') %}
+	{% if not(list) or list|length == 1 %}
+		{{ _self.navButtonUpdate(_h, title, url, suburl, content, params) }}
+	{% else %}
+		{% if params == false %}
+			{% set params = '"type": "slide-right",' %}
+		{% endif %}
+		{% if content == false %}
+			{% set content = 'h-layout-center-content' %}
+		{% endif %}
+		{% if suburl == false %}
+			{% set suburl = 'edit' %}
+		{% endif %}
+		<div class="h-nav-button-wrapper">
+			<a href="javascript:void(0);" class="h-nav-button h-action-popup-menu">
+				<img src="/assets/manager/havana-js/img/icon/ico-update.svg" align="top" />
+				<span>{{ title }}</span>
+			</a>
+			<div class="h-popup-content h-popup-menu">
+			{% for lang in list %}
+				<a href="javascript:void(0);" class="h-action-selected-open-window h-action-close-popup-menu" data-action='{"select": {"from":"#{{ content }}", "check": 1}, "window": { {{params}} "url": "{{ _h.url('manager/myarea/' ~ url ~ '/' ~ suburl) }}", "params": {"lang": "{{ lang }}"}}}'>{{ lang|upper }}</a>
+			{% endfor %}
+			</div>
+		</div>	
+	{% endif %}
+{% endmacro %}
+
+{% macro navButtonDelete(_h, title, url, checkMultiple, suburl, content) %}
+	{% if suburl == false %}
+		{% set suburl = 'delete' %}
+	{% endif %}
+	{% if content == false %}
+		{% set content = 'h-layout-center-content' %}
+	{% endif %}
+	{% if checkMultiple %}
+		{% set check = 0 %}
+	{% else %}
+		{% set check = 1 %}
+	{% endif %}
+	{{ _self.navButton(_h, title, 'delete', 'click', 'h-action-selected-execute', '{"select": {"from":"#' ~ content ~ '", "check": ' ~ check ~ '}, "confirm": "Eliminare la voce selezionata?", "url": "' ~ _h.url('manager/myarea/' ~ url ~ '/' ~ suburl) ~ '", "delete_item": true}') }}		
+{% endmacro %}
+
+{% macro navButton(_h, title, icon, buttonEffect, action, params) %}
+	{% if buttonEffect == 'click' %}
+		{% set cssButtonEffect = 'h-nav-button-click' %}
+	{% elseif buttonEffect == 'noborder' %}
+		{% set cssButtonEffect = 'h-nav-button-noborder' %}
+	{% elseif buttonEffect == 'arrow-selected' %}
+		{% set cssButtonEffect = '' %}
+		{% set cssBtnSelected = 'h-nav-button-down' %}
+	{% elseif buttonEffect == 'arrow' %}
+		{% set cssButtonEffect = '' %}
+	{% endif %}
+	<div class="h-nav-button-wrapper {{ cssBtnSelected }}">
+		<a href="javascript:void(0);" class="h-nav-button {{ cssButtonEffect }} {{ action }}" data-action='{{ params }}'>
+			<img src="/assets/manager/havana-js/img/icon/ico-{{ icon }}.svg" align="top" />
+			<span>{{ title }}</span>
+		</a>
+	</div>	
+{% endmacro %}
+
+{% macro navButtonLang(_h, title, icon, buttonEffect, action, params) %}
+	{% set list = _h.config('enabled_languages') %}
+	{% if not(list) or list|length == 1 %}
+		{{ _self.navButton(_h, title, icon, buttonEffect, action, params) }}
+	{% else %}
+		{% if buttonEffect == 'click' %}
+			{% set cssButtonEffect = 'h-nav-button-click' %}
+		{% elseif buttonEffect == 'noborder' %}
+			{% set cssButtonEffect = 'h-nav-button-noborder' %}
+		{% elseif buttonEffect == 'arrow-selected' %}
+			{% set cssButtonEffect = '' %}
+			{% set cssBtnSelected = 'h-nav-button-down' %}
+		{% elseif buttonEffect == 'arrow' %}
+			{% set cssButtonEffect = '' %}
+		{% endif %}
+
+		<div class="h-nav-button-wrapper">
+			<a href="javascript:void(0);" class="h-nav-button h-action-popup-menu">
+				<img src="/assets/manager/havana-js/img/icon/ico-{{ icon }}.svg" align="top" />
+				<span>{{ title }}</span>
+			</a>
+			<div class="h-popup-content h-popup-menu">
+			{% for lang in list %}
+				<a href="javascript:void(0);" class="{{ cssButtonEffect }} h-action-close-popup-menu {{ action }}" data-action='{{ params }}' data-params-lang="{{ lang }}">{{ lang|upper }}</a>
+			{% endfor %}
+			</div>
+		</div>	
+	{% endif %}
+{% endmacro %}
+
+{% macro navMenuGestione(_h) %}
+	<div class="h-nav-button-wrapper">
+		<a href="javascript:void(0);" class="h-nav-button h-action-popup-menu">
+			Gestione
+		</a>
+		<div class="h-popup-content h-popup-menu">
+			<a href="{{ _h.url('manager/myarea/query/index') }}">Search query</a>
+			<a href="{{ _h.url('manager/myarea/carrello/index') }}">Carrelli sospesi</a>
+			<a href="{{ _h.url('manager/myarea/azioneordine/index') }}">Azioni post ordine</a>
+			<a href="{{ _h.url('manager/myarea/azionepreordine/index') }}">Azioni ordini non pagati</a>
+		</div>
+	</div>
+{% endmacro %}
+
+{% macro navMenuActionsAddBase(_h, selected, is_in_dashboard) %}
+{% endmacro %}
+{% macro navMenuActionsAdd(_h, selected, is_in_dashboard) %}
+{% endmacro %}
+
+{% macro navMenuActions(_h, selected, is_in_dashboard) %}
+	{% set _lbl = _h.labels.get('manager') %}
+
+	{% if _h.session.params.user.id_utente_entrato_per_conto_di > 0 %}
+		<div class="h-block-menu">
+			<ul>
+				<li><a href="{{ _h.url('manager/myarea/ritorna-come-utente') }}">Ritorna al manager</a></li>
+			</ul>
+		</div>
+	{% endif %}
+	{% if not(is_in_dashboard) %}
+		<div class="h-block-menu">
+			<ul>
+				<li {% if selected == 'dashboard' %}class="selected"{% endif %}><a href="{{ _h.url('manager/myarea/index') }}">{{ _lbl.dashboard }}</a></li>
+				{% if _h.session.params.user.accesso >= 5 %}
+				<li {% if selected == 'promemoria' %}class="selected"{% endif %}><a href="{{ _h.url('manager/myarea/promemoria/index') }}">{{ _lbl.promemoria }}</a></li>
+				{% endif %}
+			</ul>
+		</div>
+	{% endif %}
+	{{ _self.navMenuActionsAddBase(_h, selected, is_in_dashboard) }}
+	{% if _h.session.params.user.abilitato_prodotti %}
+		<div class="h-block-menu">
+			<h2 class="clear">
+				<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+					 viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve">
+				<g id="Bounding_Boxes">
+					<path fill="none" d="M0,0h24v24H0V0z"/>
+				</g>
+				<g id="Outline">
+					<g id="ui_x5F_spec_x5F_header">
+					</g>
+					<g>
+						<path d="M7,18c-1.1,0-1.99,0.9-1.99,2c0,1.1,0.89,2,1.99,2c1.1,0,2-0.9,2-2C9,18.9,8.1,18,7,18z"/>
+						<path d="M17,18c-1.1,0-1.99,0.9-1.99,2c0,1.1,0.89,2,1.99,2c1.1,0,2-0.9,2-2C19,18.9,18.1,18,17,18z"/>
+						<path d="M15.55,13c0.75,0,1.41-0.41,1.75-1.03l3.58-6.49C21.25,4.82,20.77,4,20.01,4H5.21L4.27,2H1v2h2l3.6,7.59l-1.35,2.44
+							C4.52,15.37,5.48,17,7,17h12v-2H7l1.1-2H15.55z M6.16,6h12.15l-2.76,5H8.53L6.16,6z"/>
+					</g>
+				</g>
+				</svg>
+				<span>{{ _lbl.title_articoli }}</span>
+			</h2>
+			<ul>
+				<li {% if selected == 'articolo' %}class="selected"{% endif %}>
+					<a href="{{ _h.url('manager/myarea/articolo/index') }}{% if _h.settings.get('default_gestione_articoli_manager') == '1' %}?edit=1{% endif %}">{{ _lbl.prodotti }}</a>
+				</li>
+				{% if _h.istanza.isMaster() and _h.session.params.user.accesso >= 2 and _h.session.params.user.accesso != 3 %}
+					<li {% if selected == 'azienda' %}class="selected"{% endif %}><a href="{{ _h.url('manager/myarea/azienda/index') }}">{{ _lbl.azienda_brand }}</a></li>
+					<li {% if selected == 'categorie' %}class="selected"{% endif %}><a href="{{ _h.url('manager/myarea/attributo/index-categoria') }}">{{ _lbl.categorie }}</a></li>
+					<li {% if selected == 'collezioni' %}class="selected"{% endif %}><a href="{{ _h.url('manager/myarea/attributo/index') }}">{{ _lbl.collezioni }}</a></li>
+				{% endif %}
+			</ul>
+		</div>
+	{% endif %}
+	{% if _h.session.params.user.accesso >= 2 %}
+		{% if _h.session.params.user.accesso >= 3 and _h.session.params.user.abilitato_ordini %}
+		<div class="h-block-menu">
+			<h2 class="clear">
+				<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+					 viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve">
+				<g id="Header_x2F_BG" display="none">
+					<rect x="-358" y="-314" display="inline" fill="#F1F1F2" width="520" height="520"/>
+				</g>
+				<g id="Bounding_Boxes">
+					<g id="ui_x5F_spec_x5F_header_copy_3">
+					</g>
+					<path fill="none" d="M0,0h24v24H0V0z"/>
+				</g>
+				<g id="Rounded" display="none">
+					<g id="ui_x5F_spec_x5F_header_copy_5" display="inline">
+					</g>
+					<path display="inline" d="M15,18.5c-2.51,0-4.68-1.42-5.76-3.5H14c0.55,0,1-0.45,1-1v0c0-0.55-0.45-1-1-1H8.58
+						c-0.05-0.33-0.08-0.66-0.08-1s0.03-0.67,0.08-1H14c0.55,0,1-0.45,1-1v0c0-0.55-0.45-1-1-1H9.24C10.32,6.92,12.5,5.5,15,5.5
+						c1.25,0,2.42,0.36,3.42,0.97c0.5,0.31,1.15,0.26,1.57-0.16l0,0c0.58-0.58,0.45-1.53-0.25-1.96C18.36,3.5,16.73,3,15,3
+						c-3.92,0-7.24,2.51-8.48,6H4c-0.55,0-1,0.45-1,1v0c0,0.55,0.45,1,1,1h2.06C6.02,11.33,6,11.66,6,12s0.02,0.67,0.06,1H4
+						c-0.55,0-1,0.45-1,1v0c0,0.55,0.45,1,1,1h2.52c1.24,3.49,4.56,6,8.48,6c1.74,0,3.36-0.49,4.74-1.35c0.69-0.43,0.82-1.39,0.24-1.97
+						l0,0c-0.42-0.42-1.07-0.47-1.57-0.15C17.42,18.15,16.26,18.5,15,18.5z"/>
+				</g>
+				<g id="Sharp" display="none">
+					<g id="ui_x5F_spec_x5F_header_copy_4" display="inline">
+					</g>
+					<path display="inline" d="M15,18.5c-2.51,0-4.68-1.42-5.76-3.5H15v-2H8.58c-0.05-0.33-0.08-0.66-0.08-1s0.03-0.67,0.08-1H15V9H9.24
+						C10.32,6.92,12.5,5.5,15,5.5c1.61,0,3.09,0.59,4.23,1.57L21,5.3C19.41,3.87,17.3,3,15,3c-3.92,0-7.24,2.51-8.48,6H3v2h3.06
+						C6.02,11.33,6,11.66,6,12s0.02,0.67,0.06,1H3v2h3.52c1.24,3.49,4.56,6,8.48,6c2.31,0,4.41-0.87,6-2.3l-1.78-1.77
+						C18.09,17.91,16.62,18.5,15,18.5z"/>
+				</g>
+				<g id="Outline">
+					<g id="ui_x5F_spec_x5F_header">
+					</g>
+					<path d="M15,18.5c-2.51,0-4.68-1.42-5.76-3.5H15v-2H8.58c-0.05-0.33-0.08-0.66-0.08-1s0.03-0.67,0.08-1H15V9H9.24
+						C10.32,6.92,12.5,5.5,15,5.5c1.61,0,3.09,0.59,4.23,1.57L21,5.3C19.41,3.87,17.3,3,15,3c-3.92,0-7.24,2.51-8.48,6H3v2h3.06
+						C6.02,11.33,6,11.66,6,12s0.02,0.67,0.06,1H3v2h3.52c1.24,3.49,4.56,6,8.48,6c2.31,0,4.41-0.87,6-2.3l-1.78-1.77
+						C18.09,17.91,16.62,18.5,15,18.5z"/>
+				</g>
+				<g id="Duotone" display="none">
+					<g id="ui_x5F_spec_x5F_header_copy_2" display="inline">
+					</g>
+					<path display="inline" d="M15,18.5c-2.51,0-4.68-1.42-5.76-3.5H15v-2H8.58c-0.05-0.33-0.08-0.66-0.08-1s0.03-0.67,0.08-1H15V9H9.24
+						C10.32,6.92,12.5,5.5,15,5.5c1.61,0,3.09,0.59,4.23,1.57L21,5.3C19.41,3.87,17.3,3,15,3c-3.92,0-7.24,2.51-8.48,6H3v2h3.06
+						C6.02,11.33,6,11.66,6,12s0.02,0.67,0.06,1H3v2h3.52c1.24,3.49,4.56,6,8.48,6c2.31,0,4.41-0.87,6-2.3l-1.78-1.77
+						C18.09,17.91,16.62,18.5,15,18.5z"/>
+				</g>
+				<g id="Fill" display="none">
+					<g id="ui_x5F_spec_x5F_header_copy" display="inline">
+					</g>
+					<path display="inline" d="M15,18.5c-2.51,0-4.68-1.42-5.76-3.5H15v-2H8.58c-0.05-0.33-0.08-0.66-0.08-1s0.03-0.67,0.08-1H15V9H9.24
+						C10.32,6.92,12.5,5.5,15,5.5c1.61,0,3.09,0.59,4.23,1.57L21,5.3C19.41,3.87,17.3,3,15,3c-3.92,0-7.24,2.51-8.48,6H3v2h3.06
+						C6.02,11.33,6,11.66,6,12s0.02,0.67,0.06,1H3v2h3.52c1.24,3.49,4.56,6,8.48,6c2.31,0,4.41-0.87,6-2.3l-1.78-1.77
+						C18.09,17.91,16.62,18.5,15,18.5z"/>
+				</g>
+				<g id="nyt_x5F_exporter_x5F_info" display="none">
+				</g>
+				</svg>
+				<span>{{ _lbl.title_gestione }}</span>
+			</h2>
+			<ul>
+				<li {% if selected == 'ordini' %}class="selected"{% endif %}><a href="{{ _h.url('manager/myarea/ordini/index') }}">{{ _lbl.ordini }}</a></li>
+				{% if _h.config('gestione_preventivi', false) %}
+					<li {% if selected == 'preventivi' %}class="selected"{% endif %}><a href="{{ _h.url('manager/myarea/preventivi/index') }}">{{ _lbl.preventivi }}</a></li>
+				{% endif %}
+				{% if _h.config('vendita_voucher', false) %}
+					<li {% if selected == 'voucher' %}class="selected"{% endif %}><a href="{{ _h.url('manager/myarea/voucher/index') }}">Voucher</a></li>
+				{% endif %}
+				{% if _h.session.params.user.accesso >= 5 %}
+					<li {% if selected == 'buonosconto' %}class="selected"{% endif %}><a href="{{ _h.url('manager/myarea/buonosconto/index') }}">{{ _lbl.buoni_sconto }}</a></li>
+					{% if _h.settings.get('gestione_ordini_fornitore', '') != '' %}
+					<li {% if selected == 'fornitorearticolo' %}class="selected"{% endif %}><a href="{{ _h.url('manager/myarea/fornitorearticolo/index') }}">{{ _lbl.ordini_ai_fornitori }}</a></li>
+					{% endif %}
+					{% if _h.session.params.user.abilitato_statistiche %}
+					<li {% if selected == 'statistiche' %}class="selected"{% endif %}><a href="{{ _h.url('manager/myarea/statistiche/index') }}?anno=current">{{ _lbl.statistiche }}</a></li>
+					<li {% if selected == 'statistichemese' %}class="selected"{% endif %}><a href="{{ _h.url('manager/myarea/statistichemese/index') }}">{{ _lbl.statistiche_mese }}</a></li>
+					<li {% if selected == 'statistichecliente' %}class="selected"{% endif %}><a href="{{ _h.url('manager/myarea/statistichecliente/index') }}">{{ _lbl.statistiche_cliente }}</a></li>
+					{% endif %}
+				{% endif %}
+			</ul>
+		</div>		
+		{% endif %}
+		
+		{% if _h.session.params.user.accesso >= 5 and _h.session.params.user.abilitato_clienti %}
+		<div class="h-block-menu">
+			<h2 class="clear">
+				<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+					 viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve">
+				<g id="Bounding_Boxes">
+					<g id="ui_x5F_spec_x5F_header_copy_3" display="none">
+					</g>
+					<g>
+						<path fill="none" d="M0,0h24v24H0V0z"/>
+					</g>
+				</g>
+				<g id="Rounded" display="none">
+					<g id="ui_x5F_spec_x5F_header_copy_5">
+					</g>
+					<path display="inline" d="M16.5,12c1.38,0,2.49-1.12,2.49-2.5S17.88,7,16.5,7S14,8.12,14,9.5S15.12,12,16.5,12z M9,11
+						c1.66,0,2.99-1.34,2.99-3S10.66,5,9,5S6,6.34,6,8S7.34,11,9,11z M16.5,14c-1.83,0-5.5,0.92-5.5,2.75V18c0,0.55,0.45,1,1,1h9
+						c0.55,0,1-0.45,1-1v-1.25C22,14.92,18.33,14,16.5,14z M9,13c-2.33,0-7,1.17-7,3.5V18c0,0.55,0.45,1,1,1h6v-2.25
+						c0-0.85,0.33-2.34,2.37-3.47C10.5,13.1,9.66,13,9,13z"/>
+				</g>
+				<g id="Sharp" display="none">
+					<g id="ui_x5F_spec_x5F_header_copy_4">
+					</g>
+					<path display="inline" d="M16.5,12c1.38,0,2.49-1.12,2.49-2.5S17.88,7,16.5,7S14,8.12,14,9.5S15.12,12,16.5,12z M9,11
+						c1.66,0,2.99-1.34,2.99-3S10.66,5,9,5S6,6.34,6,8S7.34,11,9,11z M16.5,14c-1.83,0-5.5,0.92-5.5,2.75V19h11v-2.25
+						C22,14.92,18.33,14,16.5,14z M9,13c-2.33,0-7,1.17-7,3.5V19h7v-2.25c0-0.85,0.33-2.34,2.37-3.47C10.5,13.1,9.66,13,9,13z"/>
+				</g>
+				<g id="Outline">
+					<g id="ui_x5F_spec_x5F_header" display="none">
+					</g>
+					<g>
+						<g>
+							<path d="M9,12c1.93,0,3.5-1.57,3.5-3.5S10.93,5,9,5S5.5,6.57,5.5,8.5S7.07,12,9,12z M9,7c0.83,0,1.5,0.67,1.5,1.5S9.83,10,9,10
+								S7.5,9.33,7.5,8.5S8.17,7,9,7z"/>
+							<path d="M9.05,17H4.77c0.99-0.5,2.7-1,4.23-1c0.11,0,0.23,0.01,0.34,0.01c0.34-0.73,0.93-1.33,1.64-1.81
+								C10.25,14.07,9.56,14,9,14c-2.34,0-7,1.17-7,3.5V19h7v-1.5C9,17.33,9.02,17.16,9.05,17z"/>
+							<path d="M16.5,14.5c-1.84,0-5.5,1.01-5.5,3V19h4.58H22v-1.5C22,15.51,18.34,14.5,16.5,14.5z"/>
+							<g>
+								<path d="M17.71,12.68C18.47,12.25,19,11.44,19,10.5C19,9.12,17.88,8,16.5,8S14,9.12,14,10.5c0,0.94,0.53,1.75,1.29,2.18
+									c0.36,0.2,0.77,0.32,1.21,0.32S17.35,12.88,17.71,12.68z"/>
+							</g>
+						</g>
+					</g>
+				</g>
+				<g id="Duotone" display="none">
+					<g id="ui_x5F_spec_x5F_header_copy_2">
+					</g>
+					<g display="inline">
+						<circle opacity="0.3" cx="9" cy="8.5" r="1.5"/>
+						<path opacity="0.3" d="M4.77,17h4.28c0.01-0.06,0.12-0.58,0.29-0.99C9.23,16.01,9.11,16,9,16C7.47,16,5.75,16.5,4.77,17z"/>
+						<g>
+							<path d="M9,12c1.93,0,3.5-1.57,3.5-3.5S10.93,5,9,5S5.5,6.57,5.5,8.5S7.07,12,9,12z M9,7c0.83,0,1.5,0.67,1.5,1.5S9.83,10,9,10
+								S7.5,9.33,7.5,8.5S8.17,7,9,7z"/>
+							<path d="M9.05,17H4.77c0.99-0.5,2.7-1,4.23-1c0.11,0,0.23,0.01,0.34,0.01c0.34-0.73,0.93-1.33,1.64-1.81
+								C10.25,14.07,9.56,14,9,14c-2.34,0-7,1.17-7,3.5V19h7v-1.5C9,17.33,9.02,17.16,9.05,17z"/>
+							<path d="M16.5,14.5c-1.84,0-5.5,1.01-5.5,3V19h4.58H22v-1.5C22,15.51,18.34,14.5,16.5,14.5z"/>
+							<g>
+								<path d="M17.71,12.68C18.47,12.25,19,11.44,19,10.5C19,9.12,17.88,8,16.5,8S14,9.12,14,10.5c0,0.94,0.53,1.75,1.29,2.18
+									c0.36,0.2,0.77,0.32,1.21,0.32S17.35,12.88,17.71,12.68z"/>
+							</g>
+						</g>
+					</g>
+				</g>
+				<g id="Material" display="none">
+					<g id="ui_x5F_spec_x5F_header_copy">
+					</g>
+					<path display="inline" d="M16.5,12c1.38,0,2.49-1.12,2.49-2.5S17.88,7,16.5,7S14,8.12,14,9.5S15.12,12,16.5,12z M9,11
+						c1.66,0,2.99-1.34,2.99-3S10.66,5,9,5S6,6.34,6,8S7.34,11,9,11z M16.5,14c-1.83,0-5.5,0.92-5.5,2.75V19h11v-2.25
+						C22,14.92,18.33,14,16.5,14z M9,13c-2.33,0-7,1.17-7,3.5V19h7v-2.25c0-0.85,0.33-2.34,2.37-3.47C10.5,13.1,9.66,13,9,13z"/>
+				</g>
+				</svg>			
+				<span>{{ _lbl.title_clienti }}</span>
+			</h2>
+			<ul>
+				<li {% if selected == 'cliente' %}class="selected"{% endif %}><a href="{{ _h.url('manager/myarea/cliente/index') }}">{{ _lbl.clienti }}</a></li>
+				<li {% if selected == 'listino' %}class="selected"{% endif %}><a href="{{ _h.url('manager/myarea/listino/index') }}">{{ _lbl.listino_cliente }}</a></li>
+				<li {% if selected == 'newsletter' %}class="selected"{% endif %}><a href="{{ _h.url('manager/myarea/newsletter/index') }}">{{ _lbl.newsletter }}</a></li>
+				<li {% if selected == 'avvisaprodottoesaurito' %}class="selected"{% endif %}><a href="{{ _h.url('manager/myarea/avvisoprodottoesaurito/index') }}">{{ _lbl.avvisa_prodotto_esaurito }}</a></li>
+				{% if _h.config('gestione_file_clienti', false) %}
+				<li {% if selected == 'filecliente' %}class="selected"{% endif %}><a href="{{ _h.url('manager/myarea/filecliente/index') }}">{{ _lbl.files_cliente }}</a></li>
+				{% endif %}
+				{% if _h.config('gioc_app', false) %}
+				<li><a href="{{ _h.url('manager/myarea/gioc-app') }}">GiocApp</a></li>
+				{% endif %}
+			</ul>
+		</div>
+		{% endif %}
+		
+		{% if _h.config('blog', true) and _h.session.params.user.accesso != 3 and _h.session.params.user.abilitato_blog %}			
+		<div class="h-block-menu">
+			<h2 class="clear">
+				<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+					 viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve">
+				<g id="Bounding_Boxes">
+					<path fill="none" d="M0,0h24v24H0V0z"/>
+				</g>
+				<g id="Outline">
+					<g id="ui_x5F_spec_x5F_header">
+					</g>
+					<g>
+						<path d="M4,6H2v14c0,1.1,0.9,2,2,2h14v-2H4V6z"/>
+						<path d="M20,2H8C6.9,2,6,2.9,6,4v12c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V4C22,2.9,21.1,2,20,2z M20,16H8V4h12V16z"/>
+						<rect x="10" y="9" width="8" height="2"/>
+						<rect x="10" y="12" width="4" height="2"/>
+						<rect x="10" y="6" width="8" height="2"/>
+					</g>
+				</g>
+				</svg>			
+				<span>{{ _lbl.title_blog }}</span>
+			</h2>
+			<ul>
+				<li {% if selected == 'blog' %}class="selected"{% endif %}><a href="{{ _h.url('manager/myarea/blog/index') }}">{{ _lbl.articoli_blog }}</a></li>
+				<li {% if selected == 'categorie_blog' %}class="selected"{% endif %}><a href="{{ _h.url('manager/myarea/attributo/index-blog') }}">{{ _lbl.categorie_blog }}</a></li>
+				<li {% if selected == 'staff_blog' %}class="selected"{% endif %}><a href="{{ _h.url('manager/myarea/attributo/index-blog-redattore') }}">{{ _lbl.staff_blog }}</a></li>
+			</ul>
+		</div>
+		{% endif %}
+		{% if _h.config('blog', true) and _h.session.params.user.accesso != 3 and _h.session.params.user.abilitato_evento_news %}			
+		<div class="h-block-menu">
+			<h2 class="clear">
+				<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+					 viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve">
+				<g id="Bounding_Boxes">
+					<path fill="none" d="M0,0h24v24H0V0z"/>
+				</g>
+				<g id="Outline">
+					<g id="ui_x5F_spec_x5F_header">
+					</g>
+					<g>
+						<path d="M4,6H2v14c0,1.1,0.9,2,2,2h14v-2H4V6z"/>
+						<path d="M20,2H8C6.9,2,6,2.9,6,4v12c0,1.1,0.9,2,2,2h12c1.1,0,2-0.9,2-2V4C22,2.9,21.1,2,20,2z M20,16H8V4h12V16z"/>
+						<rect x="10" y="9" width="8" height="2"/>
+						<rect x="10" y="12" width="4" height="2"/>
+						<rect x="10" y="6" width="8" height="2"/>
+					</g>
+				</g>
+				</svg>			
+				<span>{{ _lbl.title_evento_news }}</span>
+			</h2>
+			<ul>
+				<li {% if selected == 'evento_news' %}class="selected"{% endif %}><a href="{{ _h.url('manager/myarea/evento_news/index') }}">{{ _lbl.articoli_evento_news }}</a></li>
+				<li {% if selected == 'categorie_evento_news' %}class="selected"{% endif %}><a href="{{ _h.url('manager/myarea/attributo/index-evento-news') }}">{{ _lbl.categorie_evento_news }}</a></li>
+			</ul>
+		</div>
+		{% endif %}
+
+		{% if _h.session.params.user.accesso != 3 and _h.session.params.user.abilitato_contenuti %}
+		<div class="h-block-menu">
+			<h2 class="clear">
+				<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+					 viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve">
+				<g id="Bounding_Boxes">
+					<g id="ui_x5F_spec_x5F_header_copy_2">
+					</g>
+					<path fill="none" d="M0,0h24v24H0V0z"/>
+				</g>
+				<g id="Outline">
+					<g id="ui_x5F_spec_x5F_header">
+					</g>
+					<g>
+						<path d="M21,3H3C2,3,1,4,1,5v14c0,1.1,0.9,2,2,2h18c1,0,2-1,2-2V5C23,4,22,3,21,3z M21,18.92c-0.02,0.03-0.06,0.06-0.08,0.08H3
+							V5.08C3.02,5.06,3.06,5.02,3.08,5h17.83c0.03,0.02,0.06,0.06,0.08,0.08V18.92z"/>
+						<polygon points="11,15.51 8.5,12.5 5,17 19,17 14.5,11 		"/>
+					</g>
+				</g>
+				</svg>
+				<span>{{ _lbl.title_cottenuti }}</span>
+			</h2>
+			<ul>
+				<li {% if selected == 'banner' %}class="selected"{% endif %}><a href="{{ _h.url('manager/myarea/banner/index') }}">{{ _lbl.banner }}</a></li>
+				<li {% if selected == 'popup' %}class="selected"{% endif %}><a href="{{ _h.url('manager/myarea/popup/index') }}">{{ _lbl.popup }}</a></li>
+				<li {% if selected == 'pagina' %}class="selected"{% endif %}><a href="{{ _h.url('manager/myarea/pagina/index') }}">{{ _lbl.pagine }}</a></li>
+				<li {% if selected == 'contratti' %}class="selected"{% endif %}><a href="{{ _h.url('manager/myarea/contratti/index') }}">{{ _lbl.termini_condizioni_privacy }}</a></li>
+				<li {% if selected == 'testo' %}class="selected"{% endif %}><a href="{{ _h.url('manager/myarea/testo/index') }}">{{ _lbl.blocco_testo }}</a></li>
+				<li {% if selected == 'faq' %}class="selected"{% endif %}><a href="{{ _h.url('manager/myarea/faq/index') }}">{{ _lbl.faq }}</a></li>
+				<li {% if selected == 'glossario' %}class="selected"{% endif %}><a href="{{ _h.url('manager/myarea/glossario/index') }}">{{ _lbl.glossario }}</a></li>
+				{% if _h.session.params.user.accesso >= 5 %}
+				<li {% if selected == 'sondaggio' %}class="selected"{% endif %}><a href="{{ _h.url('manager/myarea/sondaggio/index') }}">{{ _lbl.sondaggio }}</a></li>
+				<li {% if selected == 'landingpage' %}class="selected"{% endif %}><a href="{{ _h.url('manager/myarea/landingpage/index') }}">{{ _lbl.landing_page }}</a></li>
+				<li {% if selected == 'file' %}class="selected"{% endif %}><a href="{{ _h.url('manager/myarea/file/index') }}">{{ _lbl.files }}</a></li>
+				{% endif %}
+			</ul>
+		</div>
+		{% endif %}
+		{{ _self.navMenuActionsAdd(_h, selected, is_in_dashboard) }}
+		
+		{% if _h.session.params.user.accesso >= 10 %}
+		<div class="h-block-menu">
+			<h2 class="clear">
+				<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+					 viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve">
+				<g id="Bounding_Boxes">
+					<g id="ui_x5F_spec_x5F_header_copy_3" display="none">
+					</g>
+					<g>
+						<path fill="none" d="M0,0h24v24H0V0z"/>
+					</g>
+				</g>
+				<g id="Rounded" display="none">
+					<g id="ui_x5F_spec_x5F_header_copy_5">
+					</g>
+					<path display="inline" d="M16.5,12c1.38,0,2.49-1.12,2.49-2.5S17.88,7,16.5,7S14,8.12,14,9.5S15.12,12,16.5,12z M9,11
+						c1.66,0,2.99-1.34,2.99-3S10.66,5,9,5S6,6.34,6,8S7.34,11,9,11z M16.5,14c-1.83,0-5.5,0.92-5.5,2.75V18c0,0.55,0.45,1,1,1h9
+						c0.55,0,1-0.45,1-1v-1.25C22,14.92,18.33,14,16.5,14z M9,13c-2.33,0-7,1.17-7,3.5V18c0,0.55,0.45,1,1,1h6v-2.25
+						c0-0.85,0.33-2.34,2.37-3.47C10.5,13.1,9.66,13,9,13z"/>
+				</g>
+				<g id="Sharp" display="none">
+					<g id="ui_x5F_spec_x5F_header_copy_4">
+					</g>
+					<path display="inline" d="M16.5,12c1.38,0,2.49-1.12,2.49-2.5S17.88,7,16.5,7S14,8.12,14,9.5S15.12,12,16.5,12z M9,11
+						c1.66,0,2.99-1.34,2.99-3S10.66,5,9,5S6,6.34,6,8S7.34,11,9,11z M16.5,14c-1.83,0-5.5,0.92-5.5,2.75V19h11v-2.25
+						C22,14.92,18.33,14,16.5,14z M9,13c-2.33,0-7,1.17-7,3.5V19h7v-2.25c0-0.85,0.33-2.34,2.37-3.47C10.5,13.1,9.66,13,9,13z"/>
+				</g>
+				<g id="Outline">
+					<g id="ui_x5F_spec_x5F_header" display="none">
+					</g>
+					<g>
+						<g>
+							<path d="M9,12c1.93,0,3.5-1.57,3.5-3.5S10.93,5,9,5S5.5,6.57,5.5,8.5S7.07,12,9,12z M9,7c0.83,0,1.5,0.67,1.5,1.5S9.83,10,9,10
+								S7.5,9.33,7.5,8.5S8.17,7,9,7z"/>
+							<path d="M9.05,17H4.77c0.99-0.5,2.7-1,4.23-1c0.11,0,0.23,0.01,0.34,0.01c0.34-0.73,0.93-1.33,1.64-1.81
+								C10.25,14.07,9.56,14,9,14c-2.34,0-7,1.17-7,3.5V19h7v-1.5C9,17.33,9.02,17.16,9.05,17z"/>
+							<path d="M16.5,14.5c-1.84,0-5.5,1.01-5.5,3V19h4.58H22v-1.5C22,15.51,18.34,14.5,16.5,14.5z"/>
+							<g>
+								<path d="M17.71,12.68C18.47,12.25,19,11.44,19,10.5C19,9.12,17.88,8,16.5,8S14,9.12,14,10.5c0,0.94,0.53,1.75,1.29,2.18
+									c0.36,0.2,0.77,0.32,1.21,0.32S17.35,12.88,17.71,12.68z"/>
+							</g>
+						</g>
+					</g>
+				</g>
+				<g id="Duotone" display="none">
+					<g id="ui_x5F_spec_x5F_header_copy_2">
+					</g>
+					<g display="inline">
+						<circle opacity="0.3" cx="9" cy="8.5" r="1.5"/>
+						<path opacity="0.3" d="M4.77,17h4.28c0.01-0.06,0.12-0.58,0.29-0.99C9.23,16.01,9.11,16,9,16C7.47,16,5.75,16.5,4.77,17z"/>
+						<g>
+							<path d="M9,12c1.93,0,3.5-1.57,3.5-3.5S10.93,5,9,5S5.5,6.57,5.5,8.5S7.07,12,9,12z M9,7c0.83,0,1.5,0.67,1.5,1.5S9.83,10,9,10
+								S7.5,9.33,7.5,8.5S8.17,7,9,7z"/>
+							<path d="M9.05,17H4.77c0.99-0.5,2.7-1,4.23-1c0.11,0,0.23,0.01,0.34,0.01c0.34-0.73,0.93-1.33,1.64-1.81
+								C10.25,14.07,9.56,14,9,14c-2.34,0-7,1.17-7,3.5V19h7v-1.5C9,17.33,9.02,17.16,9.05,17z"/>
+							<path d="M16.5,14.5c-1.84,0-5.5,1.01-5.5,3V19h4.58H22v-1.5C22,15.51,18.34,14.5,16.5,14.5z"/>
+							<g>
+								<path d="M17.71,12.68C18.47,12.25,19,11.44,19,10.5C19,9.12,17.88,8,16.5,8S14,9.12,14,10.5c0,0.94,0.53,1.75,1.29,2.18
+									c0.36,0.2,0.77,0.32,1.21,0.32S17.35,12.88,17.71,12.68z"/>
+							</g>
+						</g>
+					</g>
+				</g>
+				<g id="Material" display="none">
+					<g id="ui_x5F_spec_x5F_header_copy">
+					</g>
+					<path display="inline" d="M16.5,12c1.38,0,2.49-1.12,2.49-2.5S17.88,7,16.5,7S14,8.12,14,9.5S15.12,12,16.5,12z M9,11
+						c1.66,0,2.99-1.34,2.99-3S10.66,5,9,5S6,6.34,6,8S7.34,11,9,11z M16.5,14c-1.83,0-5.5,0.92-5.5,2.75V19h11v-2.25
+						C22,14.92,18.33,14,16.5,14z M9,13c-2.33,0-7,1.17-7,3.5V19h7v-2.25c0-0.85,0.33-2.34,2.37-3.47C10.5,13.1,9.66,13,9,13z"/>
+				</g>
+				</svg>
+				<span>{{ _lbl.title_accesso }}</span>
+			</h2>
+			<ul>
+				{% if _h.config('gestione_agenti', false) %}
+				<li {% if selected == 'agente' %}class="selected"{% endif %}><a href="{{ _h.url('manager/myarea/agente/index') }}">{{ _lbl.agenti }}</a></li>
+				{% endif %}
+				<li {% if selected == 'operatore' %}class="selected"{% endif %}><a href="{{ _h.url('manager/myarea/operatore/index') }}">{{ _lbl.operatori }}</a></li>
+			</ul>
+		</div>
+		{% endif %}
+		
+		{% if is_in_dashboard and _h.session.params.user.accesso != 3 %}
+		<div class="h-block-menu">
+			<ul>
+				<li><a href="{{ _h.url('manager/myarea/label/index') }}" class="h-action-close-popup-menu">{{ _lbl.labels }}</a></li>
+			</ul>
+		</div>
+		{% endif %}
+	{% endif %}
+{% endmacro %}
+
+{% macro navMenu(_h, selected) %}
+	<div class="h-nav-menu">
+		<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve">
+		<g id="Bounding_Boxes">
+			<path fill="none" d="M0,0h24v24H0V0z"/>
+		</g>
+		<g id="Outline_1_">
+			<path d="M3,18h18v-2H3V18z M3,13h18v-2H3V13z M3,6v2h18V6H3z"/>
+		</g>
+		</svg>	
+	</div>
+	<div class="h-nav-menu-bar">
+		<div class="h-nav-menu-logo">
+			<a href="{{ _h.url('manager/myarea/index') }}">
+				{% if _h.istanza.isMaster() %}
+					<img src="/assets/manager/img/logo-login.png">
+				{% else %}
+					<img src="/assets/manager/img/logo-login-{{ _h.istanza.name() }}.png">
+				{% endif %}
+			</a>
+		</div>
+		<div class="h-nav-menu-action">
+			{{ _self.navMenuActions(_h, selected) }}
+		</div>
+		<div class="h-nav-menu-user">
+			<div class="h-user-info">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+					<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+					<path d="M0 0h24v24H0z" fill="none"/>
+				</svg>			
+				<span>{{ _h.session.params.user.nome }} {{ _h.session.params.user.cognome }}</span>
+			</div>
+			<div class="h-user-menu">
+				<a href="javascript:void(0)" class="h-action-window action-close-nav-menu" data-action='{"width": 360, "height": 360, "overlay": true, "type": "layer","url": "{{ _h.url('manager/myarea/edit-password') }}"}'>
+					Modifica password
+				</a>
+				<a href="{{ _h.url('manager/index') }}">Esci</a>
+			</div>
+		</div>
+	</div>
+{% endmacro %}
+
+{% macro navTotalItem(_h, da, a, totale) %}
+<div class="h-nav-list-count">	
+	{{ _self.navTotalItemDetails(_h, da, a, totale) }}
+</div>
+{% endmacro %}
+
+{% macro navTotalItemSimple(_h, totale) %}
+<div class="h-nav-list-count">	
+	<div class="h-nav-button-wrapper">
+		<div class="h-nav-separator"> 
+		tot.: <span>{{ totale }}</span>
+		</div>
+	</div>
+</div>
+{% endmacro %}
+
+{% macro navTotalItemDetails(_h, da, a, totale) %}
+	{% if a > 0 %}
+		<div class="h-nav-button-wrapper"><div class="h-nav-separator"> 
+		{{ da }}-{{ a }} di {{ totale }}</div></div>
+		{% if a > 25 %}
+			{{ _self.navButton(_h, 'pagina precendente', 'prev', 'click', 'h-action-next-list', '{"content": "#h-layout-center-content", "add": -25}') }}
+		{% endif %}
+		{% if totale > a %}
+			{{ _self.navButton(_h, 'pagina successiva', 'next', 'click', 'h-action-next-list', '{"content": "#h-layout-center-content", "add": 25}') }}
+		{% endif %}
+	{% endif %}
+{% endmacro %}
+
+{% macro slideBoxHeaderToolbar(_h, title, base) %}
+	{{ _self.slideBoxHeader(_h, title, base, true) }}
+{% endmacro %}
+
+{% macro slideBoxHeaderToolbarEnd() %}
+		</div>
+	</div>
+	<form>
+	<div class="h-layout-content">
+{% endmacro %}
+
+{% macro slideBoxHeader(_h, title, base, toolbar) %}
+{% if base == false %}
+	{% set css_bottombar = ' h-layout-show-bottombar' %}
+{% endif %}
+{% if toolbar %}
+	{% set css_toolbar = ' h-layout-show-toolbar' %}
+{% endif %}
+<div class="h-layout-content-wrapper h-layout-show-topbar{{ css_bottombar }}{{ css_toolbar }}">
+	<div class="h-layout-topbar">
+		<div class="h-layout-content-wrapper">
+			{{ title }}
+			<a href="javascript:void(0);" class="h-close-box"></a>
+		</div>
+	</div>
+	{% if toolbar %}
+	<div class="h-layout-toolbar h-nav-button-text">
+		<div class="h-layout-content-wrapper">
+	{% else %}
+	<form>
+	<div class="h-layout-content">
+		<fieldset>
+	{% endif %}
+{% endmacro %}
+
+{% macro slideBoxFooter(_h, url, onComplete, addParams, clearSelection, label) %}	
+	{% if label == null %}
+		{% set label = 'Salva' %}
+	{% endif %}
+	{% if onComplete == null %}
+		{% set onComplete = '"reload": "#h-layout-center-content",' %}
+	{% elseif onComplete.id != '' %}
+		{% set onComplete = '"replace_item": "' ~ onComplete.id ~ '",' %}
+	{% elseif onComplete != null and onComplete != '' %}
+		{% set onComplete = onComplete ~ ',' %}
+	{% endif %}	
+	
+		</fieldset>
+	</div>
+	{% if url == false %}
+	{% else %}
+	<div class="h-layout-bottombar">
+		<div class="h-layout-content-wrapper">
+			<a href="javascript:void(0);" class="h-bar-button h-bar-button-gray h-close-box">Chiudi</a>
+			<a href="javascript:void(0);" class="h-bar-button h-bar-button-blu h-action-submit" data-action='{"url":"{{ _h.url(url) }}", "onComplete": {"closeWin": true, {{ onComplete }}"clearSelection": "{{ clearSelection }}"}, "loadinMessage": "salvataggio in corso..." {{ addParams }}}'>{{ label }}</a>
+		</div>
+	</div>
+	{% endif %}
+	</form>
+</div>
+{% endmacro %}
+			
+			
+{% macro dynamicTreeSelect(_h, selectType, fieldLabel, list, item, fieldName, type, required, principale, id_principale, quantita, ordine) %}	
+<div class="field-line field-select-add">
+	<label>{{ fieldLabel }}{% if required %}<span>*</span>{% endif %}:</label>
+	{% if principale %}
+	<em style="color: #999; padding: 5px 0; display: block;">Selezionare la voce da considerare "principale", cliccando sul pallino a sinistra. Quando una riga è evidenziata in grigio, senza pallino selezionato, identifica che una sottovoce è stata impostata come "principale".</em>
+	{% endif %}
+	<div class="select-content-wrapper">
+		<div class="select-content tree tree-level-{{ selectType }}" data-multiple-check-options="{{ fieldName }}[]" data-id-principale="{{ id_principale }}">
+			{% for i in list %}	
+				{% if item.containsValue(fieldName, i.id) %} 
+					{% set cssClass = ' h-checkbox-checked' %}
+					{% set value = i.id %}
+				{% else %}
+					{% set cssClass = '' %}
+					{% set value = '' %}
+				{% endif %}
+				<div class="h-checkbox-wrapper hrow tree-item{% if principale %} tree-item-principale{% endif %}{% if quantita %} tree-item-input{% endif %}" data-id="{{ i.id }}" data-parent-id="{{ i.get('id_padre') }}">
+					{% if quantita %}
+						{% set codice = item.codiceMagazzino(quantita, i.id) %}
+						{% set qta = item.quantitaMagazzino(quantita, i.id) %}
+						<input type="text" name="{{ quantita }}_{{ i.id }}_codice" class="tree-item-codice" placeholder="Codice" value="{{ codice }}" maxlength="50">
+						<input type="text" name="{{ quantita }}_{{ i.id }}_quantita" class="valida-digitint valida-int tree-item-qta" placeholder="Qta." value="{{ qta }}" maxlength="5">
+					{% endif %}
+					{% if ordine %}
+						{% set ord = item.ordineAttributo(ordine, i.id) %}
+						<input type="text" name="{{ ordine }}_{{ i.id }}_ordine" class="valida-digitint valida-int tree-item-qta" placeholder="Peso" value="{{ ord }}" maxlength="5">
+					{% endif %}
+					<span class="h-checkbox{{ cssClass }}" data-value="{{ i.id }}"><input type="hidden" name="{{ fieldName }}[]" value="{{ value }}" /></span>
+					<strong>{{ i.get('nome') }}</strong>
+				</div>				
+			{% endfor %}
+		</div>
+	</div>	
+</div>
+{% endmacro %}
+
+{% macro dynamicOnlyOneTreeSelect(_h, fieldLabel, list, item, fieldName, type, required, principale, id_principale) %}	
+{{ _self.dynamicTreeSelect(_h, 'onlyone', fieldLabel, list, item, fieldName, type, required, principale, id_principale) }}
+{% endmacro %}
+{% macro dynamicOnlyOneMultipleTreeSelect(_h, fieldLabel, list, item, fieldName, type, required, principale, id_principale) %}	
+{{ _self.dynamicTreeSelect(_h, 'onlyone-multiple', fieldLabel, list, item, fieldName, type, required, principale, id_principale) }}
+{% endmacro %}
+
+{% macro dynamicSingleTreeSelect(_h, fieldLabel, list, item, fieldName, type, required, principale, id_principale) %}	
+{{ _self.dynamicTreeSelect(_h, 'single', fieldLabel, list, item, fieldName, type, required, principale, id_principale) }}
+{% endmacro %}	
+		 
+{% macro dynamicMultipleTreeSelect(_h, fieldLabel, list, item, fieldName, type, required, principale, id_principale, quantita, ordine) %}	
+{{ _self.dynamicTreeSelect(_h, 'multi', fieldLabel, list, item, fieldName, type, required, principale, id_principale, quantita, ordine) }}
+{% endmacro %}
+
+{% macro dynamicBaseTreeSelect(_h, fieldLabel, list, item, fieldName, type, required, principale, id_principale) %}	
+{{ _self.dynamicTreeSelect(_h, 'base', fieldLabel, list, item, fieldName, type, required, principale, id_principale) }}
+{% endmacro %}
+
+{% macro dynamicMultipleSelect(_h, fieldLabel, list, item, fieldName, type, required, incremento_prezzo, quantita, hide_select_all) %}	
+<div class="field-line field-select-add">
+	<label>{{ fieldLabel }}{% if required %}<span>*</span>{% endif %}:</label>
+	<div class="select-content-wrapper">
+		{% if not(hide_select_all) %}
+		<div class="field-line field-299" style="margin-top: 0;">
+			<div class="h-checkbox-wrapper"><span class="h-checkbox" data-value="1" data-action='{"callback": "seleziona_tutto_da_elenco"}'><input type="hidden" name="_seleziona_tutto_elenco" value="" /></span> <strong style="font-weight: bold;">Seleziona tutte le voci dell'elenco</strong></div>
+		</div>
+		{% endif %}
+	
+		<table class="select-content" data-multiple-check-options="{{ fieldName }}[]" style="width: 100%;">
+			{% for i in list %}	
+				{% if item.containsValue(fieldName, i.id) %} 
+					{% set cssClass = ' h-checkbox-checked' %}
+					{% set value = i.id %}
+				{% else %}
+					{% set cssClass = '' %}
+					{% set value = '' %}
+				{% endif %}
+				<tr class="h-checkbox-wrapper">
+					<td style="padding-left: 15px;"><span class="h-checkbox{{ cssClass }}" data-value="{{ i.id }}"><input type="hidden" name="{{ fieldName }}[]" value="{{ value }}" /></span> <strong>{{ i.get('nome') }}</strong></td>
+					{% if quantita %}
+					<td width="100">
+						{% set qta = item.quantitaMagazzino(quantita, i.id) %}
+						<div class="field-line field-50 field-line-left" style="margin-right: 10px">
+							<label>Qta:</label>
+							<input type="text" name="{{ quantita }}_{{ i.id }}_quantita" class="field valida-digitint valida-int" value="{{ qta }}" maxlength="6">
+						</div>
+					</td>
+					{% endif %}
+					{% if incremento_prezzo %}
+					<td width="150">
+						{% set ip = item.incrementoPrezzo(incremento_prezzo, i.id) %}
+						<div class="field-line field-50 field-line-left" style="margin-right: 10px">
+							<label>Inc. Prezzo:</label>
+							<input type="text" name="{{ incremento_prezzo }}_{{ i.id }}_incremento_prezzo" class="field valida-digitfloat valida-euro" value="{{ _h.util.euro(ip.valore) }}" maxlength="6">
+						</div>
+						<div class="field-line field-50 field-line-left" style="margin-right: 0">
+							<label>Tipo:</label>
+							<select name="{{ incremento_prezzo }}_{{ i.id }}_tipo_incremento_prezzo" class="field">
+							<option value="0"{% if ip.tipo == 0 %} selected="true"{% endif %}>%</value>
+							<option value="1"{% if ip.tipo == 1 %} selected="true"{% endif %}></value>
+							<option value="2"{% if ip.tipo == 2 %} selected="true"{% endif %}>Sostituisci</value>
+							</select>
+						</div>
+					</td>
+					{% endif %}
+				</tr>
+			{% endfor %}
+		</table>
+		
+		{% if type %}
+		<div class="h-nav-button-wrapper">
+			<a href="javascript:void(0);" class="h-nav-button h-nav-button-click h-action-alttext h-action-add-item-in-select" data-alttext="aggiungi" data-action='{"url": "{{ _h.url('manager/myarea/attributo/edit-new') }}", "type": "{{ type }}"}'>
+				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+					<path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+					<path d="M0 0h24v24H0z" fill="none"/>
+				</svg>
+			</a>
+		</div>	
+		{% endif %}
+		<div class="clear-line"></div>
+	</div>	
+</div>
+{% endmacro %}
+
+{% macro dynamicSelect(_h, fieldLabel, list, item, fieldName, type, required, hideBtnAdd) %}	
+<div class="field-line clear field-select-add field-400">
+	<label>{{ fieldLabel }}{% if required %}<span>*</span>{% endif %}:</label>
+	<div class="select-wrapper field-300">
+		<select name="{{ fieldName }}" class="select-content field{% if required %} valida-required{% endif %}">
+			<option value=""></option>
+		{% for i in list %}	
+			<option value="{{ i.id }}" {% if i.id == item.get(fieldName) %}selected{% endif %}>{{ i.get('nome') }}</option>
+		{% endfor %}	
+		</select> 
+	</div>
+	{% if not(hideBtnAdd) %}
+	<div class="h-nav-button-wrapper">
+		<a href="javascript:void(0);" class="h-nav-button h-nav-button-click h-action-alttext h-action-add-item-in-select" data-alttext="aggiungi" data-action='{"url": "{{ _h.url('manager/myarea/attributo/edit-new') }}", "type": "{{ type }}"}'>
+			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+				<path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+				<path d="M0 0h24v24H0z" fill="none"/>
+			</svg>
+		</a>
+	</div>	
+	{% endif %}
+	<div class="clear-line"></div>
+</div>
+{% endmacro %}

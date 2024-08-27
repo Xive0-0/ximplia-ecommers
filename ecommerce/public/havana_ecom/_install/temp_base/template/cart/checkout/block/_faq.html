@@ -1,0 +1,11 @@
+{% import _h.template('_macro.html') as mc %}
+{% set _lblc = _h.labels.get('checkout') %}
+<div class="col-box-faq">
+	<div class="tab-title"><span>{{ _lblc.title_domande_frequenti }}</span></div>
+	<div class="tab-content clear">
+	<div class="faq">
+		<strong>{{ _lblc.title_domande_frequenti }}</strong>
+		{{ mc.faq_list(_h, listFaq) }}
+	</div>
+	</div>
+</div>

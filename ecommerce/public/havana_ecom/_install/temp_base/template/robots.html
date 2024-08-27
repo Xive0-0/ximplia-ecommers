@@ -1,0 +1,12 @@
+{% if _h.settings.get('script_robots') and _h.settings.get('script_robots') != '' %}
+{{ _h.settings.get('script_robots') }}
+{% else %}
+User-agent: *
+Disallow: /manager/
+Disallow: /cart/
+Disallow: /cartprev/
+Disallow: /find.php*
+Disallow: /search.php*
+Disallow: /account/
+Sitemap: {{ _h.c_url('sitemap.xml') }}
+{% endif %} 

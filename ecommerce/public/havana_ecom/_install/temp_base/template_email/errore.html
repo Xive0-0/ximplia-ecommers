@@ -1,0 +1,16 @@
+{% set _lbl = _h.labels('email', lang) %}
+{% import _h.template('_macro.html') as mc %}
+
+<div style="{{ mc.style_fontBase() }}">Errore <strong>{{ testo }}</strong></div>
+<div style="{{ mc.style_fontBase() }}">{{ exception }}</div>
+{% if params %}
+<div style="{{ mc.style_fontBase() }}">
+<ul>
+	{% for k,v in params %}
+	<li style="{{ mc.style_fontBase() }}">{{ k }}: <strong>{{ v }}</strong></li>
+	{% endfor %}
+</ul>
+</div>
+{% endif %}
+
+

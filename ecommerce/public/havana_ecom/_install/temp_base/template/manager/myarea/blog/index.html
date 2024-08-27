@@ -1,0 +1,30 @@
+{% import _h.template('manager/_macro.html') as mc %}
+{% set _lbl = _h.labels.get('manager') %}
+{{ mc.index_page_header(_h, _lbl.articoli_blog, 'blog') }}
+	
+	{% if _h.session.params.user.accesso >= 5 %}
+	{{ mc.navButtonNew(_h, 'nuovo', 'blog') }}
+	{% endif %}
+	{{ mc.navButtonUpdateLang(_h, 'modifica', 'blog') }}
+	{% if _h.session.params.user.accesso >= 5 %}
+	{{ mc.navButtonDelete(_h, 'elimina', 'blog') }}
+	{{ mc.navSeparatore() }}
+	{{ mc.navButton(_h, 'immagine', 'image', 'click', 'h-action-upload-file', '{"select": {"from":"#h-layout-center-content", "check": 1}, "url": "' ~ _h.url('manager/myarea/blog/upload') ~ '", "fileType": ["jpg","png","gif","jpeg"], "onComplete": {"reload": "#h-layout-center-content"}}') }}	
+	{{ mc.navButton(_h, 'gallery immagini', 'gallery', 'click', 'h-action-selected-open-window', '{"select": {"from":"#h-layout-center-content", "check": 1}, "window": {"type": "slide-right", "url": "' ~ _h.url('manager/myarea/galleryimmagini/index') ~ '", "params": {"tipo_entita": "blog"}}}') }}
+	{{ mc.navSeparatore() }}
+	{% endif %}
+	{{ mc.navButtonMetaInfo(_h, 'blog') }}
+	
+	<div class="h-list-right h-nav-button-group" id="filtri-attivita">
+	{{ mc.navButton(_h, 'filtra', 'filter', 'arrow', 'h-load-in-window', '{"show": ["details-right"], "loadIn": "#h-layout-filtro", "url": "' ~ _h.url('manager/myarea/blog/filtro') ~ '"}') }}
+	</div>
+	<div class="h-list-right" id="azzera-filtro">
+	{{ mc.navButton(_h, 'azzera filtro', 'reset', 'click', 'h-action-reset-filter', '{"load": "#h-layout-center-content", "reset": "#filtri-attivita"}') }}
+	</div>
+	
+{{ mc.index_page_footer(_h, result, 'blog') }}
+
+<div id="h-layout-details-right" class="h-layout h-layout-middle">
+	<div class="h-layout-content-wrapper" id="h-layout-filtro">
+	</div>
+</div>

@@ -1,0 +1,112 @@
+{% set _lble = _h.labels('email', lang) %}
+{% set _lblc = _h.labels('checkout_preventivo', lang) %}
+{% import _h.template('_macro.html') as mc %}
+
+{% if interna %}
+<div style="{{ mc.margin() }}">
+	<h2 style="{{ mc.style_h2() }}">{{ item.get('codice') }}</h2>
+</div>
+{% else %}
+	{% if semplice %}
+	<p style="{{ mc.style_fontBase() }}">{{ _lble.ciao }} <strong style="{{ mc.style_fontTitolo() }}">{{ ordine.spedizione.nome }}</strong></p>
+	{% else %}
+	<div style="{{ mc.margin() }};text-align:center;">
+		<h1 style="{{ mc.style_font() }};font-size: 40px;text-transform: capitalize;">{{ _lble.grazie }}</h1>
+		<div style="{{ mc.style_fontBase() }}">{{ _lble.descr_ricezione_preventivo }}</div>
+	</div>
+	{% endif %}
+<div style="{{ mc.margin() }}">
+	<h2 style="{{ mc.style_h2() }}">{{ _lble.il_tuo_preventivo }}</h2>
+	<div style="{{ mc.style_fontBase() }}">{{ _lble.riferimento_tuo_preventivo }}: <strong style="{{ mc.style_fontTitolo() }}">{{ item.get('codice') }}</strong></div>
+</div>	
+{% endif %}
+
+{% if show_intestazione %}
+	{% set intestazione = item.intestazione() %}
+	{% if intestazione.oggetto %}
+	<div style="{{ mc.margin() }}">
+	<div style="{{ mc.style_fontBase() }}"><strong>{{ intestazione.oggetto }}</strong></div>
+	</div>
+	{% endif %}
+
+	{% if intestazione.testo %}
+	<div style="{{ mc.margin() }}">
+	<div style="{{ mc.style_fontBase() }}">{{ intestazione.testo }}</div>
+	</div>
+	{% endif %}
+{% endif %}
+
+<div style="{{ mc.margin() }}">
+	<h2 style="{{ mc.style_h2() }}">{{ _lble.title_dettagli_preventivo }}</h2>
+	{{ mc.ordine_dati_preventivo(_h, ordine) }}
+</div>
+<div style="{{ mc.margin() }}">
+	<h2 style="{{ mc.style_h2() }}">{{ _lble.title_dettagli_preventivo }}</h2>
+	{{ mc.ordine_articoli(_h, ordine, interna) }}
+</div>
+
+{% if show_intestazione %}
+	<div style="{{ mc.margin() }}">
+	{% if intestazione.validita_offerta %}
+	<div style="{{ mc.style_fontBase() }}">{{ _lblc.field_validita_offerta }} <strong>{{ intestazione.validita_offerta }}</strong></div>
+	{% endif %}
+	{% if intestazione.montaggio %}
+	<div style="{{ mc.style_fontBase() }}">{{ _lblc.field_montaggio }} <strong>{{ intestazione.montaggio }}</strong></div>
+	{% endif %}
+	{% if intestazione.termini_consegna %}
+	<div style="{{ mc.style_fontBase() }}">{{ _lblc.field_termini_consegna }} <strong>{{ intestazione.termini_consegna }}</strong></div>
+	{% endif %}
+	{% if intestazione.pagamento %}
+	<div style="{{ mc.style_fontBase() }}">{{ _lblc.field_pagamento }} <strong>{{ intestazione.pagamento }}</strong></div>
+	{% endif %}
+	{% if intestazione.garanzia %}
+	<div style="{{ mc.style_fontBase() }}">{{ _lblc.field_garanzia }} <strong>{{ intestazione.garanzia }}</strong></div>
+	{% endif %}
+
+	{% if _h.config('gestione_preventivi_campi_liberi', true) %}
+		{% if intestazione.spedizione %}
+		<div style="{{ mc.style_fontBase() }}">{{ _lblc.field_spedizione }} <strong style="{{ mc.style_fontBase() }}">{{ intestazione.spedizione }}</strong></div>
+		{% endif %}
+		{% if intestazione.sconto %}
+		<div style="{{ mc.style_fontBase() }}">{{ _lblc.field_sconto }} <strong style="{{ mc.style_fontBase() }}">{{ intestazione.sconto }}</strong></div>
+		{% endif %}
+		{% if intestazione.totale %}
+		<div style="{{ mc.style_fontBase() }}">{{ _lblc.field_totale }} <strong style="{{ mc.style_h3() }}">{{ intestazione.totale }}</strong></div>
+		{% endif %}
+	{% else %}
+		{% if intestazione.spedizione %}
+		<div style="{{ mc.style_fontBase() }}">{{ _lblc.field_spedizione }} <strong style="{{ mc.style_fontBase() }}">{{ _h.util.euro(intestazione.spedizione) }} &euro;</strong></div>
+		{% endif %}
+		{% if intestazione.sconto %}
+		<div style="{{ mc.style_fontBase() }}">{{ _lblc.field_sconto }} <strong style="{{ mc.style_fontBase() }}">{{ _h.util.euro(intestazione.sconto) }} &euro;</strong></div>
+		{% endif %}
+		{% if intestazione.totale %}
+		<div style="{{ mc.style_fontBase() }}">{{ _lblc.field_totale }} <strong style="{{ mc.style_h3() }}">{{ _h.util.euro(intestazione.totale) }} &euro;</strong></div>
+		{% endif %}
+	{% endif %}
+	</div>
+
+	{% if intestazione.altro_testo %}
+	<div style="{{ mc.margin() }}">
+	<div style="{{ mc.style_fontBase() }}">{{ intestazione.altro_testo }}</div>
+	</div>
+	{% endif %}
+{% else %}
+	<div style="{{ mc.margin() }}">
+		<div style="{{ mc.style_fontBase() }}">{{ _lble.testo_evasione_preventivo }}</div>
+	</div>	
+{% endif %}
+
+{% if not(interna) and show_intestazione %}
+	<div style="{{ mc.margin() }}">
+		<div style="{{ mc.style_h2() }}"><a href="{{ _h.c_url('account/my/preventivi/to-ordine') }}?id={{ item.id }}">{{ _lblc.crea_ordine_da_preventivo  }}</a></div>
+	</div>
+	{% if _lble.testo_aggiuntivo_footer_e_mail_preventivo and _lble.testo_aggiuntivo_footer_e_mail_preventivo != '' %}
+	<div style="{{ mc.margin() }}">
+		<div style="{{ mc.style_fontBase() }}">{{ _lble.testo_aggiuntivo_footer_e_mail_preventivo }}</div>
+	</div>
+	{% endif %}
+{% endif %}
+
+
+

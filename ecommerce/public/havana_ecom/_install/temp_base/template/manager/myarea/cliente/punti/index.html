@@ -1,0 +1,7 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeaderToolbar(_h, 'Punti cliente: ' ~ item.get('nome') ~ ' ' ~ item.get('cognome'), true) }}
+	{{ mc.navButton(_h, 'aggiungi / rimuovi', 'new', 'click', 'h-action-selected-open-window', '{"window": {"type": "layer", "overlay": true, "params": {"id_cliente":"' ~ _h.input('id', '') ~ '"}, "width": 350, "height": 260, "url": "' ~ _h.url('manager/myarea/cliente/punti/edit') ~ '"}}') }}
+{{ mc.slideBoxHeaderToolbarEnd() }}
+
+{{ mc.box_footer(_h, 'punti', 'cliente/punti', list, '{"id": ' ~ item.id ~ '}') }}

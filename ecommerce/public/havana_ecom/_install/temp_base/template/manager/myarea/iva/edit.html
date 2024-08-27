@@ -1,0 +1,44 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% if item == null %}
+	{% set title = 'Nuova IVA' %}
+{% else %}
+	{% set title = 'Modifica IVA' %}
+{% endif %}
+{{ mc.slideBoxHeader(_h, title) }}
+<input type="hidden" name="old_iva" value="{{ item.get('valore') }}">
+<p class="field-line field-line-left field-100">
+	<label>IVA<span>*</span>:</label>
+	<input type="text" name="iva" class="field valida-required valida-digiteuro" value="{{ item.euroBi('valore') }}"> %
+</p>
+<div class="field-line field-line-left field-200">
+	<label>Paese di riferimento:</label>
+{% if item %}
+	<input type="hidden" name="codice_iso_nazione" readonly="true" value="{{ item.get('codice_iso_nazione') }}">
+	{% set nazione = '' %}
+	{% for elem in listPaeseUe %}
+		{% if elem.codice_iso == item.get('codice_iso_nazione') %}
+			{% set nazione = elem.nome %}
+		{% endif %}
+	{% endfor %}
+	<input type="text" class="field" name="nome:codice_iso_nazione" readonly="true" value="{{ nazione }}">
+{% else %}
+	<select name="codice_iso_nazione" class="field valida-required">
+		{% for elem in listPaeseUe %}
+			{% set sel = '' %}
+			{% if elem.codice_iso == 'IT' %}
+				{% set sel = 'selected' %}
+			{% endif %}
+			<option value="{{ elem.codice_iso }}" {{ sel }}>{{ elem.nome }}</option>
+		{% endfor %}	
+	</select>
+{% endif %}
+</div>
+<div class="clear"></div>
+{{ mc.checkbox(item.get('principale'), 1, 'principale', 'Principale nel paese di riferimento') }}
+<p class="field-line field-400">
+	<label>Descrizione:</label>
+	<textarea name="descrizione" class="field">{{ item.get('descrizione') }}</textarea>
+</p>
+{{ mc.labelCampiObbligatori() }}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/iva/ex-edit'), '"reload": "#iva-content"') }}	

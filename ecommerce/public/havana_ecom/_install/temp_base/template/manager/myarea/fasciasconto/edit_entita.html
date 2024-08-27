@@ -1,0 +1,13 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Fasce sconto') }}
+<input type="hidden" name="table" value="{{ _h.input('table', '') }}">
+<input type="hidden" name="id_entita" value="{{ _h.input('id', 0) }}">
+<p class="field-line-text">Impostare il valore di sconto per ogni fascia.<br>Lasciando vuoto viene considerato "nessuno sconto" e il sistema considera il valore più generico.</p>
+{% for item in list %}
+<p class="field-line field-100">
+	<label>{{ item.id }}:</label>
+	<input type="text" name="{{ item.id }}" class="field valida-float" value="{{ _h.util.euro(map_valore.get(item.id)) }}"> %
+</p>
+{% endfor %}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/fasciasconto/ex-edit-entita')) }}	

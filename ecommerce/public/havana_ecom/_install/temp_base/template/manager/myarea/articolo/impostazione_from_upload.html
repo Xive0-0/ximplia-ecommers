@@ -1,0 +1,48 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% set lang = _h.input('lang', _h.config('default_language', 'it')) %}
+
+{{ mc.slideBoxHeader(_h, 'Impostazioni da file') }}
+<p class="field-line field-400">
+	<label>Modifica impostazioni da file: .xls, .xlsx<span>*</span>:</label>
+	<select name="operazione" class="field valida-required">
+		<option value=""></option>
+		<option value="abilitato">Abilita</option>
+		<option value="not_abilitato">Disabilita</option>
+		<option value="esaurito">Imposta come esaurito</option>
+		<option value="not_esaurito">Imposta come non esaurito</option>
+		<option value="codice_sconto_non_utilizzabile">Imposta flag "codice sconto non utilizzabile"</option>
+		<option value="not_codice_sconto_non_utilizzabile">Rimuovi flag "codice sconto non utilizzabile"</option>
+		<option value="no_spese_spedizione">Imposta flag "no spese spedizione"</option>
+		<option value="not_no_spese_spedizione">Rimuovi flag "no spese spedizione"</option>
+		<option value="obbligo_fattura">Abilita obbligo fattura</option>
+		<option value="not_obbligo_fattura">Rimuovi obbligo fattura</option>
+		<option value="non_considerare_in_spedizione_gratuita">Imposta flag "non considerare in spedizione gratuita"</option>
+		<option value="not_non_considerare_in_spedizione_gratuita">Imposta flag "non considerare in spedizione gratuita"</option>
+		<option value="abilitato_fasce_sconto">Attiva fasce sconto</option>
+		<option value="not_abilitato_fasce_sconto">Disabilita fasce sconto</option>
+	</select>
+</p>
+<div class="field-line-label" style="margin-top: 10px;">
+	La prima riga del file viene considerata come intestazioni, i nomi delle colonne (anche non in ordine) da utilizzare:
+	<ul style="margin-top: 10px; margin-left: 20px;">
+		<li><strong>HID</strong>, questo campo se valorizzato è il primo che viene tenuto in considerazione come riferimento all'articolo</li>
+		<li><strong>CODICE</strong>, questo campo se valorizzato è il secondo dopo HID per riferimento all'articolo</li>
+		<li><strong>CODICE FORNITORE</strong>, questo campo se valorizzato è il terzo dopo CODICE per riferimento all'articolo</li>
+	</ul>
+</div>
+
+<fieldset class="fieldset-box">
+	<div class="field-line field-line-file" data-file="">
+		<input type="hidden" name="file_data" class="field-file valida-required" value="">
+		<input type="hidden" name="file_data_name" class="field-file-name">
+		<label>File (.xls, .xlsx) <span>*</span></label>
+		<div class="field-anteprima"></div>
+		<div class="field-button">
+			<a class="h-bar-button h-bar-button-blu h-action-upload-file" data-action='{"url": "{{ _h.url('manager/myarea/upload-temp-file') }}", "fileType": ["xls","xlsx"]}'>carica file</a>
+			<a class="h-bar-button h-bar-button-gray h-action-upload-file-reset">Cancella</a>
+		</div>
+		<div class="clear"></div>
+	</div>
+</fieldset>
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/articolo/ex-impostazione-from-upload'), '"none": true') }}	

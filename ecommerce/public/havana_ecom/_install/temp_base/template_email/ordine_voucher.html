@@ -1,0 +1,19 @@
+{% set _lbl = _h.labels('email', lang) %}
+{% import _h.template('_macro.html') as mc %}
+
+<div style="{{ mc.margin() }}">
+	<h2 style="{{ mc.style_h2() }}">{{ _lbl.ciao }} {{ nome }}</h2>
+	<div style="{{ mc.style_fontBase() }}">{{ _lbl.descrizione_anteprima_acquisto_voucher }}</div>
+</div>	
+<br>
+	<table width="100%" cellspacing="0" cellpadding="0" border="0">
+	<tbody>
+	<tr>
+	{{ mc.item_articolo(_h, item) }}
+	</tr>
+	</tbody>
+	</table>
+<br><br>
+<div style="{{ mc.margin() }}">
+	<div style="{{ mc.style_fontBase() }}">{{ _lbl.descrizione_dettaglio_acquisto_voucher }}</div>
+</div>	

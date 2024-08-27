@@ -1,0 +1,111 @@
+{% include _h.template('manager/myarea/ordini/documenti/template_header.html') %}
+	{% set ordine = item.dettaglio.ordine %}
+	<div><em>Ordine num.:</em> {{ item.get('codice') }}</div>
+	<br><br>
+	<table border="0" cellpadding="0" cellspacing="0" style="width: 100%" style="margin-top: 10pt">
+	<tr>
+		<td style="width: 50%" class="dati-intestazione-fattura">
+			<div class="riga"><span>Documento:</span><br>DDT</div>
+			<div class="riga"><span>Numero:</span><br>{{ num_fattura }}</div>
+			<div class="riga"><span>Data:</span><br>{{ data_fattura }}</div>
+		</td>
+		<td style="width: 50%" class="intestazione-fattura">
+			<div style="margin: 7pt 10pt;">
+			{% if ordine.tipo_spedizione == 2 %}
+				<div class="title">Ritiro da parte del cliente presso la sede:</div>
+				<div class="riga">{{ ordine.sede_ritiro.nome }}</div>
+				<div class="riga">{{ ordine.sede_ritiro.via }}, {{ ordine.sede_ritiro.num_civico }}</div>
+				<div class="riga">{{ ordine.sede_ritiro.cap }} {{ ordine.sede_ritiro.localita }} ({{ ordine.sede_ritiro.provincia }})</div>
+			{% else %}
+				<div class="title">Indirizzo destinazione:</div>
+				<div class="riga">{{ ordine.spedizione.nome }} {{ ordine.spedizione.cognome }}</div>
+				{% if ordine.spedizione.presso %}
+				<div class="riga"><em>presso:</em> {{ ordine.spedizione.presso }}</div>
+				{% endif %}
+				{% if ordine.spedizione.nome_campanello %}
+				<div class="riga"><em>nome camp.:</em> {{ ordine.spedizione.nome_campanello }}</div>
+				{% endif %}
+				<div class="riga">{{ ordine.spedizione.via }}, {{ ordine.spedizione.num_civico }}</div>
+				<div class="riga">{{ ordine.spedizione.cap }} {{ ordine.spedizione.localita }} ({{ ordine.spedizione.provincia }})</div>
+				<div class="riga">{{ ordine.spedizione.nazione }}</div>
+				{% if ordine.spedizione.indicazioni %}
+				<div class="riga"><em>indicazioni:</em> {{ ordine.spedizione.indicazioni }}</div>
+				{% endif %}	
+				<div class="title" style="margin-top: 5pt">Recapiti:</div>
+				<div class="riga">{{ ordine.e_mail }}</div>
+				<div class="riga">{{ ordine.spedizione.telefono }}</div>
+			{% endif %}
+			</div>
+		</td>
+	</tr>
+	</table>
+	<br><br>
+	<table border="0" cellpadding="0" cellspacing="0" style="width: 100%">
+	<tr>
+		<td style="width: 50%" class="dati-intestazione-fattura">
+			<div class="riga"><span>Spedizione:</span><br>PORTO FRANCO</div>
+			<div class="riga"><span>Numero colli:</span><br>{{ numero_colli }}</div>
+			{% if item.get('tipo_pagamento') == 4 %}
+			<div class="riga-big">
+				<span>CONTRASSEGNO:</span> {{ _h.util.valuta(ordine.total_ordine, ordine.currency) }}
+			</div>
+			{% endif %}
+		{% if corriere %}
+			<div class="riga"><span>Spedito con:</span><br>
+			{{ checkout_util.getCorriere(corriere).label }}</div>
+		{% endif %}
+		</td>
+		<td style="width: 50%" class="intestazione-spedizione">
+			<div style="margin: 7pt 10pt;">
+				<div class="title">Indirizzo mittente:</div>
+				<div class="riga">{{ _h.settings.get('mittente_ragione_sociale') }}</div>
+				{% if _h.settings.get('mittente_ragione_sociale_2') %}
+				<div class="riga">{{ _h.settings.get('mittente_ragione_sociale_2') }}</div>
+				{% endif %}
+				<div class="riga">{{ _h.settings.get('mittente_via') }}, {{ _h.settings.get('mittente_num_civico') }}</div>
+				<div class="riga">{{ _h.settings.get('mittente_cap') }} {{ _h.settings.get('mittente_localita') }} ({{ _h.settings.get('mittente_provincia') }})</div>
+				<div class="riga">{{ _h.settings.get('mittente_nazione') }}</div>
+				<div class="riga">P.IVA {{ _h.settings.get('mittente_piva') }}</div>
+				{% if _h.settings.get('mittente_cf') %}
+				<div class="riga">C.F. {{ _h.settings.get('mittente_cf') }}</div>
+				{% endif %}
+			</div>
+		</td>
+	</tr>
+	</table>
+	<br><br>
+	<table class="fattura" border="0" cellpadding="0" cellspacing="0" style="width: 100%">
+	<tr class="fattura-intestazione">
+		<td	class="col-codice">
+			<div class="valore">Codice</div>
+		</td>
+		<td	class="col-descrizione-ddt">
+			<div class="valore">Descrizione</div>
+		</td>
+		<td	class="col-quantita">
+			<div class="valore">Qta</div>
+		</td>
+	</tr>
+	{% set map = _h.context('mapAttributo') %}
+	{% set mapType = _h.context('mapAttributoType') %}
+	{% set listItems = item.listItems() %}
+	{% for art in listItems %}
+	<tr class="fattura-linea">
+		<td	class="col-codice"><div class="valore valore-codice">{{ art.item.codice|split('', 13)|join('<br>') }}</div></td>
+		<td	class="col-descrizione">
+			<div class="valore">{{ art.item.nome }}<br>
+			{% for attr in art.attr %}
+				{% if attr.id != '' %}
+					{% set a = map.get(attr.id) %}
+					<div class="small"><em>{{ mapType.get(a.get('tipo')).nome }}:</em> {{ a.get('nome') }}</div>
+				{% endif %}
+			{% endfor %}
+			</div>			
+		</td>
+		<td class="col-quantita euro"><div class="valore">{{ art.qta }}</div></td>
+	</tr>
+	{% endfor %}
+	</table>
+
+</body>
+</html>

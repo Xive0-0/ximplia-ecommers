@@ -1,0 +1,410 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Impostazioni pagamento') }}
+
+<div class="h-tab">
+
+<div data-tab-rif="impostazioni">Impostazioni</div>
+<div data-tab-rif="pagamenti_accettati">Pagamenti</div>
+<div data-tab-rif="carta_credito">Carta di credito</div>
+<div data-tab-rif="paypal">PayPal</div>
+<div data-tab-rif="bonifico">Bonifico</div>
+<div data-tab-rif="contrassegno">Contrassegno</div>
+<div data-tab-rif="scalapay">Scalapay</div>
+<div data-tab-rif="satispay">Satispay</div>
+<div data-tab-rif="bancontact">Bancontact</div>
+<div data-tab-rif="18app">Carta giovani</div>
+<div data-tab-rif="oney">Oney</div>
+<div data-tab-rif="postepay">PostePay</div>
+<div data-tab-rif="ricarica">Ricarica</div>
+<div data-tab-rif="sede">Sede</div>
+
+<div data-tab="impostazioni">
+	{{ mc.checkbox(_h.settings.get('checkout_pagamento_con_esenzioni'), 1, 'checkout_pagamento_con_esenzioni', 'Abilitare pagamento gestione esenzioni') }}
+	{{ mc.checkbox(_h.settings.get('checkout_pagamento_con_link_tutto_abilitato'), 1, 'checkout_pagamento_con_link_tutto_abilitato', 'Tutti i pagamenti sono abilitati anche con pagamento con invio link') }}
+
+	<div class="field-line field-400">
+		<label>Tua nazione di riferimento:</label>
+		<select name="checkout_pagamento_tua_nazione" class="field valida-required">
+		<option value=""></option>
+		{% for item in listNazione %}
+		<option value="{{ item.id }}" {% if _h.settings.get('checkout_pagamento_tua_nazione') == item.id %} selected="true"{% endif %}>{{ item.get('nome') }}</option>
+		{% endfor %}
+		</select>
+	</div>
+	
+	<fieldset class="fieldset-box">
+	{{ mc.checkbox(_h.settings.get('checkout_marca_da_bollo_fattura'), 1, 'checkout_marca_da_bollo_fattura', 'Gestione marca da bollo in fattura') }}
+	<div class="field-line field-200">
+		<label>Importo marca da bollo:</label>
+		<input type="text" name="checkout_marca_da_bollo_importo" class="field valida-euro" value="{{ _h.util.euro(_h.settings.get('checkout_marca_da_bollo_importo')) }}">
+	</div>
+	<div class="field-line field-200">
+		<label>Applica bollo se ordine superiore a euro:</label>
+		<input type="text" name="checkout_marca_da_bollo_ordine_maggiore_di" class="field valida-euro" value="{{ _h.util.euro(_h.settings.get('checkout_marca_da_bollo_ordine_maggiore_di')) }}">
+	</div>
+	</fieldset>
+</div>
+
+<div data-tab="pagamenti_accettati">
+	<div class="field-line field-400">
+		<label>Pagamento di default:</label>
+		<select name="checkout_pagamento_default" class="field valida-required">
+		<option value=""></option>
+		<option value="1" {% if _h.settings.get('checkout_pagamento_default') == 1 %}selected="true"{% endif %}>Carta di Credito</option>
+		<option value="2" {% if _h.settings.get('checkout_pagamento_default') == 2 %}selected="true"{% endif %}>PayPal</option>
+		<option value="3" {% if _h.settings.get('checkout_pagamento_default') == 3 %}selected="true"{% endif %}>Bonifico Bancario</option>
+		<option value="4" {% if _h.settings.get('checkout_pagamento_default') == 4 %}selected="true"{% endif %}>Contrassegno</option>
+		<option value="9" {% if _h.settings.get('checkout_pagamento_default') == 9 %}selected="true"{% endif %}>Scalapay</option>
+		<option value="20" {% if _h.settings.get('checkout_pagamento_default') == 20 %}selected="true"{% endif %}>Satispay</option>
+		<option value="21" {% if _h.settings.get('checkout_pagamento_default') == 21 %}selected="true"{% endif %}>Bancontact</option>
+		<option value="22" {% if _h.settings.get('checkout_pagamento_default') == 22 %}selected="true"{% endif %}>Carta giovani</option>
+		<option value="23" {% if _h.settings.get('checkout_pagamento_default') == 23 %}selected="true"{% endif %}>Oney</option>
+		<option value="5" {% if _h.settings.get('checkout_pagamento_default') == 5 %}selected="true"{% endif %}>PostePay</option>
+		<option value="6" {% if _h.settings.get('checkout_pagamento_default') == 6 %}selected="true"{% endif %}>Ricarica Cellulare</option>
+		<option value="7" {% if _h.settings.get('checkout_pagamento_default') == 7 %}selected="true"{% endif %}>Pagamento presso la sede contestualmente al ritiro</option>
+		</select>
+	</div>
+	
+	{{ mc.checkbox(_h.settings.get('checkout_pagamento_cc'), 1, 'checkout_pagamento_cc', 'Carta di credito') }}
+	{{ mc.checkbox(_h.settings.get('checkout_pagamento_paypal'), 1, 'checkout_pagamento_paypal', 'PayPal') }}
+	{{ mc.checkbox(_h.settings.get('checkout_pagamento_bonifico'), 1, 'checkout_pagamento_bonifico', 'Bonifico bancario') }}
+	{{ mc.checkbox(_h.settings.get('checkout_pagamento_contrassegno'), 1, 'checkout_pagamento_contrassegno', 'Contrassegno') }}
+	{{ mc.checkbox(_h.settings.get('checkout_pagamento_contrassegno_utenti_speciali'), 1, 'checkout_pagamento_contrassegno_utenti_speciali', 'Contrassegno (solo utenti abilitati)') }}
+	{{ mc.checkbox(_h.settings.get('checkout_pagamento_scalapay'), 1, 'checkout_pagamento_scalapay', 'Scalapay') }}
+	{{ mc.checkbox(_h.settings.get('checkout_pagamento_satispay'), 1, 'checkout_pagamento_satispay', 'Satispay') }}
+	{{ mc.checkbox(_h.settings.get('checkout_pagamento_bancontact'), 1, 'checkout_pagamento_bancontact', 'Bancontact') }}
+	{{ mc.checkbox(_h.settings.get('checkout_pagamento_18app'), 1, 'checkout_pagamento_18app', 'Carta giovani') }}
+	{{ mc.checkbox(_h.settings.get('checkout_pagamento_oney'), 1, 'checkout_pagamento_oney', 'Oney') }}
+	{{ mc.checkbox(_h.settings.get('checkout_pagamento_come_da_accordi'), 1, 'checkout_pagamento_come_da_accordi', 'Come da accordi (solo utenti abilitati)') }}
+	{{ mc.checkbox(_h.settings.get('checkout_pagamento_postepay'), 1, 'checkout_pagamento_postepay', 'PostePay') }}
+	{{ mc.checkbox(_h.settings.get('checkout_pagamento_ricarica'), 1, 'checkout_pagamento_ricarica', 'Ricarica cellulare') }}
+	{{ mc.checkbox(_h.settings.get('checkout_pagamento_ritiro_sede'), 1, 'checkout_pagamento_ritiro_sede', 'Pagamento/Ritiro presso la sede (gestire le sedi in: "Costi e optional spedizione, IVA fatturazione")') }}
+	{{ mc.checkbox(_h.settings.get('checkout_pagamento_ritiro_sede_blocco'), 1, 'checkout_pagamento_ritiro_sede_blocco', 'Forza pagamento in sede in caso di "spedizione con ritiro in sede"') }}
+</div>
+
+<div data-tab="carta_credito">
+{% if _h.config('checkout_cc') == 'cartasi' or _h.config('checkout_cc') == 'nexi' %}
+	<div class="field-line field-400">
+		<label>Nome del circuito:</label>
+		<input type="text" name="checkout_cc_circuito" class="field" value="{{ _h.settings.get('checkout_cc_circuito') }}" maxlength="50">
+	</div>	
+	<div class="field-line field-400">
+		<label>Nome legato al conto corrente della banca:</label>
+		<input type="text" name="checkout_cc_ultimateCreditorName" class="field" value="{{ _h.settings.get('checkout_cc_ultimateCreditorName') }}" maxlength="75">
+	</div>
+	<div class="field-line field-400">
+		<label>Indirizzo del Merchant:</label>
+		<input type="text" name="checkout_cc_address" class="field" value="{{ _h.settings.get('checkout_cc_address') }}" maxlength="70">
+	</div>	
+	<div class="field-line field-400">
+		<label>Descrizione tipo servizio offerto <em>(mostrato nella email inviata dalla banca al cliente)</em>:</label>
+		<input type="text" name="checkout_cc_descrizione" class="field" value="{{ _h.settings.get('checkout_cc_descrizione') }}" maxlength="300">
+	</div>
+{% elseif _h.config('checkout_cc') == 'plainplay' %}
+	<div class="field-line field-400">
+		<label>Nome del circuito:</label>
+		<input type="text" name="checkout_cc_circuito" class="field" value="{{ _h.settings.get('checkout_cc_circuito') }}" maxlength="50">
+	</div>	
+	<div class="field-line field-400">
+		<label>Nome presente in fase di acquisto:</label>
+		<input type="text" name="checkout_cc_label" class="field valida-alphanum" value="{{ _h.settings.get('checkout_cc_label') }}" maxlength="10">
+	</div>	
+	<div class="field-line field-400">
+		<label>ABI della propria banca:</label>
+		<input type="text" name="checkout_cc_abi" class="field" value="{{ _h.settings.get('checkout_cc_abi') }}" maxlength="5">
+	</div>
+{% elseif _h.config('checkout_cc') == 'stripe' %}
+	<div class="field-line field-400">
+		<label>Nome del circuito:</label>
+		<input type="text" name="checkout_cc_circuito" class="field" value="{{ _h.settings.get('checkout_cc_circuito') }}" maxlength="50">
+	</div>	
+	<div class="field-line field-400">
+		<label>Nome presente in fase di acquisto:</label>
+		<input type="text" name="checkout_cc_label" class="field" value="{{ _h.settings.get('checkout_cc_label') }}" maxlength="50">
+	</div>	
+{% elseif _h.config('checkout_cc') == 'paytabs' %}
+	<div class="field-line field-400">
+		<label>Nome del circuito:</label>
+		<input type="text" name="checkout_cc_circuito" class="field" value="{{ _h.settings.get('checkout_cc_circuito') }}" maxlength="50">
+	</div>	
+	<div class="field-line field-400">
+		<label>Nome presente in fase di acquisto:</label>
+		<input type="text" name="checkout_cc_label" class="field" value="{{ _h.settings.get('checkout_cc_label') }}" maxlength="50">
+	</div>	
+{% elseif _h.config('checkout_cc') == 'pagonline' %}
+	<div class="field-line field-400">
+		<label>Nome del circuito:</label>
+		<input type="text" name="checkout_cc_circuito" class="field" value="{{ _h.settings.get('checkout_cc_circuito') }}" maxlength="50">
+	</div>
+{% elseif _h.config('checkout_cc') == 'payplug' %}
+	<div class="field-line field-400">
+		<label>Nome del circuito:</label>
+		<input type="text" name="checkout_cc_circuito" class="field" value="{{ _h.settings.get('checkout_cc_circuito') }}" maxlength="50">
+	</div>
+{% elseif _h.config('checkout_cc') == 'payway' %}
+	<div class="field-line field-400">
+		<label>Nome del circuito:</label>
+		<input type="text" name="checkout_cc_circuito" class="field" value="{{ _h.settings.get('checkout_cc_circuito') }}" maxlength="50">
+	</div>
+{% elseif _h.config('checkout_cc') == 'axepta' %}
+	<div class="field-line field-400">
+		<label>Nome del circuito:</label>
+		<input type="text" name="checkout_cc_circuito" class="field" value="{{ _h.settings.get('checkout_cc_circuito') }}" maxlength="50">
+	</div>
+{% elseif _h.config('checkout_cc') == 'tgp' %}
+	<div class="field-line field-400">
+		<label>Nome del circuito:</label>
+		<input type="text" name="checkout_cc_circuito" class="field" value="{{ _h.settings.get('checkout_cc_circuito') }}" maxlength="50">
+	</div>
+{% elseif _h.config('checkout_cc') == 'monetaweb' %}
+	<div class="field-line field-400">
+		<label>Nome del circuito:</label>
+		<input type="text" name="checkout_cc_circuito" class="field" value="{{ _h.settings.get('checkout_cc_circuito') }}" maxlength="50">
+	</div>
+	<div class="field-line field-400">
+		<label>Nome presente in fase di acquisto:</em>:</label>
+		<input type="text" name="checkout_cc_label" class="field" value="{{ _h.settings.get('checkout_cc_label') }}" maxlength="30">
+	</div>
+{% elseif _h.config('checkout_cc') == 'paypal' %}
+	Pagamento con Carta di Credito con PayPal, per le impostazioni accedere alla scheda "PayPal"
+	<div class="field-line field-400">
+		<label>Nome del circuito:</label>
+		<input type="text" name="checkout_cc_circuito" class="field" value="{{ _h.settings.get('checkout_cc_circuito') }}" maxlength="50">
+	</div>	
+{% else %}
+	<strong>Pagamento con POS online NON configurato</strong>
+{% endif %}
+	<div class="field-line field-100">
+		<label>Percentuale spese da aggiungere all'ordine:</label>
+		<input type="text" name="checkout_cc_percentuale_spese" class="field valida-euro" value="{{ _h.util.euro(_h.settings.get('checkout_cc_percentuale_spese')) }}"> %
+	</div>
+	<div class="field-line field-100">
+		<label>Percentuale sconto sull'ordine (solo se non presenti spese):</label>
+		<input type="text" name="checkout_cc_percentuale_sconto" class="field valida-euro" value="{{ _h.util.euro(_h.settings.get('checkout_cc_percentuale_sconto')) }}"> %
+	</div>
+</div>
+
+<div data-tab="paypal">
+	<div class="field-line field-400">
+		<label>E-mail conto:</label>
+		<input type="text" name="checkout_paypal_email" class="field valida-email" value="{{ _h.settings.get('checkout_paypal_email') }}">
+	</div>
+	<div class="field-line field-400">
+		<label>E-mail receiver verifica pagamento (parametro di PayPal che permette di avere e-mail notifica diversa da e-mail conto):</label>
+		<input type="text" name="checkout_paypal_receiver_email" class="field valida-email" value="{{ _h.settings.get('checkout_paypal_receiver_email') }}">
+	</div>
+	<div class="field-line field-400">
+		<label>Intestazione:</label>
+		<input type="text" name="checkout_paypal_intestazione" class="field" value="{{ _h.settings.get('checkout_paypal_intestazione') }}">
+	</div>
+	<div class="field-line field-100">
+		<label>Percentuale spese da aggiungere all'ordine:</label>
+		<input type="text" name="checkout_paypal_percentuale_spese" class="field valida-euro" value="{{ _h.util.euro(_h.settings.get('checkout_paypal_percentuale_spese')) }}"> %
+	</div>
+	<div class="field-line field-100">
+		<label>Percentuale sconto sull'ordine (solo se non presenti spese):</label>
+		<input type="text" name="checkout_paypal_percentuale_sconto" class="field valida-euro" value="{{ _h.util.euro(_h.settings.get('checkout_paypal_percentuale_sconto')) }}"> %
+	</div>
+	
+	{{ mc.checkbox(_h.settings.get('checkout_pagamento_paypal_con_autorizzazione'), 1, 'checkout_pagamento_paypal_con_autorizzazione', 'Pagamento/incasso con autorizzazione') }}
+	{{ mc.checkbox(_h.settings.get('checkout_pagamento_paypal_spedizione'), 1, 'checkout_pagamento_paypal_spedizione', 'Invia i dati di spedizione') }}
+	{{ mc.checkbox(_h.settings.get('checkout_pagamento_paypal_spedizione_sovrascrivi'), 1, 'checkout_pagamento_paypal_spedizione_sovrascrivi', 'Sovrascrivere i dati di spedizione se presenti in account cliente') }}
+	{{ mc.checkbox(_h.settings.get('checkout_pagamento_paypal_spedizione_visualizza'), 1, 'checkout_pagamento_paypal_spedizione_visualizza', 'Visualizzare le informazioni di spedizione') }}
+	
+	<div>
+	<br>
+	<strong>ISTRUZIONI PER CONFIGURARE IPN</strong>
+	<ul>
+		<li>accedi al pannello di Paypal e imposta i seguenti dati</li>
+			<ul style="margin-left: 20px;">
+			<li>"Impostazioni conto" -> "Notiche" -> "Notifica immediata di pagamento"</li>
+			<li>attiva IPN e inserisci il seguente indirizzo</li>
+			<li style="margin-left: 20px;">{{ _h.webAppUrl }}/cart/checkout/cc/paypal/ipn.php</li>
+			</ul>
+		</li>
+	</ul>
+	</div>
+</div>
+
+<div data-tab="bonifico">
+	<div class="field-line field-400">
+		<label>Nome banca e filiale:</label>
+		<input type="text" name="checkout_banca_nome" class="field" value="{{ _h.settings.get('checkout_banca_nome') }}">
+	</div>
+	<div class="field-line field-400">
+		<label>Conto intestato a:</label>
+		<input type="text" name="checkout_banca_intestazione" class="field" value="{{ _h.settings.get('checkout_banca_intestazione') }}">
+	</div>
+	<div class="field-line field-400">
+		<label>IBAN:</label>
+		<input type="text" name="checkout_banca_iban" class="field" value="{{ _h.settings.get('checkout_banca_iban') }}">
+	</div>
+	<div class="field-line field-400">
+		<label>Codice SWIFT/BIC:</label>
+		<input type="text" name="checkout_banca_swift" class="field" value="{{ _h.settings.get('checkout_banca_swift') }}">
+	</div>
+	{{ mc.checkbox(_h.settings.get('checkout_imposta_banca_come_pagato'), 1, 'checkout_imposta_banca_come_pagato', 'Pagamento con Bonifico Bancario impostato per default come pagato') }}
+	<div class="field-line field-100">
+		<label>Percentuale spese da aggiungere all'ordine:</label>
+		<input type="text" name="checkout_banca_percentuale_spese" class="field valida-euro" value="{{ _h.util.euro(_h.settings.get('checkout_banca_percentuale_spese')) }}"> %
+	</div>
+	<div class="field-line field-100">
+		<label>Percentuale sconto sull'ordine:</label>
+		<input type="text" name="checkout_banca_percentuale_sconto" class="field valida-euro" value="{{ _h.util.euro(_h.settings.get('checkout_banca_percentuale_sconto')) }}"> %
+	</div>
+</div>
+
+<div data-tab="contrassegno">
+	<div class="field-line field-100">
+		<label>Costo contrassegno:</label>
+		<input type="text" name="checkout_contrassegno_spesa" class="field valida-euro" value="{{ _h.util.euro(_h.settings.get('checkout_contrassegno_spesa')) }}">
+	</div>
+	<div class="field-line field-200">
+		<label>Importo massimo contrassegno:</label>
+		<input type="text" name="checkout_contrassegno_valore_massimo" class="field valida-euro" value="{{ _h.util.euro(_h.settings.get('checkout_contrassegno_valore_massimo', '3000')) }}">
+	</div>
+	{{ mc.checkbox(_h.settings.get('checkout_imposta_contrassegno_come_pagato'), 1, 'checkout_imposta_contrassegno_come_pagato', 'Pagamento in contrassegno impostato per default come pagato') }}
+</div>
+
+<div data-tab="scalapay">
+	<div class="field-line field-200">
+		<label>Importo minimo rateizzabile:</label>
+		<input type="text" name="checkout_pagamento_scalapay_min" class="field valida-euro valida-digiteuro" value="{{ _h.util.euro(_h.settings.get('checkout_pagamento_scalapay_min')) }}">
+	</div>
+	<div class="field-line field-200">
+		<label>Importo massimo rateizzabile:</label>
+		<input type="text" name="checkout_pagamento_scalapay_max" class="field valida-euro valida-digiteuro" value="{{ _h.util.euro(_h.settings.get('checkout_pagamento_scalapay_max')) }}">
+	</div>
+	<div class="field-line field-200">
+		<label>Numero di rate</label>
+		<input type="text" name="checkout_pagamento_scalapay_rate" class="field valida-int valida-digitint" value="{{ _h.settings.get('checkout_pagamento_scalapay_rate') }}">
+	</div>
+	
+	<div class="field-line field-100">
+		<label>Percentuale spese da aggiungere all'ordine:</label>
+		<input type="text" name="checkout_pagamento_scalapay_percentuale_spese" class="field valida-euro" value="{{ _h.util.euro(_h.settings.get('checkout_pagamento_scalapay_percentuale_spese')) }}"> %
+	</div>
+	<div class="field-line field-100">
+		<label>Percentuale sconto sull'ordine (solo se non presenti spese):</label>
+		<input type="text" name="checkout_pagamento_scalapay_percentuale_sconto" class="field valida-euro" value="{{ _h.util.euro(_h.settings.get('checkout_pagamento_scalapay_percentuale_sconto')) }}"> %
+	</div>
+</div>
+<div data-tab="oney">
+	<div class="field-line field-400">
+		<label>Nome presente in fase di acquisto:</label>
+		<input type="text" name="checkout_pagamento_oney_label" class="field valida-alphanum" value="{{ _h.settings.get('checkout_pagamento_oney_label') }}" maxlength="50">
+	</div>	
+	<div class="field-line field-200">
+		<label>Importo minimo rateizzabile:</label>
+		<input type="text" name="checkout_pagamento_oney_min" class="field valida-euro valida-digiteuro" value="{{ _h.util.euro(_h.settings.get('checkout_pagamento_oney_min')) }}">
+	</div>
+	<div class="field-line field-200">
+		<label>Importo massimo rateizzabile:</label>
+		<input type="text" name="checkout_pagamento_oney_max" class="field valida-euro valida-digiteuro" value="{{ _h.util.euro(_h.settings.get('checkout_pagamento_oney_max')) }}">
+	</div>
+	<div class="field-line field-200">
+		<label>Numero di rate</label>
+		<input type="text" name="checkout_pagamento_oney_rate" class="field valida-int valida-digitint" value="{{ _h.settings.get('checkout_pagamento_oney_rate') }}">
+	</div>
+	
+	<div class="field-line field-100">
+		<label>Percentuale spese da aggiungere all'ordine:</label>
+		<input type="text" name="checkout_pagamento_oney_percentuale_spese" class="field valida-euro" value="{{ _h.util.euro(_h.settings.get('checkout_pagamento_oney_percentuale_spese')) }}"> %
+	</div>
+	<div class="field-line field-100">
+		<label>Percentuale sconto sull'ordine (solo se non presenti spese):</label>
+		<input type="text" name="checkout_pagamento_oney_percentuale_sconto" class="field valida-euro" value="{{ _h.util.euro(_h.settings.get('checkout_pagamento_oney_percentuale_sconto')) }}"> %
+	</div>
+</div>
+
+<div data-tab="satispay">
+	<div class="field-line field-400">
+		<label>Token autorizzazione Satispay:</label>
+		<input type="text" name="checkout_pagamento_satispay_codice_conto" class="field" value="{{ _h.settings.get('checkout_pagamento_satispay_codice_conto') }}">
+	</div>
+	{{ mc.checkbox(_h.settings.get('checkout_pagamento_satispay_sandbox'), 1, 'checkout_pagamento_satispay_sandbox', 'Sandbox') }}
+
+	<div class="field-line field-100">
+		<label>Percentuale spese da aggiungere all'ordine:</label>
+		<input type="text" name="checkout_pagamento_satispay_percentuale_spese" class="field valida-euro" value="{{ _h.util.euro(_h.settings.get('checkout_pagamento_satispay_percentuale_spese')) }}"> %
+	</div>
+	<div class="field-line field-100">
+		<label>Percentuale sconto sull'ordine (solo se non presenti spese):</label>
+		<input type="text" name="checkout_pagamento_satispay_percentuale_sconto" class="field valida-euro" value="{{ _h.util.euro(_h.settings.get('checkout_pagamento_satispay_percentuale_sconto')) }}"> %
+	</div>
+</div>
+<div data-tab="bancontact">
+	<div class="field-line field-400">
+		<label>Nome del circuito:</label>
+		<input type="text" name="checkout_bancontact_circuito" class="field" value="{{ _h.settings.get('checkout_bancontact_circuito') }}" maxlength="50">
+	</div>
+	
+	<div class="field-line field-100">
+		<label>Percentuale spese da aggiungere all'ordine:</label>
+		<input type="text" name="checkout_bancontact_percentuale_spese" class="field valida-euro" value="{{ _h.util.euro(_h.settings.get('checkout_bancontact_percentuale_spese')) }}"> %
+	</div>
+	<div class="field-line field-100">
+		<label>Percentuale sconto sull'ordine (solo se non presenti spese):</label>
+		<input type="text" name="checkout_bancontact_percentuale_sconto" class="field valida-euro" value="{{ _h.util.euro(_h.settings.get('checkout_bancontact_percentuale_sconto')) }}"> %
+	</div>
+</div>
+<div data-tab="18app">
+	<div class="field-line field-400">
+		<label>Nome del circuito:</label>
+		<input type="text" name="checkout_18app_circuito" class="field" value="{{ _h.settings.get('checkout_18app_circuito') }}" maxlength="50">
+	</div>
+	<div class="field-line-textarea field-400">
+		<label>Certificato .pem:</label>
+		<textarea name="checkout_18app_pem" class="field" style="width: 700px; height: 500px;">{{ _h.settings.get('checkout_18app_pem') }}</textarea>
+	</div>
+</div>
+
+<div data-tab="postepay">
+	{{ mc.checkbox(_h.settings.get('checkout_postepay_visibile_solo_acquisto'), 1, 'checkout_postepay_visibile_solo_acquisto', 'Dati Postepay visibili solo a chi effettua il pagamento') }}
+
+	<div class="field-line field-400">
+		<label>Intestatario carca:</label>
+		<input type="text" name="checkout_postepay_intestatario" class="field" value="{{ _h.settings.get('checkout_postepay_intestatario') }}">
+	</div>
+	<div class="field-line field-400">
+		<label>Numero carta:</label>
+		<input type="text" name="checkout_postepay_numero" class="field" value="{{ _h.settings.get('checkout_postepay_numero') }}">
+	</div>
+	<div class="field-line field-400">
+		<label>Codice Fiscale / P.IVA referente:</label>
+		<input type="text" name="checkout_postepay_codice" class="field" value="{{ _h.settings.get('checkout_postepay_codice') }}">
+	</div>
+	
+	{{ mc.checkbox(_h.settings.get('checkout_imposta_postepay_come_pagato'), 1, 'checkout_imposta_postepay_come_pagato', 'Pagamento con Poste pay impostato per default come pagato') }}
+</div>
+
+<div data-tab="ricarica">
+	<div class="field-line field-400">
+		<label>Intestatario numero:</label>
+		<input type="text" name="checkout_ricarica_intestatario" class="field" value="{{ _h.settings.get('checkout_ricarica_intestatario') }}">
+	</div>
+	<div class="field-line field-400">
+		<label>Numero telefono:</label>
+		<input type="text" name="checkout_ricarica_numero" class="field" value="{{ _h.settings.get('checkout_ricarica_numero') }}">
+	</div>
+	
+	{{ mc.checkbox(_h.settings.get('checkout_imposta_ricarica_come_pagato'), 1, 'checkout_imposta_ricarica_come_pagato', 'Pagamento con Ricarica impostato per default come pagato') }}
+</div>
+
+<div data-tab="sede">
+	<div class="field-line-text">
+	Impostazioni per ritiro e/o pagamento in sede
+	</div>
+	{{ mc.checkbox(_h.settings.get('checkout_imposta_ritiro_sede_come_pagato'), 1, 'checkout_imposta_ritiro_sede_come_pagato', 'Pagamento con Ritiro in Sede impostato per default come pagato') }}
+	<div class="field-line field-100">
+		<label>Percentuale sconto sull'ordine:</label>
+		<input type="text" name="checkout_sede_percentuale_sconto" class="field valida-euro" value="{{ _h.util.euro(_h.settings.get('checkout_sede_percentuale_sconto')) }}"> %
+	</div>
+
+</div>
+
+</div>
+
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/ex-edit-impostazioni-pagamento')) }}	
+

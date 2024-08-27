@@ -1,0 +1,31 @@
+{% import _h.template('_macro.html') as mc %}
+{% set _lblc = _h.labels.get('checkout') %}
+{% set _lblcp = _h.labels.get('checkout_preventivo') %}
+
+{% if list|length > 0 %}
+	{% for elem in list %}
+	<div class="cart-item" data-id="{{ elem.tmp_id }}">
+		{{ mc.item_articolo_carrello_list(_h, elem) }}
+		{% set iva = true %}
+		{% if (_h.session.params.user.prezzo_senza_iva or _h.config('prezzi_senza_iva', false)) %}
+			{% set iva = false %}
+		{% endif %}
+		<div class="cart-preventivo-item-add-qta">+</div>
+		<div class="cart-preventivo-item-rem-qta">-</div>
+		<div class="cart-item-qta">x <span>{{ elem.qta }}</span></div>
+		<div class="cart-item-total">
+			<a href="javascript:void(0)" title="{{ _lblc.btn_elimina }}" data-id="{{ elem.tmp_id }}" class="btn-delete-cart-preventivo-item">{{ _lblc.btn_elimina }}</a>
+			<span>
+			{% if (_h.session.params.user.prezzo_senza_iva or _h.config('prezzi_senza_iva', false)) %}
+			{{ _h.util.valuta(elem.total_imponibile, currency) }}
+			<em>{{ _lblc.prezzo_iva_escl_small }}</em>
+			{% else %}
+			{{ _h.util.valuta(elem.total, currency) }} 
+			{% endif %}
+			</span>
+		</div>
+	</div>
+	{% endfor %}
+{% else %}
+	<div class="cart-void">{{ _lblcp.carrello_vuoto }}</div>
+{% endif %}

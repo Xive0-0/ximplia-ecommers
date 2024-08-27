@@ -1,0 +1,19 @@
+	<section class="nav nav-user nav-header">
+		<ul>
+			{% if _h.session.isAuth and _h.session.profile == 'guest' %}
+				<li>{{ mc.link(_h, _h.url('account/my/index'), _lblg.my_area, '<small>' ~ _lblg.ciao ~ '</small> ' ~ _h.session.params.user.nome) }}</li>
+				{% if _h.session.params.user.tipo == 'agente' %}
+				<li>{{ mc.link(_h, _h.url('/account/my/agente/index'), _lblg.btn_seleziona_cliente) }}</li>
+				<li>{{ mc.link(_h, _h.url('/account/my/ordini/index-clienti'), _lblg.btn_miei_ordini) }}</li>
+				{% else %}
+				<li>{{ mc.link(_h, _h.url('account/my/ordini/index'), _lblg.btn_miei_ordini) }}</li>
+				{% endif %}
+				{% if _h.config('gestione_preventivi', false) %}
+				<li>{{ mc.link(_h, _h.url('account/my/preventivi/index'), _lblg.btn_miei_preventivi) }}</li>
+				{% endif %}
+				<li>{{ mc.link(_h, _h.url('account/logout'), _lblg.btn_esci) }}</li>
+			{% else %}
+			<li>{{ mc.link(_h, _h.url('account/login'), _lblg.btn_login) }}</li>
+			{% endif %}
+		</ul>
+	</section>

@@ -1,0 +1,9 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeaderToolbar(_h, 'Fornitori', true) }}
+	{{ mc.navButton(_h, 'nuovo', 'new', 'click', 'h-action-selected-open-window', '{"window": {"type": "layer", "overlay": true, "width": 500, "height": 250, "url": "' ~ _h.url('manager/myarea/fornitore/edit') ~ '"}}') }}
+	{{ mc.navButtonUpdate(_h, 'modifica', 'fornitore', '', 'fornitore-articolo-content', '"type": "layer", "overlay": true, "width": 500, "height": 250,') }}
+	{{ mc.navButton(_h, 'elimina', 'delete', 'click', 'h-action-selected-execute', '{"select": {"from":"#fornitore-articolo-content", "check": 1}, "confirm": "Eliminare la voce selezionata?", "url": "' ~ _h.url('manager/myarea/fornitore/delete') ~ '", "reload": "#fornitore-articolo-content"}') }}		
+{{ mc.slideBoxHeaderToolbarEnd() }}
+
+{{ mc.box_footer(_h, 'fornitore-articolo', 'fornitore', list) }}

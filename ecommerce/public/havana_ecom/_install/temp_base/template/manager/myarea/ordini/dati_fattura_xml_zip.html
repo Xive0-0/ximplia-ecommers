@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<p:FatturaElettronica xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:p="http://ivaservizi.agenziaentrate.gov.it/docs/xsd/fatture/v1.2" versione="FPR12">
+	<FatturaElettronicaHeader>
+		<DatiTrasmissione>
+			<IdTrasmittente>
+				<IdPaese>IT</IdPaese>
+				<IdCodice>{{ _h.settings.get('fatturazione_trasmittente_codice') }}</IdCodice>
+			</IdTrasmittente>
+			<ProgressivoInvio>{{ ordine.id }}</ProgressivoInvio>
+			<FormatoTrasmissione>FPR12</FormatoTrasmissione>
+			<CodiceDestinatario>{{ trasmissione_codice_destinatario }}</CodiceDestinatario>
+			{% if trasmissione_pec_destinatario %}
+			<PECDestinatario>{{ trasmissione_pec_destinatario }}</PECDestinatario>
+			{% endif %}
+		</DatiTrasmissione>
+		<CedentePrestatore>
+			<DatiAnagrafici>
+				{% if _h.settings.get('fatturazione_piva') %}
+				<IdFiscaleIVA>
+					<IdPaese>IT</IdPaese>
+					<IdCodice>{{ _h.settings.get('fatturazione_piva') }}</IdCodice>
+				</IdFiscaleIVA>
+				{% endif %}
+				{% if _h.settings.get('fatturazione_cf') %}
+				<CodiceFiscale>{{ _h.settings.get('fatturazione_cf') }}</CodiceFiscale>
+				{% endif %}
+				<Anagrafica>
+					<Denominazione>{{ _h.settings.get('fatturazione_ragione_sociale') }}{% if _h.settings.get('fatturazione_ragione_sociale_2') %} {{ _h.settings.get('fatturazione_ragione_sociale_2') }}{% endif %}</Denominazione>
+				</Anagrafica>
+				<RegimeFiscale>{{ _h.settings.get('fatturazione_regime_fiscale')|upper }}</RegimeFiscale>
+			</DatiAnagrafici>
+			<Sede>
+				<Indirizzo>{{ _h.settings.get('fatturazione_via') }}, {{ _h.settings.get('fatturazione_num_civico') }}</Indirizzo>
+				<CAP>{{ _h.settings.get('fatturazione_cap') }}</CAP>
+				<Comune>{{ _h.settings.get('fatturazione_localita') }}</Comune>
+				<Provincia>{{ _h.settings.get('fatturazione_provincia')|upper }}</Provincia>
+				<Nazione>IT</Nazione>
+			</Sede>
+			<Contatti>
+				{% if _h.settings.get('fatturazione_telefono') %}
+				<Telefono>{{ _h.settings.get('fatturazione_telefono') }}</Telefono>
+				{% endif %}
+				{% if _h.settings.get('fatturazione_fax') %}
+				<Fax>{{ _h.settings.get('fatturazione_fax') }}</Fax>
+				{% endif %}
+				{% if _h.settings.get('fatturazione_email') %}
+				<Email>{{ _h.settings.get('fatturazione_email') }}</Email>
+				{% endif %}
+			</Contatti>
+		</CedentePrestatore>
+		<CessionarioCommittente>
+			<DatiAnagrafici>
+				{% if fattura.p_iva %}
+				<IdFiscaleIVA>
+					<IdPaese>{{ nazione_fattura.get('codice_iso') }}</IdPaese>
+					<IdCodice>{{ fattura.p_iva }}</IdCodice>
+				</IdFiscaleIVA>
+				{% endif %}
+				{% if fattura.codice_fiscale and nazione_fattura.get('codice_iso') == 'IT' %}
+				<CodiceFiscale>{{ fattura.codice_fiscale }}</CodiceFiscale>
+				{% endif %}
+				<Anagrafica>
+					<Denominazione>{{ fattura.nome }}</Denominazione>
+				</Anagrafica>
+			</DatiAnagrafici>
+			<Sede>
+				<Indirizzo>{{ fattura.via }}</Indirizzo>
+				<NumeroCivico>{% if fattura.num_civico %}{{ fattura.num_civico }}{% else %}0{% endif %}</NumeroCivico>
+				<CAP>{{ fattura.cap }}</CAP>
+				<Comune>{{ fattura.localita }}</Comune>
+				{% if fattura.provincia|length == 2 and nazione_fattura.get('codice_iso') == 'IT' %}
+				<Provincia>{{ fattura.provincia|upper }}</Provincia>
+				{% endif %}
+				<Nazione>{{ nazione_fattura.get('codice_iso') }}</Nazione>
+			</Sede>
+		</CessionarioCommittente>
+	</FatturaElettronicaHeader>
+	<FatturaElettronicaBody>
+		<DatiGenerali>
+			<DatiGeneraliDocumento>
+				<TipoDocumento>TD01</TipoDocumento>
+				<Divisa>EUR</Divisa>
+				<Data>{{ ordine.data_fattura }}</Data>
+				<Numero>{{ ordine.numero_fattura }}</Numero>
+				<ImportoTotaleDocumento>{{ ordine.totale }}</ImportoTotaleDocumento>
+			</DatiGeneraliDocumento>
+		</DatiGenerali>
+		<DatiBeniServizi>
+		{% set numero_linea = 1 %}
+		{% for item in list_items %}
+			<DettaglioLinee>
+				<NumeroLinea>{{ numero_linea }}</NumeroLinea>
+				<CodiceArticolo>
+					<CodiceTipo>AswArtFor</CodiceTipo>
+					<CodiceValore>{{ item.codice }}</CodiceValore>
+				</CodiceArticolo>
+				<Descrizione>{{ item.nome }}</Descrizione>
+				<Quantita>{{ item.qta }}</Quantita>
+				<PrezzoUnitario>{{ item.imponibile_unitario }}</PrezzoUnitario>
+				{% if item.sconto %}
+					<ScontoMaggiorazione>
+					  <Tipo>SC</Tipo>
+					  <Percentuale>{{ item.sconto }}</Percentuale>
+					</ScontoMaggiorazione>
+				{% endif %}
+				<PrezzoTotale>{{ item.imponibile_totale }}</PrezzoTotale>
+				<AliquotaIVA>{{ item.aliquota }}</AliquotaIVA>
+				{% if item.natura %}
+				<Natura>{{ item.natura }}</Natura>
+				{% endif %}
+			</DettaglioLinee>
+			{% set numero_linea = numero_linea + 1 %}
+		{% endfor %}
+			{% if not(nazione_fattura.get('cee')) %}
+				<DettaglioLinee>
+					<NumeroLinea>{{ numero_linea }}</NumeroLinea>
+					<Descrizione>Non imponibile art. 8, comma 1, lettera A, DRP 633/72</Descrizione>
+					<PrezzoUnitario>0.00</PrezzoUnitario>
+					<PrezzoTotale>0.00</PrezzoTotale>
+					<AliquotaIVA>0.00</AliquotaIVA>
+					<Natura>N3.1</Natura>
+				</DettaglioLinee>
+				{% set numero_linea = numero_linea + 1 %}
+			{% endif %}
+			{% if sconto %}
+				<DettaglioLinee>
+					<NumeroLinea>{{ numero_linea }}</NumeroLinea>
+					<TipoCessionePrestazione>SC</TipoCessionePrestazione>
+					<Descrizione>Sconto</Descrizione>
+					<PrezzoUnitario>-{{ sconto.importo }}</PrezzoUnitario>
+					<PrezzoTotale>-{{ sconto.importo }}</PrezzoTotale>
+					<AliquotaIVA>0.00</AliquotaIVA>
+					<Natura>{% if nazione_fattura.get('cee') %}N2.2{% else %}N3.1{% endif %}</Natura>
+				</DettaglioLinee>
+				{% set numero_linea = numero_linea + 1 %}
+			{% endif %}
+			{% if arrotondamento %}
+				<DettaglioLinee>
+					<NumeroLinea>{{ numero_linea }}</NumeroLinea>
+					<Descrizione>Arrotondamento</Descrizione>
+					<PrezzoUnitario>{{ arrotondamento.imponibile }}</PrezzoUnitario>
+					<PrezzoTotale>{{ arrotondamento.imponibile }}</PrezzoTotale>
+					<AliquotaIVA>0.00</AliquotaIVA>
+					<Natura>{% if nazione_fattura.get('cee') %}N2.2{% else %}N3.1{% endif %}</Natura>
+				</DettaglioLinee>
+				{% set numero_linea = numero_linea + 1 %}
+			{% endif %}
+			{% if spedizione %}
+				<DettaglioLinee>
+					<NumeroLinea>{{ numero_linea }}</NumeroLinea>
+					<TipoCessionePrestazione>AC</TipoCessionePrestazione>
+					<Descrizione>{{ spedizione.descrizione }}</Descrizione>
+					<PrezzoUnitario>{{ spedizione.imponibile }}</PrezzoUnitario>
+					<PrezzoTotale>{{ spedizione.imponibile }}</PrezzoTotale>
+					<AliquotaIVA>{{ spedizione.aliquota }}</AliquotaIVA>
+					{% if spedizione.natura %}
+					<Natura>{{ spedizione.natura }}</Natura>
+					{% endif %}
+				</DettaglioLinee>
+			{% endif %}
+			{% for item in list_aliquota_iva %}
+				<DatiRiepilogo>
+					<AliquotaIVA>{{ item.aliquota }}</AliquotaIVA>
+					{% if not(item.iva_in_fattura) %}
+						{% if nazione_fattura.get('cee') %}
+						<Natura>N3.2</Natura>
+						{% else %}
+						<Natura>N3.1</Natura>
+						{% endif %}
+					{% endif %}
+					<ImponibileImporto>{{ item.imponibile }}</ImponibileImporto>
+					<Imposta>{{ item.imposta }}</Imposta>
+					{% if item.iva_in_fattura %}
+					<EsigibilitaIVA>I</EsigibilitaIVA>
+					{% else %}			
+						{% if nazione_fattura.get('cee') %}
+						<RiferimentoNormativo>Non imponibile art. 41, comma 1, lettera B,D,L n. 311/93</RiferimentoNormativo>
+						{% else %}
+						<RiferimentoNormativo>Non imp. art. 8 c. 1 lett. a DPR 633/72</RiferimentoNormativo>
+						{% endif %}
+					{% endif %}
+				</DatiRiepilogo>
+			{% endfor %}
+			{% if sconto %}
+				<DatiRiepilogo>
+					<AliquotaIVA>0.00</AliquotaIVA>
+					<Natura>{% if nazione_fattura.get('cee') %}N2.2{% else %}N3.1{% endif %}</Natura>
+					<ImponibileImporto>-{{ sconto.importo }}</ImponibileImporto>
+					<Imposta>0.00</Imposta>
+					<RiferimentoNormativo>{% if nazione_fattura.get('cee') %}Importi senza IVA{% else %}Non imp. art. 8 c. 1 lett. a DPR 633/72{% endif %}</RiferimentoNormativo>
+				</DatiRiepilogo>
+			{% endif %}
+			{% if arrotondamento %}
+				<DatiRiepilogo>
+					<AliquotaIVA>0.00</AliquotaIVA>
+					<Natura>{% if nazione_fattura.get('cee') %}N2.2{% else %}N3.1{% endif %}</Natura>
+					<ImponibileImporto>{{ arrotondamento.imponibile }}</ImponibileImporto>
+					<Imposta>0.00</Imposta>
+					<RiferimentoNormativo>{% if nazione_fattura.get('cee') %}Importi senza IVA{% else %}Non imp. art. 8 c. 1 lett. a DPR 633/72{% endif %}</RiferimentoNormativo>
+				</DatiRiepilogo>
+			{% endif %}
+		</DatiBeniServizi>
+		{% if pagamento %}
+		<DatiPagamento>
+			<CondizioniPagamento>TP02</CondizioniPagamento>
+			<DettaglioPagamento>
+				<ModalitaPagamento>{{ pagamento.tipo }}</ModalitaPagamento>
+				<DataScadenzaPagamento>{{ pagamento.data }}</DataScadenzaPagamento>
+				<ImportoPagamento>{{ pagamento.importo }}</ImportoPagamento>
+			</DettaglioPagamento>
+		</DatiPagamento>
+		{% endif %}
+	</FatturaElettronicaBody>
+</p:FatturaElettronica>

@@ -1,0 +1,4 @@
+{% import _h.template('manager/_my_macro.html') as mymc %}
+{% for item in list %}
+{{ mymc.item_statistiche_cliente(_h, item) }}
+{% endfor %}

@@ -1,0 +1,37 @@
+<table class="h-list" cellpadding="0" cellspacing="0" border="0">
+<thead>
+<tr class="h-list-header">
+	<th style="width: 100px;">Cod. Ordine</th>
+	<th style="width: 20px;">Rif.</th>
+	<th style="width: 16px;">&nbsp;</th>
+	<th style="width: 100px;">Data</th>
+	<th style="width: 150px;">Utente</th>
+	<th>Dettaglio</th>
+</tr>
+</thead>
+<tbody>
+{% for elem in list %}
+	<tr>
+		<td>{{ elem.get('id_cliente_ordine') }}</td>
+		<td>{{ elem.get('ordine') }}</td>
+		<td>
+		{% if elem.get('stato') == 1 %}
+			<img src="/assets/manager/havana-js/img/icon/ico-alert.svg" class="h-action-alttext h-action-selected-execute" data-action='{"confirm": "Impostare come gestita la problematica?", "url": "{{ _h.url('manager/myarea/ordini/log/ex-gestito') }}", "params": {"id": "{{ elem.get('id_cliente_ordine') }}_{{ elem.get('ordine') }}"}, "reload": ["#log-content", "#h-layout-center-content"]}' data-alttext="da gestire" style="cursor: pointer">
+		{% elseif elem.get('stato') == 2 %}
+			<img src="/assets/manager/havana-js/img/icon/ico-confirm.svg" class="h-action-alttext" data-alttext="gestito">
+		{% else %}
+			&nbsp;
+		{% endif %}
+		</td>
+		<td>{{ elem.getDateTime('data_inserimento') }}</td>
+		<td>{{ elem.get('utente') }}</td>
+		<td>
+		{% if elem.get('azione') %}
+			<em>{{ elem.get('azione') }}</em>{% if elem.get('testo') %}:{% endif%}
+		{% endif %}
+		{{ elem.get('testo')|replace({"\n": "<br>"}) }}
+		</td>
+	</tr>
+{% endfor %}
+</tbody>
+</table>

@@ -1,0 +1,2425 @@
+{% macro item_statistiche_cliente(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td>
+			<strong>{{ item.get('e_mail') }}</strong>
+			<div>{{ item.get('cognome') }} {{ item.get('nome') }}</div>
+			{% if item.get('telefono') %}
+				<div style="font-size: 10px; color: #777">{{ item.get('telefono') }}</div>
+			{% endif %}
+			{% if item.get('nazione') %}
+				<div style="font-size: 10px; color: #777">{{ item.get('nazione') }}</div>
+			{% endif %}
+			<div style="font-size: 10px; color: #777">lingua: <strong>{{ item.get('lang')|upper }}</strong>, registrato: <strong>{% if item.get('id_cliente') > 0 %}SI{% else %}NO{% endif %}</strong></div>
+		</td>
+		<td style="padding-left: 5px;">
+			<div>{{ item.get('punti_accumulati') }}</div>
+			<div style="font-size: 10px; color: #777">residui {{ item.get('punti_residui') }}</div>
+			<div style="font-size: 10px; color: #777">utilizzati {{ item.get('punti_utilizzati') }}</div>
+		</td>
+		<td style="padding-left: 5px;">
+			<div>{{ item.get('numero_articoli_acquistati_totale') }}</div>
+			<div style="font-size: 10px; color: #777">med {{ item.euro('numero_articoli_acquistati_media_totale') }}</div>
+			<div style="font-size: 10px; color: #777">med/&euro; {{ item.euro('valore_articolo_media_totale') }}</div>
+		</td>
+		<td style="padding-left: 5px;">
+			<div>{{ item.get('numero_articoli_acquistati_anno_corrente') }}</div>
+			<div style="font-size: 10px; color: #777">med {{ item.euro('numero_articoli_acquistati_media_anno_corrente') }}</div>
+			<div style="font-size: 10px; color: #777">med/&euro; {{ item.euro('valore_articolo_media_anno_corrente') }}</div>
+		</td>
+		<td style="padding-left: 5px;">
+			<div>{{ item.get('numero_articoli_acquistati_anno_1') }}</div>
+			<div style="font-size: 10px; color: #777">med {{ item.euro('numero_articoli_acquistati_media_anno_1') }}</div>
+			<div style="font-size: 10px; color: #777">med/&euro; {{ item.euro('valore_articolo_media_anno_1') }}</div>
+		</td>
+		<td style="padding-left: 5px;">
+			<div>{{ item.get('numero_articoli_acquistati_anno_2') }}</div>
+			<div style="font-size: 10px; color: #777">med {{ item.euro('numero_articoli_acquistati_media_anno_2') }}</div>
+			<div style="font-size: 10px; color: #777">med/&euro; {{ item.euro('valore_articolo_media_anno_2') }}</div>
+		</td>
+		<td style="padding-left: 5px;">
+		{% if item.getDate('data_ordine_ultimo') %}
+			<div><div style="font-size: 9px; color: #777">ultimo:</div>{{ item.getDate('data_ordine_ultimo') }}</div>
+			<div><div style="font-size: 9px; color: #777">primo:</div>{{ item.getDate('data_ordine_primo') }}</div>
+		{% endif %}
+		</td>
+		<td style="padding-left: 5px;">
+		{% if item.get('giorni_distanza_ordine_ultimo_1') > 0 %}
+			<div><div style="font-size: 9px; color: #777">gg ultimo a prec.:</div>{{ item.get('giorni_distanza_ordine_ultimo_1') }}</div>
+		{% endif %}
+		{% if item.get('giorni_distanza_ordine_1_2') > 0 %}
+			<div><div style="font-size: 9px; color: #777">gg penultimo a prec.:</div>{{ item.get('giorni_distanza_ordine_1_2') }}</div>
+		{% endif %}
+		</td>
+		<td style="padding-left: 5px;">
+			<div>{{ item.get('numero_ordini_totale') }}</div>
+			<div style="font-size: 10px; color: #777">tot/&euro; {{ item.euro('valore_ordini_totale') }}</div>
+			<div style="font-size: 10px; color: #777">med/&euro; {{ item.euro('valore_ordini_media') }}</div>
+		</td>
+		<td style="padding-left: 5px;">
+			<div>{{ item.get('numero_ordini_anno_corrente') }}</div>
+			<div style="font-size: 10px; color: #777">&euro; {{ item.euro('valore_ordini_anno_corrente') }}</div>
+		</td>
+		<td style="padding-left: 5px;">
+			<div>{{ item.get('numero_ordini_anno_1') }}</div>
+			<div style="font-size: 10px; color: #777">&euro; {{ item.euro('valore_ordini_anno_1') }}</div>
+		</td>
+		<td style="padding-left: 5px;">
+			<div>{{ item.get('numero_ordini_anno_2') }}</div>
+			<div style="font-size: 10px; color: #777">&euro; {{ item.euro('valore_ordini_anno_2') }}</div>
+		</td>
+		<td style="padding-left: 5px;">
+			<div>{{ item.get('numero_ordini_annullato_totale') }}</div>
+			<div style="font-size: 10px; color: #777">tot/&euro; {{ item.euro('valore_ordini_annullato_totale') }}</div>
+			<div style="font-size: 10px; color: #777">med/&euro; {{ item.euro('valore_ordini_annullato_media') }}</div>
+		</td>
+		<td style="padding-left: 5px;">
+			<div>{{ item.get('numero_ordini_annullato_anno_corrente') }}</div>
+			<div style="font-size: 10px; color: #777">&euro; {{ item.euro('valore_ordini_annullato_anno_corrente') }}</div>
+		</td>
+		<td style="padding-left: 5px;">
+			<div>{{ item.get('numero_ordini_annullato_anno_1') }}</div>
+			<div style="font-size: 10px; color: #777">&euro; {{ item.euro('valore_ordini_annullato_anno_1') }}</div>
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_statistiche_mese(_h, item) %}
+	{% set imp = _h.config('template').manager.item.articolo %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+	{% if item.abilitato() %}
+		<td class="h-action-selected-execute" data-action='{"url": "{{ _h.url('manager/myarea/articolo/ex-disabilita') }}", "confirm": "Confermi di voler disabilitare?", "params": {"id": {{ item.id }}}, "replace_item": true}' style="cursor: pointer; background: #34a853; width: 10px; padding: 0; overflow: hidden;">&nbsp;</td>
+	{% else %}
+		<td class="h-action-selected-execute" data-action='{"url": "{{ _h.url('manager/myarea/articolo/ex-abilita') }}", "confirm": "Confermi di voler abilitare?", "params": {"id": {{ item.id }}}, "replace_item": true}' style="cursor: pointer; background: #aaaaaa; width: 10px; padding: 0; overflow: hidden;">&nbsp;</td>
+	{% endif %}
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		{% if imp.id %}
+		<td><a class="link" href="{{ _h.url('item-articolo') }}?id={{ item.id }}" title="apri pagina" target="_blank">#{{ item.id }}</a></td>
+		{% endif %}
+		{% if imp.codice %}
+		<td>
+			<a class="link" href="{{ _h.url('item-articolo') }}?id={{ item.id }}" title="apri pagina" target="_blank"><span class="h-edit-table-value" data-key="codice">{{ item.get('codice') }}</span></a>
+		</td>	
+		{% endif %}
+		{% if imp.codice_fornitore %}
+		<td>
+			<div class="h-list-cell-auto-wrapper h-action-alttext" data-alttext="{{ item.get('codice_fornitore') }}">
+				<div class="h-list-cell-auto">
+					<span class="h-edit-table-value" data-key="codice_fornitore">{{ item.get('codice_fornitore') }}</span>
+				</div>
+			</div>
+		</td>	
+		{% endif %}	
+		<td>
+			<div class="h-list-cell-auto-wrapper h-action-alttext" data-alttext="{{ item.get('nome') }}">
+				<div class="h-list-cell-auto">
+					<span class="h-edit-table-value" data-key="nome">{{ item.get('nome') }}</span>
+				</div>
+			</div>
+		</td>
+		{% for m in 1..12 %}
+		<td class="h-action-alttext" style="padding-left: 4px;" data-alttext="agg. carrello: {{ item.getStatistiche(m, 'add') }}<br>visite pag: {{ item.getStatistiche(m, 'view') }}">
+			{{ item.getStatistiche(m, 'buy') }}
+		</td>
+		{% endfor %}
+		<td style="padding-left: 4px;">{{ item.getStatisticheTotale() }}</td>
+		<td style="padding-left: 4px;">{{ item.getStatisticheMedia('buy', _h.view('mesi_anno', 12)) }}</td>
+		{% if _h.config('gestione_magazzino', false) %}
+			{% set qta = item.get('quantita_magazzino', 0) %}
+			<td style="padding-left: 4px;">{{ qta }}</td>
+			{% if qta < 0 %}
+				{% set qta = 0 %}
+			{% endif %}
+			<td style="padding-right: 4px; text-align: right;">{{ _h.util.euro(item.get('prezzo_acquisto') * qta) }}</td>
+		{% endif %}
+	</tr>
+{% endmacro %}
+
+{% macro item_gruppo(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					{{ item.get('nome') }}
+				</div>
+			</div>
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_cliente_punti(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td>{{ item.getDateTime('data_inserimento') }}</td>
+		<td>{{ item.getDate('data_scadenza') }}</td>
+		<td>
+			{% if item.id < 0 %}
+				<strong>{{ item.get('punti') }}</strong>
+			{% else %}
+				{{ item.get('punti') }}
+			{% endif %}
+		</td>
+		<td>
+		{% if item.id < 0 %}
+			<strong>TOTALE ATTIVI</strong>
+		{% else %}
+			{% if item.get('riferimento_entita') == 'ordine' %}
+				{% if item.get('punti') > 0 %}
+				Acquisto ordine #{{ item.get('riferimento_id') }}
+				{% else %}
+				Pagamento ordine #{{ item.get('riferimento_id') }}
+				{% endif %}
+			{% elseif item.get('riferimento_entita') == 'negozio' %}
+				Acquisto in negozio {{ item.get('descrizione') }}
+			{% elseif item.get('riferimento_entita') == 'operatore' %}
+				Manuale da operatore
+			{% elseif item.get('riferimento_entita') == 'registrazione' %}
+				Registrazione
+			{% elseif item.get('riferimento_entita') == 'compleanno' %}
+				Compleanno
+			{% elseif item.get('riferimento_entita') == 'scadenza' %}
+				Compensazione punti scaduti
+			{% endif %}
+		{% endif %}
+		</td>
+		<td>{{ item.getDate('riferimento_data') }}</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_cliente_scadenza(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>{{ item.getDate('data_primo_acquisto') }}</td>
+		<td>{{ item.getDate('data_aggiornamento_scadenza') }}</td>
+		<td>{{ item.getDate('data_prossima_scadenza') }}</td>
+		<td>
+			{% if item.get('articolo_codice') %}
+				<div>{{ item.get('articolo_codice') }}</div>	
+			{% endif %}
+			<strong>{{ item.get('articolo_nome') }}</strong>
+		</td>
+		<td>{{ item.get('numero_seriale') }}</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_cliente_fattura(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					{{ item.get('nome') }}
+				</div>
+			</div>
+		</td>
+		<td>{{ item.get('p_iva') }}</td>
+		<td>{{ item.get('codice_fiscale') }}</td>
+		<td>
+			{% if item.get('pec') %}
+			<div>{{ item.get('pec') }}</div>
+			{% endif %}
+			{% if item.get('sdi') %}
+			<div>{{ item.get('sdi') }}</div>
+			{% endif %}
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_articolo_pacchetto(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>{{ item.get('codice') }}</td>
+		<td>
+			{% if item.get('solo_login') %}
+				<img src="/assets/manager/havana-js/img/icon/ico-user.svg" class="h-action-alttext" data-alttext="utente loggato">
+			{% elseif item.get('solo_b2b') %}
+				<img src="/assets/manager/havana-js/img/icon/ico-bag.svg" class="h-action-alttext" data-alttext="utente B2B">
+			{% else %}
+				&nbsp;
+			{% endif %}
+		</td>
+		<td>{% if item.get('id_listino_cliente') > 0 %}<img src="/assets/manager/havana-js/img/icon/ico-euro.svg" class="h-action-alttext" data-alttext="listino personalizzato">{% else %}&nbsp;{% endif %}</td>
+		<td>
+		<div>{{ item.getDate('data_dal') }} - {{ item.getDate('data_al') }}</div>
+			{% if item.get('tipo_calcolo_qta') == 2 %}
+			qta calc. su tot carrello
+			{% elseif item.get('tipo_calcolo_qta') == 1 %}
+			qta calc. articolo su carrello
+			{% else %}
+			qta calc. su articolo
+			{% endif %}
+		</td>
+		<td>{{ item.get('qta_dal') }}</td>
+		<td>
+			{% if item.get('multiplo') %}
+			multiplo
+			{% else %}
+			{{ item.get('qta_al') }}
+			{% endif %}
+		</td>
+		<td>
+			{{ item.euro('valore') }}
+			{% if item.get('valore_tipo', 0) == 0 %}
+				 / pezzo
+			{% else %}
+				% sconto
+			{% endif %}
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_cliente_spedizione(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					{{ item.get('cognome') }} {{ item.get('nome') }}
+				</div>
+			</div>
+		</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					{{ item.get('via') }}, {{ item.get('num_civico') }} - {{ item.get('cap') }} {{ item.get('localita') }} ({{ item.get('provincia') }})
+				</div>
+			</div>
+		</td>
+	</tr>
+{% endmacro %}
+
+
+{% macro item_mapping(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>{{ item.get('lang') }}</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					{{ item.get('activity') }}
+				</div>
+			</div>
+		</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					{{ item.get('url') }}
+				</div>
+			</div>
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_redirect(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>{{ item.get('lang') }}</td>
+		<td>{{ item.get('codice') }}</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					{{ item.get('url_from') }}
+				</div>
+			</div>
+		</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					{{ item.get('url_to') }}
+				</div>
+			</div>
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_urlmeta(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>{{ item.get('lang') }}</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					{{ item.get('url') }}
+				</div>
+			</div>
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_fascia_sconto(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>
+			{% if item.get('default_fascia') %}
+				<img src="/assets/manager/havana-js/img/icon/ico-confirm.svg" class="h-action-alttext" data-alttext="fascia default">
+			{% else %}
+				&nbsp;
+			{% endif %}
+		</td>
+		<td>{{ item.get('valore') }}%</td>
+		<td>{{ item.get('id') }}</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_banner(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td style="background: {% if item.abilitato() %}#34a853{% else %}#aaaaaa{% endif %}; width: 10px; padding: 0; overflow: hidden;">&nbsp;</td>
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td><div class="image-anteprima"><img class="image" src="{{ item.imageAnteprima() }}"></div></td>
+		<td>{{ item.get('ordine') }}</td>
+		<td>
+		{% if item.get('tipo') == 1 %}
+			Articolo
+		{% elseif item.get('tipo') == 2 %}
+			Azienda
+		{% elseif item.get('tipo') == 3 %}
+			Collezione
+		{% elseif item.get('tipo') == 4 %}
+			Pagina
+		{% elseif item.get('tipo') == 5 %}
+			URL
+		{% elseif item.get('tipo') == 6 %}
+			Blog
+		{% elseif item.get('tipo') == 8 %}
+			Evento/news
+		{% elseif item.get('tipo') == 7 %}
+			File
+		{% endif %}
+		</td>
+		<td>
+			{{ _h.context('mapBannerType')[item.get('posizione')] }}
+			{% if item.get('slider') %}
+			<div>[slider]</div>
+			{% endif %}
+		</td>
+		<td>
+			{% if item.getDate('visibile_dal') %}
+			<div>Dal: {{ item.getDate('visibile_dal') }}</div>
+			{% endif %}
+			{% if item.getDate('visibile_al') %}
+			<div>Al: {{ item.getDate('visibile_al') }}</div>
+			{% endif %}
+		</td>
+		<td>
+			{{ item.get('titolo') }}
+			{% if item.get('codice') %}
+			<div><em>codice: </em><strong>{{ item.get('codice') }}</strong></div>
+			{% endif %}
+		</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+				{% if item.get('visibilita_lang', '') == '-' %}
+					tutte le lingue
+				{% else %}
+					{{ item.get('visibilita_lang', '') }}
+				{% endif %}
+				</div>
+			</div>
+		</td>
+		<td>{{ item.getDateTime('data_modifica') }}</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_banner_entita(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td style="background: {% if item.abilitato() %}#34a853{% else %}#aaaaaa{% endif %}; width: 10px; padding: 0; overflow: hidden;">&nbsp;</td>
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td><div class="image-anteprima"><img class="image" src="{{ item.imageAnteprima() }}"></div></td>
+		<td>{{ item.get('ordine') }}</td>
+		<td>
+		{% if item.get('tipo') == 1 %}
+			Articolo
+		{% elseif item.get('tipo') == 2 %}
+			Azienda
+		{% elseif item.get('tipo') == 3 %}
+			Collezione
+		{% elseif item.get('tipo') == 4 %}
+			Pagina
+		{% elseif item.get('tipo') == 5 %}
+			URL
+		{% elseif item.get('tipo') == 6 %}
+			Blog
+		{% elseif item.get('tipo') == 8 %}
+			Evento/news
+		{% elseif item.get('tipo') == 7 %}
+			File
+		{% endif %}
+		</td>
+		<td>
+			{{ item.get('titolo') }}
+			{% if item.get('codice') %}
+			<div><em>codice: </em><strong>{{ item.get('codice') }}</strong></div>
+			{% endif %}
+			<div><em>posizione: </em><strong>{{ _h.context('mapBannerType')[item.get('posizione')] }}</strong></div>
+			<div><em>visibilità: </em><strong>{% if item.get('visibilita_lang', '') == '-' %}
+				tutte le lingue
+			{% else %}
+				{{ item.get('visibilita_lang', '') }}
+			{% endif %}</strong></div>
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_popup(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td style="background: {% if item.abilitato() %}#34a853{% else %}#aaaaaa{% endif %}; width: 10px; padding: 0; overflow: hidden;">&nbsp;</td>
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>{{ item.get('ordine') }}</td>	
+		<td>
+		{% if item.get('tipo') == 1 %}
+			codice html
+		{% elseif item.get('tipo') == 2 %}
+			immagine
+		{% endif %}
+		</td>		
+		<td>
+		{% if item.get('tipo_apertura') == 1 %}
+			ad ogni apertura
+		{% elseif item.get('tipo_apertura') == 2 %}
+			solo una volta
+		{% elseif item.get('tipo_apertura') == 3 %}
+			una volta al giorno
+		{% elseif item.get('tipo_apertura') == 4 %}
+			una volta a settimana
+		{% elseif item.get('tipo_apertura') == 5 %}
+			una volta al mese
+		{% elseif item.get('tipo_apertura') == 6 %}
+			chiusura pagina
+		{% endif %}
+		</td>
+		<td>
+		{% if item.get('visibile_device', 0) == 1 %}
+			dekstop
+		{% elseif item.get('visibile_device', 0) == 2 %}
+			mobile
+		{% else %}
+			dekstop + mobile
+		{% endif %}
+		</td>
+		<td>
+		{% if item.get('posizione') == 1 %}
+			tutte le pagine
+		{% elseif item.get('posizione') == 2 %}
+			home page
+		{% elseif item.get('posizione') == 3 %}
+			collezioni
+		{% elseif item.get('posizione') == 4 %}
+			scheda prodotto
+		{% elseif item.get('posizione') == 5 %}
+			checkout
+		{% elseif item.get('posizione') == 6 %}
+			login/registrazione
+		{% elseif item.get('posizione') == 7 %}
+			myarea
+		{% endif %}			
+		</td>
+		<td>
+			{{ item.get('nome') }}
+		</td>
+		<td>
+		{% if item.get('tipo') == 1 %}
+			Articolo
+		{% elseif item.get('tipo') == 2 %}
+			Azienda
+		{% elseif item.get('tipo') == 3 %}
+			Collezione
+		{% elseif item.get('tipo') == 4 %}
+			Pagina
+		{% elseif item.get('tipo') == 5 %}
+			URL
+		{% elseif item.get('tipo') == 6 %}
+			Blog
+		{% elseif item.get('tipo') == 8 %}
+			Evento/news
+		{% elseif item.get('tipo') == 7 %}
+			File
+		{% endif %}
+		</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+				{% if item.get('visibilita_lang', '') == '-' %}
+					tutte le lingue
+				{% else %}
+					{{ item.get('visibilita_lang', '') }}
+				{% endif %}
+				</div>
+			</div>
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_listino(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td style="background: {% if item.abilitato() %}#34a853{% else %}#aaaaaa{% endif %}; width: 10px; padding: 0; overflow: hidden;">&nbsp;</td>
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>
+			{% if item.get('con_iva') %}
+				<img src="/assets/manager/havana-js/img/icon/ico-confirm.svg" class="h-action-alttext" data-alttext="prezzi iva inclusa">
+			{% else %}
+				&nbsp;
+			{% endif %}
+		</td>
+		<td>{{ item.get('nome') }}</td>
+		<td>{{ item.get('codice') }}</td>
+		<td>
+			{% if item.get('tipo') == 0 %}
+				cliente
+			{% elseif item.get('tipo') == 1 %}
+				url
+			{% else %}
+				lang
+			{% endif %}
+		</td>
+		<td>{{ item.get('url') }}</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_ordine_cliente(_h, item) %}
+	{% set ordine = item.dettaglio.ordine %}
+	{% set pagamenti = _h.context('checkout_util') %}
+	<tr data-id="{{ item.id }}">
+		<td>
+			{% if item.get('problema') %}
+			<img src="/assets/manager/havana-js/img/icon/ico-alert.svg" class="h-action-alttext h-action-window"  data-action='{"type": "layer", "url": "{{ _h.url('manager/myarea/ordini/log/index') }}", "overlay": true, "width": 800, "height": 500, "params": {"id": {{ item.id }}}}' data-alttext="da gestire" style="cursor: pointer">
+			{% else %}
+			&nbsp;
+			{% endif %}
+		</td>
+		<td>
+			<a href="javascript:void(0)" class="link h-action-alttext h-action-window" data-action='{"type": "layer", "overlay": true, "width": 800, "height": 600, "url": "{{ _h.url('manager/myarea/ordini/dettaglio') }}", "params": {"id": {{ item.id }}}}' data-alttext="dettaglio">
+				{{ item.get('codice') }}
+			</a>
+			{{ item.get('integra_cliente_ordine_precedente_id')  }}
+			{% if item.get('integra_cliente_ordine_precedente_id') %}
+				<div style="font-size: 10px;"><em>Coll.:</em> 
+					<a href="javascript:void(0)" class="link h-action-alttext h-action-window" data-action='{"type": "layer", "overlay": true, "width": 800, "height": 600, "url": "{{ _h.url('manager/myarea/ordini/dettaglio') }}", "params": {"id": {{ item.get('integra_cliente_ordine_precedente_id') }}}}' data-alttext="dettaglio">
+						<strong style="color: #ed4747;">{{ item.get('integra_cliente_ordine_precedente_id') }}</strong>
+					</a>
+				</div>
+			{% endif %}
+		</td>
+		<td>{{ item.getDateTime('data_inserimento') }}</td>
+		<td>
+			<span class="h-action-alttext" data-alttext="{{ pagamenti.getPagamento(item.get('tipo_pagamento')) }}">{{ pagamenti.getPagamento(item.get('tipo_pagamento'), true) }}</span>
+		</td>
+			{% if item.get('stato_pagamento') == 0 %}	
+				{% set alt = 'non pagato' %}
+				{% set label = 'N.P.' %}
+			{% elseif item.get('stato_pagamento') == 1 %}	
+				{% set alt = 'bonifico comunicato CRO' %}
+				{% set label = 'CRO' %}
+			{% elseif item.get('stato_pagamento') == 2 %}
+				{% set alt = 'pagato acconto' %}
+				{% set label = 'ACC' %}
+			{% elseif item.get('stato_pagamento') == 3 %}
+				{% set alt = 'pagato' %}
+				{% set label = 'P' %}
+			{% elseif item.get('stato_pagamento') == 10 %}
+				{% set alt = 'annullato' %}
+				{% set label = 'A' %}
+			{% endif %}	
+		<td>
+			<span class="h-action-alttext" data-alttext="{{ alt }}">{{ label }}</span>
+		</td>
+		{{ _self.cella_ordine_documenti(_h, item) }}
+		<td style="text-align: right; padding-right: 10px;">{{ _h.util.valuta(ordine.total_ordine, item.get('currency')) }}</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_ordine_simple_agente(_h, item) %}
+	{% set ordine = item.dettaglio.ordine %}
+	<tr data-id="{{ item.id }}">
+		<td>
+			{% if item.get('problema') %}
+			<img src="/assets/manager/havana-js/img/icon/ico-alert.svg" class="h-action-alttext h-action-window"  data-action='{"type": "layer", "url": "{{ _h.url('manager/myarea/ordini/log/index') }}", "overlay": true, "width": 800, "height": 500, "params": {"id": {{ item.id }}}}' data-alttext="da gestire" style="cursor: pointer">
+			{% else %}
+			&nbsp;
+			{% endif %}
+		</td>
+		<td><a href="javascript:void(0)" class="link h-action-alttext h-action-window" data-action='{"type": "layer", "overlay": true, "width": 800, "height": 600, "url": "{{ _h.url('manager/myarea/ordini/dettaglio') }}", "params": {"id": {{ item.id }}}}' data-alttext="dettaglio">
+			{{ item.get('codice') }}
+		</a></td>
+		<td>{{ item.getDateTime('data_inserimento') }}</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto h-action-alttext" data-alttext="{{ ordine.spedizione.nome }} {{ ordine.spedizione.cognome }}<br>{{ ordine.e_mail }}">
+					{{ ordine.spedizione.nome }} {{ ordine.spedizione.cognome }}
+				</div>
+			</div>		
+		</td>
+		<td style="text-align: right; padding-right: 10px;">{{ _h.util.valuta(ordine.total_ordine, item.get('currency')) }}</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_ordine_simple(_h, item) %}
+	{% set ordine = item.dettaglio.ordine %}
+	<tr data-id="{{ item.id }}">
+		<td>
+			{% if item.get('problema') %}
+			<img src="/assets/manager/havana-js/img/icon/ico-alert.svg" class="h-action-alttext h-action-window"  data-action='{"type": "layer", "url": "{{ _h.url('manager/myarea/ordini/log/index') }}", "overlay": true, "width": 800, "height": 500, "params": {"id": {{ item.id }}}}' data-alttext="da gestire" style="cursor: pointer">
+			{% else %}
+			&nbsp;
+			{% endif %}
+		</td>
+		<td><a href="javascript:void(0)" class="link h-action-alttext h-action-window" data-action='{"type": "layer", "overlay": true, "width": 800, "height": 600, "url": "{{ _h.url('manager/myarea/ordini/dettaglio') }}", "params": {"id": {{ item.id }}}}' data-alttext="dettaglio">
+			{{ item.get('codice') }}
+		</a></td>
+		<td>{{ item.getDateTime('data_inserimento') }}</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto h-action-alttext" data-alttext="{{ ordine.spedizione.nazione }}">
+					{{ ordine.spedizione.nazione }}
+				</div>
+			</div>		
+		</td>
+		<td style="text-align: right; padding-right: 10px;">{{ _h.util.valuta(ordine.total_ordine, item.get('currency')) }}</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_ordine(_h, item) %}
+	{% set pagamenti = _h.context('checkout_util') %}
+	{% set ordine = item.dettaglio.ordine %}
+
+	{% set css_linea = '' %}
+	{% if item.get('stato') == 0 %}
+		{% set stato = 'preso in carico' %}
+		{% set colore = '#aaaaaa' %}
+	{% elseif item.get('stato') == 100 %}
+		{% set stato = 'lavorazione' %}
+		{% set colore = '#aaaaaa' %}
+		{% set css_linea = ' riga-blu' %}
+	{% elseif item.get('stato') == 101 %}
+		{% set stato = 'attesa articoli' %}
+		{% set colore = '#ffe400' %}
+	{% elseif item.get('stato') == 102 %}
+		{% set stato = 'attesa feedback' %}
+		{% set colore = '#00c0ff' %}
+	{% elseif item.get('stato') == 200 %}
+		{% set stato = 'disp. / in sped.' %}
+		{% set colore = '#34a853' %}
+		{% set css_linea = ' riga-verde' %}
+	{% elseif item.get('stato') == 201 %}
+		{% set stato = 'consegnato' %}
+		{% set colore = '#34a853' %}
+		{% set css_linea = ' riga-verde' %}
+	{% elseif item.get('stato') == 202 %}
+		{% set stato = 'ord. evaso parz.' %}
+		{% set colore = '#34a853' %}
+		{% set css_linea = ' riga-verde' %}
+	{% elseif item.get('stato') == 800 %}
+		{% set stato = 'annullato' %}
+		{% set colore = '#ed4747' %}
+	{% elseif item.get('stato') == 801 %}
+		{% set stato = 'rimborsato' %}
+		{% set colore = '#ed4747' %}
+	{% elseif item.get('stato') == 900 %}
+		{% set stato = 'reso' %}
+		{% set colore = '#ed4747' %}
+	{% elseif item.get('stato') == 901 %}
+		{% set stato = 'reso parziale' %}
+		{% set colore = '#34a853' %}
+	{% elseif item.get('stato') == 902 %}
+		{% set stato = 'cambio merce' %}
+		{% set colore = '#34a853' %}
+	{% elseif item.get('stato') == 903 %}
+		{% set stato = 'cambio merce parziale' %}
+		{% set colore = '#34a853' %}
+	{% endif %}
+	
+	{% if item.get('stato_pagamento') == 0 %} 
+		{% set css_linea = ' riga-rossa' %}
+	{% endif %}
+	<tr data-id="{{ item.id }}" class="item-autoload{{ css_linea }}">
+		<td style="background: {{ colore }}; width: 10px; padding: 0; overflow: hidden;">&nbsp;</td>
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		{% if _h.config('gestione_agenti', false) %}
+		<td>
+			{% if item.get('id_agente') > 0 %}
+			<img src="/assets/manager/havana-js/img/icon/ico-user.svg" class="h-action-alttext" data-alttext="effettuato da agente: {{ item.get('agente') }}">
+			{% else %}
+			&nbsp;
+			{% endif %}
+		</td>		
+		{% endif %}
+		<td>
+			{% if item.get('problema') %}
+			<a class="h-action-alttext h-action-window" data-action='{"type": "layer", "url": "{{ _h.url('manager/myarea/ordini/log/index') }}", "overlay": true, "width": 950, "height": 500, "params": {"id": "{{ item.id }}"}}' data-alttext="problema su ordine" style="cursor: pointer">
+			<img src="/assets/manager/havana-js/img/icon/ico-alert.svg">
+			</a>
+			{% elseif item.get('problema_ordini_generale') %}
+			<a class="h-action-alttext h-action-window" data-action='{"type": "layer", "url": "{{ _h.url('manager/myarea/ordini/log/index') }}", "overlay": true, "width": 950, "height": 500, "params": {"id": "{{ item.id }}", "all": 1}}' data-alttext="problemi su altri ordini" style="cursor: pointer">
+				<img src="/assets/manager/havana-js/img/icon/ico-info.svg">
+			</a>
+			{% else %}
+			&nbsp;
+			{% endif %}
+		</td>
+		<td>{{ item.get('lang')|upper }}</td>
+		<td>
+			<a href="javascript:void(0)" class="link h-action-alttext h-action-window" data-action='{"type": "slide-right", "url": "{{ _h.url('manager/myarea/ordini/dettaglio') }}", "params": {"id": {{ item.id }}}, "extend": 400}' data-alttext="dettaglio">
+				{{ item.get('codice') }}
+				{% if _h.config('gestione_preventivi', false) and item.get('id_preventivo') > 0 %}
+				<div style="color: #ed4747; font-size: 10px;">prev.: P{{ item.get('id_preventivo') }}</div>
+				{% endif %}
+				{% if item.get('eliminato') %}
+				<div style="color: #ed4747; font-size: 9px; font-weight: bold;">ELIMINATO</div>
+				{% endif %}
+			</a>
+			{% if item.get('integra_cliente_ordine_precedente_id') %}
+				<div style="font-size: 10px;"><em>Coll.:</em> 
+					<a href="javascript:void(0)" class="link h-action-alttext h-action-window" data-action='{"type": "layer", "overlay": true, "width": 800, "height": 600, "url": "{{ _h.url('manager/myarea/ordini/dettaglio') }}", "params": {"id": {{ item.get('integra_cliente_ordine_precedente_id') }}}}' data-alttext="dettaglio">
+						<strong style="color: #ed4747;">{{ item.get('integra_cliente_ordine_precedente_id') }}</strong>
+					</a>
+				</div>
+			{% endif %}
+		</td>
+		<td style="font-size: 10px;"  class="disponibilita-ordine{% if item.get('numero_articoli_disponibili') < item.get('numero_articoli') %} cell-alert{% endif %}" data-numero-articoli="{{ item.get('numero_articoli') }}"><span>{{ item.get('numero_articoli_disponibili') }}</span>/{{ item.get('numero_articoli') }}</td>
+		<td style="font-size: 10px">{{ item.getDateTime('data_inserimento') }}</td>
+		{% if item.get('carrello_da_completare', 0) == 0 %}
+		<td class="h-action-window link" data-action='{"type": "layer", "url": "{{ _h.url('manager/myarea/ordini/stato-ordine') }}", "overlay": true, "width": 400, "height": 400, "params": {"id": {{ item.id }}}}'>
+			{{ stato }}
+		</td>
+		{% else %}
+		<td>
+			carrello
+		</td>
+		{% endif %}
+		<td class="h-action-window link" data-action='{"type": "layer", "url": "{{ _h.url('manager/myarea/ordini/stato-spedizione') }}", "overlay": true, "width": 500, "height": 400, "params": {"id": {{ item.id }}}}'>
+			<div>
+			{% if item.get('stato_spedizione') == 0 %}	
+			&nbsp;
+			{% elseif item.get('stato_spedizione') == 1 %}	
+			evasione parziale
+			{% elseif item.get('stato_spedizione') == 2 %}
+			<div class="block-dettaglio"><small>spedito</small></div>
+			{% elseif item.get('stato_spedizione') == 3 %}
+			consegnato
+			{% endif %}	
+			</div>
+			{% if item.get('stato_spedizione') > 0 and item.get('traking') %}
+				<div>{{ item.get('traking') }}</div>
+			{% endif %}	
+			{% if item.get('stato_spedizione') > 0 and item.get('corriere_spedizione') %}
+				<div class="block-dettaglio"><small>{{ item.get('corriere_spedizione') }}</small></div>
+			{% endif %}	
+
+			{% if item.get('integrazione_articoli') %}
+			<div style="font-size: 9px; color: #777;">integrazione</div>
+			{% endif %}
+		</td>
+		<td class="link-base h-action-window" data-action='{"type": "layer", "url": "{{ _h.url('manager/myarea/ordini/stato-pagamento') }}", "overlay": true, "width": 500, "height": 400, "params": {"id": {{ item.id }}}}'>
+			<span class="h-action-alttext" data-alttext="{{ pagamenti.getPagamento(item.get('tipo_pagamento')) }}">{{ pagamenti.getPagamento(item.get('tipo_pagamento'), true) }}</span>
+			{% if item.get('tipo_pagamento') == 1 %}
+				<div style="font-size: 9px">
+				{{ item.get('circuito_pagamento') }}
+				</div>
+			{% endif %}
+			{% if item.get('valore_pagato_con_punti_cent', 0) > 0 %}
+			<div style="font-size: 9px">uso credito</div>
+			{% endif %}
+		</td>
+			{% if item.get('stato_pagamento') == 0 %}	
+				{% set alt = 'non pagato' %}
+				{% set label = 'N.P.' %}
+			{% elseif item.get('stato_pagamento') == 1 %}	
+				{% set alt = 'bonifico comunicato CRO' %}
+				{% set label = 'CRO' %}
+			{% elseif item.get('stato_pagamento') == 2 %}
+				{% set alt = 'pagato acconto' %}
+				{% set label = 'ACC' %}
+			{% elseif item.get('stato_pagamento') == 3 %}
+				{% set alt = 'pagato' %}
+				{% set label = 'P' %}
+			{% elseif item.get('stato_pagamento') == 10 %}
+				{% set alt = 'annullato' %}
+				{% set label = 'A' %}
+			{% endif %}	
+		<td class="link-base h-action-window" data-action='{"type": "layer", "url": "{{ _h.url('manager/myarea/ordini/stato-pagamento') }}", "overlay": true, "width": 500, "height": 400, "params": {"id": {{ item.id }}}}'>
+			<span class="h-action-alttext" data-alttext="{{ alt }}">{{ label }}</span>
+		</td>
+		<td style="font-size: 10px"><a href="javascript:void(0)" class="link h-action-alttext h-action-window" data-action='{"type": "layer", "url": "{{ _h.url('manager/myarea/ordini/log/index') }}", "overlay": true, "width": 950, "height": 500, "params": {"id": {{ item.id }}}}' data-alttext="log">
+		{{ item.getDateTime('data_pagamento') }}
+		</a></td>
+		<td>
+			{% if item.get('problema_cliente') %}
+			<a class="h-action-window"  data-action='{"type": "layer", "url": "{{ _h.url('manager/myarea/cliente/log/index') }}", "overlay": true, "width": 950, "height": 500, "params": {"e_mail": "{{ ordine.e_mail }}"}}' style="cursor: pointer">
+				<img src="/assets/manager/havana-js/img/icon/ico-alert.svg">
+			</a>
+			{% endif %}
+			<div style="display: inline-block;" class="h-action-alttext" data-alttext="{{ ordine.spedizione.nome }} {{ ordine.spedizione.nome }}<br>{% if ordine.spedizione.presso %}<em>presso:<em> {{ ordine.spedizione.presso }}<br>{% endif %}{% if ordine.spedizione.nome_campanello %}<em>nome camp.:<em> {{ ordine.spedizione.nome_campanello }}<br>{% endif %}{{ ordine.spedizione.via }}, {{ ordine.spedizione.num_civico }}<br>{{ ordine.spedizione.cap }} {{ ordine.spedizione.localita }} ({{ ordine.spedizione.provincia }})<br>{{ ordine.spedizione.nazione }}<br>{{ ordine.e_mail }}<br>{{ ordine.spedizione.telefono }}">
+				<a class="link h-action-window" data-action='{"type": "layer", "url": "{{ _h.url('manager/myarea/ordini/scrivi') }}", "overlay": true, "width": 550, "height": 600, "params": {"id": {{ item.id }}}}'>
+					{{ ordine.spedizione.nome }} {{ ordine.spedizione.cognome }}<br>
+					{{ ordine.e_mail }}
+					{% if _h.config('gestione_agenti', false) %}
+						{% if item.get('id_agente') > 0 %}
+						<div><em>agente:</em> <strong>{{ item.get('agente') }}</strong></div>
+						{% endif %}
+					{% endif %}
+				</a>
+			</div>
+		</td>
+		{{ _self.cella_ordine_documenti(_h, item) }}
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto h-action-alttext" data-alttext="{{ ordine.spedizione.nazione }}">{{ ordine.spedizione.nazione }}</div>
+			</div>		
+		</td>
+		<td style="text-align: right">{{ _h.util.valuta(ordine.total_ordine, item.get('currency')) }}
+			{% if _h.config('gestione_agenti', false) and ordine.total_sconto > 0 %}
+			<div style="color: #ed4747; font-size: 10px; font-weight: bold;">-{{ _h.util.valuta(ordine.total_sconto, item.get('currency')) }}</div>
+			{% endif %}
+			{% if item.get('valore_pagato_con_punti_cent', 0) > 0 %}
+			<div style="font-size: 9px">pagato con credito: {{ _h.util.valuta(item.get('valore_pagato_con_punti_cent', 0) / 100, item.get('currency')) }}</div>
+			{% endif %}
+		</td>
+		<td style="font-size: 10px"><a href="javascript:void(0)" class="link h-action-alttext h-action-window" data-action='{"type": "layer", "url": "{{ _h.url('manager/myarea/ordini/log/index') }}", "overlay": true, "width": 800, "height": 500, "params": {"id": {{ item.id }}}}' data-alttext="log">
+		{{ item.getDateTime('data_modifica') }}
+		</a></td>
+	</tr>
+{% endmacro %}
+
+{% macro item_voucher(_h, item) %}
+	{% import _h.template('manager/_my_macro.html') as mymc %}
+	{% set ordine = item.dettaglio().ordine %}
+	{% set css_linea = '' %}
+	{% if item.get('voucher_stato') == 0 %}
+		{% set colore = '#aaaaaa' %}
+	{% else %}
+		{% set colore = '#34a853' %}
+		{% set css_linea = ' riga-verde' %}
+	{% endif %}
+
+	<tr data-id="{{ item.get('voucher_id') }}" class="item-autoload{{ css_linea }}">
+		<td style="background: {{ colore }}; width: 10px; padding: 0; overflow: hidden;">&nbsp;</td>
+		<td><a href="javascript:void(0)" class="link h-action-alttext h-action-window" data-action='{"type": "slide-right", "url": "{{ _h.url('manager/myarea/ordini/dettaglio') }}", "params": {"id": {{ item.id }}}, "extend": 400}' data-alttext="dettaglio">
+			{{ item.get('codice') }}
+		</a></td>
+		<td>
+			<div>
+				<a class="link h-action-window" data-action='{"type": "layer", "url": "{{ _h.url('manager/myarea/ordini/scrivi') }}", "overlay": true, "width": 500, "height": 300, "params": {"id": {{ item.id }}}}'>
+					{{ ordine.spedizione.nome }} {{ ordine.spedizione.cognome }}<br>
+					{{ ordine.e_mail }}
+				</a>
+			</div>
+		</td>
+		<td>
+			{% set listItems = item.listItems() %}
+			{% for art in listItems %}
+				{% if item.get('voucher_id_articolo_cart') == art.tmp_id %}
+					<strong>{{ art.item.nome }}</strong>
+					{% if art.item.nome_simbolico %}
+					<div>{{ art.item.nome_simbolico }}</div>
+					{% endif %}
+					{{ mymc.dettaglio_articolo_ordine(_h, art) }}
+				{% endif %}
+			{% endfor %}
+		</td>
+		<td>{{ item.get('voucher_codice') }}</td>
+		<td>{{ item.getDateTime('voucher_data_inserimento') }}</td>
+		<td>{{ item.getDateTime('voucher_data_validazione') }}</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_promemoria(_h, item) %}
+	{% set css_linea = '' %}	
+	{% if item.get('stato') == 0 %}
+		{% set stato = 'aperto / da fare' %}
+		{% set colore = '#aaaaaa' %}
+	{% elseif item.get('stato') == 1 %}
+		{% set stato = 'attenzione / problemi' %}
+		{% set colore = '#ed4747' %}
+		{% set css_linea = ' riga-rossa' %}
+	{% elseif item.get('stato') == 10 %}
+		{% set stato = 'completato' %}
+		{% set colore = '#34a853' %}
+		{% set css_linea = ' riga-verde' %}
+	{% elseif item.get('stato') == 11 %}
+		{% set stato = 'annullato' %}
+		{% set colore = '#ed4747' %}
+	{% endif %}
+
+	<tr data-id="{{ item.id }}" class="item-autoload{{ css_linea }}">
+		<td style="background: {{ colore }}; width: 10px; padding: 0; overflow: hidden;">&nbsp;</td>
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>{{ item.getDateTime('data_ora') }}</td>
+		<td>{{ stato }}</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto h-action-alttext" data-alttext="{{ item.get('descrizione') }}">{{ item.get('descrizione') }}</div>
+			</div>		
+		</td>
+		<td>
+			{% if item.get('tipo_entita') == 'articolo' %}
+				<a href="javascript:void(0)" class="link h-action-alttext h-action-window" data-action='{"type": "slide-right", "url": "{{ _h.url('manager/myarea/articolo/edit-update') }}", "params": {"lang": "it", "id": {{ item.get('id_entita', 0) }}}}' data-alttext="scheda prodotto">
+				<em>prodotto:</em> <strong>{{ item.get('anteprima') }}</strong>
+				</a>
+			{% elseif item.get('tipo_entita') == 'cliente' %}
+				<a href="javascript:void(0)" class="link h-action-alttext h-action-window" data-action='{"type": "layer", "overlay": true, "width": 500, "height": 350, "url": "{{ _h.url('manager/myarea/cliente/scrivi') }}", "params": {"id": {{ item.get('id_entita', 0) }}}}' data-alttext="scrivi cliente">
+				<em>cliente:</em> <strong>{{ item.get('anteprima') }}</strong>
+				</a>
+			{% elseif item.get('tipo_entita') == 'cliente_ordini' %}
+				<a href="javascript:void(0)" class="link h-action-alttext h-action-window" data-action='{"type": "slide-right", "url": "{{ _h.url('manager/myarea/ordini/dettaglio') }}", "params": {"id": {{ item.get('id_entita', 0) }}}, "extend": 400}' data-alttext="dettaglio ordine">
+				<em>ordine:</em> <strong>{{ item.get('anteprima') }}</strong>
+				</a>
+			{% else %}
+				{{ item.get('anteprima') }}
+			{% endif %}
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_preventivo(_h, item) %}
+	{% set ordine = item.dettaglio.ordine %}
+
+	{% set css_linea = '' %}
+	{% if item.get('codice_ordine_da_preventivo') %}
+		{% set colore = '#34a853' %}
+		{% set css_linea = ' riga-verde' %}
+	{% elseif item.getDate('data_invio_preventivo') %}
+		{% set colore = '#00c0ff' %}
+	{% else %}
+		{% set css_linea = ' riga-rossa' %}
+		{% set colore = '#ed4747' %}
+	{% endif %}
+	
+	<tr data-id="{{ item.id }}" class="item-autoload{{ css_linea }}">
+		<td style="background: {{ colore }}; width: 10px; padding: 0; overflow: hidden;">&nbsp;</td>
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>
+			{% if item.get('problema') %}
+			<img src="/assets/manager/havana-js/img/icon/ico-alert.svg" class="h-action-alttext h-action-window"  data-action='{"type": "layer", "url": "{{ _h.url('manager/myarea/ordini/log/index') }}", "overlay": true, "width": 800, "height": 500, "params": {"id": {{ item.id }}}}' data-alttext="da gestire" style="cursor: pointer">
+			{% else %}
+			&nbsp;
+			{% endif %}
+		</td>
+		<td>{{ item.get('lang')|upper }}</td>
+		<td><a href="javascript:void(0)" class="link h-action-alttext h-action-window" data-action='{"type": "slide-right", "url": "{{ _h.url('manager/myarea/preventivi/dettaglio') }}", "params": {"id": {{ item.id }}}, "extend": 400}' data-alttext="dettaglio">
+			P{{ item.id }}
+			{% if _h.config('gestione_preventivi', false) and item.get('codice_ordine_da_preventivo') %}
+			<div style="color: #ed4747; font-size: 10px;">ordine: {{ item.get('codice_ordine_da_preventivo') }}</div>
+			{% endif %}
+		</a></td>
+		<td style="font-size: 11px">{{ item.getDateTime('data_inserimento') }}</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto h-action-alttext" data-alttext="{{ ordine.spedizione.nome }} {{ ordine.spedizione.nome }}<br>{% if ordine.spedizione.presso %}<em>presso:<em> {{ ordine.spedizione.presso }}<br>{% endif %}{% if ordine.spedizione.nome_campanello %}<em>nome camp.:<em> {{ ordine.spedizione.nome_campanello }}<br>{% endif %}{{ ordine.spedizione.via }}, {{ ordine.spedizione.num_civico }}<br>{{ ordine.spedizione.cap }} {{ ordine.spedizione.localita }} ({{ ordine.spedizione.provincia }})<br>{{ ordine.spedizione.nazione }}<br>{{ ordine.e_mail }}<br>{{ ordine.spedizione.telefono }}">
+					<a class="link h-action-window" data-action='{"type": "layer", "url": "{{ _h.url('manager/myarea/ordini/scrivi') }}", "overlay": true, "width": 500, "height": 300, "params": {"id": {{ item.id }}}}'>
+						{{ ordine.spedizione.nome }} {{ ordine.spedizione.cognome }}
+					</a>
+				</div>
+			</div>		
+		</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto h-action-alttext" data-alttext="{{ ordine.spedizione.nome }} {{ ordine.spedizione.nome }}<br>{% if ordine.spedizione.presso %}<em>presso:<em> {{ ordine.spedizione.presso }}<br>{% endif %}{% if ordine.spedizione.nome_campanello %}<em>nome camp.:<em> {{ ordine.spedizione.nome_campanello }}<br>{% endif %}{{ ordine.spedizione.via }}, {{ ordine.spedizione.num_civico }}<br>{{ ordine.spedizione.cap }} {{ ordine.spedizione.localita }} ({{ ordine.spedizione.provincia }})<br>{{ ordine.spedizione.nazione }}<br>{{ ordine.e_mail }}<br>{{ ordine.spedizione.telefono }}">
+					<a class="link h-action-window" data-action='{"type": "layer", "url": "{{ _h.url('manager/myarea/ordini/scrivi') }}", "overlay": true, "width": 500, "height": 300, "params": {"id": {{ item.id }}}}'>
+						{{ ordine.e_mail }}
+					</a>
+				</div>
+			</div>		
+		</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto h-action-alttext" data-alttext="{{ ordine.spedizione.nazione }}">{{ ordine.spedizione.nazione }}</div>
+			</div>		
+		</td>
+		<td style="text-align: right">{{ _h.util.valuta(ordine.total_ordine, ordine.currency) }}</td>
+		<td style="font-size: 11px"><a href="javascript:void(0)" class="link h-action-alttext h-action-window" data-action='{"type": "layer", "url": "{{ _h.url('manager/myarea/ordini/log/index') }}", "overlay": true, "width": 800, "height": 500, "params": {"id": {{ item.id }}}}' data-alttext="log">
+		{{ item.getDateTime('data_modifica') }}
+		</a></td>		
+		<td style="font-size: 11px">{{ item.getDateTime('data_invio_preventivo') }}</td>
+	</tr>
+{% endmacro %}
+
+
+{% macro cella_ordine_documenti(_h, item) %}
+		{% set ordine = item.dettaglio.ordine %}
+		<td>
+			{% set vuoto = '&nbsp;' %}
+			{% if item.get('fattura') %}
+				{% set vuoto = '' %}
+			<div class="block-dettaglio">
+				<small>		
+				{% if ordine.richiesta_fatturazione == 1 %}
+					fattura
+				{% else %}
+					ricevuta
+				{% endif %}
+				({{ item.getDateTime('data_fattura') }}):</small>
+				<a class="link h-action-link" data-action='{"url": "{{ _h.url('manager/myarea/ordini/documenti/download-fattura') }}?id={{ item.id }}"}'>
+					{{ item.get('fattura') }}
+				</a>
+			</div>
+			{% endif %}
+			{% if item.get('fattura_xml') %}
+				{% set vuoto = '' %}
+			<div class="block-dettaglio">
+				<small>XML ({{ item.getDateTime('data_fattura') }}):</small>
+				<a class="link h-action-link" data-action='{"url": "{{ _h.url('manager/myarea/ordini/documenti/download-fattura-xml') }}?id={{ item.id }}"}'>
+					{{ item.get('fattura_xml') }}
+				</a>
+			</div>
+			{% endif %}
+			{% if item.get('fattura_proforma') %}
+				{% set vuoto = '' %}
+			<div class="block-dettaglio">
+				<small>Fattura prof. ({{ item.getDateTime('data_fattura_proforma') }}):</small>
+				<a class="link h-action-link" data-action='{"url": "{{ _h.url('manager/myarea/ordini/documenti/download-fattura-proforma') }}?id={{ item.id }}"}'>
+					{{ item.get('fattura_proforma') }}
+				</a>
+			</div>
+			{% endif %}
+			{% if item.get('ddt') %}
+				{% set vuoto = '' %}
+			<div class="block-dettaglio">
+				<small>DDT ({{ item.getDateTime('data_ddt') }}):</small>
+				<a class="link h-action-link" data-action='{"url": "{{ _h.url('manager/myarea/ordini/documenti/download-ddt') }}?id={{ item.id }}"}'>
+					{{ item.get('ddt') }}
+				</a>
+			</div>
+			{% endif %}
+			{{ vuoto }}
+		</td>
+{% endmacro %}
+
+{% macro item_azione_ordine(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td style="background: {% if item.abilitato() %}#34a853{% else %}#aaaaaa{% endif %}; width: 10px; padding: 0; overflow: hidden;">&nbsp;</td>
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto h-action-alttext" data-alttext="{{ item.get('descrizione') }}">
+					{{ item.get('descrizione') }}
+				</div>
+			</div>	
+		</td>		
+		<td>{{ item.euro('totale_ordine') }}</td>
+		<td>{{ item.get('numero_giorni_dopo') }}</td>
+		<td>{{ item.getDate('data_dal') }}</td>
+		<td>{{ item.getDate('data_al') }}</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_carrello(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+	{% if item.get('chiuso') %}
+		{% set colore = '#00c0ff' %}
+	{% else %}
+		{% set colore = '#aaaaaa' %}
+	{% endif %}	
+		<td style="background: {{ colore }}; width: 10px; padding: 0; overflow: hidden;">&nbsp;</td>
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>{{ item.get('lang') }}</td>		
+		<td>
+			<a href="javascript:void(0)" class="link h-action-alttext h-action-window" data-action='{"type": "slide-right", "url": "{{ _h.url('manager/myarea/carrello/dettaglio') }}", "params": {"id": "{{ item.id }}"}, "extend": 400}' data-alttext="dettaglio">
+				{{ item.getDateTime('data_inserimento') }}
+			</a>
+		</td>
+		<td>{{ item.getDateTime('data_accesso') }}</td>
+		<td>{{ item.getDateTime('data_chiuso') }}</td>
+		<td>
+		{% if item.get('chiuso_e_mail') %}
+			<img src="/assets/manager/havana-js/img/icon/ico-confirm.svg" class="h-action-alttext" data-alttext="chiuso per e-mail identica in ordine successivo">
+		{% else %}
+			&nbsp;
+		{% endif %}
+		</td>
+		<td>{{ item.getDateTime('data_cancellazione') }}</td>
+		<td>
+		{% if item.get('ultima_azione') > 0 %}
+			{{ item.get('ultima_azione') }}
+		{% else %}
+			&nbsp;
+		{% endif %}
+		</td>
+		<td>{{ item.getDateTime('data_ultima_azione') }}</td>
+		<td>
+			{% if item.get('tipo_ultima_azione') == 1 %}
+				e-mail
+			{% elseif item.get('tipo_ultima_azione') == 2 %}
+				buono sconto
+			{% else %}
+				&nbsp;
+			{% endif %}
+		</td>
+		<td>
+		{% if item.get('e_mail') and item.get('e_mail') != '' %}
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto h-action-alttext" data-alttext="{{ item.get('e_mail') }}">
+					<a class="link h-action-window" data-action='{"type": "layer", "url": "{{ _h.url('manager/myarea/carrello/scrivi') }}", "overlay": true, "width": 550, "height": 600, "params": {"id": "{{ item.id }}"}}'>
+						{{ item.get('e_mail') }}
+					</a>
+				</div>
+			</div>		
+		{% else %}
+			&nbsp;
+		{% endif %}
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_attributoTree(_h, item, simple, id_hide) %}
+
+<div class="tree-item" data-parent-id="{{ item.get('id_padre') }}" data-id="{{ item.id }}">
+	<table class="h-list-line" cellpadding="0" cellspacing="0" border="0">
+	<tr data-id="{{ item.id }}">
+		<td style="width: 20px; padding-left: 10px; border-bottom: none;" class="tree-arrow-content"></td>
+		{% if not(simple) %}
+		<td style="background: {% if item.abilitato() %}#34a853{% else %}#aaaaaa{% endif %}; width: 5px; padding: 0; overflow: hidden;">&nbsp;</td>
+		{% if _h.session.params.user.accesso >= 5 %}
+		<td style="width: 60px; padding-left: 0;">
+			<div class="h-nav-button-wrapper" style="margin-right: 6px">
+				<a href="javascript:void(0);" style="margin-top: 0px;" class="h-nav-button h-nav-button-click h-action-alttext h-action-selected-open-window" data-alttext="aggiungi" data-action='{"window": {"type": "layer", "overlay": true, "width": 500, "height": 500, "url": "{{ _h.url('manager/myarea/attributo/edit') }}", "params": {"id_padre": {{ item.id }}, "id_tipo": {{ item.get('tipo') }} }}}'>
+					<img src="/assets/manager/havana-js/img/icon/ico-new.svg" align="top" />
+				</a>
+			</div>
+			<div class="h-nav-button-wrapper" style="margin-right: 6px">
+				<a href="javascript:void(0);" style="margin-top: 0px;" class="h-nav-button h-nav-button-click h-action-alttext h-action-selected-open-window" data-alttext="sposta" data-action='{"window": {"type": "layer", "overlay": true, "width": 800, "height": 500, "url": "{{ _h.url('manager/myarea/attributo/move') }}", "params": {"id": {{ item.id }}, "id_tipo": {{ item.get('tipo') }} }}}'>
+					<img src="/assets/manager/havana-js/img/icon/ico-move.svg" align="top" />
+				</a>
+			</div>
+		</td>
+		{% endif %}
+		{% endif %}
+		<td class="td-checkbox" style="padding-left: 0;"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		{% if not(simple) %}
+		<td style="width: 20px; padding-left: 0;">
+			{% if item.get('show_home') %}
+				<img src="/assets/manager/havana-js/img/icon/ico-home.svg" class="h-action-alttext" data-alttext="visualizza in home page">
+			{% else %}
+				&nbsp;
+			{% endif %}
+		</td>
+		<td style="width: 50px;"><div class="image-anteprima-small"><img class="image" src="{{ item.imageAnteprima() }}"></div></td>
+		<td style="width: 50px;">#{{ item.id }}</td>
+		<td style="width: 300px;">
+		{% else%}
+		<td>
+		{% endif%}
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto" class="h-action-alttext" data-alttext="{{ item.get('nome') }}">
+					{% if _h.config('gestione_azienda_account') and item.get('id_padre') == 0 and item.get('azienda_nome') %}
+					<strong>[{{ item.get('azienda_nome') }}]</strong>&nbsp;
+					{% endif %}
+					{{ item.get('nome') }}
+				</div>
+			</div>
+		</td>
+		{% if not(simple) %}
+		<td>
+		{% if item.get('titolo_pagina') %}
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto" class="h-action-alttext" data-alttext="{{ item.get('titolo_pagina') }}">
+					{{ item.get('titolo_pagina') }}
+				</div>
+			</div>
+		{% else %}
+			&nbsp;
+		{% endif %}
+		</td>
+		{% endif %}
+	</tr>
+	</table>
+</div>
+{% endmacro %}
+
+{% macro item_nazione(_h, item, listType) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td style="background: {% if item.abilitato() %}#34a853{% else %}#aaaaaa{% endif %}; width: 10px; padding: 0; overflow: hidden;">&nbsp;</td>
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>
+		{% if item.id > 1 %}
+			#{{ item.id }}
+		{% else %}
+			&nbsp;
+		{% endif %}
+		</td>
+		<td>
+		{% if item.get('cee') %}
+			CEE
+		{% else %}
+			&nbsp;
+		{% endif %}
+		</td>
+		<td align="right">
+			{% if item.get('stato') == 0 %}
+				&nbsp;
+			{% else %}
+				
+			{% endif %}
+		</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					{{ item.get('nome') }}
+				</div>
+			</div>
+			{% if _h.config('url_country', false) and item.get('country_abilitata') %}
+				<small><em>country: </em><strong>{{ item.get('country_abilitata')|upper }}</strong></small>
+			{% endif %}
+		</td>
+		<td align="right">
+			{% if item.get('iva_privati') == 0 %}
+				&nbsp;
+			{% else %}
+				iva
+			{% endif %}
+		</td>
+		<td align="right">
+			{% if item.get('iva_piva') == 0 %}
+				&nbsp;
+			{% else %}
+				iva
+			{% endif %}
+		</td>
+		{% if item.get('spedizione_gratuita', 0) > 0 %}
+		<td style="text-align:right">{{ item.euro('spedizione_gratuita') }}</td>
+		{% else %}
+		<td>&nbsp;</td>
+		{% endif %}
+	{% for type in listType %}	
+		{% if item.get(type.id, 0) > 0 %}
+		<td style="text-align:right; font-size: 11px;">{{ item.euro(type.id) }}</td>
+		{% else %}
+		<td>&nbsp;</td>
+		{% endif %}
+	{% endfor %}
+	</tr>
+{% endmacro %}
+
+{% macro item_label(_h, item) %}
+	<tr data-id="{{ item.id }}">
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>{{ item.key }}</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto" class="h-action-alttext" data-alttext="{{ item.value }}">
+					{{ item.value }}
+				</div>
+			</div>
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_attributo(_h, item) %}
+	<tr data-id="{{ item.id }}">
+		<td style="background: {% if item.abilitato() %}#34a853{% else %}#aaaaaa{% endif %}; width: 5px; padding: 0; overflow: hidden;">&nbsp;</td>
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td style="width: 20px;">
+		{% if item.get('show_home') %}
+			<img src="/assets/manager/havana-js/img/icon/ico-home.svg" class="h-action-alttext" data-alttext="visualizza in home page">
+		{% else %}
+			&nbsp;
+		{% endif %}
+		</td>
+		<td style="width: 50px;"><div class="image-anteprima-small"><img class="image" src="{{ item.imageAnteprima() }}"></div></td>
+		<td>#{{ item.id }}</td>
+		<td>{{ item.get('ordine') }}</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto" class="h-action-alttext" data-alttext="{{ item.get('nome') }}">
+					{{ item.get('nome') }}
+				</div>
+			</div>
+		</td>
+		<td>
+		{% if item.get('titolo_pagina') %}
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto" class="h-action-alttext" data-alttext="{{ item.get('titolo_pagina') }}">
+					{{ item.get('titolo_pagina') }}
+				</div>
+			</div>
+		{% else %}
+			&nbsp;
+		{% endif %}
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_attributo_valore(_h, item) %}
+	<tr data-id="{{ item.id }}">
+		<td style="background: {% if item.abilitato() %}#34a853{% else %}#aaaaaa{% endif %}; width: 5px; padding: 0; overflow: hidden;">&nbsp;</td>
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td><img class="image image-attributo" src="{{ item.imageAnteprima() }}"></td>
+		<td>{{ item.get('ordine') }}</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto" class="h-action-alttext" data-alttext="{{ item.get('nome') }}">
+					{{ item.get('nome') }}
+				</div>
+			</div>
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_attributo_extra(_h, item) %}
+	<tr data-id="{{ item.id }}">
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto" class="h-action-alttext" data-alttext="{{ item.get('nome') }}">
+					{{ item.get('nome') }}
+				</div>
+			</div>
+		</td>
+		<td>
+		{% if item.get('aspetto') == 0 %}
+		Testo
+		{% elseif item.get('aspetto') == 1 %}
+		Immagine
+		{% elseif item.get('aspetto') == 2 %}
+		Testo + Img
+		{% endif %}
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_iva(_h, item) %}
+	<tr data-id="{{ item.id }}">
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.get('valore') }}_{{ item.get('codice_iso_nazione') }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>{{ item.euroBi('valore') }}%</td>
+		<td>{{ item.get('codice_iso_nazione') }}</td>
+		<td>
+			{% if item.get('principale') %}
+			<img src="/assets/manager/havana-js/img/icon/ico-confirm.svg" class="h-action-alttext" data-alttext="principale">
+			{% endif %}
+		</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					{{ item.get('descrizione') }}
+				</div>
+			</div>
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_vendite_extra_ecommerce_ue(_h, item) %}
+	<tr data-id="{{ item.id }}">
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>{{ item.euro('importo') }} &euro;</td>
+		<td>{{ item.get('anno_riferimento') }}</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					{{ item.get('descrizione') }}
+				</div>
+			</div>
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_gallery_immagine(_h, item) %}
+	<tr data-id="{{ item.id }}">
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="image_id[]" value="" /></span></td>
+		<td>{{ item.get('ordine') }}</td>
+		<td>{{ item.get('codice') }}</td>
+		<td>
+			<img class="image" style="max-height: 45px; max-width: 60px;" src="/images/160x120/{{ item.imageById }}">
+		</td>
+		<td>
+			{{ item.get('name') }}
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					{{ item.get('alt') }}
+				</div>
+			</div>
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_immagine(_h, item) %}
+	<tr data-id="{{ item.id }}">
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="image_id[]" value="" /></span></td>
+		<td>
+		{% if item.get('tipo') == 1 %}
+			<img src="/assets/manager/havana-js/img/icon/ico-confirm.svg" class="h-action-alttext" data-alttext="immagine principale">
+		{% elseif item.get('tipo') == 2 %}
+			<img src="/assets/manager/havana-js/img/icon/ico-fascetta.svg" class="h-action-alttext" data-alttext="immagine secondaria">
+		{% else %}
+			&nbsp;
+		{% endif %}
+		</td>
+		<td>{{ item.get('ordine') }}</td>
+		<td>
+			<img class="image image-articolo" src="/images/{{ _h.config('template').manager.item_image_dim }}/{{ item.imageById }}">
+		</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					{{ item.get('descrizione') }}
+				</div>
+			</div>
+			{% if item.get('codice_colore') %}
+				<em>cod. colore:</em> <strong>{{ item.get('codice_colore') }}</strong>
+			{% endif %}
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_promozione(_h, item) %}
+	<tr data-id="{{ item.id }}">
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>
+			{% if item.get('solo_login', 0) == 1 %}
+				<img src="/assets/manager/havana-js/img/icon/ico-user.svg" class="h-action-alttext" data-alttext="solo utente loggato">
+			{% else %}
+				&nbsp;
+			{% endif %}
+		</td>
+		<td>
+			{% if item.get('tipo_applicazione_sconto', 0) == 1 %}
+				<img src="/assets/manager/havana-js/img/icon/ico-confirm.svg" class="h-action-alttext" data-alttext="sovrascrivi sconto esistente">
+			{% elseif item.get('tipo_applicazione_sconto', 0) == 2 %}
+				<img src="/assets/manager/havana-js/img/icon/ico-new.svg" class="h-action-alttext" data-alttext="aggiungi a sconto esistente">
+			{% endif %}
+		</td>
+		<td>{{ item.get('codice') }}</td>
+		<td>{{ item.getDate('data_dal') }}</td>
+		<td>{{ item.getDate('data_al') }}</td>
+		<td>{{ item.getMinuteToTime('ora_dal') }}</td>
+		<td>{{ item.getMinuteToTime('ora_al') }}</td>
+		<td>{{ item.euro('sconto', 0) }} %</td>
+	</tr>
+{% endmacro %}
+
+
+{% macro item_punti(_h, item) %}
+	<tr data-id="{{ item.id }}">
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>
+			{% if item.get('solo_login', 0) == 1 %}
+				<img src="/assets/manager/havana-js/img/icon/ico-user.svg" class="h-action-alttext" data-alttext="solo utente loggato">
+			{% else %}
+				&nbsp;
+			{% endif %}
+		</td>
+		<td>{{ item.get('descrizione') }}</td>
+		<td>{{ item.getDate('data_dal') }}</td>
+		<td>{{ item.getDate('data_al') }}</td>
+		<td>{{ item.getMinuteToTime('ora_dal') }}</td>
+		<td>{{ item.getMinuteToTime('ora_al') }}</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_allegato(_h, item) %}
+	<tr data-id="{{ item.id }}">
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="image_id[]" value="" /></span></td>
+		<td>
+			<img src="/assets/manager/havana-js/img/icon/ico-disk.svg" style="cursor: pointer;" class="h-action-link h-action-alttext" data-alttext="download" data-action='{"url": "{{ _h.url('manager/myarea/articolo/allegato/download') }}", "params": [{"key": "id", "value": "{{ item.id }}"}]}'>
+		</td>
+		<td>{% if item.get('link_id_file') > 0 %}<span class="h-action-alttext" data-alttext="link a file">L</span>{% else %}&nbsp;{% endif %}</td>
+		<td>{{ item.get('lang')|upper }}</td>
+		<td>{{ item.get('ordine') }}</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					{{ item.get('nome') }}
+				</div>
+			</div>
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_video(_h, item) %}
+	<tr data-id="{{ item.id }}">
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="image_id[]" value="" /></span></td>
+		<td>
+			<img src="/assets/manager/havana-js/img/icon/ico-video.svg" style="cursor: pointer;" class="h-action-link h-action-alttext" data-alttext="apri" data-action='{"url": "{{ item.get('url') }}"}'>
+		</td>
+		<td>{{ item.get('lang')|upper }}</td>
+		<td>{{ item.get('ordine') }}</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					{{ item.get('nome') }}
+				</div>
+			</div>
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_nazione_sede(_h, item) %}
+	<tr data-id="{{ item.id }}">
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					{{ item.get('nome') }}
+				</div>
+			</div>
+		</td>
+	</tr>
+{% endmacro %}
+
+
+{% macro item_nazione_cap(_h, item) %}
+	<tr data-id="{{ item.id }}">
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>{{ item.get('cap') }}</td>
+		<td>{{ item.get('sigla_nazione_provincia') }}</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					{{ item.get('nome') }}
+				</div>
+			</div>
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_nazione_provincia(_h, item) %}
+	<tr data-id="{{ item.id }}">
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>
+		{% if item.get('isola') %}
+			I
+		{% else %}
+			&nbsp;
+		{% endif %}
+		</td>
+		<td>{{ item.get('sigla') }}</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					{{ item.get('nome') }}
+				</div>
+			</div>
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_nazione_opzione(_h, item) %}
+	<tr data-id="{{ item.id }}">
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					{{ item.get('nome') }}
+				</div>
+			</div>
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_nazione_azienda(_h, item) %}
+	<tr data-id="{{ item.id }}">
+
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id_azienda[]" value="" /></span></td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					{{ item.get('nome') }}
+				</div>
+			</div>
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_buonosconto(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					{{ item.get('nome') }}
+				</div>
+			</div>
+			{% if item.get('limita_e_mail') %}
+			<div style="font-size: 10px;"><em>Limitato per e-mail:</em> {{ item.get('limita_e_mail') }}</div>
+			{% endif %}
+		</td>		
+		<td>
+			{% if item.get('codice_unico') %}
+			impostato a mano
+			{% else %}
+			univoco per cliente
+			{% endif %}
+			{% if item.get('sconto_item') %}
+			<div style="font-size: 8px; color: #888;">con filtro su prodotto</div>
+			{% endif %}
+		</td>
+		<td>
+			{% if item.get('codice_riutilizzabile') and not(item.get('singolo_per_e_mail')) %}
+			si
+			{% else %}
+			no
+			{% endif %}
+		</td>
+		<td>
+			{% set simbolo = '%' %}
+			{% if item.get('tipo') == 1 %}
+			percentuale sconto solo prodotti NON scontati
+			{% elseif item.get('tipo') == 2 %}
+			percentuale sconto su tutto
+			{% elseif item.get('tipo') == 3 %}
+			buono valore euro solo prodotti NON scontati
+			{% set simbolo = '' %}
+			{% elseif item.get('tipo') == 4 %}
+			buono valore euro su tutto
+			{% set simbolo = '' %}
+			{% elseif item.get('tipo') == 5 %}
+			spese spedizione gratis
+			{% elseif item.get('tipo') == 8 %}
+			buono valore euro applicato ad ogni singolo prodotto
+			{% set simbolo = '' %}
+			{% elseif item.get('tipo') == 10 %}
+			omaggio
+			{% elseif item.get('tipo') == 100 %}
+			gift
+			{% set simbolo = '' %}
+			{% endif %}
+		</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+				{{ item.get('prefisso') }}
+				</div>
+			</div>
+		</td>
+		<td>{{ _h.util.euro(item.get('sconto')) }} {{ simbolo }}</td>
+		<td>{{ _h.util.euro(item.get('acquisto_minimo')) }}</td>
+		<td>
+			{% if item.get('codice_unico') %}
+			&nbsp;
+			{% else %}
+			{{ item.get('numero') }}
+			{% endif %}
+		</td>
+		<td>{{ item.get('utilizzati') }}</td>
+		<td>{{ item.getDate('data_scadenza') }}</td>
+		<td>{{ item.getDateTime('data_inserimento') }}</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_pagina(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td><div class="image-anteprima"><img class="image" src="{{ item.imageAnteprima() }}"></div></td>
+		<td>{{ item.get('ordine') }}</td>
+		<td>{{ item.get('codice') }}</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					{{ item.get('titolo') }}
+				</div>
+			</div>
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_contratti(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>{{ item.getDateTime('data_inserimento') }}</td>
+		<td>{{ item.get('versione') }}</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					{{ item.get('titolo') }}
+				</div>
+			</div>
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_glossario(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>{{ item.get('lettera') }}</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					{{ item.get('nome') }}
+				</div>
+			</div>
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_file(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td><a href="/download-file/{{ item.get('codice') }}" target="_blank" class="h-action-alttext" data-alttext="download"><img src="/assets/manager/havana-js/img/icon/ico-disk.svg"></a></td>
+		<td>{{ item.get('codice') }}</td>
+		<td>{{ item.getDateTime('data_modifica') }}</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					{{ item.get('nome') }}
+				</div>
+			</div>
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_file_cliente(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td><a href="/account/download-file/{{ item.id }}" target="_blank" class="h-action-alttext" data-alttext="download"><img src="/assets/manager/havana-js/img/icon/ico-disk.svg"></a></td>
+		<td>{% if item.get('link_id_file') > 0 %}<span class="h-action-alttext" data-alttext="link a file">L</span>{% else %}&nbsp;{% endif %}</td>
+		<td>{{ item.get('ordine') }}</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					{{ item.get('titolo') }}
+				</div>
+			</div>
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_testo_e_mail(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					{{ item.get('nome') }}
+				</div>
+			</div>
+		</td>
+		<td>{{ item.get('tipo') }}</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_costo_imballaggio(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>
+		{% if item.get('escluso_ritiro_sede') %}
+			No Imb.
+		{% else %}
+			&nbsp;
+		{% endif %}
+		</td>
+		<td>{{ item.euro('da_euro') }}</td>
+		<td>{{ item.euro('a_euro') }}</td>
+		<td>{{ item.euro('valore') }} {% if item.get('tipo') == 'euro' %}EUR{% else %}%{% endif %}</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_ordini_workdaygls(_h, item) %}
+	{% set ordine = item.dettaglio.ordine %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>{{ item.get('codice') }}</td>
+		<td>
+			<div>{{ ordine.spedizione.nome }} {{ ordine.spedizione.cognome }}</div>
+			{% if ordine.spedizione.presso %}
+			<div><em>presso:</em> {{ ordine.spedizione.presso }}</div>
+			{% endif %}
+			{% if ordine.spedizione.nome_campanello %}
+			<div><em>nome camp.:</em> {{ ordine.spedizione.nome_campanello }}</div>
+			{% endif %}
+			<div>{{ ordine.spedizione.via }}, {{ ordine.spedizione.num_civico }}</div>
+			<div>{{ ordine.spedizione.cap }} {{ ordine.spedizione.localita }} ({{ ordine.spedizione.provincia }})</div>
+			<div>{{ ordine.spedizione.nazione }}</div>
+			{% if ordine.spedizione.indicazioni %}
+				<div><em>indicazioni:</em> {{ ordine.spedizione.indicazioni }}</div>
+			{% endif %}
+		</td>
+		<td>{{ item.get('e_mail') }}{% if item.get('telefono') %}<div>{{ item.get('telefono') }}</div>{% endif %}</td>
+		<td>{{ item.valuta('totale', item.get('currency')) }}</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_ordini_extraindirizzo(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>{{ item.get('codice') }}</td>
+		<td>
+			<strong>{{ item.get('cognome') }} {{ item.get('nome') }}</strong>
+			{% if item.get('presso') %}<div>{{ item.get('presso') }}</div>{% endif %}
+			<div>{{ item.get('via') }}, {{ item.get('num_civico') }}</div>
+			<div>{{ item.get('cap') }} {{ item.get('localita') }} ({{ item.get('provincia') }})</div>
+		</td>
+		<td>{{ item.get('e_mail') }}{% if item.get('telefono') %}<div>{{ item.get('telefono') }}</div>{% endif %}</td>
+		<td>{{ item.euro('totale_ordine') }} &euro;</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_fornitore(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>{{ item.nome }}</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_cookiepolicy(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>{{ item.get('ordine') }}</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					{{ item.get('nome') }}
+				</div>
+			</div>
+		</td>
+		<td>{{ item.get('tipo') }}</td>
+		<td>{{ item.getDateTime('data_modifica') }}</td>
+		<td>
+			{% if item.get('entita_id', 0) > 0 %}
+				{{ item.get('entita_descrizione') }}
+			{% else %}
+				&nbsp;
+			{% endif %}
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_testo(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td style="background: {% if item.abilitato() %}#34a853{% else %}#aaaaaa{% endif %}; width: 10px; padding: 0; overflow: hidden;">&nbsp;</td>
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>{{ item.get('codice') }}</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					{{ item.get('titolo') }}
+				</div>
+			</div>
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_testo_pagina(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td style="background: {% if item.abilitato() %}#34a853{% else %}#aaaaaa{% endif %}; width: 10px; padding: 0; overflow: hidden;">&nbsp;</td>
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>{{ item.get('ordine') }}</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					{{ item.get('titolo') }}
+				</div>
+			</div>
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_blog(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td style="background: {% if item.abilitato() %}#34a853{% else %}#aaaaaa{% endif %}; width: 10px; padding: 0; overflow: hidden;">&nbsp;</td>
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>
+		{% if item.get('show_home') %}
+			<img src="/assets/manager/havana-js/img/icon/ico-home.svg" class="h-action-alttext" data-alttext="visualizza in home page">
+		{% else %}
+			&nbsp;
+		{% endif %}
+		</td>
+		<td><a href="{{ _h.url('item-blog') }}?id={{ item.id }}" target="_blank" class="link">#{{ item.id }}</a></td>
+		<td><div class="image-anteprima"><img class="image" src="{{ item.imageAnteprima() }}"></div></td>
+		<td>{{ item.get('lettera') }}</td>
+		<td>{{ item.get('ordine') }}</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					{{ item.get('titolo') }}
+				</div>
+			</div>
+		</td>
+		<td>{{ item.getDatetime('data_modifica') }}</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_evento_news(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td style="background: {% if item.abilitato() %}#34a853{% else %}#aaaaaa{% endif %}; width: 10px; padding: 0; overflow: hidden;">&nbsp;</td>
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>
+		{% if item.get('show_home') %}
+			<img src="/assets/manager/havana-js/img/icon/ico-home.svg" class="h-action-alttext" data-alttext="visualizza in home page">
+		{% else %}
+			&nbsp;
+		{% endif %}
+		</td>
+		<td><a href="{{ _h.url('item-blog') }}?id={{ item.id }}" target="_blank" class="link">#{{ item.id }}</a></td>
+		<td><div class="image-anteprima"><img class="image" src="{{ item.imageAnteprima() }}"></div></td>
+		<td>{{ item.get('lettera') }}</td>
+		<td>{{ item.get('ordine') }}</td>
+		<td>
+			{% if item.getDate('data_dal') and item.getDate('data_al') and item.getDate('data_dal') != item.getDate('data_al') %}
+				dal {{ item.getDate('data_dal') }} al {{ item.getDate('data_al') }}
+			{% elseif item.getDate('data_dal') %}
+				il {{ item.getDate('data_dal') }}
+			{% endif %}
+		</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					{{ item.get('titolo') }}
+				</div>
+			</div>
+		</td>
+		<td>{{ item.getDatetime('data_modifica') }}</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_landingpage(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td style="background: {% if item.abilitato() %}#34a853{% else %}#aaaaaa{% endif %}; width: 10px; padding: 0; overflow: hidden;">&nbsp;</td>
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					<a href="{{ _h.xurl('landingpage') }}/{{ item.get('codice') }}" target="_blank" class="link">{{ item.get('codice') }}</a>
+				</div>
+			</div>
+		</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					{{ item.get('nome') }}
+				</div>
+			</div>
+		</td>
+		<td>
+			{% if item.get('form', 0) == 1 %}
+				<img src="/assets/manager/havana-js/img/icon/ico-confirm.svg" class="h-action-alttext" data-alttext="pagina con form">
+			{% else %}
+				&nbsp;
+			{% endif %}
+		</td>
+		<td>
+			{% if item.get('no_extra', 0) == 1 %}
+				<img src="/assets/manager/havana-js/img/icon/ico-confirm.svg" class="h-action-alttext" data-alttext="Pagina dedicata, senza grafica sito">
+			{% else %}
+				&nbsp;
+			{% endif %}
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_sondaggio(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td style="background: {% if item.abilitato() %}#34a853{% else %}#aaaaaa{% endif %}; width: 10px; padding: 0; overflow: hidden;">&nbsp;</td>
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>
+			<a href="{{ _h.xurl('sondaggio') }}/{{ item.id() }}" target="_blank" class="link">#{{ item.id() }}</a>
+		</td>
+		<td>{{ item.getDate('data_dal') }}</td>
+		<td>{{ item.getDate('data_al') }}</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					{{ item.get('nome') }}
+				</div>
+			</div>
+		</td>
+		<td>{{ item.get('punti_assegnati') }}</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_faq(_h, item, listGruppo) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>{{ item.get('ordine') }}</td>
+		<td>
+		{% if item.get('pagina_checkout') > 0 %}
+			{{ item.get('pagina_checkout') }}
+		{% else %}
+			&nbsp;
+		{% endif %}
+		</td>
+		<td>
+		{% if item.get('gruppo') < 0 %}
+			&nbsp;
+		{% else %}
+			{% set listGruppo = _h.context('listGruppo') %}
+			{{ listGruppo[item.get('gruppo')] }}
+		{% endif %}
+		</td>
+		<td>{{ item.get('domanda') }}</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					{{ item.get('risposta') }}
+				</div>
+			</div>
+		</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					{{ item.get('riepilogo') }}
+				</div>
+			</div>
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_azienda(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td style="background: {% if item.abilitato() %}#34a853{% else %}#aaaaaa{% endif %}; width: 10px; padding: 0; overflow: hidden;">&nbsp;</td>
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>
+		{% if item.get('show_home') %}
+			<img src="/assets/manager/havana-js/img/icon/ico-home.svg" class="h-action-alttext" data-alttext="visualizza in home page">
+		{% else %}
+			&nbsp;
+		{% endif %}
+		</td>
+		<td><div class="image-anteprima"><img class="image" src="{{ item.imageAnteprima() }}"></div></td>
+		<td>{{ item.get('codice') }}</td>
+		<td>{{ item.get('nome') }}</td>
+		<td>{{ item.get('regione') }}</td>
+		{% if _h.config('gestione_azienda_account', false) %}
+		<td>
+			{% if _h.session.params.user.accesso >= 10 %}
+			<a class="link action-accedi-come-account h-action-alttext" data-action='{"url": "{{ _h.url('manager/myarea/azienda/ex-accedi-come-utente') }}", "id": "{{ item.id }}"}' data-alttext="accedi come utente" style="cursor: pointer">{{ item.get('account_e_mail') }}</a>
+			{% else %}
+			{{ item.get('account_e_mail') }}
+			{% endif %}
+		</td>
+		{% endif %}
+	</tr>
+{% endmacro %}
+
+
+{% macro item_cliente(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td style="background: {% if item.abilitato() %}#34a853{% else %}#aaaaaa{% endif %}; width: 10px; padding: 0; overflow: hidden;">&nbsp;</td>
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>
+			{% if item.get('problema') %}
+			<a class="h-action-alttext h-action-window" data-action='{"type": "layer", "url": "{{ _h.url('manager/myarea/cliente/log/index') }}", "overlay": true, "width": 800, "height": 500, "params": {"id": "{{ item.id }}"}}' data-alttext="da gestire" style="cursor: pointer">
+			<img src="/assets/manager/havana-js/img/icon/ico-alert.svg">
+			</a>
+			{% else %}
+			&nbsp;
+			{% endif %}
+		</td>
+		<td align="center">
+		{% if item.get('codice_attivazione', null) == null %}
+			<img src="/assets/manager/havana-js/img/icon/ico-user.svg" class="h-action-alttext" data-alttext="account confermato">
+		{% else %}
+			&nbsp;
+		{% endif %}
+		</td>
+		<td align="center">
+		{% if item.get('b2b', false) %}
+			<img src="/assets/manager/havana-js/img/icon/ico-bag.svg" class="h-action-alttext" data-alttext="account B2B">
+		{% else %}
+			&nbsp;
+		{% endif %}
+		</td>
+		<td>{{ item.get('lang') }}</td>
+		<td>
+			{{ item.get('cognome') }} {{ item.get('nome') }}
+			<div>{{ item.get('e_mail') }}</div>
+		</td>
+		<td style="font-size: 10px;">{{ item.getDateTime('data_inserimento') }}</td>
+		<td style="font-size: 10px;">{{ item.getDateTime('ultimo_accesso') }}</td>
+		<td align="center">
+		{% if item.get('prezzo_senza_iva', 0) == 1 %}
+			<img src="/assets/manager/havana-js/img/icon/ico-confirm.svg" class="h-action-alttext" data-alttext="prezzi visualizzati senza IVA">
+		{% else %}
+			&nbsp;
+		{% endif %}
+		</td>
+		<td align="center">
+		{% if item.get('spese_spedizione_gratis', 0) == 1 %}
+			<img src="/assets/manager/havana-js/img/icon/ico-confirm.svg" class="h-action-alttext" data-alttext="spese spedizione gratis">
+		{% else %}
+			&nbsp;
+		{% endif %}
+		</td>
+		<td align="center">
+		{% if item.get('pagamento_contrassegno', 0) == 1 %}
+			<img src="/assets/manager/havana-js/img/icon/ico-confirm.svg" class="h-action-alttext" data-alttext="pagamento in contrassegno">
+		{% else %}
+			&nbsp;
+		{% endif %}
+		</td>
+		<td align="center">
+		{% if item.get('speciale', 0) == 1 %}
+			<img src="/assets/manager/havana-js/img/icon/ico-confirm.svg" class="h-action-alttext" data-alttext="utente speciale">
+		{% else %}
+			&nbsp;
+		{% endif %}
+		</td>
+		<td align="center">
+		{% if item.get('gestione_admin', 0) == 1 %}
+			<img src="/assets/manager/havana-js/img/icon/ico-confirm.svg" class="h-action-alttext" data-alttext="utente admin">
+		{% else %}
+			&nbsp;
+		{% endif %}
+		</td>
+		<td>{{ item.get('nome_listino_cliente') }}</td>
+		<td>{{ item.get('sconto', 0) }} %</td>
+		<td align="center">
+		{% if item.get('sconto_forzato', 0) == 1 %}
+			<img src="/assets/manager/havana-js/img/icon/ico-confirm.svg" class="h-action-alttext" data-alttext="sconto forzato, esclude quello degli articoli">
+		{% else %}
+			&nbsp;
+		{% endif %}
+		</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto h-action-alttext" data-alttext="{{ item.get('fascia_sconto') }}">{{ item.get('fascia_sconto') }}</div>
+			</div>		
+		</td>
+		<td>
+			{% if item.get('richiesta_cancellazione') %} 
+			<img src="/assets/manager/havana-js/img/icon/ico-reset.svg" class="h-action-alttext" data-alttext="richiesta cancellazione {{ item.getDateTime('data_richiesta_cancellazione') }}">
+			{% else %}
+			&nbsp;
+			{% endif %}
+		</td>
+		<td>
+			<img src="/assets/manager/havana-js/img/icon/ico-list.svg" class="h-action-alttext h-action-window"  data-action='{"type": "layer", "url": "{{ _h.url('manager/myarea/logprivacy/index') }}", "overlay": true, "width": 1100, "height": 500, "params": {"id_entita": {{ item.id }}, "tipo_entita": "cliente"}}' data-alttext="log azioni privacy" style="cursor: pointer">
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_agente(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td style="background: {% if item.abilitato() %}#34a853{% else %}#aaaaaa{% endif %}; width: 10px; padding: 0; overflow: hidden;">&nbsp;</td>
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>{{ item.get('nome') }}</td>
+		<td>{{ item.get('cognome') }}</td>
+		<td style="font-size: 10px;">{{ item.getDateTime('data_inserimento') }}</td>
+		<td style="font-size: 10px;">{{ item.getDateTime('ultimo_accesso') }}</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto h-action-alttext" data-alttext="{{ item.get('e_mail') }}">{{ item.get('e_mail') }}</div>
+			</div>		
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_newsletter(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>{{ item.get('lang') }}</td>
+		<td>{{ item.getDateTime('data_inserimento') }}</td>
+		<td>{{ item.get('nome') }}</td>
+		<td>{{ item.get('cognome') }}</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto h-action-alttext" data-alttext="{{ item.get('e_mail') }}">{{ item.get('e_mail') }}</div>
+			</div>
+		</td>
+		<td>{{ item.get('telefono') }}</td>
+		<td>{{ item.get('gruppo') }}</td>
+		<td>
+			{% if item.get('richiesta_cancellazione') %} 
+			<img src="/assets/manager/havana-js/img/icon/ico-reset.svg" class="h-action-alttext" data-alttext="richiesta cancellazione {{ item.getDateTime('data_richiesta_cancellazione') }}">
+			{% else %}
+			&nbsp;
+			{% endif %}
+		</td>
+		<td>
+			<img src="/assets/manager/havana-js/img/icon/ico-list.svg" class="h-action-alttext h-action-window"  data-action='{"type": "layer", "url": "{{ _h.url('manager/myarea/logprivacy/index') }}", "overlay": true, "width": 1100, "height": 500, "params": {"id_entita": {{ item.id }}, "tipo_entita": "newsletter"}}' data-alttext="log azioni privacy" style="cursor: pointer">
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_avvisoprodottoesaurito(_h, item) %}
+	{% set imp = _h.config('template').manager.item.articolo %}
+	<tr data-id="{{ item.get('avvisa_id') }}" class="item-autoload">
+		<td style="background: {% if item.get('avvisa_stato', 0) > 0 %}#34a853{% else %}#aaaaaa{% endif %}; width: 10px; padding: 0; overflow: hidden;">&nbsp;</td>
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.get('avvisa_id') }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>{{ item.get('avvisa_lang')|upper }}</td>
+		<td>{{ item.getDateTime('avvisa_data_inserimento') }}</td>
+		<td>{{ item.getDateTime('avvisa_data_risposta') }}</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto h-action-alttext" data-alttext="{{ item.get('e_mail') }}">{{ item.get('avvisa_e_mail') }}</div>
+			</div>		
+		</td>
+		<td>{{ item.get('avvisa_telefono') }}</td>
+		<td><img class="image image-articolo" src="{{ item.imageUrl(_h.config('template').manager.item_image_dim) }}"></td>
+		{% if imp.id %}
+		<td><a class="link" href="{{ _h.url('item-articolo') }}?id={{ item.id }}" title="apri pagina" target="_blank">#{{ item.id }}</a></td>
+		{% endif %}
+		{% if imp.codice %}
+		<td>
+			<a class="link" href="{{ _h.url('item-articolo') }}?id={{ item.id }}" title="apri pagina" target="_blank"><span class="h-edit-table-value" data-key="codice">{{ item.get('codice') }}</span></a>
+		</td>	
+		{% endif %}
+		<td>
+			<div class="h-list-cell-auto-wrapper h-action-alttext" data-alttext="{{ item.get('nome') }}">
+				<div class="h-list-cell-auto">
+					<span class="h-edit-table-value" data-key="nome">{{ item.get('nome') }}</span>
+				</div>
+			</div>
+			{% set tree_categoria = _h.context('tree_categoria') %}
+			{% if tree_categoria %}
+				{% set categoria = tree_categoria.get(item.get('id_categoria_principale')) %}
+				{% if categoria.path %}
+				<div class="articolo-categoria-path action-filtra-coll-id"  data-action='{"load": "#h-layout-center-content", "reset": "#azzera-filtro", "params": {"coll_id": "{{ categoria.id}}"}}'>{{ categoria.path }}</div>
+				{% endif %}
+				<div class="articolo-categoria">
+				{% if item.get('id_categoria')|length > 0 %}
+					<div>
+						{% for idc in item.get('id_categoria') %}
+							{% set categoria = tree_categoria.get(idc) %}
+							<span class="h-action-alttext action-filtra-coll-id" data-action='{"load": "#h-layout-center-content", "reset": "#azzera-filtro", "params": {"coll_id": "{{ categoria.id}}"}}' data-alttext="{{ categoria.path }}">[{{ categoria.nome }}]</span>
+						{% endfor %}				
+					</div>
+				{% endif %}
+				<div class="articolo-categoria">
+				{% if item.get('id_selezione')|length > 0 %}
+					<div>
+						{% for idc in item.get('id_selezione') %}
+							{% set categoria = tree_categoria.get(idc) %}
+							<span class="h-action-alttext action-filtra-coll-id" data-action='{"load": "#h-layout-center-content", "reset": "#azzera-filtro", "params": {"coll_id": "{{ categoria.id}}"}}' data-alttext="{{ categoria.path }}">[{{ categoria.nome }}]</span>
+						{% endfor %}				
+					</div>
+				{% endif %}
+				</div>
+			{% endif %}
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_operatore(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td style="background: {% if item.abilitato() %}#34a853{% else %}#aaaaaa{% endif %}; width: 10px; padding: 0; overflow: hidden;">&nbsp;</td>
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>{{ item.get('nome') }}</td>
+		<td>{{ item.get('cognome') }}</td>
+		<td>{{ item.getDateTime('ultimo_accesso') }}</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto h-action-alttext" data-alttext="{{ item.get('e_mail') }}">{{ item.get('e_mail') }}</div>
+			</div>		
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_azione_carrello(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td style="background: {% if item.abilitato() %}#34a853{% else %}#aaaaaa{% endif %}; width: 10px; padding: 0; overflow: hidden;">&nbsp;</td>
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>{{ item.id }}</td>
+		<td>
+			{% if item.get('tipo') == 1 %}
+				{% set testo = 'invia e-mail' %}
+			{% elseif item.get('tipo') == 2 %}
+				{% set testo = 'invia buono sconto' %}
+			{% elseif item.get('tipo') == 3 %}
+				{% set testo = 'elimina' %}
+			{% endif %}
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto h-action-alttext" data-alttext="{{ testo }}">{{ testo }}</div>
+			</div>		
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_azione_pre_ordine(_h, item) %}
+	<tr data-id="{{ item.id }}_{{ item.get('tipo_pagamento') }}" class="item-autoload">
+		<td style="background: {% if item.abilitato() %}#34a853{% else %}#aaaaaa{% endif %}; width: 10px; padding: 0; overflow: hidden;">&nbsp;</td>
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}_{{ item.get('tipo_pagamento') }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>{{ item.id }}</td>
+		<td>
+			{% if item.get('tipo_pagamento') == 0 %}
+				Tutti
+			{% elseif item.get('tipo_pagamento') == 1 %}
+				Carta di credito
+			{% elseif item.get('tipo_pagamento') == 2 %}
+				Pay pal
+			{% elseif item.get('tipo_pagamento') == 3 %}
+				Bonifico bancario
+			{% elseif item.get('tipo_pagamento') == 4 %}
+				Contrassegno
+			{% elseif item.get('tipo_pagamento') == 5 %}
+				Poste pay
+			{% elseif item.get('tipo_pagamento') == 6 %}
+				Ricarica telefonica
+			{% endif %}
+		</td>
+		<td>
+			{% if item.get('tipo') == 1 %}
+				{% set testo = 'invia e-mail' %}
+			{% elseif item.get('tipo') == 2 %}
+				{% set testo = 'applica buono sconto' %}
+			{% elseif item.get('tipo') == 3 %}
+				{% set testo = 'elimina ordine' %}
+			{% elseif item.get('tipo') == 4 %}
+				{% set testo = 'annulla ordine' %}
+			{% endif %}
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto h-action-alttext" data-alttext="{{ testo }}">{{ testo }}</div>
+			</div>		
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_fotocamera_obiettivo(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td style="background: {% if item.abilitato() %}#34a853{% else %}#aaaaaa{% endif %}; width: 10px; padding: 0; overflow: hidden;">&nbsp;</td>
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>{{ item.get('brand_nome') }}</td>
+		<td>{{ item.get('codice') }}</td>
+		<td>{{ item.get('nome') }}</td>
+		<td>{{ item.get('mount_lens') }}</td>
+		<td>{{ item.get('angle_min') }}</td>
+		<td>{{ item.get('angle_max') }}</td>
+		<td>{% if item.get('ring') %}SI{% else %}NO{% endif %}</td>
+		<td>{{ item.get('length_mm') }}</td>
+		<td>{{ item.get('diameter_mm') }}</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_fotocamera_modello(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td style="background: {% if item.abilitato() %}#34a853{% else %}#aaaaaa{% endif %}; width: 10px; padding: 0; overflow: hidden;">&nbsp;</td>
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>{{ item.get('brand_nome') }}</td>
+		<td>{{ item.get('codice') }}</td>
+		<td>{{ item.get('nome') }}</td>
+		<td>{{ item.get('mount_lens') }}</td>
+		<td>{{ item.get('leo3_wi_dic_mm') }}</td>
+		<td>{{ item.get('leo3_wi_plus_dic_mm') }}</td>
+		<td>{{ item.get('leo3_dic_mm') }}</td>
+		<td>{{ item.get('leo3_plus_dic_mm') }}</td>
+		<td>{{ item.get('leor_dic_mm') }}</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_fotocamera_brand(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td style="background: {% if item.abilitato() %}#34a853{% else %}#aaaaaa{% endif %}; width: 10px; padding: 0; overflow: hidden;">&nbsp;</td>
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>{{ item.get('codice') }}</td>
+		<td>{{ item.get('nome') }}</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_ambassador(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td style="background: {% if item.abilitato() %}#34a853{% else %}#aaaaaa{% endif %}; width: 10px; padding: 0; overflow: hidden;">&nbsp;</td>
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td><div class="image-anteprima"><img alt="{{ item.get('nome') }}" class="image" src="{{ item.imageAnteprima() }}"></div></td>
+		<td>{{ item.get('ordine') }}</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					{{ item.get('nome') }}
+				</div>
+			</div>
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_easydivepoint(_h, item) %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+		<td style="background: {% if item.abilitato() %}#34a853{% else %}#aaaaaa{% endif %}; width: 10px; padding: 0; overflow: hidden;">&nbsp;</td>
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td><div class="image-anteprima"><img alt="{{ item.get('nome') }}" class="image" src="{{ item.imageAnteprima() }}"></div></td>
+		<td>{{ item.get('ordine') }}</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					{{ item.get('nome') }}
+				</div>
+			</div>
+		</td>
+	</tr>
+{% endmacro %}

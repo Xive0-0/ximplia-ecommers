@@ -1,0 +1,139 @@
+{% set script_enabled = true %}
+{% if _h.config('cookie_policy') == 'gdpr22' %}
+	{% if not(_h.cookie('statistiche')) %}
+		{% set script_enabled = false %}
+	{% endif %}
+{% endif %}
+
+{% if script_enabled %}
+	{% if _h.config('ga4', false) %}
+		{% if _h.settings.getByUrl('google_tag_manager', '-') != '-' and _h.settings.getByUrl('google_tag_manager') != '' or
+			_h.settings.getByUrl('google_site_tag', '-') != '-' and _h.settings.getByUrl('google_site_tag') != '' %}
+		<script>
+			gtag("event", "purchase", {
+				"ecommerce": {
+					"id": "{{ codice }}",
+					"value": {{ordine.total_ordine}},
+					"shipping": 0,
+					"transaction_id": "{{ codice }}",
+					"currency": "EUR",
+					"items": [
+						{% set separatore = "" %}
+						{% set iva = true %}
+						{% if ordine.add_iva == "" and ordine.prezzo_senza_iva %}
+							{% set iva = false %}
+						{% endif %}
+						{% for art in ordine.list_items %}
+							{% if iva %}
+								{% set prezzo = art.item.prezzo %}
+							{% else %}
+								{% set prezzo = art.item.prezzo_imponibile %}
+							{% endif %}
+							{{ separatore }}{
+							   "item_id": "{{ art.item.id }}",
+							   "item_name": "{{ art.item.nome }}",
+							   "price": {{ prezzo|number_format(2, ".", "") }},
+							   "quantity": {{ art.qta }}
+						   }
+						   {% set separatore = "," %}
+						{% endfor %}
+					]
+				}
+			});
+		</script>		
+		{% endif %}
+	{% else %}
+		{% if _h.settings.getByUrl('google_tag_manager', '-') != '-' and _h.settings.getByUrl('google_tag_manager') != '' or
+			_h.settings.getByUrl('google_site_tag', '-') != '-' and _h.settings.getByUrl('google_site_tag') != '' %}
+		<script>
+			gtag('event', 'conversion', {
+				'transactionTotal': {{ordine.total_ordine}},
+				'transactionId': '{{ codice }}',
+				'transactionProducts': [
+					{% set separatore = '' %}
+					{% set iva = true %}
+					{% if ordine.add_iva == '' and ordine.prezzo_senza_iva %}
+						{% set iva = false %}
+					{% endif %}
+					{% for art in ordine.list_items %}
+						{% if iva %}
+							{% set prezzo = art.item.prezzo %}
+						{% else %}
+							{% set prezzo = art.item.prezzo_imponibile %}
+						{% endif %}
+						{{ separatore }}{
+						   'sku': '{{ art.item.id }}',
+						   'name': '{{ art.item.nome }}',
+						   'price': {{ prezzo|number_format(2, '.', '') }},
+						   'quantity': {{ art.qta }}
+					   }
+					   {% set separatore = ',' %}
+					{% endfor %}
+				]
+			});
+		</script>
+		{% endif %}
+
+		{% if _h.settings.getByUrl('google_analytics_key', '-') != '-' and _h.settings.getByUrl('google_analytics_key') != '' %}
+		<script>
+			{% set iva = true %}
+			{% if ordine.add_iva == '' and ordine.prezzo_senza_iva %}
+				{% set iva = false %}
+			{% endif %}
+			{% for art in ordine.list_items %}
+				{% if iva %}
+					{% set prezzo = art.item.prezzo %}
+				{% else %}
+					{% set prezzo = art.item.prezzo_imponibile %}
+				{% endif %}
+				ga('ec:addProduct', {
+				  'id': '{{ art.item.id }}',
+				  'name': '{{ art.item.nome }}',
+				  'price': '{{ prezzo|number_format(2, '.', '') }}',
+				  'quantity': {{ art.qta }}
+				});
+			{% endfor %}
+
+			{% set spese_spedizione = ordine.total_spedizione + ordine.total_spedizione_opzione %}
+
+			ga('ec:setAction', 'purchase', {
+			  'id': '{{ codice }}',
+			  'revenue': '{{ordine.total_ordine|number_format(2, '.', '')}}',
+			  'shipping': '{{ spese_spedizione }}'
+			});
+			ga('send', 'pageview');
+		</script>
+		{% endif %}
+	{% endif %}
+
+
+	{% if _h.settings.getByUrl('facebook_pixel', '-') != '-' and _h.settings.getByUrl('facebook_pixel') != '' %}
+	<script>
+		{% set item_id = [] %}
+		{% for art in ordine.list_items %}
+			{% set item_id = item_id|merge([art.item.id])%}
+		{% endfor %}
+	  fbq('track', 'Purchase', {
+			value: {{ordine.total_ordine|number_format(2, '.', '')}},
+			currency: 'EUR',
+			content_ids: [{{item_id|join(',')}}],
+			content_type: 'product'
+		});
+	</script>
+	{% endif %}
+	{% if _h.settings.getByUrl('pinterest_tag_id', '-') != '-' and _h.settings.getByUrl('pinterest_tag_id') != '' %}
+	<script>
+		{% set item_id = [] %}
+		{% for art in ordine.list_items %}
+			{% set item_id = item_id|merge([art.item.id])%}
+		{% endfor %}
+		pintrk('track', 'checkout', { 
+		   value: {{ordine.total_ordine|number_format(2, '.', '')}},
+		   order_quantity: {{ item_id|length }}, 
+		   currency: 'EUR', 
+		   event_id: '{{ codice }}',
+		   product_ids: [{{item_id|join(',')}}] }
+		);
+	</script>
+	{% endif %}
+{% endif %}

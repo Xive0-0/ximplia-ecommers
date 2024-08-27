@@ -1,0 +1,42 @@
+{% import _h.template('manager/_macro.html') as mc %}
+{{ mc.index_page_header(_h, 'Preventivi', 'preventivi') }}
+		
+	{% set list = _h.config('enabled_languages') %}
+	{% if not(list) or list|length == 1 %}
+	{{ mc.navButton(_h, 'stampa', 'print', 'click', 'h-action-selected-open-window', '{"select": {"from":"#h-layout-center-content", "check": 1, "errorMessage": "Selezionare una voce"}, "window": {"type": "window", "url": "' ~ _h.url('cartprev/pdf') ~ '"}}') }}
+	{% else %}
+	<div class="h-nav-button-wrapper">
+		<a href="javascript:void(0);" class="h-nav-button h-action-popup-menu h-action-alttext" data-alttext="stampa">
+			<img src="/assets/manager/havana-js/img/icon/ico-print.svg" align="top" />
+			<span>Stampa</span>
+		</a>
+		<div class="h-popup-content h-popup-menu">
+			{% for lang in list %}
+			<a href="javascript:void(0);" class="h-action-selected-open-window h-action-close-popup-menu" data-action='{"select": {"from":"#h-layout-center-content", "check": 1, "errorMessage": "Selezionare una voce"}, "window": {"type": "window", "url": "{{ _h.url('cartprev/pdf') }}", "params":{"lang": "{{ lang }}"}}}'>stampa {{ lang|upper }}</a>
+			{% endfor %}
+		</div>
+	</div>
+	{% endif  %}
+		
+	{{ mc.navButton(_h, 'ticket', 'report', 'click', 'h-action-selected-open-window', '{"select": {"from":"#h-layout-center-content", "check": 1, "errorMessage": "Selezionare una voce"}, "window": {"overlay": true, "type": "layer", "url": "' ~ _h.url('manager/myarea/ordini/log/index') ~ '"}}') }}
+	{{ mc.navButton(_h, 'esporta dati', 'disk', 'click', 'h-action-selected-open-window', '{"window": {"overlay": true, "width": 350, "height": 290, "type": "layer", "url": "' ~ _h.url('manager/myarea/preventivi/esporta-info') ~ '"}}') }}
+	
+{% if _h.session.params.user.accesso >= 10 %}
+	{{ mc.navSeparatore() }}	
+	{{ mc.navButtonDelete(_h, 'elimina preventivo', 'ordini') }}	
+{% endif %}
+	<div class="h-list-right h-nav-button-group" id="filtri-attivita">
+	{{ mc.navButton(_h, 'filtra', 'filter', 'arrow', 'h-load-in-window', '{"show": ["details-right"], "loadIn": "#h-layout-filtro", "url": "' ~ _h.url('manager/myarea/preventivi/filtro') ~ '"}') }}
+	</div>
+	<div class="h-list-right" id="azzera-filtro">
+	{{ mc.navButton(_h, 'azzera filtro', 'reset', 'click', 'h-action-reset-filter', '{"load": "#h-layout-center-content", "reset": "#filtri-attivita"}') }}
+	</div>
+
+	{{ mc.filtro_list() }}
+	
+{{ mc.index_page_footer(_h, result, 'preventivi') }}
+
+<div id="h-layout-details-right" class="h-layout h-layout-middle">
+	<div class="h-layout-content-wrapper" id="h-layout-filtro">
+	</div>
+</div>

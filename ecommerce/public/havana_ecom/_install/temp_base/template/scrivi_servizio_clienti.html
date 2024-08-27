@@ -1,0 +1,80 @@
+{% import _h.template('_macro.html') as mc %}
+{% set _lblg = _h.labels.get('global') %}
+{% set _lblf = _h.labels.get('form') %}
+
+<div class="breadcrumbs clear">
+	{{ mc.breadcrumbs_home(_h) }}
+	{{ mc.breadcrumbs_separatore() }}
+	<a>{{ _lblg.title_servizio_clienti }}</a>
+	{{ mc.breadcrumbs_separatore() }}
+	<a>{{ _lblg.title_scrivi_staff }}</a>
+</div>
+
+
+<form id="pagina" class="block-margin">
+	<h1>{{ _lblg.title_scrivi_staff }}</h1>
+	<div class="field-text">
+		<p>{{ _lblg.descr_scrivi_staff }}</p>
+	</div>
+	<div class="form-error-message"></div>
+	<div class="field-line">
+		<div class="field">
+			<label>{{ _lblf.field_tuo_nome }} <span>*</span></label>
+			<input type="text" name="nome" class="valida-required" maxlength="50">
+		</div>
+	</div>
+	<div class="field-line">
+		<div class="field">
+			<label>{{ _lblf.field_tuo_email }} <span>*</span></label>
+			<input type="text" name="e_mail" class="valida-required valida-email" maxlength="100">
+		</div>
+	</div>
+	{% if _h.input('codice_item') %}
+	<div class="field-line">
+		<div class="field">
+			<label>{{ _lblf.field_codice_prodotto }}</label>
+			<input type="text" name="codice_articolo" class="valida-digitalphanum" maxlength="50" value="{{ _h.input('codice_item') }}">
+		</div>
+	</div>
+	{% else %}
+	<div class="field-line">
+		<div class="field">
+			<label>{{ _lblf.field_numero_ordine }}</label>
+			<input type="text" name="numero_ordine" class="valida-digitalphanum" maxlength="50" value="{{ _h.input('codice') }}">
+		</div>
+	</div>
+	{% endif %}
+	<div class="field-line field-line-textarea">
+		<div class="field">
+			<label>{{ _lblf.field_testo_richiesta }} <span>*</span></label>
+			<textarea name="testo" class="valida-required"></textarea>
+		</div>
+	</div>
+	<div class="field-line-checkbox">
+		<div class="field-checkbox-description">	
+			{{ _lblf.descr_dichiarazione_letto_privacy }}
+			 <a href="{{ mapPagine.privacy.url }}" title="{{ _lblf.btn_ulteriori_informazioni_privacy }}" target="_blank">{{ _lblf.btn_ulteriori_informazioni_privacy }}</a>.
+		</div>
+		<div class="field-checkbox-check-acconsento clear checkbox-group">
+			<div class="field-checkbox-check">
+				<span class="checkbox" data-value="1"><input type="hidden" name="no_accetto_privacy" value="1"></span>
+				<span class="checkbox-label"><span>{{ _lblf.btn_non_acconsento }}</span></span>
+			</div>
+			<div class="field-checkbox-check">
+				<span class="checkbox" data-value="1"><input type="hidden" name="accetto_privacy" value=""></span>
+				<span class="checkbox-label"><span>{{ _lblf.btn_acconsento }}</span></span>
+			</div>
+		</div>
+	</div>
+	<div class="field-text-obbligatori">{{ _lblf.campi_obbligatori }}</div>
+	{{ mc.google_recaptcha(_h, 'scrivi') }}
+	<div class="field-button field-button-left">
+		<a class="button-red button submit-form" href="javascript:void(0)" title="Invia" data-action='{"url": "{{ _h.url('ex-scrivi-servizio-clienti') }}", "onComplete": {"type": "show", "show": "#conferma_pagina", "hide": "#pagina"}}'><span>{{ _lblf.btn_invia_richiesta }}</span></a>
+	</div>
+</form>
+
+<div id="conferma_pagina" class="hide-block block-margin">
+	<div class="hide-block-title">{{ _lblg.title_grazie }}</div>
+	<p>{{ _lblg.descr_conferma_invio_richiesta }}</p>
+	<p>{{ _h.settings.get('staff_firma') }}.</p>
+</div>

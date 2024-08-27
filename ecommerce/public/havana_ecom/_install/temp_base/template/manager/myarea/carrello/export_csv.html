@@ -1,0 +1,4 @@
+LANG;E_MAIL;DATA INS.;DATA CHIUSURA;ULTIMA AZ.;DATA ULTIMA AZ.;
+{% for item in list %}
+{{ item.get('lang') }};{{ item.get('e_mail') }};{{ item.getDateTime('data_inserimento') }};{{ item.getDateTime('data_chiuso') }};{% if item.get('tipo_ultima_azione', 0) == 1 %}invia e-mail{% elseif item.get('tipo_ultima_azione', 0) == 2 %}invia buono sconto{% elseif item.get('tipo_ultima_azione', 3) == 2 %}elimina{% endif %};{{ item.getDateTime('data_ultima_azione') }};
+{% endfor %}

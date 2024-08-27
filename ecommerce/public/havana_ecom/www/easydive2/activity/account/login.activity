@@ -1,0 +1,11 @@
+{
+	"put": {
+		"view": [
+			{"noindex": true}
+		]
+	},
+	"on:": [
+		"account/logout"
+	],
+	"on:view": "account/login"
+}

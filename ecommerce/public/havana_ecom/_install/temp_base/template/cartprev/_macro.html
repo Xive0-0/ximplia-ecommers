@@ -1,0 +1,158 @@
+{% macro riepilogo_ordine(_h, ordine) %}
+{% import _h.template('_macro.html') as mc %}
+{% set _lblc = _h.labels.get('checkout_preventivo') %}
+<div class="riepilogo">
+	<h2>{{ _lblc.title_articoli_preventivo }}</h2>
+	<div class="col-info">
+		{% if not(_h.config('gestione_preventivi_semplice', false)) %}
+		<div class="line">
+			<em class="label">
+				{{ _lblc.title_intestazione_preventivo }}:
+			</em> 
+			<div class="rientro font-big">
+				{{ ordine.spedizione.nome }} {{ ordine.spedizione.cognome }}<br>
+				{% if ordine.fattura.nome != ordine.spedizione.nome ~ ' ' ~ ordine.spedizione.cognome %}
+				{{ ordine.fattura.nome }}<br>
+				{% endif %}
+				{% if ordine.fattura.p_iva %}
+					<em class="label">{{ _lblc.p_iva }}</em> {{ ordine.fattura.p_iva }}<br>
+				{% endif %}
+				{% if ordine.fattura.codice_fiscale %}
+					<em class="label">{{ _lblc.codice_fiscale_small }}</em> {{ ordine.fattura.codice_fiscale }}<br>
+				{% endif %}	
+				{% if ordine.spedizione.via %}
+				{{ ordine.spedizione.via }}{% if ordine.spedizione.num_civico %}, {{ ordine.spedizione.num_civico }}{% endif %}<br>
+				{% endif %}
+				{{ ordine.spedizione.cap }}{% if ordine.spedizione.localita %} {{ ordine.spedizione.localita }}{% endif %}{% if ordine.spedizione.provincia %} ({{ ordine.spedizione.provincia }}){% endif %}<br>
+				{{ ordine.spedizione.nazione }}
+			</div>
+		</div>
+		{% endif %}
+		<div class="line">
+			<em class="label">{{ _lblc.notifiche_spedizione }}</em> 
+			<div class="rientro font-big">
+				{{ ordine.e_mail }}<br>
+				{{ ordine.spedizione.telefono }}
+			</div>
+		</div>
+		{% if ordine.spedizione.indicazioni %}
+		<div class="line">
+			<em class="label">{{ _lblc.indicazione_preventivo }}:</em> 
+			<div class="rientro font-big">
+				{{ ordine.spedizione.indicazioni }}
+			</div>
+		</div>
+		{% endif %}
+	</div>
+	<div class="col-dettaglio">
+	<div class="col-dettaglio-content">
+		{% set iva = true %}
+		{% if ordine.add_iva == '' and ordine.prezzo_senza_iva %}
+			{% set iva = false %}
+		{% endif %}
+		
+		{% for art in ordine.list_items %}
+		<div class="item-carrello clear">
+			<div class="item-carrello-articolo">
+				<div class="item-carrello-articolo-inner">
+				{{ mc.item_articolo_carrello_thanks(_h, art) }}
+				</div>
+			</div>
+			<div class="item-carrello-price">
+				<div class="item-carrello-price-details">
+					{% if iva %}
+						{% set prezzo_originale = art.item.prezzo_originale %}
+						{% set prezzo = art.item.prezzo %}
+						{% set total = art.total %}
+					{% else %}
+						{% set prezzo_originale = art.item.prezzo_originale_imponibile %}
+						{% set prezzo = art.item.prezzo_imponibile %}
+						{% set total = art.total_imponibile %}
+					{% endif %}
+					{% if art.item.is_sconto %}
+					<span class="price-old">{{ _h.util.valuta(prezzo_originale, art.item.currency) }}</span>
+					{% endif %}
+					<span class="price item-buy-price">{{ _h.util.valuta(prezzo, art.item.currency) }}</span>			
+				</div>
+				<div class="item-carrello-price-total">x {{ art.qta }}<strong>{{ _h.util.valuta(total, art.item.currency) }}</strong></div>
+				{% if not(iva) %}
+				<div class="item-carrello-price-iva">+{{ _lblc.iva }} {{ art.item.iva }}%: {{ _h.util.valuta(art.total_iva, art.item.currency) }}</div>
+				{% endif %}
+			</div>
+		</div>
+		{% endfor %}
+		{% for art in ordine.list_items_virtuale %}
+		<div class="item-carrello clear">
+			<div class="item-carrello-articolo">
+				<div class="item-carrello-articolo-inner">
+					{% if art.item.image %}
+						<img src="{{ _h.webAppUrl }}/images/prev/{{ _h.config('template').web.temp_image_dim }}/{{ art.item.image }}">
+					{% else %}
+						<img src="{{ _h.webAppUrl }}/assets/void_image.png">
+					{% endif %}
+					
+					<div class="item-carrello-details">
+						<div class="item-carrello-details-inner">
+						<strong>{{ art.item.nome }}</strong>
+						{% if art.item.note %}
+							<span>{{ art.item.note }}</span>
+						{% endif %}
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="item-carrello-price">
+				<div class="item-carrello-price-details">
+					{% if iva %}
+						{% set prezzo = art.item.prezzo %}
+						{% set total = art.total %}
+					{% else %}
+						{% set prezzo = art.item.prezzo_imponibile %}
+						{% set total = art.total_imponibile %}
+					{% endif %}
+					<span class="price item-buy-price">{{ _h.util.valuta(prezzo, art.item.currency) }}</span>			
+				</div>
+				<div class="item-carrello-price-total">x {{ art.qta }}<strong>{{ _h.util.valuta(total, art.item.currency) }}</strong></div>
+				{% if not(iva) %}
+				<div class="item-carrello-price-iva">+{{ _lblc.iva }} {{ art.item.iva }}%: {{ _h.util.valuta(art.total_iva, art.item.currency) }}</div>
+				{% endif %}
+			</div>
+		</div>
+		{% endfor %}
+		<div class="riepilogo-carrello">		
+			<div class="item-carrello clear">
+				<div class="item-carrello-articolo">
+					<div class="item-carrello-articolo-inner">
+						<em>{{ _lblc.articoli_imponibile }}:</em>
+					</div>
+				</div>
+				<div class="item-carrello-price">
+					{{ _h.util.valuta(ordine.total_articoli_imponibile, ordine.currency) }}
+				</div>
+			</div>
+			<div class="item-carrello clear">
+				<div class="item-carrello-articolo">
+					<div class="item-carrello-articolo-inner">
+						<em>{{ _lblc.articoli_iva }}:</em>
+					</div>
+				</div>
+				<div class="item-carrello-price">
+					{{ _h.util.valuta(ordine.total_articoli_iva, ordine.currency) }}
+				</div>
+			</div>
+			<div class="item-carrello clear">
+				<div class="item-carrello-articolo">
+					<div class="item-carrello-articolo-inner">
+						<strong>{{ _lblc.totale }}:</strong>
+					</div>
+				</div>
+				<div class="item-carrello-price">
+					<strong>{{ _h.util.valuta(ordine.total_ordine, ordine.currency) }}</strong>
+				</div>
+			</div>
+		</div>
+		
+	</div>
+	</div>
+</div>
+{% endmacro %}

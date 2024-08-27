@@ -1,0 +1,13 @@
+{
+	"put": {
+		"view": [
+			{"mymetainfo": true}
+		]
+	},
+	"on:": [
+		{"name": "testo", "params": {"codice": "servizio_clienti"}},
+		{"name": "testo", "params": {"codice": "faq", "item": "testo_faq"}},
+		"list-faq"
+	],
+	"on:view": "faq"
+}

@@ -1,0 +1,8 @@
+<h1>{{ item.get('titolo') }}</h1>
+<div class="html">
+{% if item.get('contenuto_pagina') == 0 %}
+{{ item.getWithMerge('testo') }}
+{% else %}
+{{ item.getWithMerge('html') }}
+{% endif %}
+</div>

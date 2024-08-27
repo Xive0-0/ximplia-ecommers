@@ -1,0 +1,32 @@
+{% import _h.template('_macro.html') as mc %}
+{% set _lblw = _h.labels.get('website') %}
+
+<div class="index-background">
+	{{ mc.banner(0, listBanner['1'], '2000x715', 'top', null, '1100x1100') }}
+
+	{% for elem in listSelezioni %}
+		<div style="background: #fff;">
+			<div class="anteprima-home web">
+				<div class="anteprima-home-inner">
+					<div class="anteprima-home-titolo">
+						<h2>{{ elem.cat.get('nome') }}</h2>
+						<p>{{ elem.cat.get('sottotitolo') }}</p>
+					</div>
+					<div class="anteprima-home-items lista-articoli-home clear">
+						{% for item in elem.list %}
+						{{ mc.item_articolo(_h, item) }}
+						{% endfor %}
+					</div>
+					<div class="anteprima-home-link"><a href="{{ elem.cat.url }}">{{ _lblw.vedi_tutti }}</a></p></div>
+				</div>
+			</div>
+		</div>
+	{% endfor %}
+		
+	<div class="web">
+	
+		{% for elem in listBanner['5'] %}
+		{{ mc.banner(loop.index0, listBanner['5'], '1100x1100', 'riquadro', 'right') }}
+		{% endfor %}
+	</div>
+</div>

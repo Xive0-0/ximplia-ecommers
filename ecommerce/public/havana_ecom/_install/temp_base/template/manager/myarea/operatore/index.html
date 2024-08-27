@@ -1,0 +1,10 @@
+{% import _h.template('manager/_macro.html') as mc %}
+{{ mc.index_page_header(_h, 'Operatori', 'operatore') }}
+		
+	{{ mc.navButtonNew(_h, 'nuovo', 'operatore') }}
+	{{ mc.navButtonUpdate(_h, 'modifica', 'operatore') }}
+	{{ mc.navButtonDelete(_h, 'elimina', 'operatore') }}		
+	{{ mc.navSeparatore() }}
+	{{ mc.navButton(_h, 'reset password', 'password', 'click', 'h-action-selected-open-window', '{"select": {"from":"#h-layout-center-content", "check": 1, "errorMessage": "Selezionare una voce"}, "window": {"type": "layer", "overlay": true, "width": 300, "height": 300, "url": "' ~ _h.url('manager/myarea/operatore/edit-password') ~ '"}}') }}
+
+{{ mc.index_page_footer(_h, result, 'operatore') }}

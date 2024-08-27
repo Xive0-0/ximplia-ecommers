@@ -1,0 +1,31 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Acquisto / scadenza') }}
+
+<input type="hidden" name="id_cliente" value="{{ _h.input('id_cliente') }}">
+<input type="hidden" name="id" value="{{ item.id }}">
+<div class="field-line field-line-text field-400">
+	<div>Codice:</div>
+	<strong>{{ item.get('articolo_codice')}}</strong>
+</div>
+<div class="field-line field-line-text field-400">
+	<div>Articolo:</div>
+	<strong>{{ item.get('articolo_nome')}}</strong>
+</div>
+<div class="field-line field-line-text field-400">
+	<div>Data acquisto:</div>
+	<strong>{{ item.getDate('data_primo_acquisto') }}</strong>
+</div>
+
+<div class="field-line field-150">
+	<label>Data aggiornamento scadenza<span>*</span>:</label>
+	<input type="text" name="data_aggiornamento_scadenza" class="field valida-datasimple input-datepicker valida-required" value="{{ item.getDate('data_aggiornamento_scadenza') }}" maxlength="10">
+</div>
+
+<div class="field-line field-400">
+	<label>Numero seriale:</label>
+	<input type="text" name="numero_seriale" class="field" value="{{ item.get('numero_seriale') }}" maxlength="50">
+</div>
+
+{{ mc.labelCampiObbligatori() }}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/cliente/scadenza/ex-edit'), '"reload": "#scadenza-content"') }}	

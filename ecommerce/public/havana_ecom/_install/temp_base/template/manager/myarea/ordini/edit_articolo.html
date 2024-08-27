@@ -1,0 +1,73 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% set ordine = item.dettaglio.ordine %}
+{{ mc.slideBoxHeader(_h, 'Modifica articolo') }}
+<input type="hidden" name="id" value="{{ item.id }}">
+{% for art in ordine.list_items %}
+	{% set modifica_articolo = false %}
+	{% if art.tmp_id %}
+		{% if art.tmp_id == _h.input('articolo_tmp_id') %}
+			{% set modifica_articolo = true %}
+		{% endif %}
+	{% else %}
+		{% if art.item.id == _h.input('articolo_id') %}
+			{% set modifica_articolo = true %}
+		{% endif %}
+	{% endif %}
+	
+	{% if modifica_articolo %}
+		<input type="hidden" name="articolo_id" value="{{ art.item.id }}">
+		<input type="hidden" name="articolo_tmp_id" value="{{ art.tmp_id }}">
+		<div class="line-label">
+			<em>codice: </em> <strong>{{ art.item.codice }}</strong>
+		</div>
+		<div class="line-label">
+			<em>nome: </em> <strong>{{ art.item.nome }}</strong>
+		</div>
+		<div class="line-label">
+			<em>prezzo finale: </em> <strong>{{ _h.util.valuta(art.item.prezzo, art.item.currency) }}</strong>
+		</div>
+		<div class="line-label">
+			<em>sconto: </em> <strong>-{{ art.item.sconto }}%</strong>
+		</div>
+		<div class="line-label">
+			<em>prezzo originale: </em> <strong>{{ _h.util.valuta(art.item.prezzo_originale, art.item.currency) }}</strong>
+		</div>
+		
+		{% if ordine.add_iva == '' %}
+			<div class="line-label">prezzi IVA inclusa: {{ art.item.iva }}%</div>
+		{% else %}
+			<div class="line-label">prezzi senza IVA per esenzione: {{ ordine.nazione_esenzione_legge }}</div>
+		{% endif %}
+		<div>&nbsp;</div>
+		<p class="field-line field-line-left field-100">
+			<label>Quantità<span>*</span>:</label>
+			<input type="text" name="quantita" class="field valida-digitnumber valida-required" value="{{ art.qta }}" maxlength="3" {% if not(_h.config('manager_ordine_update_qta_articolo', true)) %}readonly="true" style="border-color: transparent"{% endif %}>
+		</p>
+		<p class="field-line field-line-left field-100">
+			<label>Prezzo originale unit. {{ ordine.currency }}<span>*</span>:</label>
+			<input type="text" name="prezzo" class="field valida-euro valida-required" value="{{ _h.util.euro(art.item.prezzo_originale) }}" maxlength="10">
+		</p>
+		<p class="field-line field-100">
+			<label>Sconto %:</label>
+			<input type="text" name="sconto" class="field valida-digitnumber" value="{{ art.item.sconto }}" maxlength="2">
+		</p>
+		{% if _h.settings.get('gestione_ordini_fornitore', '') != '' %}
+			{{ mc.checkbox(art.ordinato_a_fornitore.inviato, 1, 'inviato_ordine_fornitore', 'Inviato ordine pezzo/i al fornitore', 1) }}
+			{% if not(art.ordinato_a_fornitore.fornitore) %}
+				<p class="field-line field-400">
+					<label>Fornitore:</label>
+					<input type="text" name="fornitore_manuale" class="field" value="{{ art.ordinato_a_fornitore.fornitore_manuale }}" maxlength="100">
+				</p>
+			{% endif %}
+		{% endif %}
+		<p class="field-line field-line-textarea field-400">
+			<label>Note aggiuntive:</label>
+			<textarea name="note" class="field">{{ art.note }}</textarea>
+		</p>		
+	{% endif %}
+{% endfor %}
+
+{{ mc.labelCampiObbligatori() }}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/ordini/ex-edit-articolo'), '"reload": ["#h-layout-center-content", "#dettaglio-content"]') }}	
+

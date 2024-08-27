@@ -1,0 +1,17 @@
+<div data-tab="articoli">
+	<p class="field-line field-400">
+		<label>Cerca e aggiungi articolo:</label>
+		<input type="hidden" name="relazione_id" value="">
+		<input type="text" name="relazione_nome" class="field autocomplete" value="" data-action='{"url": "{{ _h.url('manager/myarea/articolo/list-autocomplete') }}", "add_item_to": "#elenco_articoli"}'>
+	</p>
+	<br><br>
+	Articoli selezionati:
+	<div id="elenco_articoli">
+	</div>
+</div>
+<div data-tab="categoria">
+{{ mc.dynamicOnlyOneMultipleTreeSelect(_h, 'Categoria', listCategoria, null, 'id_categoria') }}
+</div>
+<div data-tab="brand">
+{{ mc.dynamicMultipleSelect(_h, 'Azienda/Brand', listAzienda, null, 'id_azienda') }}
+</div>

@@ -1,0 +1,9 @@
+{
+	"on:begin": [
+		{"name": "cart/step/load-item", "params": {"codice": "ACC/L3/LOGO"}}
+	],
+	"on:view": {
+		"template": "cart/step/seleziona_logo",
+		"extra": false
+	}
+}

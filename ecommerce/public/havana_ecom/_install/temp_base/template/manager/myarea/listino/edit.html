@@ -1,0 +1,115 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% if item == null %}
+	{% set title = 'Nuovo listino' %}
+	{% set description = 'Inserire i dati del nuovo listino:' %}
+{% else %}
+	{% set title = 'Modifica listino' %}
+	{% set description = 'Dati del listino' %}
+{% endif %}
+{{ mc.slideBoxHeader(_h, title) }}
+<input type="hidden" name="id" value="{{ item.id }}">
+<p class="field-line">{{ description }}</p>
+<div class="field-line field-200">
+	{% if item.abilitato() or item == null %} 
+		{% set cssClass = ' h-checkbox-checked' %}
+		{% set value = 1 %}
+	{% else %}
+		{% set cssClass = '' %}
+		{% set value = '' %}
+	{% endif %}
+	<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="abilitato" value="{{ value }}" /></span> <strong>Abilitato</strong></div>
+</div>
+
+{% if item == null %}
+<div class="field-line field-200">
+	{% if item.get('con_iva') or item == null %} 
+		{% set cssClass = ' h-checkbox-checked' %}
+		{% set value = 1 %}
+	{% else %}
+		{% set cssClass = '' %}
+		{% set value = '' %}
+	{% endif %}
+	<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="con_iva" value="{{ value }}" /></span> <strong>IVA inclusa</strong></div>
+</div>
+{% endif %}
+<p class="field-line field-400">
+	<label>Nome<span>*</span>:</label>
+	<input type="text" name="nome" class="field valida-required" value="{{ item.get('nome') }}" maxlength="50">
+</p>
+<p class="field-line field-400">
+	<label>Codice riferimento interno:</label>
+	<input type="text" name="codice" class="field valida-digitalphanum" value="{{ item.get('codice') }}" maxlength="50">
+</p>
+{% if _h.config('gestione_listino_country', false) %}
+<p class="field-line field-200">
+	<label>Tipo:</label>
+	<select name="tipo" class="field">
+	{{ mc.listComboOptions([{'id': '0', 'text': 'Cliente'},{'id': '1', 'text': 'In base a Country'}], item.get('tipo')) }}
+	</select>
+</p>
+<p class="field-line field-400">
+	<label>Country <em>(separare più valori con virgola)</em>:</label>
+	<input type="text" name="url" class="field" value="{{ item.get('url') }}" maxlength="100">
+</p>
+{% endif %}
+
+<fieldset class="select-content-wrapper" style="margin-top: 10px; padding: 5px;">
+	<div>
+		<div class="h-nav-button-wrapper">
+			<a href="javascript:void(0);" class="h-nav-button h-nav-button-click h-action-alttext h-action-add-extra-wrapper" data-alttext="Aggiungi sconto su carrello per fascia prezzo" data-action='{"params": {"content": "#elenco_parametri_form"}}'>
+				<img src="/assets/manager/havana-js/img/icon/ico-new.svg" align="top" />
+			</a>
+		</div>	
+		<strong class="h-nav-button-wrapper" style="line-height: 40px;">Aggiungi sconto su carrello per fascia prezzo</strong>
+	</div>
+	<div class="clear"></div>
+	<div id="elenco_parametri_form" class="h-table-parametri-extra-wrapper">
+		<textarea class="h-table-parametri-extra-template">
+			<tr data-key="%id%" class="new-extra-param">
+				<td class="valore-150"><div class="field-line"><label></label><input type="text" class="field valida-digiteuro valida-euro valida-required" name="sconto_da_euro_%id%"></div></td>
+				<td class="valore-150"><div class="field-line"><label></label><input type="text" class="field valida-digiteuro valida-euro valida-required" name="sconto_a_euro_%id%"></div></td>
+				<td class="valore-150"><div class="field-line"><label></label><input type="text" class="field valida-digiteuro valida-euro valida-required" name="sconto_%id%"></div></td>
+				<td class="azione">
+					<div class="h-nav-button-wrapper">
+						<a href="javascript:void(0);" class="h-nav-button h-nav-button-click h-action-rem-extra-wrapper">
+							<img src="/assets/manager/havana-js/img/icon/ico-delete.svg" align="top" />
+						</a>
+					</div>
+				</td>
+			</tr>
+		</textarea>
+		{% set sconto = item.parametriDinamici('sconto') %}
+		<input type="hidden" name="parametri_extra" value="{{ sconto|keys|join(',') }}">
+		<input type="hidden" name="parametri_extra_new" value="">
+		<table class="h-table-parametri-extra form" border="0" cellspacing="0" cellpadding="0">
+			<thead>
+			<tr>
+				<th class="valore-150">Da euro (€)</th>
+				<th class="valore-150">A euro (€)</th>
+				<th class="valore-150">Sconto (%)</th>
+				<th class="azione"></th>
+			</tr>
+			</thead>
+			<tbody>
+			{% for k, v in sconto %}
+			<tr data-key="{{k}}">
+				<td class="valore-150"><div class="field-line"><label></label><input type="text" class="field valida-digiteuro valida-euro valida-required" name="sconto_da_euro_{{k}}" value="{{ _h.util.euro(v.da_euro) }}"></div></td>
+				<td class="valore-150"><div class="field-line"><label></label><input type="text" class="field valida-digiteuro valida-euro valida-required" name="sconto_a_euro_{{k}}" value="{{ _h.util.euro(v.a_euro) }}"></div></td>
+				<td class="valore-150"><div class="field-line"><label></label><input type="text" class="field valida-digiteuro valida-euro valida-required" name="sconto_{{k}}" value="{{ _h.util.euro(v.percentuale) }}"></div></td>
+				<td class="azione">
+					<div class="h-nav-button-wrapper">
+						<a href="javascript:void(0);" class="h-nav-button h-nav-button-click h-action-rem-extra-wrapper">
+							<img src="/assets/manager/havana-js/img/icon/ico-delete.svg" align="top" />
+						</a>
+					</div>
+				</td>
+			</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</fieldset>
+{{ mc.labelCampiObbligatori() }}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/listino/ex-edit'), item) }}	
+

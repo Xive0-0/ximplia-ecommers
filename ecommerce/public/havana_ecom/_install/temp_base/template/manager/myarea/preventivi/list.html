@@ -1,0 +1,24 @@
+{% import _h.template('manager/_macro_items.html') as mci %}
+<table class="h-list item-autoload-total h-fixed-header-table" cellpadding="0" cellspacing="0" border="0" data-total="{{ result.total }}">
+<thead>
+<tr class="h-list-header">
+	<th style="width: 10px; padding: 0; overflow: hidden;">&nbsp;</th>
+	<th style="width: 20px;">&nbsp;</th>
+	<th style="width: 16px;" data-order="co.problema" data-order-type="{{ result.order_type_co_problema }}">&nbsp;</th>
+	<th style="width: 20px;">L</th>
+	<th style="width: 90px;" data-order="co.id" data-order-type="{{ result.order_type_co_id }}">Codice</th>
+	<th style="width: 120px;" data-order="co.data_inserimento" data-order-type="{{ result.order_type_co_data_inserimento }}">Data ric.</th>
+	<th style="width: 200px;">Nome e Cognome</th>
+	<th>E-mail</th>
+	<th style="width: 150px;" >Nazione</th>
+	<th style="width: 120px;" >Importo</th>
+	<th style="width: 120px;" data-order="co.data_modifica" data-order-type="{{ result.order_type_co_data_modifica }}">Data modifica</th>
+	<th style="width: 120px;" data-order="co.data_invio_preventivo" data-order-type="{{ result.order_type_co_data_invio_preventivo }}">Data invio</th>
+</tr>
+</thead>
+<tbody>
+{% for item in result.list %}		
+	{{ mci.item_preventivo(_h, item) }}
+{% endfor %}
+</tbody>
+</table>

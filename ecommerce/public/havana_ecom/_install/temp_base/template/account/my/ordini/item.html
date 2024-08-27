@@ -1,0 +1,77 @@
+{% import _h.template('_macro.html') as mc %}
+{% import _h.template('cart/_macro.html') as cmc %}
+
+{% if item %}
+{% set ordine = ordine.ordine %}
+{% set _lblc = _h.labels.get('checkout') %}
+
+<h2>{{ _lblc.title_ordine }} {{ item.get('codice') }}</h2>
+<div class="dettaglio-ordine">
+
+<div class="riepilogo">
+	<div class="line">
+		<em class="label">{{ _lblc.codice_per_comunicazione }}</em> 
+		<div class="rientro font-big">
+			{{ item.get('codice') }}	
+		</div>
+	</div>
+	<div class="line">
+		<em class="label">{{ _lblc.data_effettuazione_ordine }}</em> 
+		<div class="rientro font-big">
+			{{ item.getDateTime('data_inserimento') }}	
+		</div>
+	</div>	
+	<div class="line">
+		<em class="label">{{ _lblc.stato }}:</em> 
+		<div class="rientro font-big">
+			{% if item.get('stato') == 0 %}	
+			{{ _lblc.stato_preso_in_carico }}
+			{% elseif item.get('stato') >= 100 and item.get('stato') < 200 %}	
+			{{ _lblc.stato_lavorazione }}
+			{% elseif item.get('stato') >= 200 and item.get('stato') < 300 %}
+				{% if item.get('stato') == 201 or item.get('stato_spedizione') == 3 %}
+					{{ _lblc.stato_consegnato }}
+				{% elseif item.get('stato_spedizione') == 2 %}
+					{{ _lblc.stato_spedito }}
+				{% else %}
+					{{ _lblc.stato_pronto }}
+				{% endif %}
+			{% elseif item.get('stato') >= 800 and item.get('stato') < 900 %}
+				{% if item.get('stato') == 800 %}
+					{{ _lblc.stato_annullato }}
+				{% else %}
+					{{ _lblc.stato_rimborsato }}
+				{% endif %}
+			{% elseif item.get('stato') >= 900 and item.get('stato') < 1000 %}
+			{{ _lblc.stato_reso_cambio }}
+			{% endif %}
+		</div>
+	</div>	
+	<div class="line">
+		<em class="label">{{ _lblc.stato_spedizione }}:</em> 
+		<div class="rientro font-big">
+			{% if item.get('stato_spedizione') >= 2 %}
+				{% if item.get('traking') %}
+					<div class="line">
+						<em>{{ _lblc.stato_sp_traking }}: </em><a href="" target="_blank" title="segui la spedizione">{{ item.get('traking') }}</a>
+					</div>
+					{% if item.getDateTime('data_prevista_consegna') %}
+					<div class="line">
+						<em>{{ _lblc.stato_sp_consegna_prevista }}: </em>{{ item.getDateTime('data_prevista_consegna') }}
+					</div>
+					{% endif %}
+				{% endif %}
+			{% else %}
+			{{ _lblc.stato_sp_non_spedito }}
+			{% endif %}	
+		</div>
+	</div>
+</div>
+
+{{ cmc.riepilogo_ordine(_h, ordine) }}
+
+</div>
+{% else %}
+<h2>{{ _lblc.title_ordine }}</h2>
+{{ _lblc.descr_ordine_non_disponibile }}
+{% endif %}

@@ -1,0 +1,51 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Scrivi') }}
+<input type="hidden" name="id" value="{{ _h.input('id') }}">
+<div class="message-center-block" data-message-center="{{ _h.util.messageCenter('ordine_messaggio') }}">
+<div class="message-center-block-expandible" data-type="email">
+	<div class="message-center-block-expandible-title">Scrivi E-Mail</div>
+	<div class="message-center-block-expandible-body">
+		{{ mc.checkbox('', 1, 'includi_riepilogo_ordine', 'Includi riepilogo ordine') }}
+		<div class="field-line field-400">
+			<label>Oggetto <em>(se lasciato vuoto il sistema inserisce il riferimento ordine)</em>:</label>
+			<input type="text" name="oggetto" class="field">
+		</div>
+		<div class="field-line field-400">
+			<label>Testo e-mail<span>*</span>:</label>
+			<textarea name="testo" class="visual-editor"></textarea>
+		</div>
+	</div>
+</div>
+<div class="message-center-block-expandible" data-type="wapp">
+	<div class="message-center-block-expandible-title">Scrivi WhatsApp</div>
+	<div class="message-center-block-expandible-body">
+		<div class="field-line field-400 field-line-textarea">
+			<label>Testo messaggio<span>*</span>:</label>
+			<textarea name="testo_wapp" class="field"></textarea>
+		</div>
+		<div style="margin-top: 10px"><em>Campi dinamici:</em><br>
+		- codice, codice ordine<br>
+		- link, link apertura ordine<br>
+		- nome, nome cliente<br>
+		- cognome, cognome cliente
+		</div>
+	</div>
+</div>
+<div class="message-center-block-expandible" data-type="sms">
+	<div class="message-center-block-expandible-title">Scrivi SMS</div>
+	<div class="message-center-block-expandible-body">
+		<div class="field-line field-400 field-line-textarea">
+			<label>Testo SMS<span>*</span>:</label>
+			<textarea name="testo_sms" class="field"></textarea>
+		</div>
+		<div style="margin-top: 10px"><em>Campi dinamici:</em><br>
+		- codice, codice ordine<br>
+		- link, link apertura ordine<br>
+		- nome, nome cliente<br>
+		- cognome, cognome cliente
+		</div>
+	</div>
+</div>
+</div>
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/ordini/ex-scrivi'), null, '', '', 'Invia') }}

@@ -1,0 +1,19 @@
+{% import _h.template('_macro.html') as mc %}
+
+<div class="breadcrumbs clear">
+	{{ mc.breadcrumbs_home(_h) }}
+	{{ mc.breadcrumbs_separatore(_h) }}
+	<a>{{ item.get('titolo') }}</a>
+</div>
+
+{% if item.get('contenuto_pagina') == 3 and item.get('template') %}
+	<h1>{{ item.get('titolo') }}</h1>
+	{% include _h.template('_page/' ~ item.get('template') ~ '.html') %}
+{% else %}
+<div class="page">
+<h1>{{ item.get('titolo') }}</h1>
+<div class="html">
+{{ item.getWithMerge('testo') }}
+</div>
+</div>
+{% endif %}

@@ -1,0 +1,23 @@
+{% set _lblf = _h.labels.get('form') %}
+
+{% if _h.settings.get('calcolo_spedizione_con_provincia') != '' and _h.settings.get('provincia_nazione_da_tendina') and listProvinciaNazione|length > 0 %}
+	<div class="field-line">
+		<div class="field">
+			<label>{{ _lblf.field_provincia }}</label>
+			<select name="provincia" class="valida-required">
+			<option></option>
+			{% for prov in listProvinciaNazione %}
+				<option value="{{ prov.get('sigla') }}">{{ prov.get('nome') }}</option>
+			{% endfor %}
+			</select>
+		</div>
+	</div>
+{% endif %}
+{% if _h.settings.get('calcolo_spedizione_con_cap') != '' and isListCap %}
+<div class="field-line">
+	<div class="field">
+		<label>{{ _lblf.field_cap }}</label>
+		<input type="text" name="cap" class="valida-required" maxlength="5">
+	</div>
+</div>
+{% endif %}

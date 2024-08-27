@@ -1,0 +1,34 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% set lang = _h.input('lang', _h.config('default_language', 'it')) %}
+
+{{ mc.slideBoxHeader(_h, 'Carica fotocamere/obiettivo') }}
+<p class="field-line-label">
+	Inserire solo file: <strong>.xls, .xlsx</strong>
+</p>
+
+<fieldset class="fieldset-box">
+	<div class="field-line field-line-file" data-file="">
+		<input type="hidden" name="file_modello" class="field-file" value="">
+		<input type="hidden" name="file_modello_name" class="field-file-name">
+		<label>File fotocamere (.xls, .xlsx)</label>
+		<div class="field-anteprima"></div>
+		<div class="field-button">
+			<a class="h-bar-button h-bar-button-blu h-action-upload-file" data-action='{"url": "{{ _h.url('manager/myarea/upload-temp-file') }}", "fileType": ["xls","xlsx"]}'>carica file</a>
+			<a class="h-bar-button h-bar-button-gray h-action-upload-file-reset">Cancella</a>
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="field-line field-line-file" data-file="">
+		<input type="hidden" name="file_obiettivo" class="field-file" value="">
+		<input type="hidden" name="file_obiettivo_name" class="field-file-name">
+		<label>File obiettivi (.xls, .xlsx)</label>
+		<div class="field-anteprima"></div>
+		<div class="field-button">
+			<a class="h-bar-button h-bar-button-blu h-action-upload-file" data-action='{"url": "{{ _h.url('manager/myarea/upload-temp-file') }}", "fileType": ["xls","xlsx"]}'>carica file</a>
+			<a class="h-bar-button h-bar-button-gray h-action-upload-file-reset">Cancella</a>
+		</div>
+		<div class="clear"></div>
+	</div>
+</fieldset>
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/ex-upload-fotocamera-obiettivo'), '"none": true') }}	

@@ -1,0 +1,12 @@
+{% set _lbl = _h.labels('email', lang) %}
+{% import _h.template('_macro.html') as mc %}
+
+<p style="{{ mc.style_fontBase() }}">Compilato form da pagina: <strong>{{ item.get('titolo') }}</strong>.</p>
+
+{{ mc.tableHeader() }}
+{% for key in params_key%}
+{{ mc.row(key, params[key]) }}
+{% endfor %}	
+{{ mc.tableFooter() }}
+
+

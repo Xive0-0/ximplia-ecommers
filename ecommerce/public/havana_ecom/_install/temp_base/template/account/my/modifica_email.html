@@ -1,0 +1,56 @@
+{% set _lblm = _h.labels.get('my') %}
+{% set _lblf = _h.labels.get('form') %}
+<h2>{{ _lblm.title_modifica_email }}</h2>
+
+<form id="pagina">
+	{% if _h.session.params.user.password_accesso %}
+	<div class="field-text">
+		{{ _lblm.modifica_email_accesso }} <strong>{{ _h.settings.get('staff_indirizzo') }}</strong>
+	</div>
+	<div class="field-text">
+		{{ _lblm.email_attuale }} <strong>{{ _h.session.params.user.e_mail }}</strong>
+	</div>	
+	{% else %}
+	<div class="field-text">
+		{{ _lblm.sei_entrato_con_facebook }} <strong>{{ _h.session.params.user.e_mail }}</strong>.<br> 
+		{{ _lblm.descr_nuova_email_faceook }}
+	</div>
+	{% endif %}
+	<div class="field-text">
+		{{ _lblm.descr_verifica_email }}
+	</div>
+	<div class="form-error-message"></div>
+	<div class="field-line">
+		<div class="field">
+			<label>{{ _lblf.field_nuova_email }} <span>*</span></label>
+			<input type="text" name="e_mail" class="valida-required valida-email" maxlength="100">
+		</div>
+	</div>
+	{% if _h.session.params.user.password_accesso %}
+	{% else %}
+	<div class="field-line-50-50">
+		<div class="field-line">
+			<div class="field">
+				<label>{{ _lblf.field_nuova_password }} <span>*</span></label>
+				<input type="password" name="password" class="valida-required valida-password valida-check-password" maxlength="20">
+			</div>
+		</div>
+		<div class="field-line">
+			<div class="field">
+				<label>{{ _lblf.field_conferma_password }} <span>*</span></label>
+				<input type="password" name="conferma_password" class="valida-required valida-confermapassword" maxlength="20">
+			</div>
+		</div>
+	</div>
+	{% endif %}
+	<div class="field-text-obbligatori">{{ _lblf.campi_obbligatori }}</div>
+	{{ mc.google_recaptcha(_h, 'modifica_dati') }}
+	<div class="field-button field-button-left">
+		<a class="button-red button submit-form" href="javascript:void(0)" title="{{ _lblf.btn_modifica }}" data-action='{"url": "{{ _h.url('account/my/ex-modifica-email') }}", "onComplete": {"type": "show", "show": "#conferma_pagina", "hide": "#pagina"}}'><span>{{ _lblf.btn_modifica }}</span></a>
+	</div>
+
+</form>
+
+<div id="conferma_pagina" class="hide-block">
+	<p>{{ _lblm.descr_verifica_email }}</p>
+</div>

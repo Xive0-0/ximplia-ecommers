@@ -1,0 +1,22 @@
+{% import _h.template('manager/_macro.html') as mc %}
+{{ mc.slideBoxHeader(_h, 'Seleziona articolo') }}
+
+			<p class="field-line field-400">
+				<label>Seleziona articolo:</label>
+				<input type="hidden" name="relazione_id" value="">
+				<input type="text" name="relazione_nome" class="field autocomplete" value="" data-action='{"url": "{{ _h.url('manager/myarea/articolo/list-autocomplete') }}", "add_item_to": "#elenco_articoli", "remove_item": true}'>
+			</p>
+			<br><br>
+			<div id="elenco_articoli" class="select-content-wrapper select-content-single">
+			</div>
+
+		</fieldset>
+	</div>
+
+	<div class="h-layout-bottombar">
+		<div class="h-layout-content-wrapper">
+			<a href="javascript:void(0);" class="h-bar-button h-bar-button-gray h-close-box">Annulla</a>
+			<a href="javascript:void(0);" class="h-bar-button h-bar-button-blu h-action-seleziona-risorsa-banner-autocomplete">Seleziona</a>
+		</div>
+	</div>
+</form>

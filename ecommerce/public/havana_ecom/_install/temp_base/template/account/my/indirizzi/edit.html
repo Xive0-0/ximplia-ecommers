@@ -1,0 +1,104 @@
+{% set _lblm = _h.labels.get('my') %}
+{% set _lblf = _h.labels.get('form') %}
+
+<h4 class="subtitle">{{ _lblm.title_indirizzi_spedizione }}</h4>
+{% if item %}
+<h2>{{ _lblm.title_modifica }}</h2>
+{% else %}
+<h2>{{ _lblm.title_nuovo }}</h2>
+{% endif %}
+<form id="pagina">
+	<input type="hidden" name="id" value="{{ item.id }}">
+	<div class="field-text">
+		{{ _lblm.dati_spedizione }}:
+	</div>
+	<div class="form-error-message"></div>
+	<div class="field-line-50-50">
+		<div class="field-line">
+			<div class="field">
+				<label>{{ _lblf.field_nome }} <span>*</span></label>
+				<input type="text" name="nome" class="valida-required" maxlength="50" value="{{ item.get('nome') }}">
+			</div>
+		</div>
+		<div class="field-line">
+			<div class="field">
+				<label>{{ _lblf.field_cognome }} <span>*</span></label>
+				<input type="text" name="cognome" class="valida-required" maxlength="50" value="{{ item.get('cognome') }}">
+			</div>
+		</div>
+	</div>
+	<div class="field-line-50-50">
+		<div class="field-line">
+			<div class="field">
+				<label>{{ _lblf.field_co_presso }}</label>
+				<input type="text" name="presso" maxlength="100" value="{{ item.get('presso') }}">
+			</div>
+		</div>
+		<div class="field-line">
+			<div class="field">
+				<label>{{ _lblf.field_nome_campanello }}</label>
+				<input type="text" name="nome_campanello" maxlength="100" value="{{ item.get('nome_campanello') }}">
+			</div>
+		</div>
+	</div>
+	<div class="field-line-80-20">
+		<div class="field-line">
+			<div class="field">
+				<label>{{ _lblf.field_indirizzo }} <span>*</span></label>
+				<input type="text" name="via" class="valida-required" maxlength="100" value="{{ item.get('via') }}">
+			</div>
+		</div>
+		<div class="field-line">
+			<div class="field">
+				<label>{{ _lblf.field_civico }}Civico <span>*</span></label>
+				<input type="text" name="num_civico" class="valida-required" maxlength="10" value="{{ item.get('num_civico') }}">
+			</div>
+		</div>
+	</div>
+	<div class="field-line-30-70">
+		<div class="field-line">
+			<div class="field">
+				<label>{{ _lblf.field_cap }} <span>*</span></label>
+				<input type="text" name="cap" class="valida-required" maxlength="10" value="{{ item.get('cap') }}">
+			</div>
+		</div>
+		<div class="field-line">
+			<div class="field">
+				<label>{{ _lblf.field_localita }} <span>*</span></label>
+				<input type="text" name="localita" class="valida-required" maxlength="50" value="{{ item.get('localita') }}">
+			</div>
+		</div>
+	</div>
+	<div class="field-line-50-50">
+		<div class="field-line">
+			<div class="field">
+				<label>{{ _lblf.field_provincia }} <span>*</span></label>
+				<input type="text" name="provincia" class="valida-required" maxlength="50" value="{{ item.get('provincia') }}">
+			</div>
+		</div>
+		<div class="field-line">
+			<div class="field">
+				<label>{{ _lblf.field_nazione }} <span>*</span></label>
+				<select name="nazione" class="valida-required">
+					<option value=""></option>
+					{% for naz in listNazione %}
+					<option value="{{ naz.id }}" {% if naz.id == item.get('nazione') %}selected="true"{% endif %}>{{ naz.get('nome') }}</option>
+					{% endfor %}
+				</select>
+			</div>
+		</div>
+	</div>
+	<div class="field-line-50-50">
+		<div class="field-line">
+			<div class="field">
+				<label>{{ _lblf.field_telefono }} <span>*</span></label>
+				<input type="text" name="telefono" class="field-country-phone valida-required" maxlength="20" value="{{ item.get('telefono') }}">
+			</div>
+		</div>
+	</div>
+	<div class="field-text-obbligatori">{{ _lblf.campi_obbligatori }}</div>
+	{{ mc.google_recaptcha(_h, 'modifica_dati') }}
+	<div class="field-button field-button-left">
+		<a class="button-red button submit-form" href="javascript:void(0)" title="{{ _lblf.btn_salva }}" data-action='{"url": "{{ _h.url('account/my/indirizzi/ex-edit') }}", "onComplete": {"type": "url", "url": "{{ _h.url('account/my/indirizzi/index') }}"}}'><span>{{ _lblf.btn_salva }}</span></a>
+	</div>
+</form>

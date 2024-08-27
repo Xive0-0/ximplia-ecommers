@@ -1,0 +1,4 @@
+{% set _lbl = _h.labels('email', lang) %}
+{% import _h.template('_macro.html') as mc %}
+
+<p style="{{ mc.style_fontBase() }}">Abbiamo ricevuto la conferma automatica di pagamento avvenuto attraverso: <strong>{{ tipo_pagamento }}</strong> per l'ordine <strong>{{ codice }}</strong>.</p>

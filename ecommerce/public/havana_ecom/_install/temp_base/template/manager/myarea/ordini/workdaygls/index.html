@@ -1,0 +1,7 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeaderToolbar(_h, 'Work Day GLS', true) }}
+	{{ mc.navButton(_h, 'chiudi spedizioni', 'confirm', 'click', 'h-action-selected-execute', '{"select": {"from":"#ordini-workdaygls-content", "check": 0, "errorMessage": "Selezionare almeno una voce"}, "reload": "#ordini-workdaygls-content", "url": "' ~ _h.url('manager/myarea/ordini/chiusura-work-day-gls') ~ '"}') }}
+{{ mc.slideBoxHeaderToolbarEnd() }}
+
+{{ mc.box_footer(_h, 'ordini-workdaygls', 'ordini/workdaygls', list) }}

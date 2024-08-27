@@ -1,0 +1,170 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% if item == null %}
+	{% set title = 'Nuovo cliente' %}
+	{% set description = 'Inserire i dati del nuovo cliente:' %}
+{% else %}
+	{% set title = 'Modifica cliente' %}
+	{% set description = 'Dati del cliente' %}
+{% endif %}
+{{ mc.slideBoxHeader(_h, title) }}
+<input type="hidden" name="id" value="{{ item.id }}">
+
+<div class="h-tab">
+
+	<div data-tab-rif="cliente">Cliente</div>
+	<div data-tab-rif="gruppi">Gruppi</div>
+	{% include _h.template('manager/myarea/cliente/_edit_tabs.html') %}
+
+	<div data-tab="cliente">
+		<p class="field-line">{{ description }}</p>
+		<div class="field-line field-200">
+			{% if item.abilitato() or item == null %} 
+				{% set cssClass = ' h-checkbox-checked' %}
+				{% set value = 1 %}
+			{% else %}
+				{% set cssClass = '' %}
+				{% set value = '' %}
+			{% endif %}
+			<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="abilitato" value="{{ value }}" /></span> <strong>Abilitato</strong></div>
+		</div>
+		{{ mc.checkbox(item.get('b2b'), 1, 'b2b', 'Utente B2B') }}
+		{{ mc.checkbox(item.get('speciale'), 1, 'speciale', 'Utente speciale di servizio con gestione autonoma degli sconti') }}
+		{{ mc.checkbox(item.get('gestione_admin'), 1, 'gestione_admin', 'Utente admin con gestione invio link carrello, autonomia sconti') }}
+		{% if _h.config('gestione_ticket_cliente', false) %}
+		{{ mc.checkbox(item.get('abilitato_risposta_ticket'), 1, 'abilitato_risposta_ticket', 'Abilitato a rispondere ai ticket') }}
+		{% endif %}
+		{% set tipo_appartenenza_ue = 'intra' %}
+		{% if item %}
+			{% set tipo_appartenenza_ue = item.get('tipo_appartenenza_ue') %}
+		{% endif %}
+		<p class="field-line field-line-left field-100">
+			<label>Lang<span>*</span>:</label>
+			<select name="lang" class="field valida-required">
+			{% for l in listLang %}
+			<option value="{{ l }}"{% if l == item.get('lang') %} selected="true"{% endif %}>{{ l|upper }}</option>
+			{% endfor %}
+			</select>
+		</p>
+		<p class="field-line field-line-left field-200">
+			<label>Tipo soggetto UE:</label>
+			<select name="tipo_appartenenza_ue">
+			<option value="intra"{% if tipo_appartenenza_ue == 'intra' %} selected="true"{% endif %}>Intra</option>
+			<option value="extra"{% if tipo_appartenenza_ue == 'extra' %} selected="true"{% endif %}>Extra</option>
+			</select>
+		</p>
+		<div class="clear"></div>
+		<p class="field-line field-400">
+			<label>E-Mail<span>*</span>:</label>
+			<input type="text" name="e_mail" class="field valida-required valida-email" value="{{ item.get('e_mail') }}" maxlength="100">
+		</p>
+		<p class="field-line field-400">
+			<label>Telefono:</label>
+			<input type="text" name="telefono" class="field valida-telefono" value="{{ item.get('telefono') }}" maxlength="20">
+		</p>
+		{% if item == null %}
+		<p class="field-line field-line-left">
+			<label>Password<span>*</span>:</label>
+			<input type="password" name="password" class="field valida-required valida-password" value="" maxlength="30">
+		</p>
+		<p class="field-line">
+			<label>Conferma password<span>*</span>:</label>
+			<input type="password" name="conferma_password" class="field valida-required valida-password" value="" maxlength="30">
+		</p>
+		{% endif %}
+		{% set field_nome_required = _h.settings.get('form_campo_required_registrazione_nome', '') %}
+		{% set field_cognome_required = _h.settings.get('form_campo_required_registrazione_cognome', '') %}
+		{% set field_sesso_required = _h.settings.get('form_campo_required_registrazione_sesso', '') %}
+		{% set field_data_nascita_required = _h.settings.get('form_campo_required_registrazione_data_nascita', '') %}
+		{% set field_anno_nascita_required = _h.settings.get('form_campo_required_registrazione_anno_nascita', '') %}
+
+		<p class="field-line clear field-line-left">
+			<label>Nome{% if field_nome_required != '' %} <span>*</span>{% endif %}:</label>
+			<input type="text" name="nome" class="field{% if field_nome_required != '' %} valida-required{% endif %}" value="{{ item.get('nome') }}" maxlength="30">
+		</p>
+		<p class="field-line">
+			<label>Cognome{% if field_cognome_required != '' %} <span>*</span>{% endif %}:</label>
+			<input type="text" name="cognome" class="field{% if field_cognome_required != '' %} valida-required{% endif %}" value="{{ item.get('cognome') }}" maxlength="30">
+		</p>
+		<p class="field-line clear field-line-left field-100">
+			<label>Data nascita{% if field_data_nascita_required != '' %} <span>*</span>{% endif %}:</label>
+			<input type="text" name="data_nascita" class="field valida-datasimple input-datepicker{% if field_data_nascita_required != '' %} valida-required{% endif %}" value="{{ item.getDate('data_nascita') }}" maxlength="10">
+		</p>
+		<p class="field-line field-line-left field-100">
+			<label>Anno nascita{% if field_anno_nascita_required != '' %} <span>*</span>{% endif %}:</label>
+			<select name="anno_nascita" class="field{% if field_anno_nascita_required != '' %} valida-required{% endif %}">
+			<option></option>
+			{% for a in 1920.._h.util.currentYear %}
+			<option value="{{ a }}" {% if a == item.get('anno_nascita') %}selected="true"{% endif%}>{{ a }}</option>
+			{% endfor %}
+			</select>
+		</p>
+		<p class="field-line field-line-left field-100">
+			<label>Sesso{% if field_sesso_required != '' %} <span>*</span>{% endif %}:</label>
+			<select name="sesso" class="field{% if field_sesso_required != '' %} valida-required{% endif %}">
+			<option></option>
+			<option value="1" {% if item.get('sesso') == 1 %}selected="true"{% endif%}>Maschio</option>
+			<option value="2" {% if item.get('sesso') == 2 %}selected="true"{% endif%}>Femmina</option>
+			<option value="3" {% if item.get('sesso') == 2 %}selected="true"{% endif%}>Altro</option>
+			</select>
+		</p>
+		<div class="clear"></div>
+		<p class="clear field-line field-100">
+			<label>Sconto %:</label>
+			<input type="text" name="sconto" class="field valida-digitnumber" value="{{ item.get('sconto', 0) }}" maxlength="2"> %
+		</p>
+		{{ mc.checkbox(item.get('sconto_forzato'), 1, 'sconto_forzato', 'Sconto forzato (ignora sconto articolo)') }}
+		<p class="field-line field-200">
+			<label>Fascia sconto:</label>
+			<select name="fascia_sconto" class="field">
+			<option value=""></option>
+			{% for fs in listFasciaSconto %}
+			<option value="{{ fs.id }}"{% if fs.id == item.get('fascia_sconto') or (item == null and fs.get('default_fascia')) %} selected="true"{% endif %}>{{ fs.id }}</option>
+			{% endfor %}
+			</select>
+		</p>
+		{{ mc.checkbox(item.get('prezzo_senza_iva'), 1, 'prezzo_senza_iva', 'Visualizza prezzi senza IVA') }}
+		{{ mc.checkbox(item.get('spese_spedizione_gratis'), 1, 'spese_spedizione_gratis', 'Spese spedizione gratis') }}
+		{{ mc.checkbox(item.get('pagamento_contrassegno'), 1, 'pagamento_contrassegno', 'Abilitato al pagamento in contrassegno (se pagamento impostato per gli utenti registrati)') }}
+		{{ mc.checkbox(item.get('pagamento_come_da_accordi'), 1, 'pagamento_come_da_accordi', 'Abilitato al pagamento "come da accordi" (se pagamento impostato per gli utenti registrati)') }}
+		<p class="field-line field-400">
+			<label>Listino personalizzato <em>(eventuale valore inserito nel campo sconto viene considerato)</em>:</label>
+			<select name="id_listino_cliente" class="field">
+			<option value=""></option>
+			{{ mc.comboOptionsFromList(listListino, 'id', 'nome', item.get('id_listino_cliente')) }}
+			</select>
+		</p>
+		{{ mc.labelCampiObbligatori() }}
+	</div>
+	<div data-tab="gruppi">
+		<div class="field-line field-select-add">
+			<label>Gruppi:</label>
+			<div class="select-content-wrapper">
+				<div class="select-content" data-multiple-check-options="id_gruppo[]">
+					{% for i in listGruppo %}	
+						{% if i.id in listGruppoCliente %} 
+							{% set cssClass = ' h-checkbox-checked' %}
+							{% set value = i.id %}
+						{% else %}
+							{% set cssClass = '' %}
+							{% set value = '' %}
+						{% endif %}
+						<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="{{ i.id }}"><input type="hidden" name="id_gruppo[]" value="{{ value }}" /></span> <strong>{{ i.get('nome') }}</strong></div>
+					{% endfor %}
+				</div>
+				<div class="h-nav-button-wrapper">
+					<a href="javascript:void(0);" class="h-nav-button h-nav-button-click h-action-alttext h-action-add-item-in-select" data-alttext="aggiungi" data-action='{"url": "{{ _h.url('manager/myarea/cliente/gruppo/edit-new') }}"}'>
+						<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+							<path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
+							<path d="M0 0h24v24H0z" fill="none"/>
+						</svg>
+					</a>
+				</div>	
+				<div class="clear-line"></div>
+			</div>	
+		</div>
+	</div>
+</div>
+
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/cliente/ex-edit'), item) }}	
+

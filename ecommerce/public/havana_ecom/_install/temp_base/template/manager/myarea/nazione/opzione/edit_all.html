@@ -1,0 +1,124 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Opzione spedizione per tutti') }}
+<div class="h-tab">
+
+<div data-tab-rif="opzione">Opzione</div>
+<div data-tab-rif="dettaglio">Dettaglio</div>
+
+<div data-tab="opzione">
+<p class="field-line field-400">
+	<label>Nome opzione <i>(valore simbolico solo per il manager)</i><span>*</span>:</label>
+	<input type="text" name="nome" class="field valida-required" value="{{ item.get('nome') }}" maxlength="100">
+</p>
+<p class="field-line field-200">
+	<label>Tipo selezione opzione:</label>
+	<select name="tipo" class="field">
+	{{ mc.listComboOptions([{'id': '1', 'text': 'Scelta singola'},{'id': '2', 'text': 'Scelta multipla'}], item.get('tipo')) }}
+	</select>
+</p>
+<p class="field-line field-200">
+	<label>Considera nazioni appartenenti a:</label>
+	<select name="appartenenza" class="field">
+		<option value="tutte" selected="true">Tutte</option>
+		<option value="cee">Appartenenti alla CEE</option>
+		<option value="europa">Europa</option>
+		<option value="asia">Asia</option>
+		<option value="africa">Africa</option>
+		<option value="oceania">Oceania</option>
+		<option value="america_nord">America del nord</option>
+		<option value="america_sud">America del sud</option>
+	</select>
+</p>
+</div>
+<div data-tab="dettaglio">
+	<div>
+		<div class="h-nav-button-wrapper">
+			<a href="javascript:void(0);" class="h-nav-button h-nav-button-click h-action-alttext h-action-add-extra-wrapper" data-alttext="nuova opzione" data-action='{"params": {"table": ".h-table-parametri-extra-content", "content": "#elenco_opzioni"}}'>
+				<img src="/assets/manager/havana-js/img/icon/ico-new.svg" align="top" />
+			</a>
+		</div>	
+		<strong class="h-nav-button-wrapper" style="line-height: 40px;">Aggiungi </strong>
+	</div>
+	
+	<div id="elenco_opzioni" class="h-table-parametri-extra-wrapper">
+		<textarea class="h-table-parametri-extra-template">
+		<div class="h-table-parametri-extra form h-table-parametri-extra-block" data-key="%id%" class="new-extra-param">
+		<table>
+		{% for l in listLang %}
+			<tr>
+				<td class="lang">{{ l|upper }}</td>
+				<td class="valore-200"><div class="field-line"><label></label><input type="text" class="field valida-required" name="new_{{ l }}_nome_%id%"></div></td>
+				<td class="valore-350"><div class="field-line"><label></label><input type="text" class="field" name="new_{{ l }}_descrizione_%id%"></div></td>
+				<td class="valore-100">
+				{% if l == 'it'%}
+					<div class="field-line"><input type="text" class="field valida-required valida-euro valida-digitfloat" name="new_prezzo_%id%"></div>
+				{% else %}
+					&nbsp;
+				{% endif %}
+				</td>
+				<td class="azione">
+					<div class="h-nav-button-wrapper">
+				{% if l == 'it'%}
+						<a href="javascript:void(0);" class="h-nav-button h-nav-button-click h-action-rem-extra-wrapper" data-action='{"cont": ".h-table-parametri-extra-block"}'>
+							<img src="/assets/manager/havana-js/img/icon/ico-delete.svg" align="top" />
+						</a>
+				{% endif %}
+					</div>
+				</td>
+			</tr>
+		{% endfor %}
+		</table>
+		</div>
+		</div>
+		</textarea>
+		<input type="hidden" name="parametri_extra" value="{{ item_lang_value_id }}">
+		<input type="hidden" name="parametri_extra_new" value="">
+		<div class="clear"></div>
+		<table class="h-table-parametri-extra form">
+			<tr>
+				<td class="lang">&nbsp;</td>
+				<td class="valore-200">Nome<span class="required">*</span></td>
+				<td class="valore-350">Descrizione</td>
+				<td class="valore-100">Prezzo {{ _h.config('manager_valuta', '&euro;') }}</td>
+				<td class="azione">&nbsp;</td>
+			</tr>
+		</table>
+		<div class="h-table-parametri-extra-content">
+		
+		{% for item_lang in item_lang_value %}
+		<div class="h-table-parametri-extra form h-table-parametri-extra-block" data-key="{{ item_lang.id }}">
+		<table>
+			{% for l in listLang %}
+				{% set itl = item_lang[l] %}
+				<tr>
+					<td class="lang">{{ l|upper }}</td>
+					<td class="valore-200"><div class="field-line"><label></label><input type="text" class="field valida-required" name="{{ l }}_nome_{{ itl.id }}" value="{{ itl.get('nome') }}"></div></td>
+					<td class="valore-350"><div class="field-line"><label></label><input type="text" class="field" name="{{ l }}_descrizione_{{ itl.id }}" value="{{ itl.get('descrizione') }}"></div></td>
+					<td class="valore-100">
+					{% if l == 'it'%}
+						<div class="field-line"><input type="text" class="field valida-required valida-euro valida-digitfloat" name="prezzo_{{ itl.id }}" value="{{ itl.euro('prezzo') }}"></div>
+					{% else %}
+						&nbsp;
+					{% endif %}
+					</td>
+					<td class="azione">
+						<div class="h-nav-button-wrapper">
+					{% if l == 'it'%}
+							<a href="javascript:void(0);" class="h-nav-button h-nav-button-click h-action-rem-extra-wrapper" data-action='{"cont": ".h-table-parametri-extra-block"}'>
+								<img src="/assets/manager/havana-js/img/icon/ico-delete.svg" align="top" />
+							</a>
+					{% endif %}
+						</div>
+					</td>
+				</tr>
+			{% endfor %}
+			</table>
+			</div>
+		{% endfor %}
+		</div>
+	</div>
+</div>
+
+</div>
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/nazione/opzione/ex-edit-all'), '"reload": "#nazione-content"') }}	

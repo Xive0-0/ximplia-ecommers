@@ -1,0 +1,32 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% set lang = _h.input('lang', _h.config('default_language', 'it')) %}
+
+{{ mc.slideBoxHeader(_h, 'Pesi calcolo spedizione') }}
+<p class="field-line-label">
+	Importa pesi: <strong>.xls, .xlsx, .csv</strong>
+</p>
+<div class="field-line-label" style="margin-top: 10px;">
+	La prima riga del file viene considerata come intestazioni, le colonne devono essere nell'ordine:
+	<ul style="margin-top: 10px; margin-left: 20px;">
+		<li><strong>HID</strong>, identificativo di sistema, obbligatorio</li>
+		<li><strong>CODICE</strong>, codice articolo (colonna NON considerata)</li>
+		<li><strong>NOME</strong>, nome articolo (colonna NON considerata)</li>
+		<li><strong>PESO</strong>, peso articolo da inserire, obbligatorio</li>
+	</ul>
+</div>
+
+<fieldset class="fieldset-box">
+	<div class="field-line field-line-file" data-file="">
+		<input type="hidden" name="file_data" class="field-file valida-required" value="">
+		<input type="hidden" name="file_data_name" class="field-file-name">
+		<label>File (.xls, .xlsx, .csv) <span>*</span></label>
+		<div class="field-anteprima"></div>
+		<div class="field-button">
+			<a class="h-bar-button h-bar-button-blu h-action-upload-file" data-action='{"url": "{{ _h.url('manager/myarea/upload-temp-file') }}", "fileType": ["xls","xlsx","csv"]}'>carica file</a>
+			<a class="h-bar-button h-bar-button-gray h-action-upload-file-reset">Cancella</a>
+		</div>
+		<div class="clear"></div>
+	</div>
+</fieldset>
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/articolo/ex-pesi-spedizione-from-upload'), '"none": true') }}	

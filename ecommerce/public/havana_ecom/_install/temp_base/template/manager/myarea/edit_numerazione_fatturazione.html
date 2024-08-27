@@ -1,0 +1,22 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Numerazione fatturazione') }}
+<p class="field-line field-100">
+	<label>Num. fattura a partire da<span>*</span>:</label>
+	<input type="text" name="fatturazione_num_fattura" class="field valida-digitnumber valida-required" value="{{ map.fatturazione_num_fattura }}">
+</p>
+<p class="field-line field-100">
+	<label>Num. ricevuta a partire da<span>*</span>:</label>
+	<input type="text" name="fatturazione_num_ricevuta" class="field valida-digitnumber valida-required" value="{{ map.fatturazione_num_ricevuta }}">
+</p>
+<p class="field-line field-100">
+	<label>Num. fattura proforma a partire da<span>*</span>:</label>
+	<input type="text" name="fatturazione_num_fattura_proforma" class="field valida-digitnumber valida-required" value="{{ map.fatturazione_num_fattura_proforma }}">
+</p>
+<p class="field-line field-100">
+	<label>Num. DDT a partire da<span>*</span>:</label>
+	<input type="text" name="fatturazione_num_ddt" class="field valida-digitnumber valida-required" value="{{ map.fatturazione_num_ddt }}">
+</p>
+{{ mc.labelCampiObbligatori() }}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/ex-edit-numerazione-fatturazione')) }}	
+

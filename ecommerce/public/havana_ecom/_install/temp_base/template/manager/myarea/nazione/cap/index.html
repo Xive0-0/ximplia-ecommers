@@ -1,0 +1,22 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeaderToolbar(_h, 'Spese per CAP: ' ~ item.get('nome'), true) }}
+	{{ mc.navButton(_h, 'nuova', 'new', 'click', 'h-action-selected-open-window', '{"window": {"type": "layer", "overlay": true, "params": {"id_nazione":' ~ item.id ~ '}, "width": 500, "height": 500, "url": "' ~ _h.url('manager/myarea/nazione/cap/edit') ~ '"}}') }}
+	{{ mc.navButton(_h, 'modifica', 'update', 'click', 'h-action-selected-open-window', '{"select": {"from":"#nazione-content", "check": 1, "errorMessage": "Selezionare una voce"}, "window": {"type": "layer", "url": "' ~ _h.url('manager/myarea/nazione/cap/edit') ~ '", "width": 500, "height": 500, "overlay": true, "params": {"id_nazione":' ~ item.id ~ '}}}') }}
+	{{ mc.navButton(_h, 'elimina', 'delete', 'click', 'h-action-selected-execute', '{"select": {"from":"#nazione-content", "check": 0, "errorMessage": "Selezionare almeno una voce"}, "confirm": "Eliminare la voce selezionata?", "params": {"id_nazione":' ~ item.id ~ '}, "url": "' ~ _h.url('manager/myarea/nazione/cap/delete') ~ '", "reload": ["#nazione-content"]}') }}
+
+	{{ mc.navSeparatore() }}
+	<div class="h-nav-button-wrapper">
+		<a href="javascript:void(0);" class="h-nav-button h-action-popup-menu h-action-alttext" data-alttext="impostazioni">
+			<img src="/assets/manager/havana-js/img/icon/ico-menu.svg" align="top" />
+			<span>Impostazioni</span>
+		</a>
+		<div class="h-popup-content h-popup-menu">
+			<a href="javascript:void(0);" class="h-action-selected-open-window h-action-close-popup-menu" data-action='{"select": {"from":"#nazione-content", "check": 0}, "window": {"type": "layer", "overlay": true, "width": 400, "height": 500, "url": "{{ _h.url('manager/myarea/nazione/cap/edit-spedizioni-selezione') }}", "params": {"id_nazione": {{ item.id }} }}}'>Spese da selezione</a>
+			<a href="javascript:void(0);" class="h-action-selected-open-window h-action-close-popup-menu" data-action='{"window": {"type": "layer", "overlay": true, "width": 400, "height": 500, "url": "{{ _h.url('manager/myarea/nazione/cap/edit-spedizioni') }}", "params": {"id_nazione": {{ item.id }} }}}'>Spese per tutti</a>
+		</div>
+	</div>	
+	
+{{ mc.slideBoxHeaderToolbarEnd() }}
+
+{{ mc.box_footer(_h, 'nazione', 'nazione/cap', list, '{"id": ' ~ item.id ~ '}') }}

@@ -1,0 +1,15 @@
+{% set _lbl = _h.labels('email', lang) %}
+{% import _h.template('_macro.html') as mc %}
+
+<p style="{{ mc.style_fontBase() }}">{{ _lbl.gentile_cliente }}</p>
+<div style="{{ mc.style_fontBase() }}">{{ _lbl.descr_link_pagine_termnini_condizioni }} 
+	<ul>
+{% for elem in link %}
+	<li style="{{ mc.style_fontBase() }}"><strong>{{ elem.titolo }}</strong><br>
+	<em>{{ _lbl.stato }}</em> {% if elem.stato %}{{ _lbl.stato_accettato }}{% else %}{{ _lbl.stato_non_accettato }}{% endif %}<br>
+	<a href="{{ link }}" style="{{ mc.style_link() }}">{{ elem.link }}</a></li>
+{% endfor %}
+	</ul>
+</div>
+
+

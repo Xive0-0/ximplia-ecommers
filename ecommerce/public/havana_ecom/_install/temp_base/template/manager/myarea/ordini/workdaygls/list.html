@@ -1,0 +1,19 @@
+{% import _h.template('manager/_macro_items.html') as mci %}
+<table class="h-list item-autoload-total h-fixed-header-table" cellpadding="0" cellspacing="0" border="0" data-total="{{ result.total }}">
+<thead>
+<tr class="h-list-header">
+	<th style="width: 20px;">
+		<span class="h-checkbox h-checkbox-select-all" data-value="1"><input type="hidden" name="_select_all" value="" /></span>
+	</th>
+	<th style="width: 100px;">Codice</th>
+	<th>Indirizzo</th>
+	<th style="width: 250px;">Recapiti</th>
+	<th style="width: 100px;">Importo totale</th>
+</tr>
+</thead>
+<tbody>
+{% for item in list %}		
+	{{ mci.item_ordini_workdaygls(_h, item) }}
+{% endfor %}
+</tbody>
+</table>

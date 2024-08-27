@@ -1,0 +1,35 @@
+<div class="image-wrapper"></div>
+<div class="window-wrapper">
+	<header>
+		<div class="logo">
+		{% if _h.istanza.isMaster() %}
+			<img src="/assets/manager/img/logo-login.png">
+		{% else %}
+			<div><img src="/assets/manager/img/logo-login-{{ _h.istanza.name() }}.png"></div>
+			<div><img src="/assets/manager/img/logo-login.png" style="max-width: 80px"></div>
+		{% endif %}
+		</div>
+	</header>
+		<form>
+			<fieldset>
+				<p class="field-line">
+					<label>E-Mail:</label>
+					<input type="text" name="e_mail" class="field valida-email valida-required">
+				</p>
+				<p class="field-line">
+					<label>Password:</label>
+					<input type="password" name="password" class="field valida-required">
+				</p>
+				{{ mc.google_recaptcha(_h, 'manager_login') }}
+				<p class="field-line form-error-message"></p>
+				<p class="field-line">
+					<a href="javascript:void(0);" class="btn-submit h-action-submit h-return-submit" title="Accedi" data-action='{"url":"{{ _h.url('manager/ex-login') }}", "buttonLogin": true, "onComplete": "{{ _h.url('manager/myarea/index') }}"}'>Accedi</a>
+				</p>
+			</fieldset>
+		</form>
+	<footer>
+		<div class="copy">
+		{% include _h.template('manager/_copy.html') %}
+		</div>
+	</footer>
+</div>

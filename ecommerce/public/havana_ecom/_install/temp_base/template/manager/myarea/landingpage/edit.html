@@ -1,0 +1,337 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% set lang = _h.input('lang', _h.config('default_language', 'it')) %}
+
+{% if item == null %}
+	{% set title = 'Nuova Landing Page' %}
+{% else %}
+	{% set title = 'Modifica Landing Page' %}
+{% endif %}
+{{ mc.slideBoxHeader(_h, title) }}
+<input type="hidden" name="lang" value="{{ lang }}">
+<input type="hidden" name="id" value="{{ item.id }}">
+
+<div class="block-tab">
+<div class="block-tab-header">
+	<div data-block-tab="scheda_base">Landing page</div>
+	<div data-block-tab="relazioni">Relazioni</div>
+</div>
+<div data-block-tab-body="scheda_base" class="block-tab-body">
+
+<div class="h-tab">
+<div data-tab-rif="base">Base</div>
+<div data-tab-rif="pagina">Pagina</div>
+<div data-tab-rif="form">Form</div>
+<div data-tab-rif="email">E-Mail</div>
+{% if listLang|length > 1 %}
+<div data-tab-rif="visibilita">Visibilità</div>
+{% endif %}
+<div data-tab="base">
+<div class="field-line field-400">
+	{% if item.abilitato %} 
+		{% set cssClass = ' h-checkbox-checked' %}
+		{% set value = 1 %}
+	{% else %}
+		{% set cssClass = '' %}
+		{% set value = '' %}
+	{% endif %}
+	<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="abilitato" value="{{ value }}" /></span> <strong>Abilitato</strong></div>
+</div>
+<p class="field-line field-400">
+	<label>Codice riferimento<span>*</span>:</label>
+	<input type="text" name="codice" class="field valida-required valida-alphanum valida-digitalphanum" value="{{ item.get('codice') }}" maxlength="100">
+</p>
+<p class="field-line field-400">
+	<label>Descrizione/nome interno<span>*</span>:</label>
+	<input type="text" name="nome" class="field valida-required" value="{{ item.get('nome') }}" maxlength="200">
+</p>
+<div class="field-line field-400">
+	{% if item.get('form') %} 
+		{% set cssClass = ' h-checkbox-checked' %}
+		{% set value = 1 %}
+	{% else %}
+		{% set cssClass = '' %}
+		{% set value = '' %}
+	{% endif %}
+	<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="form" value="{{ value }}" /></span> <strong>Visualizza form</strong></div>
+</div>
+
+<p class="field-line field-400">
+	<label>{{ mc.labelLang(lang) }} Titolo:</label>
+	<input type="text" name="titolo" class="field" value="{{ item.get('titolo') }}" maxlength="250">
+</p>
+<p class="field-line field-400 edit-lang">
+	<label>{{ mc.labelLang(lang) }} Descrizione breve:</label>
+	<textarea name="descrizione_breve" class="field">{{ item.get('descrizione_breve') }}</textarea>
+</p>
+<p class="field-line field-400">
+	<label>E-Mail dove ricevere le notifiche:</label>
+	<input type="text" name="e_mail_notifica" class="field valida-email" value="{{ item.get('e_mail_notifica') }}">
+</p>
+{{ mc.labelCampiObbligatori() }}
+</div>
+
+<div data-tab="pagina">
+{{ mc.contenutiInLingua(lang) }}
+<div class="h-show-if-content">
+<p class="field-line field-400">
+	<label>Gestione contenuto:</label>
+	<select name="contenuto_pagina" class="field h-show-if" data-action='{"map": [{"key": "0", "cont": [".contenuto_pagina"]}, {"key": "1", "cont": [".contenuto_html"]}, {"key": "2", "cont": [".contenuto_html"]}, {"key": "3", "cont": [".contenuto_pagina"]}, {"key": "4", "cont": [".contenuto_html"]}, {"key": "5", "cont": [".contenuto_template_1"]}]}'>
+		{{ mc.listComboOptions([{'id': '0', 'text': 'Editor visuale'}, {'id': '1', 'text': 'HTML'}, {'id': '2', 'text': 'HTML in pagina dedicata slegata completamente da sito'}, {'id': '3', 'text': 'Editor visuale senza header e footer'}, {'id': '4', 'text': 'HTML senza header e footer'}, {'id': '5', 'text': 'Template immagini'}], item.get('contenuto_pagina')) }}
+	</select>
+</p>
+<div class="contenuto_pagina">
+	<div class="field-line field-400">
+		<label>{{ mc.labelLang(lang) }} Pagina:</label>
+		{{ mc.gestione_file() }}
+		<textarea name="html_pagina" class="visual-editor">{{ item.get('html_pagina') }}</textarea>
+	</div>
+	<p class="field-line field-400">
+		<label>Evento javascript richiamato al completamento salvataggio:</label>
+		<input type="text" name="js_on_complete_event" class="field" value="{{ item.get('js_on_complete_event') }}" maxlength="50">
+	</p>
+
+	<p class="field-line field-line-textarea field-400">
+		<label>Script pagina:</label>
+		<textarea name="script_pagina" class="field">{{ item.get('script_pagina') }}</textarea>
+	</p>
+	<p class="field-line field-line-textarea field-400">
+		<label>CSS pagina:</label>
+		<textarea name="css_pagina" class="field">{{ item.get('css_pagina') }}</textarea>
+	</p>
+	<p class="field-line field-400">
+		<label>Classe CSS pagina:</label>
+		<input type="text" name="css_class_pagina" class="field" value="{{ item.get('css_class_pagina') }}" maxlength="50">
+	</p>
+</div>
+<div class="contenuto_html">
+	<p class="field-line field-400 edit-lang">
+		<label>{{ mc.labelLang(lang) }} HTML dedicato:</label>
+		<textarea name="html" class="field" style="height: 400px;">{{ item.get('html') }}</textarea>
+	</p>
+</div>
+<div class="contenuto_template_1">
+	<p class="field-line field-400">
+		<label>Overlay sotto al form:</label>
+		<select name="form_overlay">
+			{{ mc.listComboOptions([{'id': '', 'text': 'Nessuno'}, {'id': 'bianco', 'text': 'Bianco'}, {'id': 'nero', 'text': 'Nero'}], item.get('form_overlay')) }}
+		</select>
+	</p>	
+	<p class="field-line field-400">
+		<label>Allineamento testo nel form:</label>
+		<select name="form_allinea">
+			{{ mc.listComboOptions([{'id': '', 'text': 'Sinistra'}, {'id': 'centra', 'text': 'Centrato'}, {'id': 'destra', 'text': 'Destra'}], item.get('form_allinea')) }}
+		</select>
+	</p>
+
+	<div style="width: 50%; float: left;">
+	{{ mc.upload_immagine(_h, 'Banner 1 (1400x650px)', item.imageAnteprima('g1'), 'banner1') }}
+	</div>
+	<div style="width: 50%; float: left;">
+	{{ mc.upload_immagine(_h, 'Versione mobile (640X960px)', item.imageAnteprima('g2'), 'banner1_mobile') }}
+	</div>
+	<div class="clear"></div>
+	
+	<div style="width: 50%; float: left;">
+	{{ mc.upload_immagine(_h, 'Banner 2 (1400x320px)', item.imageAnteprima('g3'), 'banner2') }}
+	</div>
+	<div style="width: 50%; float: left;">
+	{{ mc.upload_immagine(_h, 'Versione mobile  (640x505px)', item.imageAnteprima('g4'), 'banner2_mobile') }}
+	</div>
+	<div class="clear"></div>
+</div>
+</div>
+</div>
+<div data-tab="form">
+	{{ mc.contenutiInLingua(lang) }}
+	<p class="field-line field-400">
+		<label>{{ mc.labelLang(lang) }} Titolo box form:</label>
+		<input type="text" name="form_titolo" class="field" value="{{ item.get('form_titolo') }}" maxlength="200">
+	</p>
+	<p class="field-line field-400 field-line-textarea">
+		<label>{{ mc.labelLang(lang) }} Descrizione box form:</label>
+		<textarea name="form_descrizione" class="field">{{ item.get('form_descrizione') }}</textarea>
+	</p>
+	<p class="field-line field-400">
+		<label>{{ mc.labelLang(lang) }} Testo bottone invio:</label>
+		<input type="text" name="form_label_pulsante" class="field" value="{{ item.get('form_label_pulsante') }}" maxlength="50">
+	</p>
+	<p class="field-line field-200">
+		<label>{{ mc.labelLang(lang) }} ID lista klaviyo:</label>
+		<input type="text" name="form_lista_id_klaviyo" class="field" value="{{ item.get('form_lista_id_klaviyo') }}" maxlength="20">
+	</p>
+	<p class="field-line field-400">
+		<label>{{ mc.labelLang(lang) }} Titolo box form ringraziamento:</label>
+		<input type="text" name="form_titolo_conferma" class="field" value="{{ item.get('form_titolo_conferma') }}" maxlength="200">
+	</p>
+	<div class="field-line field-400">
+		{% if item.get('form_conferma_pagina_esterna') %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% else %}
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="form_conferma_pagina_esterna" value="{{ value }}" /></span> <strong>Pagina conferma su pagina dedicata</strong></div>
+	</div>
+	<p class="field-line field-400 field-line-textarea">
+		<label>{{ mc.labelLang(lang) }} Descrizione box form ringraziamento:</label>
+		<textarea name="form_descrizione_conferma" class="field">{{ item.get('form_descrizione_conferma') }}</textarea>
+	</p>
+	<br>
+	<p class="field-line-text">
+	<strong>Campi form presenti:</strong>
+	</p>
+	
+	<div>
+		<div class="h-nav-button-wrapper">
+			<a href="javascript:void(0);" class="h-nav-button h-nav-button-click h-action-alttext h-action-add-extra-wrapper" data-alttext="nuovo parametro extra" data-action='{"params": {"content": "#elenco_parametri_extra_form"}}'>
+				<img src="/assets/manager/havana-js/img/icon/ico-new.svg" align="top" />
+			</a>
+		</div>	
+		<strong class="h-nav-button-wrapper" style="line-height: 40px;">Aggiungi parametro</strong>
+	</div>
+	<div class="clear"></div>
+	<div id="elenco_parametri_extra_form" class="h-table-parametri-extra-wrapper">
+		<textarea class="h-table-parametri-extra-template">
+			<tr data-key="%id%" class="new-extra-param">
+				<td class="chiave"><div class="field-line"><label></label><input type="text" class="field valida-digitalphanum valida-required" name="extra_new_chiave_%id%"></div></td>
+				<td class="tipo"><div class="field-line"><label></label><select class="field" name="extra_new_tipo_%id%">
+				<option value="stringa">Stringa</option>
+				<option value="e-mail">E-Mail</option>
+				<option value="data">Data</option>
+				<option value="testo">Testo</option>
+				<option value="lista">Lista</option>
+				<option value="newsletter">Newsletter</option>
+				<option value="checkbox">Checkbox</option>
+				<option value="file">File</option>
+				</select></div></td>
+				<td class="label"><div class="field-line"><label></label><input type="text" class="field valida-required" name="extra_new_label_%id%"></div></td>
+				<td class="valore"><div class="field-line"><input type="text" class="field" name="extra_new_valore_%id%"></div></td>
+				<td class="obbligatorio">
+				{{ mc.checkbox('', 1, 'extra_new_required_%id%', '') }}
+				</td>
+				<td class="azione">
+					<div class="h-nav-button-wrapper">
+						<a href="javascript:void(0);" class="h-nav-button h-nav-button-click h-action-rem-extra-wrapper">
+							<img src="/assets/manager/havana-js/img/icon/ico-delete.svg" align="top" />
+						</a>
+					</div>
+				</td>
+			</tr>
+		</textarea>
+		<input type="hidden" name="parametri_extra" value="{{ item.parametriExtra('form_').keys }}">
+		<input type="hidden" name="parametri_extra_new" value="">
+		<table class="h-table-parametri-extra form" border="0" cellspacing="0" cellpadding="0">
+			<thead>
+			<tr>
+				<th class="chiave">Chiave <span class="required">*</span></th>
+				<th class="tipo">Tipo <span class="required">*</span></th>
+				<th class="label">Label {{ mc.labelLang(lang) }} <span class="required">*</span></th>
+				<th class="valore">Valore {{ mc.labelLang(lang) }}</th>
+				<th class="obbligatorio">Obbl.</th>
+				<th class="azione"></th>
+			</tr>
+			</thead>
+			<tbody>
+			{% for k in item.parametriExtra('form_').list %}
+			<tr data-key="{{k}}">
+				<td class="chiave"><div class="chiave-details">{{k}}</div></td>
+				<td class="tipo"><div class="field-line"><label></label><select class="field" name="extra_tipo_{{k}}">
+				<option value="stringa"{% if item.get('extra_tipo_' ~ k) == 'stringa' %} selected{% endif %}>Stringa</option>
+				<option value="e-mail"{% if item.get('extra_tipo_' ~ k) == 'e-mail' %} selected{% endif %}>E-Mail</option>
+				<option value="data"{% if item.get('extra_tipo_' ~ k) == 'data' %} selected{% endif %}>Data</option>
+				<option value="testo"{% if item.get('extra_tipo_' ~ k) == 'testo' %} selected{% endif %}>Testo</option>
+				<option value="lista"{% if item.get('extra_tipo_' ~ k) == 'lista' %} selected{% endif %}>Lista</option>
+				<option value="newsletter"{% if item.get('extra_tipo_' ~ k) == 'newsletter' %} selected{% endif %}>Newsletter</option>
+				<option value="checkbox"{% if item.get('extra_tipo_' ~ k) == 'checkbox' %} selected{% endif %}>Checkbox</option>
+				<option value="file"{% if item.get('extra_tipo_' ~ k) == 'file' %} selected{% endif %}>File</option>
+				</select></div></td>
+				<td class="label"><div class="field-line"><label></label><input type="text" class="field valida-required" name="extra_label_{{k}}" value="{{ item.get('extra_label_' ~ k) }}"></div></td>
+				<td class="valore"><div class="field-line"><input type="text" class="field" name="extra_valore_{{k}}" value="{{ item.get('extra_valore_' ~ k) }}"></div></td>
+				<td class="obbligatorio">
+				{{ mc.checkbox(item.get('extra_required_' ~ k), 1, 'extra_required_' ~ k, '') }}
+				</td>
+				<td class="azione">
+					<div class="h-nav-button-wrapper">
+						<a href="javascript:void(0);" class="h-nav-button h-nav-button-click h-action-rem-extra-wrapper">
+							<img src="/assets/manager/havana-js/img/icon/ico-delete.svg" align="top" />
+						</a>
+					</div>
+				</td>
+			</tr>
+			{% endfor %}
+			</tbody>
+		</table>
+		<br>
+		<em>In caso di tipo "lista", nel campo "valore" inserire le opzioni separate da una virgola</em>
+		<br><br>
+		<em>Utilizzare la chiave "email" per il campo che sarà considerato come indirizzo di posta elettronica dell'utente a cui inviare l'e-mail</em>
+	</div>
+</div>
+{% if listLang|length > 1 %}
+<div data-tab="visibilita">
+	{% set nuovo = true %}
+	{% if item %}
+		{% set nuovo = false %}
+	{% endif %}
+	{% set list_lang = item.get('visibilita_lang', '')|split(',') %}
+	{% for l in listLang %}
+		{% set valore = '' %}
+		{% if nuovo or item.get('visibilita_lang', '') == '-' or l in list_lang %}
+			{% set valore = l %}
+		{% endif %}
+		{{ mc.checkbox(valore, l, 'visibilita_lang', 'Visibilità ' ~ l|upper, l) }}
+	{% endfor %}
+</div>
+{% endif %}
+<div data-tab="email">
+{{ mc.contenutiInLingua(lang) }}
+<p class="field-line field-400">
+	<label>{{ mc.labelLang(lang) }} Oggetto:</label>
+	<input type="text" name="e_mail_oggetto" class="field" value="{{ item.get('form_titolo') }}">
+</p>
+<div class="field-line field-400">
+	<label>{{ mc.labelLang(lang) }} Testo:</label>
+	<textarea name="e_mail_testo" class="visual-editor">{{ item.get('e_mail_testo') }}</textarea>
+</div>
+<div style="margin-top: 5px;"><em>è possibile inserire all'interno del testo della e-mail i riferimenti ai campi compilati dall'utente secondo la seguente logica: nome del campo racchiuso tra doppie parentesi graffe. Ad esempio {{ '{{' }}nome_campo{{ '}}' }}</em></div>
+<div style="margin-top: 10px"><em>Campi disponibili: </em> 
+{% for key in list_key %}
+{{ key }}
+{% endfor %}
+</div>
+</div>
+</div>
+
+</div>
+
+<div data-block-tab-body="relazioni" class="block-tab-body">
+
+	<div class="h-tab">
+		<div data-tab-rif="articoli">Articoli</div>
+		<div data-tab-rif="categoria">Categoria</div>
+		<div data-tab-rif="brand">Brand</div>
+
+		<div data-tab="articoli">
+			<p class="field-line field-400">
+				<label>Cerca e aggiungi articolo:</label>
+				<input type="hidden" name="relazione_id" value="">
+				<input type="text" name="relazione_nome" class="field autocomplete" value="" data-action='{"url": "{{ _h.url('manager/myarea/articolo/list-autocomplete') }}", "add_item_to": "#elenco_articoli", "add_item_id": "$id_articolo", "load_item_id": {% if item %}[{{ item.get('$id_articolo', [])|join(',') }}]{% else %}null{% endif %}}'>
+			</p>
+			<br><br>
+			Articoli selezionati:
+			<div id="elenco_articoli">
+			</div>
+		</div>
+		<div data-tab="categoria">
+		{{ mc.dynamicOnlyOneMultipleTreeSelect(_h, 'Categoria', listCategoria, item, '$id_categoria') }}
+		</div>
+		<div data-tab="brand">
+		{{ mc.dynamicMultipleSelect(_h, 'Azienda/Brand', listAzienda, item, '$id_azienda') }}
+		</div>	
+	</div>	
+</div>
+
+</div>
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/landingpage/ex-edit')) }}	

@@ -1,0 +1,36 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% set lang = _h.input('lang', _h.config('default_language', 'it')) %}
+
+{{ mc.slideBoxHeader(_h, 'Carica da File Meta info') }}
+<input type="hidden" name="lang" value="{{ lang }}">
+<input type="hidden" name="table" value="{{ _h.input('table') }}">
+<p class="field-line-label">
+	Import Meta Info per lingua <strong>{{ lang|upper }}</strong>, sono supportati solo i seguenti formati: <strong>.xls, .xlsx</strong>
+</p>
+<div class="field-line-label" style="margin-top: 10px;">
+	La prima riga del file viene considerata come intestazioni, i nomi delle colonne (anche non in ordine) da utilizzare:
+	<ul style="margin-top: 10px; margin-left: 20px;">
+		<li><strong>HID</strong>, identificativo univoco della risorsa</li>
+		<li><strong>TITLE</strong>, testo per il titolo della pagina</li>
+		<li><strong>KEYWORDS</strong>, testo per il campo meta keywords</li>
+		<li><strong>DESCRIPTION</strong>, testo per il campo meta description</li>
+		<li><strong>URL</strong>, url della risorsa (per default generato dal sistema, indicare solo se diverso dalle regole base)</li>
+		<li><strong>MAPPING</strong>, indicare "si" o "no" se deve essere eseguita la mappatura (campo vuoto o non presente corrisponde a "si")</li>
+	</ul>
+</div>
+
+<fieldset class="fieldset-box">
+	<div class="field-line field-line-file" data-file="">
+		<input type="hidden" name="file_data" class="field-file valida-required" value="">
+		<input type="hidden" name="file_data_name" class="field-file-name">
+		<label>File (.xls, .xlsx) <span>*</span></label>
+		<div class="field-anteprima"></div>
+		<div class="field-button">
+			<a class="h-bar-button h-bar-button-blu h-action-upload-file" data-action='{"url": "{{ _h.url('manager/myarea/upload-temp-file') }}", "fileType": ["xls","xlsx"]}'>carica file</a>
+			<a class="h-bar-button h-bar-button-gray h-action-upload-file-reset">Cancella</a>
+		</div>
+		<div class="clear"></div>
+	</div>
+</fieldset>
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/metainfo/ex-upload'), '"none": true') }}	

@@ -1,0 +1,26 @@
+{% if not(_h.context.isApp()) %}
+	{% import _h.template('_macro.html') as mc %}
+	{% set _lblg = _h.labels.get('global') %}
+	{% set _lblf = _h.labels.get('form') %}
+						<div class="clear"></div>
+					</div>
+				</div>
+			</div>
+			<footer class="content">
+				<div class="footer-inner web content sublist-box">
+					<section class="nav nav-footer">
+						<h4 class="sublist-arrow">{{ _lblg.title_categorie }}</h4>
+						{% include _h.template('_footer_menu_generic.html') %}
+					</section>
+					{{ mc.footer_informazioni(_h, mapPagine) }}
+					{{ mc.footer_myaccount(_h) }}
+					{{ mc.footer_recapiti(_h) }}
+					{{ mc.footer_newsletter(_h) }}
+					
+					<section class="copy">
+					{{ _h.settings.get('footer_copy') }} - {{ _lblg.p_iva }} {{ _h.settings.get('footer_p_iva') }}
+					</section>
+				</div>
+			</footer>
+		</div>
+{% endif %}

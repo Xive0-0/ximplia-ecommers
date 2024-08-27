@@ -1,0 +1,48 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Import dati') }}
+			
+<div class="h-tab">
+
+	<div data-tab-rif="aziende">Aziende/Brand</div>
+	<div data-tab-rif="collezioni">Collezioni</div>
+	<div data-tab-rif="articoli">Articoli</div>
+	<div data-tab-rif="clienti">Clienti</div>
+
+	<div data-tab="aziende">
+		<p><strong>Import dati Aziende/Brand</strong></p>
+		<p><em>L'operazione potrebbe richiedere diversi minuti, non aggiornare il browser</em></p>
+		<p><a href="javascript:void(0);" data-action='{"url": "{{ _h.url('manager/myarea/importdata/azienda') }}"}' class="h-bar-button h-bar-button-blu action-import-data">Avvia import</a></p>
+		<div class="report"></div>
+	</div>
+	<div data-tab="collezioni">
+		<p><strong>Import dati Collezioni</strong></p>
+		<p><em>L'operazione potrebbe richiedere diversi minuti, non aggiornare il browser</em></p>
+		<p><a href="javascript:void(0);" data-action='{"url": "{{ _h.url('manager/myarea/importdata/collezione') }}"}' class="h-bar-button h-bar-button-blu action-import-data">Avvia import</a></p>
+		<div class="report"></div>
+	</div>
+	<div data-tab="articoli">
+		<p><strong>Import dati Articoli</strong></p>
+		<p><em>L'operazione potrebbe richiedere diversi minuti, non aggiornare il browser</em></p>
+		<p><a href="javascript:void(0);" data-action='{"url": "{{ _h.url('manager/myarea/importdata/articolo') }}"}' class="h-bar-button h-bar-button-blu action-import-data">Avvia import</a></p>
+		<div class="report"></div>
+	</div>
+	<div data-tab="clienti">
+		<p><strong>Import dati Clienti</strong></p>
+		<p><em>L'operazione potrebbe richiedere diversi minuti, non aggiornare il browser</em></p>
+		<p><a href="javascript:void(0);" data-action='{"url": "{{ _h.url('manager/myarea/importdata/cliente') }}"}' class="h-bar-button h-bar-button-blu action-import-data">Avvia import</a></p>
+		<div class="report"></div>
+	</div>
+
+</div>
+
+
+		</fieldset>
+	</div>
+	<div class="h-layout-bottombar">
+		<div class="h-layout-content-wrapper">
+			<a href="javascript:void(0);" class="h-bar-button h-bar-button-gray h-close-box">Chiudi</a>
+		</div>
+	</div>
+	</form>
+</div>

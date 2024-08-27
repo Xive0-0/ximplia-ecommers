@@ -1,0 +1,11 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Modifica Sconto') }}
+<input type="hidden" name="id" value="{{ _h.input('id') }}">
+<p class="field-line field-100">
+	<label>Sconto (percentuale):</label>
+	<input type="text" name="sconto" class="field valida-digitnumber valida-required" value="0" maxlength="2"> %
+</p>
+{{ mc.checkbox('', 1, 'applica_tutti', 'Applica a tutti gli articoli') }}
+
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/articolo/ex-edit-sconto')) }}	

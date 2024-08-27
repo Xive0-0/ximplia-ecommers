@@ -1,0 +1,18 @@
+{
+	"put": {
+		"view": [
+			{"mymetainfo": true}
+		]
+	},
+	"on:": [
+		{"name": "search", "params": {"autoload": true, "find": true, "attributo_all": false, "order": "ordine", "order_type": "desc"}}
+	],
+	"on:view": [
+		{"template": "search_list", "extra": false, "check": "({input}[[autoload]]!=null)"},
+		{"template": "search", "params": {
+			"js": [
+				"search"
+			]
+		}}
+	]
+}

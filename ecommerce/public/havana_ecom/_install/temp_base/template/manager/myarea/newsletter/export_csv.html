@@ -1,0 +1,4 @@
+PRIVACY;MARKETING;NOME;COGNOME;E_MAIL;TELEFONO;LANG;DATA ISCR. e CONSENSO;DATA NASCITA;ANNO NASCITA;SESSO;
+{% for item in list %}
+{% if item.get('codice_attivazione') %}no{% else %}si{% endif %};{% if item.get('marketing_policy') %}si{% else %}no{% endif %};{{ item.get('nome') }};{{ item.get('cognome') }};{{ item.get('e_mail') }};{{ item.get('telefono') }};{{ item.get('lang') }};{{ item.getDateTime('data_inserimento') }};{{ item.getDate('data_nascita') }};{{ item.get('anno_nascita') }};{{ item.getFromList('sesso', ['', 'M','F','A']) }};
+{% endfor %}

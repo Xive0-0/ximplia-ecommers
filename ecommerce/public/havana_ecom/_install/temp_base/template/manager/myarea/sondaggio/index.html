@@ -1,0 +1,10 @@
+{% import _h.template('manager/_macro.html') as mc %}
+{{ mc.index_page_header(_h, 'Sondaggio', 'sondaggio') }}
+	
+	{{ mc.navButtonNew(_h, 'nuova', 'sondaggio') }}
+	{{ mc.navButtonUpdateLang(_h, 'modifica', 'sondaggio') }}
+	{{ mc.navButtonDelete(_h, 'elimina', 'sondaggio') }}
+	{{ mc.navSeparatore() }}
+	{{ mc.navButton(_h, 'esporta dati', 'disk', 'click', 'h-action-download', '{"select": {"from":"#h-layout-center-content", "check": 1, "errorMessage": "Selezionare una voce"}, "url": "' ~ _h.url('manager/myarea/sondaggio/export') ~ '"}') }}
+	
+{{ mc.index_page_footer(_h, result, 'sondaggio') }}

@@ -1,0 +1,71 @@
+{% import _h.template('manager/_macro.html') as mc %}
+{% import _h.template('manager/_my_macro.html') as mymc %}
+
+{{ mc.slideBoxHeader(_h, 'Articoli non disponibili') }}
+
+{% if item %}
+	{% if item.isOrdineCarrelloDaCompletare() %}
+		ordine ancora in fase di carrello
+		{{ mc.slideBoxFooter(_h, false) }}
+	{% else %}
+	{% set ordine = item.dettaglio.ordine %}
+	<input type="hidden" name="id" value="{{ item.id }}">
+	
+	<div class="field-line field-line-text">
+		<div>Ordine: <strong>{{ item.get('codice') }}</strong> per: <strong>{{ ordine.spedizione.cognome }} {{ ordine.spedizione.nome }}</strong></div>
+	</div>
+	{{ mc.checkbox('', 1, 'non_inviare_e_mail', 'NON inviare e-mail al cliente', 1) }}
+	<div class="field-line field-line-text">
+	Impostare tra quanti giorni gli articoli saranno disponibili per il cliente. 
+	</div>
+	<br>
+	<table class="h-list h-list-multiple-selection" cellpadding="0" cellspacing="0" border="0">
+	<thead>
+	<tr class="h-list-header">
+		<th style="width: 60px;">&nbsp;</th>
+		<th style="width: 120px;">COD</th>
+		<th>Articolo</th>
+		<th style="width: 120px;">Dis. tra num. giorni</th>
+	</tr>
+	</thead>
+	<tbody>
+		{% set map = _h.context('mapAttributo') %}
+		{% set mapType = _h.context('mapAttributoType') %}
+		
+		{% set listItems = item.listItems() %}
+		{% for art in listItems %}
+			{% if art.disponibile %}
+			{% else %}
+			<tr class="row-articolo-ordine" data-ordine-id="{{ item.id }}" data-articolo-id="{{ art.item.id }}" data-articolo-tmp-id="{{ art.tmp_id }}" data-articolo-quantita="{{ art.qta }}">
+				<td>{{ mymc.immagine_articolo_ordine(_h, art) }}</td>
+				<td>{{ art.item.codice }}{% if _h.config('template').manager.item.articolo.id %}<div style="font-size:9px;">#{{ art.item.id }}</div>{% endif %}</td>
+				<td>
+					<div><strong>{{ art.item.nome }}</strong></div>
+					{% if art.item.nome_simbolico %}
+					<div>{{ art.item.nome_simbolico }}</div>
+					{% endif %}
+					{% for attr in art.attr %}
+						{% if attr.id != 0 %}
+						{% set a = map.get(attr.id) %}
+						<div><em>{{ mapType.get(a.get('tipo')).nome }}:</em> {{ a.get('nome') }}</div>
+						{% endif %}
+					{% endfor %}
+					{{ mymc.dettaglio_articolo_ordine(_h, art) }}
+				</td>
+				<td><input name="giorni_attesa_{{ art.tmp_id }}" type="text" class="field valida-digitint" style="width: 80px"></td>
+			</tr>
+			{% endif %}
+		{% endfor %}
+	</tbody>
+	</table>
+	{% endif %}
+	
+	<p class="field-line field-400">
+		<label>Testo aggiuntivo inviato al cliente, inserito sotto agli articoli:</label>
+		<textarea name="testo" class="field"></textarea>
+	</p>
+	{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/ordini/ex-stato-ordine-in-attesa'), '"reload": ["#h-layout-center-content", "#dettaglio-content"]', '', '', 'Salva') }}
+{% else %}
+Ordine non trovato
+{{ mc.slideBoxFooter(_h) }}
+{% endif %}

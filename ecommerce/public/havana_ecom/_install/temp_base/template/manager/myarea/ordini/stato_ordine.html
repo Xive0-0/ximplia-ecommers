@@ -1,0 +1,16 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Modifica stato ordine') }}
+<input type="hidden" name="id" value="{{ _h.input('id') }}">
+
+<div class="tree-level-onlyone field-line-med">
+{{ mc.checkbox('', -1, 'stato', 'preso in carico', -1) }}
+{{ mc.checkbox('', 100, 'stato', 'in lavorazione', 100) }}
+{{ mc.checkbox('', 101, 'stato', 'attesa articoli (comunicazione utente)', 101) }}
+{{ mc.checkbox('', 102, 'stato', 'attesa di feedback', 102) }}
+{{ mc.checkbox('', 200, 'stato', 'merce disponibile / in spedizione', 200) }}
+{{ mc.checkbox('', 201, 'stato', 'consegnato', 201) }}
+{{ mc.checkbox('', 800, 'stato', 'annullato', 800) }}
+{{ mc.checkbox('', 801, 'stato', 'rimborsato', 801) }}
+</div>
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/ordini/ex-stato-ordine'), '"reload": ["#h-layout-center-content", "#dettaglio-content"]', ',"submitOnCallback":"check_stato_ordine"', '', 'Imposta stato') }}

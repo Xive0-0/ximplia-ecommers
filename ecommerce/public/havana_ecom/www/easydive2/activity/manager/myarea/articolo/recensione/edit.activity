@@ -1,0 +1,10 @@
+{
+	"on:": [
+		"manager/myarea/list-lang",
+		"manager/myarea/articolo/recensione/load"
+	],
+	"on:view": {
+		"template": "manager/myarea/articolo/recensione/edit",
+		"extra": false
+	}
+}

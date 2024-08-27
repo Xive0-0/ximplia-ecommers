@@ -1,0 +1,33 @@
+.etichetta-find-articolo {
+    left: 200px;
+    line-height: normal;
+    position: absolute;
+    top: 10px;
+}
+
+.etichetta-find-articolo .h-bar-button {
+	margin: 12px 0 0 2px;
+}
+.etichetta-find-articolo .autocomplete-content {
+	color: #61646b;
+	font-weight: normal;
+	z-index: 10;
+}
+.h-layout-topbar-etichetta {
+	height: 90px;
+}
+.h-layout-show-topbar .h-layout-content-etichetta {
+	top: 90px;
+}
+
+.etichette .autocomplete-content-value {
+	font-weight: normal;
+	font-size: 11px;
+	width: 300px;
+}
+.etichetta-find-articolo .field-line-left span.label-field {
+	display: block;
+	font-size: 9px;
+	font-weight: normal;
+	color: #61646b;
+}

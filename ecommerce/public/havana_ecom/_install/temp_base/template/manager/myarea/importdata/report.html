@@ -1,0 +1,21 @@
+{% if error_import %}
+	{% if error_import|length == 0 %}
+	<div class="import-confirm">Dati caricati correttamente</div>
+	{% else %}
+		<div class="import-error">Errori in fase di import:</div>
+		<table class="import-table" border="0" cellpadding="0" cellspacing="0">
+		<tr class="import-table-intestazione">
+			<td>File</td>
+			<td>Errore</td>
+		</tr>
+		{% for err in error_import %}
+		<tr>
+			<td>{{ err.file }}</td>
+			<td>{{ err.error }}</td>
+		</tr>
+		{% endfor %}
+		</table>
+	{% endif %}
+{% else %}
+	<div class="import-error">Parametri importazione non validi</div>
+{% endif %}

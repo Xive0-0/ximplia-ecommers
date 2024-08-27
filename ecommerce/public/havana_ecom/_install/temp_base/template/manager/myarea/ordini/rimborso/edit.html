@@ -1,0 +1,32 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Crea rimborso') }}
+	<input type="hidden" name="id" value="{{ item.id }}">
+	<input type="hidden" name="rimborso" value="{{ rimborso }}">
+	<p>Crea un rimborso 
+	{% if rimborso == 'stripe' %}
+		su carta di credito con circuito Stripe
+	{% elseif rimborso == 'paypal' %}
+		su PayPal
+	{% else %}
+		come codice Gift 
+	{% endif %}
+	per l'ordine <strong>{{ item.get('codice') }}</strong></p>
+	{{ mc.checkbox(1, 1, 'invia_comunicazione_cliente', 'Invia comunicazione al cliente') }}
+	<div class="field-line field-line-left field-100">
+		<label>Valore {{ item.get('currency')|upper }}<span>*</span>:</label>
+		<input type="text" name="rimborso_valore" class="field valida-required valida-euro" value="0" maxlength="10">
+	</div>
+	{% if rimborso == 'gift' %}
+	<div class="field-line field-line-left field-100">
+		<label>Data scadenza<span>*</span>:</label>
+		<input type="text" name="data_scadenza" class="field valida-required valida-datasimple input-datepicker" value="">
+	</div>
+	{% endif %}
+	<div class="clear"></div>
+	<div class="field-line field-400 field-line-textarea">
+		<label>Testo da aggiungere all'e-email inviata al cliente:</label>
+		<textarea name="testo" class="field"></textarea>
+	</div>
+	{{ mc.labelCampiObbligatori() }}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/ordini/rimborso/ex-edit'), '"reload": ["#dettaglio-content"]', '', '', 'Crea rimborso') }}	

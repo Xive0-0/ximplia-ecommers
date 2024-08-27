@@ -1,0 +1,24 @@
+{% set _lbl = _h.labels('email', lang) %}
+{% import _h.template('_macro.html') as mc %}
+
+<p style="{{ mc.style_fontBase() }}">Richiesta di supporto da parte di un utente dal sito <a href="{{ link_sito }}" style="{{ mc.style_link() }}">{{ link_sito }}</a>.</p>
+
+{{ mc.tableHeader() }}
+{{ mc.row('nome', nome) }}
+{{ mc.row('e-mail', e_mail) }}
+{% if numero_ordine %}
+{{ mc.row('num. ordine', numero_ordine) }}
+{% endif %}
+{% if articolo_id %}
+{{ mc.row('ID articolo', articolo_id) }}
+{% endif %}
+{% if articolo_codice %}
+{{ mc.row('Codice articolo', articolo_codice) }}
+{% endif %}
+{% if articolo_nome %}
+{{ mc.row('Articolo', articolo_nome) }}
+{% endif %}
+{{ mc.row('testo', testo) }}
+{{ mc.tableFooter() }}
+
+

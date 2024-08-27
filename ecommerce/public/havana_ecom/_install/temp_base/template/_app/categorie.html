@@ -1,0 +1,15 @@
+<div class="appweb-menu">
+	<ul>
+		{% for elem in categorie %}
+		<li class="has-childs">
+			<a href="{{ elem.url }}" class="has-image">
+				{% if elem.img %}
+				<strong style="background-image: url({{ elem.img }})"></strong>
+				{% endif %}
+				<span class="ellipsis">{{ elem.nome }}</span>
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/></svg>
+			</a>
+		</li>
+		{% endfor %}
+	</ul>
+</div>

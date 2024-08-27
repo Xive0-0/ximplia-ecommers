@@ -1,0 +1,24 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Export per fornitore') }}
+<div class="field-line field-400">
+	<label>Fornitore<span>*</span>:</label>
+	<select name="id_fornitore" class="valida-required field">
+		<option></option>
+	{% for i in listFornitore %}
+		<option value="{{ i.id }}">{{ i.nome }}</option>
+	{% endfor %}	
+	</select> 
+</div>
+
+{{ mc.labelCampiObbligatori() }}
+		<fieldset>
+	</div>
+	<div class="h-layout-bottombar">
+		<div class="h-layout-content-wrapper">
+			<a href="javascript:void(0);" class="h-bar-button h-bar-button-gray h-close-box">Annulla</a>
+			<a href="javascript:void(0);" class="h-bar-button h-bar-button-blu h-action-submit" data-action='{"method": "get", "target": "_blank", "url":"{{ _h.url('manager/myarea/fornitorearticolo/export') }}", "onComplete": {"closeWin": true}, "loadinMessage": "generazione in corso..."}'>Esporta</a>
+		</div>
+	</div>
+	</form>
+</div>

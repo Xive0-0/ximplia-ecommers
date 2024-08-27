@@ -1,0 +1,39 @@
+{% import _h.template('_macro.html') as mc %}
+{% import _h.template('cart/_macro.html') as cmc %}
+{% set _lblc = _h.labels.get('checkout') %}
+
+{% set ordine = ordine.ordine %}
+<div class="thanks">
+<div id="pagina">
+
+{% if ordine %}
+	<div class="riepilogo">
+		<h2>{{ _lblc.title_il_tuo_ordine }}</h2>
+		<div>{{ _lblc.descr_riferimento_ordine }}: <strong class="codice">{{ codice }}</strong></div>
+		{% if _lblc.descr_riferimento_ordine_note_aggiuntive %}
+		<div>{{ _lblc.descr_riferimento_ordine_note_aggiuntive }}</div>
+		{% endif %}
+	</div>
+
+	{{ cmc.riepilogo_ordine(_h, ordine) }}
+
+{% endif %}
+<div class="riepilogo">
+	{% if listFaq and listFaq|length > 0 %}
+		<h2>{{ _lblc.title_domande }}</h2>
+		{% for item in listFaq %}
+			<div class="item-faq">
+			<strong>{{ item.get('domanda') }}</strong>
+			<p>{{ item.get('risposta') }}</p>
+			</div>
+		{% endfor %}
+	{% endif %}
+	{% set _lblg = _h.labels.get('global') %}
+	<div class="item-faq">
+		<strong>{{ _lblc.title_serve_aiuto }}</strong>
+		<p>{{ _lblg.descr_help }} <a href="{{ _h.xurl('servizio-clienti') }}" title="{{ _lblg.alt_servizio_clienti }}">{{ _lblg.btn_servizio_clienti }}</a>.</p>
+	</div>
+</div>
+
+</div>
+</div>

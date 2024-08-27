@@ -1,0 +1,128 @@
+{% set _lblm = _h.labels.get('my') %}
+{% set _lblf = _h.labels.get('form') %}
+{% set _lblc = _h.labels.get('checkout') %}
+
+<h4 class="subtitle">{{ _lblm.title_dati_fatturazione }}</h4>
+{% if item %}
+<h2>{{ _lblm.title_modifica }}</h2>
+{% else %}
+<h2>{{ _lblm.title_nuovo }}</h2>
+{% endif %}
+<form id="pagina" class="data-check-nazione field-content-pec-sdi">
+	<input type="hidden" name="id" value="{{ item.id }}">
+	<div class="field-text">
+		{{ _lblm.dati_fatturazione }}:
+	</div>
+	<div class="form-error-message"></div>
+	<div class="field-line">
+		<div class="field">
+			<label>{{ _lblf.field_ragione_sociale }} <span>*</span></label>
+			<input type="text" name="ragione_sociale" class="valida-required" maxlength="100" value="{{ item.get('nome') }}">
+		</div>
+	</div>
+	<div class="field-line-50-50">
+		<div class="field-line">
+			<div class="field">
+				<label>{{ _lblf.field_nome }}</label>
+				<input type="text" name="referente_nome" maxlength="50" value="{{ item.get('referente_nome') }}">
+			</div>
+		</div>
+		<div class="field-line">
+			<div class="field">
+				<label>{{ _lblf.field_cognome }}</label>
+				<input type="text" name="referente_cognome" maxlength="50" value="{{ item.get('referente_cognome') }}">
+			</div>
+		</div>
+	</div>
+	<div class="field-line-50-50">
+		<div class="field-line">
+			<div class="field">
+				<label>{{ _lblf.field_p_iva }}</label>
+				<input type="text" name="p_iva" class="valida-piva valida-digitalphanum" maxlength="20" value="{{ item.get('p_iva') }}">
+			</div>
+		</div>
+		<div class="field-line">
+			<div class="field">
+				<label>{{ _lblf.field_codice_fiscale }}</label>
+				<input type="text" name="codice_fiscale" class="valida-codicefiscale valida-digitalphanum" maxlength="16" value="{{ item.get('codice_fiscale') }}">
+			</div>
+		</div>
+	</div>
+	<div class="field-wrapper-pec-sdi">
+		<div class="field-line-text">{{ _lblc.dati_fiscali_pec_sdi }}</div>
+		<div class="field-line-50-50">
+			<div class="field-line">
+				<div class="field">
+					<label>{{ _lblf.field_pec }}</label>
+					<input type="text" name="pec" class="valida-email" maxlength="100" value="{{ item.get('pec') }}">
+				</div>
+			</div>
+			<div class="field-line">
+				<div class="field">
+					<label>{{ _lblf.field_sdi }}</label>
+					<input type="text" name="sdi" class="valida-digitalphanum valida-sdi" data-check="108" maxlength="7" value="{{ item.get('sdi') }}">
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="field-line-80-20">
+		<div class="field-line">
+			<div class="field">
+				<label>{{ _lblf.field_indirizzo }} <span>*</span></label>
+				<input type="text" name="via" class="valida-required" maxlength="100" value="{{ item.get('via') }}">
+			</div>
+		</div>
+		<div class="field-line">
+			<div class="field">
+				<label>{{ _lblf.field_civico }} <span>*</span></label>
+				<input type="text" name="num_civico" class="valida-required" maxlength="10" value="{{ item.get('num_civico') }}">
+			</div>
+		</div>
+	</div>
+	<div class="field-line-30-70">
+		<div class="field-line">
+			<div class="field">
+				<label>{{ _lblf.field_cap }} <span>*</span></label>
+				<input type="text" name="cap" class="valida-required" maxlength="10" value="{{ item.get('cap') }}">
+			</div>
+		</div>
+		<div class="field-line">
+			<div class="field">
+				<label>{{ _lblf.field_localita }} <span>*</span></label>
+				<input type="text" name="localita" class="valida-required" maxlength="50" value="{{ item.get('localita') }}">
+			</div>
+		</div>
+	</div>
+	<div class="field-line-50-50">
+		<div class="field-line">
+			<div class="field">
+				<label>{{ _lblf.field_provincia }} <span>*</span></label>
+				<input type="text" name="provincia" class="valida-required" maxlength="50" value="{{ item.get('provincia') }}">
+			</div>
+		</div>
+		<div class="field-line">
+			<div class="field">
+				<label>{{ _lblf.field_nazione }} <span>*</span></label>
+				<select name="nazione" class="valida-required data-check-nazione field-nazione-pec-sdi">
+					<option value=""></option>
+					{% for naz in listNazione %}
+					<option value="{{ naz.id }}" {% if naz.id == item.get('nazione') %}selected="true"{% endif %}>{{ naz.get('nome') }}</option>
+					{% endfor %}
+				</select>
+			</div>
+		</div>
+	</div>
+	<div class="field-line-50-50">
+		<div class="field-line">
+			<div class="field">
+				<label>{{ _lblf.field_telefono }}</label>
+				<input type="text" name="telefono" class="field-country-phone" maxlength="20" value="{{ item.get('telefono') }}">
+			</div>
+		</div>
+	</div>
+	<div class="field-text-obbligatori">{{ _lblf.campi_obbligatori }}</div>
+	{{ mc.google_recaptcha(_h, 'modifica_dati') }}
+	<div class="field-button field-button-left">
+		<a class="button-red button submit-form" href="javascript:void(0)" title="{{ _lblf.btn_salva }}" data-action='{"url": "{{ _h.url('account/my/fatturazione/ex-edit') }}", "onComplete": {"type": "url", "url": "{{ _h.url('account/my/fatturazione/index') }}"}}'><span>{{ _lblf.btn_salva }}</span></a>
+	</div>
+</form>

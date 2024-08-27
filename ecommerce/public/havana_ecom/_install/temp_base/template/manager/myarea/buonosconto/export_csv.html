@@ -1,0 +1,4 @@
+CODICE;UTILIZZATO;DATA UTILIZZO;NUMERO UTILIZZI;
+{% for item in list %}
+{{ item.get('codice') }};{% if item.get('utilizzato') %}si{% else %}no{% endif %};{{ item.getDateTime('data_utilizzato') }};{{ item.get('numero_utilizzi') }};
+{% endfor %}

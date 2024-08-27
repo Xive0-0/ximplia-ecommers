@@ -1,0 +1,17 @@
+<div class="h-layout-content-wrapper h-layout-show-topbar cassa">
+	<div class="h-layout-topbar h-layout-topbar-cassa">
+		<div class="h-layout-content-wrapper">
+			Log privacy
+			<div class="cassa-find-articolo action-find-form">
+				<div class="field-line-left field-400">
+					<input type="text" name="e_mail" class="field" placeholder="e-mail" value="">
+				</div>
+				<a href="javascript:void(0);" class="h-bar-button h-bar-button-blu-scuro action-find-in-list" data-action='{"content": "#log_list"}'>Cerca</a>
+			</div>
+			
+			<a href="javascript:void(0);" class="h-close-box"></a>
+		</div>
+	</div>
+	<div id="log_list" class="h-layout-content h-layout-content-cassa" style="right: 0" data-url="{{ _h.url('manager/myarea/logprivacy/list-log') }}">
+	</div>
+</div>

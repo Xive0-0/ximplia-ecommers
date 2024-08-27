@@ -1,0 +1,80 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% if item == null %}
+	{% set title = 'Nuovo URL' %}
+{% else %}
+	{% set title = 'Modifica URL' %}
+{% endif %}
+{{ mc.slideBoxHeader(_h, title) }}
+<input type="hidden" name="id" value="{{ item.id }}">
+<p class="field-line">
+L'indirizzo deve essere relativo e iniziare con lo slash (/).
+</p>
+<p class="field-line field-400">
+	<label>URL<span>*</span>:</label>
+	<input type="text" name="url" class="field valida-required" value="{{ item.get('url') }}" maxlength="175">
+</p>
+<p class="field-line field-100">
+	<label>Lang<span>*</span>:</label>
+	<select name="lang" class="field valida-required">
+	{% for l in listLang %}
+	<option value="{{ l }}"{% if l == item.get('lang') %} selected="true"{% endif %}>{{ l|upper }}</option>
+	{% endfor %}
+	</select>
+</p>
+<p class="field-line field-400">
+	<label>Meta title:</label>
+	<input type="text" name="title" class="field" value="{{ item.get('title') }}">
+</p>
+<p class="field-line field-400">
+	<label>Meta description:</label>
+	<textarea name="description" class="field">{{ item.get('description') }}</textarea>
+</p>
+<p class="field-line field-400">
+	<label>Canonical:</label>
+	<input type="text" name="canonical" class="field" value="{{ item.get('canonical') }}">
+</p>
+<p class="field-line field-400">
+	<label>OG Title:</label>
+	<input type="text" name="og_title" class="field" value="{{ item.get('og_title') }}">
+</p>
+<p class="field-line field-400">
+	<label>OG Description:</label>
+	<textarea name="og_description" class="field">{{ item.get('og_description') }}</textarea>
+</p>
+<div style="border: 1px solid #ccc; padding: 5px 10px; margin-top: 10px;">
+	<strong>Contenuto pagina header</strong>
+	<p class="field-line field-400">
+		<label>Titolo:</label>
+		<input type="text" name="pagina_titolo" class="field" value="{{ item.get('pagina_titolo') }}" maxlength="100">
+	</p>
+	<p class="field-line field-400">
+		<label>Sottotitolo:</label>
+		<input type="text" name="pagina_sottotitolo" class="field" value="{{ item.get('pagina_sottotitolo') }}" maxlength="500">
+	</p>
+	<div class="field-line field-400 edit-lang">
+		<label>Descrizione:</label>
+		{{ mc.gestione_file() }}
+		<textarea name="pagina_descrizione" class="visual-editor">{{ item.get('pagina_descrizione') }}</textarea>
+	</div>
+</div>
+
+<div style="border: 1px solid #ccc; padding: 5px 10px; margin-top: 10px;">
+	<strong>Contenuto pagina footer</strong>
+	<p class="field-line field-400">
+		<label>Titolo:</label>
+		<input type="text" name="pagina_titolo2" class="field" value="{{ item.get('pagina_titolo2') }}" maxlength="100">
+	</p>
+	<p class="field-line field-400">
+		<label>Sottotitolo:</label>
+		<input type="text" name="pagina_sottotitolo2" class="field" value="{{ item.get('pagina_sottotitolo2') }}" maxlength="500">
+	</p>
+	<div class="field-line field-400 edit-lang">
+		<label>Descrizione:</label>
+		{{ mc.gestione_file() }}
+		<textarea name="pagina_descrizione2" class="visual-editor">{{ item.get('pagina_descrizione2') }}</textarea>
+	</div>
+</div>
+
+{{ mc.labelCampiObbligatori() }}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/urlmeta/ex-edit')) }}	

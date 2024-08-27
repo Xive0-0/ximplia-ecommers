@@ -1,0 +1,247 @@
+{% import _h.template('manager/_macro.html') as mc %}
+{% import _h.template('manager/_my_macro.html') as mymc %}
+
+{% if item %}
+{% set ordine = item.dettaglio.ordine %}
+
+
+<div style="margin-bottom: 10px;">
+<table class="h-list" cellpadding="0" cellspacing="0" border="0">
+<tbody>
+<tr>
+	<td style="width: 50%;">
+		<em>preventivo: </em> <strong style="color: #ed4747;">{{ item.get('codice') }}</strong>
+	</td>
+	<td style="width: 50%;">
+		{% if cliente_registrato %}
+			<div style="margin-bottom: 5px;">Utente registrato:</div>
+			<div style="margin-bottom: 5px;"><em>E-Mail: </em> <strong>{{ cliente_registrato.get('e_mail') }}</strong></div>
+			{% if cliente_registrato.get('nome') %}
+			<div style="margin-bottom: 5px;"><em>Nome: </em> <strong>{{ cliente_registrato.get('nome') }}</strong></div>
+			{% endif %}
+			{% if cliente_registrato.get('cognome') %}
+			<div style="margin-bottom: 5px;"><em>Cognome: </em> <strong>{{ cliente_registrato.get('cognome') }}</strong></div>
+			{% endif %}
+		{% else %}
+		Cliente NON registrato al sito
+		{% endif %}
+	</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class="separatore-linea"></div>
+<table class="h-list" cellpadding="0" cellspacing="0" border="0">
+<thead>
+<tr class="h-list-header">
+	<th style="color: #ed4747">
+		{{ mc.navButton(_h, 'modifica indirizzo', 'update', 'click', 'h-action-window', '{"type": "layer", "url": "' ~ _h.url('manager/myarea/preventivi/edit-spedizione') ~ '", "overlay": true, "width": 500, "height": 500, "params": {"id": ' ~ item.id ~ '}}') }}
+		<span class="h-nav-text">RIFERIMENTI</span>
+	</th>
+	<th style="width: 200px;">
+	{{ mc.navButton(_h, 'modifica e-mail', 'update', 'click', 'h-action-window', '{"type": "layer", "url": "' ~ _h.url('manager/myarea/ordini/edit-email') ~ '", "overlay": true, "width": 500, "height": 250, "params": {"id": ' ~ item.id ~ '}}') }}
+	<span class="h-nav-text">E-mail</span>
+	</th>
+	<th style="width: 150px;">Telefono</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+	<td>
+		{% if (ordine.spedizione.nome) %}
+			{{ ordine.spedizione.nome }} {{ ordine.spedizione.cognome }}<br>
+			{% if ordine.fattura.nome %}
+				{{ ordine.fattura.nome }}<br>
+				{% if ordine.fattura.p_iva %}
+					<em>P.IVA</em> {{ ordine.fattura.p_iva }}<br>
+				{% endif %}
+				{% if ordine.fattura.codice_fiscale %}
+					<em>C.F.</em> {{ ordine.fattura.codice_fiscale }}<br>
+				{% endif %}	
+				{% if ordine.spedizione.via %}
+				{{ ordine.spedizione.via }}, {{ ordine.spedizione.num_civico }}<br>
+				{% endif %}
+				{{ ordine.spedizione.cap }} {{ ordine.spedizione.localita }}{% if ordine.spedizione.provinci %} ({{ ordine.spedizione.provincia }}){% endif %}<br>
+				{{ ordine.spedizione.nazione }}
+				{% if ordine.spedizione.indicazioni %}
+					<br><br><em>indicazioni:</em> {{ ordine.spedizione.indicazioni }}
+				{% endif %}
+			{% endif %}
+		{% endif %}
+	</td>
+	<td>
+		<div class="h-list-cell-auto-wrapper">
+			<div class="h-list-cell-auto h-action-alttext" data-alttext="{{ ordine.e_mail }}">
+				<a class="link h-action-window" data-action='{"type": "layer", "url": "{{ _h.url('manager/myarea/ordini/scrivi') }}", "overlay": true, "width": 500, "height": 300, "params": {"id": {{ item.id }}}}'>
+					{{ ordine.e_mail }}
+				</a>
+			</div>
+		</div>
+	</td>
+	<td>
+		<div class="h-list-cell-auto-wrapper">
+			<div class="h-list-cell-auto h-action-alttext" data-alttext="{{ ordine.spedizione.telefono }}">
+				{{ ordine.spedizione.telefono }}
+			</div>
+		</div>
+	</td>
+</tbody>
+</table>
+
+<div class="separatore-linea"></div>
+<table class="h-list" cellpadding="0" cellspacing="0" border="0">
+<thead>
+<tr class="h-list-header">
+	<th style="color: #ed4747">
+		{{ mc.navButton(_h, 'modifica dettagli', 'update', 'click', 'h-action-window', '{"type": "layer", "url": "' ~ _h.url('manager/myarea/preventivi/edit-dettaglio') ~ '", "overlay": true, "width": 500, "height": 500, "params": {"id": ' ~ item.id ~ '}}') }}
+		<span class="h-nav-text">DETTAGLI</span>
+	</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+	<td>
+		{% set intestazione = item.intestazione() %}
+		<table border="0" width="100%" class="preventivo-intestazione" cellpadding="0" cellspacing="0">
+		<tr><th valign="top">Oggetto</th><td>{{ intestazione.oggetto }}</td></tr>
+		<tr><th valign="top">Testo</th><td>{{ intestazione.testo }}</td></tr>
+		<tr><th valign="top" style="width: 100px;">Validità offerta</th><td>{{ intestazione.validita_offerta }}</td></tr>
+		<tr><th valign="top">Montaggio/installazione</th><td>{{ intestazione.montaggio }}</td></tr>
+		<tr><th valign="top">Termini di consegna</th><td>{{ intestazione.termini_consegna }}</td></tr>
+		<tr><th valign="top">Pagamento</th><td>{{ intestazione.pagamento }}</td></tr>
+		<tr><th valign="top">Garanzia</th><td>{{ intestazione.garanzia }}</td></tr>
+		{% if _h.config('gestione_preventivi_campi_liberi', true) %}
+		<tr><th valign="top">Spedizione</th><td>{{ intestazione.spedizione }}</td></tr>
+		<tr><th valign="top">Sconto generale</th><td>{{ intestazione.sconto }}</td></tr>
+		<tr><th valign="top">Totale finale</th><td>{{ intestazione.totale }}</td></tr>
+		{% else %}
+		<tr><th valign="top">Spedizione</th><td>{{ _h.util.euro(intestazione.spedizione) }} {{ _h.config('manager_valuta', '&euro;') }}</td></tr>
+		<tr><th valign="top">Sconto generale</th><td>{{ _h.util.euro(intestazione.sconto) }} {{ _h.config('manager_valuta', '&euro;') }}{% if intestazione.sconto_percentuale %} ({{ _h.util.euro(intestazione.sconto_percentuale) }} %){% endif %}</td></tr>
+		<tr><th valign="top">Totale finale</th><td>{{ _h.util.euro(intestazione.totale) }} {{ _h.config('manager_valuta', '&euro;') }}</td></tr>
+		{% endif %}
+		<tr><th valign="top">Altro testo</th><td>{{ intestazione.altro_testo }}</td></tr>
+		</table>
+	</td>
+</tbody>
+</table>
+
+<div class="separatore-linea"></div>
+
+
+<table class="h-list" cellpadding="0" cellspacing="0" border="0">
+<thead>
+<tr class="h-list-header">
+	<th colspan="7" style="color: #ed4747">
+		{{ mc.navButton(_h, 'aggiungi articolo', 'new', 'click', 'h-action-window', '{"type": "layer", "url": "' ~ _h.url('manager/myarea/ordini/add-articolo') ~ '", "overlay": true, "width": 750, "height": 450, "params": {"id": ' ~ item.id ~ '}}') }}
+		{{ mc.navButton(_h, 'modifica sconto ordine', 'update', 'click', 'h-action-window', '{"type": "layer", "url": "' ~ _h.url('manager/myarea/ordini/edit-sconto') ~ '", "overlay": true, "width": 300, "height": 270, "params": {"id": ' ~ item.id ~ '}}') }}
+		<span class="h-nav-text">ARTICOLI ACQUISTATI</span>
+	</th>
+</tr>
+
+<tr class="h-list-header">
+	{% if stampa %}
+	<th style="width: 0;"></th>
+	{% else %}
+	<th style="width: 75px;">&nbsp;</th>
+	{% endif %}
+	<th style="width: 60px;">&nbsp;</th>
+	<th style="width: 120px;">COD</th>
+	<th>Articolo</th>
+	<th style="width: 80px;">Prezzo unit.</th>
+	<th style="width: 40px;">Qta</th>
+	<th style="width: 90px; text-align: right">Totale</th>
+</tr>
+</thead>
+<tbody>
+	{% set iva = false %}
+	{% set map = _h.context('mapAttributo') %}
+	{% set mapType = _h.context('mapAttributoType') %}
+	
+	{% for art in ordine.list_items %}
+		{% set prezzo_originale = art.item.prezzo_originale %}
+		{% set prezzo = art.item.prezzo %}
+		{% set total = art.total %}
+	<tr>
+		<td class="h-cell">
+		{{ mc.navButton(_h, 'modifica articolo', 'update', 'click', 'h-action-window', '{"type": "layer", "url": "' ~ _h.url('manager/myarea/ordini/edit-articolo') ~ '", "overlay": true, "width": 500, "height": 400, "params": {"id": ' ~ item.id ~ ', "articolo_id": ' ~ art.item.id ~ ', "articolo_tmp_id": "' ~ art.tmp_id ~ '"}}') }}	
+		{{ mc.navButton(_h, 'elimina articolo', 'delete', 'click', 'h-action-selected-execute', '{"confirm": "Eliminare articolo? Il carrello sarà ricalcolato.", "url": "' ~ _h.url('manager/myarea/ordini/ex-delete-articolo') ~ '", "params": {"id": ' ~ item.id ~ ', "articolo_id": ' ~ art.item.id ~ ', "articolo_tmp_id": "' ~ art.tmp_id ~ '"}, "reload": ["#h-layout-center-content", "#dettaglio-content"]}') }}
+		</td>
+		<td>{{ mymc.immagine_articolo_ordine(_h, art) }}</td>
+		<td>{{ art.item.codice }}</td>
+		<td>
+			<div><strong>{{ art.item.nome }}</strong></div>
+			{% if art.item.nome_simbolico %}
+			<div>{{ art.item.nome_simbolico }}</div>
+			{% endif %}
+			{% for attr in art.attr %}
+				{% if attr.id != 0 %}
+				{% set a = map.get(attr.id) %}
+				<div><em>{{ mapType.get(a.get('tipo')).nome }}:</em> {{ a.get('nome') }}</div>
+				{% endif %}
+			{% endfor %}
+			{{ mymc.dettaglio_articolo_ordine(_h, art) }}
+		</td>
+		<td style="text-align: right;">
+			<div>{{ _h.util.euro(prezzo) }} {{ _h.config('manager_valuta', '&euro;') }}</div>			
+			{% if art.item.is_pacchetto %}
+			<div style="color: #999; font-size: 12px;">{{ art.item.nome_pacchetto }}</div>
+			{% elseif art.item.is_sconto %}
+			<div style="color: #999; font-size: 12px;">-{{ art.item.sconto }}%</div>
+			<div style="color: #999; font-size: 12px; text-decoration: line-through">{{ _h.util.euro(prezzo_originale) }} {{ _h.config('manager_valuta', '&euro;') }}</div>
+			{% endif %}		
+		</td>
+		<td>{{ art.qta }}</td>
+		<td style="text-align: right;">
+			<div><strong>{{ _h.util.euro(total) }} {{ _h.config('manager_valuta', '&euro;') }}</strong></div>	
+		</td>
+	</tr>
+	{% endfor %}
+	{% for art in ordine.list_items_virtuale %}
+		{% set prezzo = art.item.prezzo %}
+		{% set total = art.total %}
+	<tr>
+		<td class="h-cell">
+		{{ mc.navButton(_h, 'elimina articolo', 'delete', 'click', 'h-action-selected-execute', '{"confirm": "Eliminare articolo? Il carrello sarà ricalcolato.", "url": "' ~ _h.url('manager/myarea/ordini/ex-delete-articolo') ~ '", "params": {"id": ' ~ item.id ~ ', "articolo_id": "' ~ art.item.id ~ '", "articolo_tmp_id": "' ~ art.tmp_id ~ '"}, "reload": ["#h-layout-center-content", "#dettaglio-content"]}') }}
+		</td>
+		<td>&nbsp;</td>
+		<td>&nbsp;</td>
+		<td>
+			<div><strong>{{ art.item.nome }}</strong></div>
+			{% if art.item.note %}
+			<div>{{ art.item.note }}</div>
+			{% endif %}
+		</td>
+		<td style="text-align: right;">
+			<div>{{ _h.util.euro(prezzo) }} {{ _h.config('manager_valuta', '&euro;') }}</div>			
+		</td>
+		<td>{{ art.qta }}</td>
+		<td style="text-align: right;">
+			<div><strong>{{ _h.util.euro(total) }} {{ _h.config('manager_valuta', '&euro;') }}</strong></div>	
+		</td>
+	</tr>
+	{% endfor %}
+	
+	<tr>
+		<td colspan="6" style="text-align: right; border-bottom: none;">tot. articoli:</td>
+		<td style="text-align: right;">{{ _h.util.euro(ordine.total_articoli) }} {{ _h.config('manager_valuta', '&euro;') }}</td>
+	</tr>
+	<tr>
+		<td colspan="6" style="text-align: right; border-bottom: none;">sconto:</td>
+		<td style="text-align: right;">-{{ intestazione.sconto }} {{ _h.config('manager_valuta', '&euro;') }}</td>
+	</tr>
+	<tr>
+		<td colspan="6" style="text-align: right; border-bottom: none; font-weight: bold; font-size: 16px;">TOTALE</td>
+		<td style="text-align: right; font-weight: bold; font-size: 16px;">
+		{% if _h.config('gestione_preventivi_campi_liberi', true) %}
+			{{ intestazione.totale }} {{ _h.config('manager_valuta', '&euro;') }}
+		{% else %}	
+			{{ _h.util.euro(intestazione.totale) }} {{ _h.config('manager_valuta', '&euro;') }}
+		{% endif %}	
+		</td>
+	</tr>
+</tbody>
+</table>
+{% else %}
+Preventivo non trovato
+{% endif %}

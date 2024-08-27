@@ -1,0 +1,55 @@
+{% import _h.template('manager/_my_macro.html') as mymc %}
+<table class="h-list" cellpadding="0" cellspacing="0" border="0">
+<thead>
+<tr class="h-list-header">
+	<th style="width: 16px;">&nbsp;</th>
+	<th style="width: 120px;">COD</th>
+	<th style="width: 45px;">&nbsp;</th>
+	<th>Nome</th>
+	<th style="width: 80px;">Prezzo</th>
+	<th style="width: 80px;">Sconto</th>
+	<th style="width: 50px;">Qta.</th>
+	<th style="width: 100px;">Totale</th>
+</tr>
+</thead>
+<tbody>
+{% for item in list %}		
+	<tr data-id="{{ item.id }}">
+		<td><img src="/assets/manager/havana-js/img/icon/ico-delete.svg" class="elimina-articolo-cassa" style="cursor: pointer;"></td>
+		<td class="codice">{{ item.codice }}</td>		
+		<td><img class="image image-articolo" src="{{ item.imageUrl('60x60') }}"></td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto nome">
+					{{ item.get('nome') }}
+				</div>
+			</div>
+			{% if _h.settings.get('gestione_ordini_fornitore', '') != '' %}
+				{% set info = mapInOrdine.get(item.id) %}
+				{% if not(info) %}
+					{% set info = {"magazzino": 0, "in_ordine": 0} %}
+				{% endif %}
+				<div>
+				{% if _h.config('gestione_magazzino', false) %}
+					<span style="color: #999; font-size: 11px; display: inline-block; margin-right: 20px;">magazzino: {{ info.magazzino }}</span>
+				{% endif %}
+					<span style="color: #999; font-size: 11px; display: inline-block;">in arrivo: {{ info.in_arrivo }}</span>
+				</div>
+				<div style="color: #4285f4; font-size: 11px; font-weight: bold; cursor: pointer; display: inline-block;" class="action-ordina-articolo-a-fornitore">ORDINA</div>
+			{% endif %}
+		</td>
+		<td style="text-align: right; padding-right: 20px;">
+			<div><span class="prezzo-unitario">{{ _h.util.euro(item.prezzo) }}</span> {{ _h.config('manager_valuta', '&euro;') }}</div>
+			<div>-<span class="sconto-originale">{{ item.sconto }}</span> %</div>
+			<div class="prezzo-originale">{{ _h.util.euro(item.prezzoOriginale()) }} {{ _h.config('manager_valuta', '&euro;') }}</div>
+			<span class="prezzo" style="display: none;">{{ _h.util.euro(item.prezzoOriginale()) }}</span>
+		</td>
+		<td style="text-align: right; padding-right: 20px;">
+			<input type="text" class="valida-digitnumber sconto" maxlength="2"> %
+		</td>
+		<td style="text-align: right; padding-right: 20px;"><input type="text" class="valida-digitnumber quantita" maxlength="3"></td>
+		<td style="text-align: right; padding-right: 20px; font-weight: bold;"><span class="valore totale"></span> {{ _h.config('manager_valuta', '&euro;') }}</td>
+	</tr>
+{% endfor %}
+</tbody>
+</table>

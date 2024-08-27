@@ -1,0 +1,27 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% set _lbl = _h.labels.get('manager') %}
+{{ mc.index_page_header(_h, _lbl.azienda_brand, 'azienda') }}
+	
+	{% if _h.istanza.isMaster() and _h.session.params.user.accesso >= 5 %}
+	{{ mc.navButtonNew(_h, 'nuova', 'azienda') }}
+	{% endif %}
+	{{ mc.navButtonUpdateLang(_h, 'modifica', 'azienda') }}
+	{% if _h.session.params.user.accesso >= 5 %}
+		{{ mc.navButtonDelete(_h, 'elimina', 'azienda') }}	
+		{% if _h.config('gestione_azienda_account', false) %}
+			{{ mc.navSeparatore() }}
+			{{ mc.navButton(_h, 'reset password', 'password', 'click', 'h-action-selected-open-window', '{"select": {"from":"#h-layout-center-content", "check": 1, "errorMessage": "Selezionare una voce"}, "window": {"type": "layer", "overlay": true, "width": 300, "height": 300, "url": "' ~ _h.url('manager/myarea/azienda/edit-password') ~ '"}}') }}
+		{% endif %}
+		{{ mc.navSeparatore() }}
+		{{ mc.navButton(_h, 'immagine', 'image', 'click', 'h-action-upload-file', '{"select": {"from":"#h-layout-center-content", "check": 1}, "url": "' ~ _h.url('manager/myarea/azienda/upload') ~ '", "fileType": ["jpg","png","gif","jpeg"], "onComplete": {"reload": "#h-layout-center-content"}}') }}	
+		{{ mc.navButton(_h, 'gallery immagini', 'gallery', 'click', 'h-action-selected-open-window', '{"select": {"from":"#h-layout-center-content", "check": 1}, "window": {"type": "slide-right", "url": "' ~ _h.url('manager/myarea/galleryimmagini/index') ~ '", "params": {"tipo_entita": "azienda"}}}') }}
+		{{ mc.navButton(_h, 'banner', 'matrix', 'click', 'h-action-selected-open-window', '{"select": {"from":"#h-layout-center-content", "check": 1}, "window": {"type": "slide-right", "url": "' ~ _h.url('manager/myarea/bannerentita/index') ~ '", "params": {"tabella": "azienda"}}}') }}
+		{{ mc.navSeparatore() }}
+		{{ mc.navButtonPromozioni(_h, 'azienda') }}
+		{{ mc.navButtonPunti(_h, 'azienda') }}
+		{{ mc.navButtonFasciaSconto(_h, 'azienda') }}
+	{% endif %}
+	{{ mc.navButtonMetaInfo(_h, 'azienda') }}
+	
+{{ mc.index_page_footer(_h, result, 'azienda') }}

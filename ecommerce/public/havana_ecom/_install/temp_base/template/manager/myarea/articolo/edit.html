@@ -1,0 +1,559 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% set lang = _h.input('lang', _h.config('default_language', 'it')) %}
+{% set _lbl = _h.labels.get('manager') %}
+
+{% if title %}
+	{% set tipo_articolo_title = title %}
+{% else %}
+	{% set tipo_articolo_title = 'Articolo' %}
+{% endif %}
+
+{% if _h.input('duplica') == 1 %}
+	{% set title = 'Duplica ' ~ tipo_articolo_title %}
+{% else %}
+	{% if item == null %}
+		{% set title = 'Nuovo ' ~ tipo_articolo_title %}
+	{% else %}
+		{% set title = 'Modifica ' ~ tipo_articolo_title %}
+	{% endif %}
+{% endif %}
+
+{{ mc.slideBoxHeader(_h, title) }}
+
+{% if _h.input('duplica') == 1 %}
+<input type="hidden" name="duplica" value="{{ item.id }}">
+{% else %}
+<input type="hidden" name="id" value="{{ item.id }}">
+{% endif %}
+{% if tipo_articolo %}
+<input type="hidden" name="tipo" value="{{ tipo_articolo }}">
+{% endif %}
+<input type="hidden" name="lang" value="{{ lang }}">
+
+<div class="block-tab {% if edit_lang %} edit-lang-wrapper{% endif %}" data-tipo-articolo="{{ tipo_articolo }}">
+<div class="block-tab-header">
+	<div data-block-tab="scheda_base" class="edit-lang">Articolo</div>
+	<div data-block-tab="immagini">Immagini</div>
+	{% if not(hide_tab_relazioni) %}
+	<div data-block-tab="relazioni">Relazioni</div>
+		{% if _h.config('gestione_articoli_clienti_abilitati', false) %}	
+		<div data-block-tab="relazioni_cliente">Clienti abilitati</div>
+		{% endif %}
+	{% endif %}
+	{% if listLang|length > 1 %}
+	<div data-block-tab="visibilita">Visibilità</div>
+	{% endif %}
+	<div data-block-tab="checkout">Checkout</div>
+	<div data-block-tab="form">Form</div>
+	<div data-block-tab="pagamenti">Pag./Sped.</div>
+</div>
+<div data-block-tab-body="scheda_base" class="block-tab-body">
+
+<div class="h-tab">
+
+<div data-tab-rif="base" class="edit-lang">Scheda</div>
+{% if _h.config('gestione_tag_articoli', false) %}
+<div data-tab-rif="tag">Tag</div>
+{% endif %}
+{% if _h.config('vendita_articoli_digitali', false) and not(hide_articolo_digitale) %}
+<div data-tab-rif="contenuto_digitale">Digitale</div>
+{% endif %}
+{% if _h.config('gestione_opzioni_articoli', false) %}
+<div data-tab-rif="opzioni_articoli">Opzioni</div>
+{% endif %}
+{% if _h.config('gestione_parametri_extra_articoli', false) %}
+<div data-tab-rif="parametri_extra_articoli">Extra</div>
+{% endif %}
+{% if listListino|length > 0 %}
+<div data-tab-rif="listini">Listino cliente</div>
+{% endif %}
+
+{% if tipo_articolo_tabs %}
+{% include tipo_articolo_tabs %}
+{% else %}
+{% include _h.template('manager/myarea/articolo/_edit_tabs.html') %}
+{% endif %}
+
+<div data-tab="base" class="edit-lang">
+{{ mc.articolo_dettaglio_header(_h, item, lang, null, hide_prezzo, tipo_articolo) }}
+{% if not(hide_prezzo) %}
+	{{ mc.codiceIvaField(_h, listIvaPerNazione, item, true) }}
+{% endif %}
+{% if hide_codice == null %}
+	{% if _h.config('template').manager.item.articolo.codice is defined %}
+		{% set hide_codice = not(_h.config('template').manager.item.articolo.codice) %}
+	{% else %}
+		{% set hide_codice = false %}
+	{% endif %}
+{% endif %}
+{{ mc.articolo_dettaglio_nome_prezzo(_h, item, lang, hide_codice, hide_magazzino, hide_prezzo, tipo_articolo) }}
+{% if not(hide_parole_chiave) %}
+<p class="field-line field-350 edit-lang">
+	<label>{{ mc.labelLang(lang) }} Parole chiave motore ricerca iterno <em>(separare le parole con spazio)</em>:</label>
+	<input type="text" name="keywords_ricerca" class="field" value="{{ item.get('keywords_ricerca') }}">
+</p>
+{% endif %}
+{% if _h.config('gestione_spese_spedizione_in_scheda_articolo', true) and not(hide_spese_spedizione) %}
+	{% if _h.config('gestione_corriere_in_scheda_articolo', false) %}
+		<p class="field-line field-200 field-line-left">
+			<label>Corriere<span>*</span>:</label>
+			<select name="corriere" class="field valida-required">
+				{{ mc.listComboOptions(listCorrieri, item.get('corriere')) }}
+			</select>
+		</p>
+	{% endif %}
+	<p class="field-line field-200 field-line-left">
+		<label>Spese spedizione<span>*</span>:</label>
+		<select name="spese_spedizione" class="field valida-required">
+			{{ mc.listComboOptions(listFasceSpeseSpedizione, item.get('spese_spedizione')) }}
+		</select>
+	</p>
+	<div class="clear"></div>
+{% endif %}
+{% if (_h.config('gestione_azienda_account_full', false) and _h.session.params.user.accesso == 3) %}
+	<input type="hidden" name="id_azienda" value="{{ _h.session.params.user.id_azienda }}">
+{% elseif _h.config('gestione_azienda_in_scheda_articolo', true) and not(hide_azienda) and not(_h.config('gestione_azienda_in_scheda_articolo_variante', false)) %}
+<div class="field-line field-400">
+	<label>{{ _lbl.azienda_brand }} <span>*</span>:</label>
+	<select name="id_azienda" class="valida-required field">
+		<option value="0">- nessuna -</option>
+	{% for i in listAzienda %}
+		<option value="{{ i.id }}" {% if i.id == item.get('id_azienda') %}selected{% endif %}>{{ i.get('nome') }}</option>
+	{% endfor %}	
+	</select> 
+</div>
+{% endif %}
+{% if _h.config('gestione_condividi_altri_in_scheda_articolo', true) and not(hide_condividi_altri) %}
+<div class="field-line field-125 field-line-left" style="margin-right: 0">
+	{% if item.get('condividi_amazon') %} 
+		{% set cssClass = ' h-checkbox-checked' %}
+		{% set value = 1 %}
+	{% else %}
+		{% set cssClass = '' %}
+		{% set value = '' %}
+	{% endif %}
+	<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="condividi_amazon" value="{{ value }}" /></span> <strong>Amazon</strong></div>
+</div>
+<div class="field-line field-125 field-line-left" style="margin-right: 0">
+	{% if item.get('condividi_ebay') %} 
+		{% set cssClass = ' h-checkbox-checked' %}
+		{% set value = 1 %}
+	{% else %}
+		{% set cssClass = '' %}
+		{% set value = '' %}
+	{% endif %}
+	<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="condividi_ebay" value="{{ value }}" /></span> <strong>Ebay</strong></div>
+</div>
+<div class="field-line field-125 field-line-left" style="margin-right: 0">
+	{% if item.get('condividi_google_shopping') %} 
+		{% set cssClass = ' h-checkbox-checked' %}
+		{% set value = 1 %}
+	{% else %}
+		{% set cssClass = '' %}
+		{% set value = '' %}
+	{% endif %}
+	<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="condividi_google_shopping" value="{{ value }}" /></span> <strong>Google</strong></div>
+</div>
+
+<div class="field-line field-125 field-line-left" style="margin-right: 0">
+	{% if item.get('condividi_trova_prezzi') %} 
+		{% set cssClass = ' h-checkbox-checked' %}
+		{% set value = 1 %}
+	{% else %}
+		{% set cssClass = '' %}
+		{% set value = '' %}
+	{% endif %}
+	<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="condividi_trova_prezzi" value="{{ value }}" /></span> <strong>Trova prezzi</strong></div>
+</div>
+{% endif %}
+<div class="clear-line"></div>
+<p class="field-line field-400">
+	<label>Sondaggio:</label>
+	<select name="id_sondaggio" class="field">
+	<option value=""></option>
+	{% for s in listSondaggio %}
+	<option value="{{ s.id }}" {% if item.get('id_sondaggio') == s.id %} selected="true"{% endif %}>{{ s.get('nome') }}</option>
+	{% endfor %}
+	</select>
+</p>
+{% if not(hide_extra) %}
+	{% if not(extra_template) %}
+		{% set extra_template = 'manager/myarea/articolo/_edit.html' %}
+	{% endif %}
+	{% include _h.template(extra_template) %}
+{% endif %}
+</div>
+
+{{ mc.articolo_dettaglio_extra(_h, item, lang, listAttributoTipo, listListino, listTag) }}
+</div>
+
+</div>
+{{ mc.tab_body_immagini(_h, item) }}
+
+{% if not(hide_tab_relazioni) %}
+<div data-block-tab-body="relazioni" class="block-tab-body">
+	<div class="h-tab">
+		{% if _h.config('articolo_gestione_bundle') %}
+		<div data-tab-rif="bundle">Bundle</div>
+		{% endif %}
+		<div data-tab-rif="relazioni_correlati">Correlati</div>
+		<div data-tab-rif="relazioni_accessori">Accessori</div>
+		{% if _h.config('articolo_gestione_bundle') %}
+		<div data-tab="bundle">
+			<div class="field-line field-400">
+				{% if item == null or item.get('prezzo_calcolo_bundle') %} 
+					{% set cssClass = ' h-checkbox-checked' %}
+					{% set value = 1 %}
+				{% else %}
+					{% set cssClass = '' %}
+					{% set value = '' %}
+				{% endif %}
+				<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="prezzo_calcolo_bundle" value="{{ value }}" /></span> <strong>Calcola il prezzo sulla base degli articoli presenti nel bundle</strong></div>
+			</div>
+
+			<p class="field-line field-400">
+				<label>Cerca e aggiungi componente:</label>
+				<input type="hidden" name="relazione_id" value="">
+				<input type="text" name="relazione_nome" class="field autocomplete" value="" data-action='{"url": "{{ _h.url('manager/myarea/articolo/list-autocomplete') }}", "params": {"relation": 1000}, "qta": true, "add_item_to": "#elenco_articoli_bundle", "add_item_id": "id_articolo_bundle"}'>
+			</p>
+			<br><br>
+			Articoli che compongono il prodotto (bundle):
+			<div id="elenco_articoli_bundle">
+			{% for elem in listBundle %}
+				<div class="autocomplete-content-value-block hrow remove-current-element-wrapper">
+					<input type="hidden" name="id_articolo_bundle[]" value="{{ elem.id }}">
+					<em class="action-remove-current-element"></em>
+					<div class="autocomplete-content-value-details autocomplete-content-value-details-qta">
+						<strong>{{ elem.codice }}</strong>
+						<span>{{ elem.get('nome') }}</span>
+						<input type="text" name="id_articolo_bundle_qta_{{ elem.id }}" value="{{ elem.get('quantita_relazione', 0) }}" class="valida-digitint" placeholder="Qta." maxlength="3">
+					</div>
+				</div>
+			{% endfor %}
+			</div>	
+		</div>
+		{% endif %}
+		<div data-tab="relazioni_correlati">	
+			<p class="field-line field-400">
+				<label>Cerca e aggiungi correlato:</label>
+				<input type="hidden" name="relazione_id" value="">
+				<input type="text" name="relazione_nome" class="field autocomplete" value="" data-action='{"url": "{{ _h.url('manager/myarea/articolo/list-autocomplete') }}", "params": {"relation": 1}, "add_item_to": "#elenco_articoli_correlati", "add_item_id": "id_articolo_correlato"}'>
+			</p>
+			<br><br>
+			Correlati selezionati:
+			<div id="elenco_articoli_correlati">
+			{% for elem in listCorrelati %}
+				<div class="autocomplete-content-value-block hrow remove-current-element-wrapper">
+					<input type="hidden" name="id_articolo_correlato[]" value="{{ elem.id }}">
+					<em class="action-remove-current-element"></em>
+					<div class="autocomplete-content-value-details"><strong>{{ elem.codice }}</strong>
+					<span>{{ elem.get('nome') }}</span>
+					</div>
+				</div>
+			{% endfor %}
+			</div>
+		</div>
+		<div data-tab="relazioni_accessori">
+			<p class="field-line field-400">
+				<label>Cerca e aggiungi accessorio:</label>
+				<input type="hidden" name="relazione_id" value="">
+				<input type="text" name="relazione_nome" class="field autocomplete" value="" data-action='{"url": "{{ _h.url('manager/myarea/articolo/list-autocomplete') }}", "params": {"relation": 2}, "add_item_to": "#elenco_articoli_accessori", "add_item_id": "id_articolo_accessorio"}'>
+			</p>
+			<br><br>
+			Accessori selezionati:
+			<div id="elenco_articoli_accessori">
+			{% for elem in listAccessori %}
+				<div class="autocomplete-content-value-block hrow remove-current-element-wrapper">
+					<input type="hidden" name="id_articolo_accessorio[]" value="{{ elem.id }}">
+					<em class="action-remove-current-element"></em>
+					<div class="autocomplete-content-value-details"><strong>{{ elem.codice }}</strong>
+					<span>{{ elem.get('nome') }}</span>
+					</div>
+				</div>
+			{% endfor %}
+			</div>		
+		</div>
+	</div>
+</div>
+	{% if _h.config('gestione_articoli_clienti_abilitati', false) %}	
+	<div data-block-tab-body="relazioni_cliente" class="block-tab-body">
+			<p class="field-line field-400">
+				<label>Cerca e aggiungi cliente:</label>
+				<input type="hidden" name="relazione_id" value="">
+				<input type="text" name="nome" class="field autocomplete" value="" data-action='{"url": "{{ _h.url('manager/myarea/cliente/list-autocomplete') }}", "add_item_to": "#elenco_articoli_clienti", "add_item_id": "id_articolo_cliente"}'>
+			</p>
+			<br><br>
+			Clienti selezionati:
+			<div id="elenco_articoli_clienti">
+			{% for elem in listArticoloCliente %}
+				<div class="autocomplete-content-value-block hrow remove-current-element-wrapper">
+					<input type="hidden" name="id_articolo_cliente[]" value="{{ elem.id }}">
+					<em class="action-remove-current-element"></em>
+					<div class="autocomplete-content-value-details"><strong>{{ elem.get('e_mail') }}</strong>
+					<span>{{ elem.get('cognome') }} {{ elem.get('nome') }}</span>
+					</div>
+				</div>
+			{% endfor %}
+			</div>
+	</div>
+	{% endif %}
+{% endif %}
+
+{% if listLang|length > 1 %}
+<div data-block-tab-body="visibilita" class="block-tab-body">
+	{% set nuovo = true %}
+	{% if item %}
+		{% set nuovo = false %}
+	{% endif %}
+	{% set list_lang = item.get('visibilita_lang', '')|split(',') %}
+	{% for l in listLang %}
+		{% set valore = '' %}
+		{% if nuovo or item.get('visibilita_lang', '') == '-' or l in list_lang %}
+			{% set valore = l %}
+		{% endif %}
+		{{ mc.checkbox(valore, l, 'visibilita_lang', 'Visibilità ' ~ l|upper, l) }}
+	{% endfor %}
+</div>
+{% endif %}
+
+<div data-block-tab-body="pagamenti" class="block-tab-body">
+	<div class="field-line-text">
+	Metodi di pagamento abilitati, l'abilitazione è relativa anche per le varianti dell'articolo<br>
+	(l'abilitazione vale SOLO se nelle impostazioni di pagamento la tipologia è abilitata e se durante il checkout la nazione scelta dall'utente ha relativa abilitazione attiva)
+	</div>
+	<div class="field-line field-line-400">
+		{% if item == null or item.get('abilita_carta_credito') %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% else %}
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="abilita_carta_credito" value="{{ value }}" /></span> <strong>Pagamento con Carta di credito</strong></div>
+	</div>
+	<div class="field-line field-line-400">
+		{% if item == null or item.get('abilita_paypal') %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% else %}
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="abilita_paypal" value="{{ value }}" /></span> <strong>Pagamento con Paypal</strong></div>
+	</div>
+	<div class="field-line field-line-400">
+		{% if item == null or item.get('abilita_bonifico') %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% else %}
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="abilita_bonifico" value="{{ value }}" /></span> <strong>Pagamento con Bonifico Bancario</strong></div>
+	</div>
+	<div class="field-line field-line-400">
+		{% if item == null or item.get('abilita_contrassegno') %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% else %}
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="abilita_contrassegno" value="{{ value }}" /></span> <strong>Pagamento in Contrassegno</strong></div>
+	</div>
+	<div class="field-line field-line-400">
+		{% if item == null or item.get('abilita_postepay') %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% else %}
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="abilita_postepay" value="{{ value }}" /></span> <strong>Pagamento con Postepay</strong></div>
+	</div>
+	<div class="field-line field-line-400">
+		{% if item == null or item.get('abilita_ricarica_cellulare') %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% else %}
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="abilita_ricarica_cellulare" value="{{ value }}" /></span> <strong>Pagamento con Ricarica cellulare</strong></div>
+	</div>
+	<div class="field-line field-line-400">
+		{% if item == null or item.get('abilita_scalapay') %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% else %}
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="abilita_scalapay" value="{{ value }}" /></span> <strong>Pagamento con Scalapay</strong></div>
+	</div>
+	<div class="field-line field-line-400">
+		{% if item == null or item.get('abilita_satispay') %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% else %}
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="abilita_satispay" value="{{ value }}" /></span> <strong>Pagamento con Satispay</strong></div>
+	</div>
+	<div class="field-line field-line-400">
+		{% if item == null or item.get('abilita_bancontact') %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% else %}
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="abilita_bancontact" value="{{ value }}" /></span> <strong>Pagamento con Bancontact</strong></div>
+	</div>
+	<div class="field-line field-line-400">
+		{% if item == null or item.get('abilita_18app') %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% else %}
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="abilita_18app" value="{{ value }}" /></span> <strong>Pagamento con Carta giovani</strong></div>
+	</div>
+	<div class="field-line field-line-400">
+		{% if item == null or item.get('abilita_oney') %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% else %}
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="abilita_oney" value="{{ value }}" /></span> <strong>Pagamento con Oney</strong></div>
+	</div>
+
+	<br><br><br>
+	
+	<div class="field-line-text">
+	Tipologia di spedizione abilitata<br>
+	(l'abilitazione vale SOLO se tipologia è abilitata se durante il checkout tutti gli articoli scelti hanno relativa abilitazione attiva)
+	</div>
+	<div class="field-line field-line-400">
+		{% if item == null or item.get('abilita_spedizione_default') %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% else %}
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="abilita_spedizione_default" value="{{ value }}" /></span> <strong>Spedizione standard (o di default)</strong></div>
+	</div>
+	<div class="field-line field-line-400">
+		{% if item == null or item.get('abilita_spedizione_express') %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% else %}
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="abilita_spedizione_express" value="{{ value }}" /></span> <strong>Spedizione express</strong></div>
+	</div>
+	<div class="field-line field-line-400">
+		{% if item == null or item.get('abilita_spedizione_extra') %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% else %}
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="abilita_spedizione_extra" value="{{ value }}" /></span> <strong>Spedizione extra</strong></div>
+	</div>
+	<div class="field-line field-line-400">
+		{% if item == null or item.get('abilita_spedizione_sede') %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% else %}
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="abilita_spedizione_sede" value="{{ value }}" /></span> <strong>Ritiro in sede</strong></div>
+	</div>
+</div>
+
+<div data-block-tab-body="checkout" class="block-tab-body">
+	<div class="field-line field-400">
+		{% if item.get('visibile_in_checkout') %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% else %}
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="visibile_in_checkout" value="{{ value }}" /></span> <strong>Visibile come aggiunta in fase di checkout sotto elenco articoli</strong></div>
+	</div>
+	<div class="field-line field-100">
+		<label>Sconto % se in checkout:</label>
+		<input type="text" name="sconto_in_checkout" class="field valida-required valida-digitnumber" maxlength="2" value="{% if item %}{{ item.get('sconto_in_checkout') }}{% else %}0{% endif %}">
+	</div>
+
+	<div class="field-line field-400">
+		{% if item.get('visibile_in_checkout_per_tag') %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% else %}
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="visibile_in_checkout_per_tag" value="{{ value }}" /></span> <strong>Abbina solo se presente corrispondenza con tag o attributo</strong></div>
+	</div>
+	{{ mc.dynamicMultipleSelect(_h, 'Tag per abbinamento', listTag, item, 'id_tag_visibile_checkout') }}
+	<div class="field-line field-400">
+		<label>Specificare codice attributo se diverso da tag:</label>
+		<input type="text" name="codice_attributo_visibile_checkout" class="field" maxlength="50" value="{{ item.get('codice_attributo_visibile_checkout') }}">
+	</div>
+</div>
+
+<div data-block-tab-body="form" class="block-tab-body">
+	{% include _h.template('manager/myarea/articolo/edit_form.html') %}
+</div>
+
+{% if _h.input('duplica') == 1 %}
+{% set item = null %}
+{% endif %}
+{{ mc.labelCampiObbligatori() }}
+{% if edit_lang %}
+	{% set url = 'manager/myarea/articolo/ex-edit-lang' %}
+{% else %}
+	{% set url = 'manager/myarea/articolo/ex-edit' %}
+{% endif %}
+</div>
+
+{% set url = _h.url(url) %}
+{% set onComplete = item %}
+
+	{% if onComplete == null %}
+		{% set onComplete = ', "reload": "#h-layout-center-content"' %}
+	{% elseif onComplete.id != '' %}
+		{% set onComplete = ', "replace_item": "' ~ onComplete.id ~ '"' %}
+	{% else %}
+		{% set onComplete = '' %}
+	{% endif %}	
+	
+		</fieldset>
+	</div>
+	<div class="h-layout-bottombar">
+		<div class="h-layout-content-wrapper">
+			<a href="javascript:void(0);" class="h-bar-button h-bar-button-gray h-close-box">Annulla</a>
+			{% if _h.input('converti_principale') == 1 %}
+				<a href="javascript:void(0);" class="h-bar-button h-bar-button-blu h-action-submit" data-action='{"url":"{{ url }}", "onComplete": {"closeWin": true, "reload": ["#variante-content", "#h-layout-center-content"]}, "loadinMessage": "salvataggio in corso..."}'>Salva</a>
+			{% else %}
+				{% if _h.config('enabled_languages') and _h.config('enabled_languages')|length > 0 %}
+				<a href="javascript:void(0);" class="h-bar-button h-bar-button-gray h-action-submit" data-action='{"confirm": "Procedere con il salvataggio sovrascrivendo i testi nelle altre lingue?", "url":"{{ url }}", "onComplete": {"closeWin": true {{onComplete}}}, "loadinMessage": "salvataggio in corso...", "params": {"salva_per_tutte_lingue": 1}}'>Salva e sovrascrivi per tutte le lingue</a>
+				{% endif %}
+				<a href="javascript:void(0);" class="h-bar-button h-bar-button-blu h-action-submit" data-action='{"url":"{{ url }}", "onComplete": {"closeWin": true {{onComplete}}}, "loadinMessage": "salvataggio in corso..."}'>Salva</a>
+			{% endif %}
+		</div>
+	</div>
+	</form>
+</div>

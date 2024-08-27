@@ -1,0 +1,22 @@
+<div class="window-wrapper">
+	<header>
+		<div class="logo">
+			<img src="/assets/manager/img/logo-login.png">
+		</div>
+	</header>
+	<form>
+		<fieldset>
+			<p class="field-line">
+				<label>Token:</label>
+				<input type="text" name="codice" class="field valida-required" value="{{ _h.input('codice') }}">
+			</p>
+			<p class="field-line form-error-message">{{ error }}</p>
+			<p class="field-line">
+				<a href="javascript:void(0);" class="btn-submit h-action-submit h-return-submit" title="Valida" data-action='{"url":"{{ _h.url('manager/voucher/ex-valida') }}", "buttonLogin": true, "onComplete": "{{ _h.url('manager/voucher/valida-ok') }}"}'>Valida</a>
+			</p>
+			<p class="field-line" style="margin-top: 50px;">
+				<a href="/manager/voucher/valida.php" style="color: #00f; text-transform: uppercase; line-height: 30px; display: inline-block;">Validazione con lettore QR</a>
+			</p>
+		</fieldset>
+	</form>
+</div>

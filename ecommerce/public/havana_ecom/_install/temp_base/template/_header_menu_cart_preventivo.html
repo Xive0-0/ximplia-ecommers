@@ -1,0 +1,11 @@
+<div class="clear">
+	<div class="step-block">
+		<div class="step-block-inner">
+			<div class="step" data-num="1"><a href="javascript:void(0)" data-step="1" title="{{ _lblcp.step_1_alt }}"><strong></strong><em></em><span>{{ _lblcp.step_1 }}</span></a></div>
+			<div class="step" data-num="2"><a href="javascript:void(0)" data-step="2" title="{{ _lblcp.step_2 }}"><strong></strong>{% if not(_h.config('gestione_preventivi_semplice', false)) %}<em></em>{% endif %}<span>{{ _lblcp.step_2 }}</span></a></div>
+			{% if not(_h.config('gestione_preventivi_semplice', false)) %}
+			<div class="step" data-num="3"><a href="javascript:void(0)" data-step="3" title="{{ _lblcp.step_3 }}"><strong></strong><span>{{ _lblcp.step_3 }}</span></a></div>
+			{% endif %}
+		</div>
+	</div>
+</div>

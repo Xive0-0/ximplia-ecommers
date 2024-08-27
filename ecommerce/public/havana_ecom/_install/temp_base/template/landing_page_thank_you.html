@@ -1,0 +1,9 @@
+{% import _h.template('_macro.html') as mc %}
+{% set _lblw = _h.labels.get('website') %}
+
+{% if form %}
+<div class="block-margin">
+	<h1>{{ form.get('form_titolo_conferma') }}</h1>
+	<p>{{ form.get('form_descrizione_conferma') }}</p>
+</div>
+{% endif %}

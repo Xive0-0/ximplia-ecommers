@@ -1,0 +1,44 @@
+{% import _h.template('manager/_macro_items.html') as mci %}
+{% set imp = _h.config('template').manager.item.articolo %}
+<table class="h-list item-autoload-total h-fixed-header-table" cellpadding="0" cellspacing="0" border="0" data-total="{{ result.total }}">
+<thead>
+<tr class="h-list-header">
+	<th style="width: 10px; padding: 0; overflow: hidden;">&nbsp;</th>
+	<th style="width: 20px;">&nbsp;</th>
+	{% if imp.id %}
+	<th style="width: 50px;" data-order="a.id" data-order-type="{{ result.order_type_a_id }}">ID</th>
+	{% endif %}
+	{% if imp.codice %}
+	<th style="width: 100px;" data-order="a.codice" data-order-type="{{ result.order_type_a_codice }}">COD</th>
+	{% endif %}
+	{% if imp.codice_fornitore %}
+	<th style="width: 100px;" data-order="a.codice_fornitore" data-order-type="{{ result.order_type_a_codice_fornitore }}">COD fornitore</th>
+	{% endif %}
+
+	<th data-order="al.nome" data-order-type="{{ result.order_type_al_nome }}">Nome</th>
+	<th style="width: 50px; padding-left: 4px;">Gen</th>
+	<th style="width: 50px; padding-left: 4px;">Feb</th>
+	<th style="width: 50px; padding-left: 4px;">Mar</th>
+	<th style="width: 50px; padding-left: 4px;">Apr</th>
+	<th style="width: 50px; padding-left: 4px;">Mag</th>
+	<th style="width: 50px; padding-left: 4px;">Giu</th>
+	<th style="width: 50px; padding-left: 4px;">Lug</th>
+	<th style="width: 50px; padding-left: 4px;">Ago</th>
+	<th style="width: 50px; padding-left: 4px;">Set</th>
+	<th style="width: 50px; padding-left: 4px;">Ott</th>
+	<th style="width: 50px; padding-left: 4px;">Nov</th>
+	<th style="width: 50px; padding-left: 4px;">Dic</th>
+	<th style="width: 75px; padding-left: 4px;">Tot</th>
+	<th style="width: 75px; padding-left: 4px;">Med</th>
+	{% if _h.config('gestione_magazzino', false) %}
+		<th style="width: 50px;" data-order="a.quantita_magazzino" data-order-type="{{ result.order_type_a_quantita_magazzino }}">Mag.</th>
+		<th style="width: 80px; padding-left: 4px;">Valore</th>
+	{% endif %}
+</tr>
+</thead>
+<tbody>
+{% for item in result.list %}		
+	{{ mci.item_statistiche_mese(_h, item) }}
+{% endfor %}
+</tbody>
+</table>

@@ -1,0 +1,58 @@
+.checkout-nav .step {
+	width: 33.33%;
+}
+
+.col-box-50:last-child {
+	margin-right: 0;
+}
+
+.col-box-50:first-child {
+	margin-left: 125px;
+}
+
+.col-box-100 {
+	float: none;
+	width: 100%;
+	margin: 0;
+}
+
+.ck-articolo {
+	width: 500px;
+}
+
+.ck-descrizione {
+	width: 1020px;
+}
+
+.ck-footer .ck-prezzo-totale, 
+.ck-line .ck-prezzo-totale {
+	width: 160px;
+}
+
+.checkout-footer-toolbar-2 {
+	text-align: left;
+}
+.ck-line-articolo-virtuale.ck-line .ck-prezzo-unitario {
+	text-align: left;
+}
+.ck-line-articolo-virtuale .ck-prezzo-unitario em {
+	min-width: 0;
+}
+.ck-line-articolo-virtuale .input {
+	box-sizing: border-box;
+	border: 1px solid #dddcdc;
+	border-radius: 2px;
+	position: relative;
+	background: #fff;
+	overflow: hidden;
+	box-shadow: 0 2px 5px rgba(0,0,0,0.1) inset;
+	height: 40px;
+	display: block;
+	width: 90%;
+	padding: 0 5px;
+}
+.btn-add-temp-image-to-item em {
+	cursor: pointer;
+	font-size: 10px;
+	text-transform: uppercase;
+}

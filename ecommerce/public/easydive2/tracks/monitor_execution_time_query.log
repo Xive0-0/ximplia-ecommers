@@ -1,0 +1,80 @@
+[2024-07-29 09:41:48] start: 2024-07-29 09:41:44
+end: 2024-07-29 09:41:48
+durata: 4
+url: /manager/myarea/update-url-mapping.php?_hjson=0
+query: update attributo_lang set dettaglio_lang = :dettaglio where id_attributo = :id and lang = :lang
+params: Array
+(
+    [:id] => 225
+    [:lang] => en
+    [:dettaglio] => {"titolo_pagina":"","descrizione":"","metainfo":{"title":"Cables for Underwater Strobes | Easydive Online Shop","keywords":"","description":"Fiber optic and SYNC cables. For underwater strobes from Ikelite, Inon and Sea & Sea. Order online and save money.","url":null,"title_template":"Cables for Underwater Strobes | Easydive Online Shop","keywords_template":null,"description_template":"Fiber optic and SYNC cables. For underwater strobes from Ikelite, Inon and Sea & Sea. Order online and save money.","og_title":"","og_description":""},"url_old":null,"url":"\/underwater-lighting\/accessories-for-underwater-strobes\/cables-for-flash","url_part":["\/underwater-lighting","\/underwater-lighting\/accessories-for-underwater-strobes","\/underwater-lighting\/accessories-for-underwater-strobes\/cables-for-flash"]}
+)
+
+[2024-08-05 15:16:46] start: 2024-08-05 15:16:43
+end: 2024-08-05 15:16:46
+durata: 3
+url: /popup?_hjson=0
+query: select
+					b.*,
+					ppl.dettaglio_lang
+				from
+					(select bu.id, bu.apri_nuova_pagina, bu.altezza, bu.larghezza, bu.cache_count, bu.codice_script, bu.tipo_apertura, bu.posizione, bu.tipo, bu.tipo_entita, bu.ordine, bu.id_entita, bu.dettaglio, bu.id_entita as risorsa from popup bu where bu.abilitato = true and bu.posizione in (1, :posizione1) and bu.visibile_device in (0, :visibile_device1) and bu.tipo_entita = 5 and (bu.visibilita_lang = '-' or bu.visibilita_lang like :visib1)
+					union
+					select ba.id, ba.apri_nuova_pagina, ba.altezza, ba.larghezza, ba.cache_count, ba.codice_script, ba.tipo_apertura, ba.posizione, ba.tipo, ba.tipo_entita, ba.ordine, ba.id_entita, ba.dettaglio, al.dettaglio_lang as risorsa from popup ba, articolo_lang al where ba.abilitato = true and ba.posizione in (1, :posizione2) and ba.visibile_device in (0, :visibile_device2) and ba.tipo_entita = 1 and ba.id_entita = al.id_articolo and al.lang = :lang1 and (ba.visibilita_lang = '-' or ba.visibilita_lang like :visib2)
+					union
+					select bz.id, bz.apri_nuova_pagina, bz.altezza, bz.larghezza, bz.cache_count, bz.codice_script, bz.tipo_apertura, bz.posizione, bz.tipo, bz.tipo_entita, bz.ordine, bz.id_entita, bz.dettaglio, zl.dettaglio_lang as risorsa from popup bz, azienda_lang zl where bz.abilitato = true and bz.posizione in (1, :posizione3) and bz.visibile_device in (0, :visibile_device3) and bz.tipo_entita = 2 and bz.id_entita = zl.id_azienda and zl.lang = :lang2 and (bz.visibilita_lang = '-' or bz.visibilita_lang like :visib3)
+					union
+					select bc.id, bc.apri_nuova_pagina, bc.altezza, bc.larghezza, bc.cache_count, bc.codice_script, bc.tipo_apertura, bc.posizione, bc.tipo, bc.tipo_entita, bc.ordine, bc.id_entita, bc.dettaglio, cl.dettaglio_lang as risorsa from popup bc, attributo_lang cl where bc.abilitato = true and bc.posizione in (1, :posizione4) and bc.visibile_device in (0, :visibile_device4) and bc.tipo_entita = 3 and bc.id_entita = cl.id_attributo and cl.lang = :lang3 and (bc.visibilita_lang = '-' or bc.visibilita_lang like :visib4)
+					union
+					select bp.id, bp.apri_nuova_pagina, bp.altezza, bp.larghezza, bp.cache_count, bp.codice_script, bp.tipo_apertura, bp.posizione, bp.tipo, bp.tipo_entita, bp.ordine, bp.id_entita, bp.dettaglio, pl.dettaglio_lang as risorsa from popup bp, pagina_lang pl where bp.abilitato = true and bp.posizione in (1, :posizione5) and bp.visibile_device in (0, :visibile_device5) and bp.tipo_entita = 4 and bp.id_entita = pl.id_pagina and pl.lang = :lang4 and (bp.visibilita_lang = '-' or bp.visibilita_lang like :visib5)
+					union				
+					select bf.id, bf.apri_nuova_pagina, bf.altezza, bf.larghezza, bf.cache_count, bf.codice_script, bf.tipo_apertura, bf.posizione, bf.tipo, bf.tipo_entita, bf.ordine, bf.id_entita, bf.dettaglio, f.id as risorsa from popup bf, files f where bf.abilitato = true and bf.posizione in (1, :posizione6) and bf.visibile_device in (0, :visibile_device6) and bf.tipo_entita = 7 and bf.id_entita = f.id and (bf.visibilita_lang = '-' or bf.visibilita_lang like :visib6)
+					union				
+					select bv.id, bv.apri_nuova_pagina, bv.altezza, bv.larghezza, bv.cache_count, bv.codice_script, bv.tipo_apertura, bv.posizione, bv.tipo, bv.tipo_entita, bv.ordine, bv.id_entita, bv.dettaglio, '' risorsa from popup bv where bv.abilitato = true and bv.posizione in (1, :posizione7) and bv.visibile_device in (0, :visibile_device7) and bv.tipo_entita = 1000 and (bv.visibilita_lang = '-' or bv.visibilita_lang like :visib7)
+					union
+					select bb.id, bb.apri_nuova_pagina, bb.altezza, bb.larghezza, bb.cache_count, bb.codice_script, bb.tipo_apertura, bb.posizione, bb.tipo, bb.tipo_entita, bb.ordine, bb.id_entita, bb.dettaglio, bl.dettaglio_lang as risorsa from popup bb, blog_lang bl where bb.abilitato = true and bb.posizione in (1, :posizione8) and bb.visibile_device in (0, :visibile_device8) and bb.tipo_entita = 6 and bb.id_entita = bl.id_blog and bl.lang = :lang5 and (bb.visibilita_lang = '-' or bb.visibilita_lang like :visib8)
+					union
+					select ben.id, ben.apri_nuova_pagina, ben.altezza, ben.larghezza, ben.cache_count, ben.codice_script, ben.tipo_apertura, ben.posizione, ben.tipo, ben.tipo_entita, ben.ordine, ben.id_entita, ben.dettaglio, benl.dettaglio_lang as risorsa from popup ben, evento_news_lang benl where ben.abilitato = true and ben.posizione in (1, :posizione9) and ben.visibile_device in (0, :visibile_device9) and ben.tipo_entita = 8 and ben.id_entita = benl.id_evento_news and benl.lang = :lang6 and (ben.visibilita_lang = '-' or ben.visibilita_lang like :visib9)) b,
+					popup_lang ppl
+				where
+					b.id = ppl.id_popup and
+					ppl.lang = :lang
+				order by b.tipo_apertura desc, b.ordine desc
+params: Array
+(
+    [:posizione1] => 0
+    [:posizione2] => 0
+    [:posizione3] => 0
+    [:posizione4] => 0
+    [:posizione5] => 0
+    [:posizione6] => 0
+    [:posizione7] => 0
+    [:posizione8] => 0
+    [:posizione9] => 0
+    [:visibile_device1] => 1
+    [:visibile_device2] => 1
+    [:visibile_device3] => 1
+    [:visibile_device4] => 1
+    [:visibile_device5] => 1
+    [:visibile_device6] => 1
+    [:visibile_device7] => 1
+    [:visibile_device8] => 1
+    [:visibile_device9] => 1
+    [:visib1] => %it,%
+    [:visib2] => %it,%
+    [:visib3] => %it,%
+    [:visib4] => %it,%
+    [:visib5] => %it,%
+    [:visib6] => %it,%
+    [:visib7] => %it,%
+    [:visib8] => %it,%
+    [:visib9] => %it,%
+    [:lang1] => it
+    [:lang2] => it
+    [:lang3] => it
+    [:lang4] => it
+    [:lang5] => it
+    [:lang6] => it
+    [:lang] => it
+)
+

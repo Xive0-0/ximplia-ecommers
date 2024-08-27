@@ -1,0 +1,124 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Azione Ordine Cliente') }}
+<input type="hidden" name="id" value="{{ item.id }}">
+<div class="h-tab">
+<div data-tab-rif="base">Azione</div>
+<div data-tab-rif="buono_sconto">Buono sconto</div>
+{% for l in listLang %}
+<div data-tab-rif="{{ l }}">{{ l|upper }}</div>
+{% endfor %}
+
+<div data-tab="base">
+<div class="field-line field-200">
+	{% set cssClass = '' %}
+	{% set value = '' %}
+	{% if item %} 
+		{% if item.get('abilitato') %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% endif %}
+	{% endif %}
+	<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="abilitato" value="{{ value }}" /></span> <strong>Abilitato</strong></div>
+</div>
+<p class="field-line field-400">
+	<label>Descrizione<span>*</span>:</label>
+	<input type="text" name="descrizione" class="field valida-required" value="{{ item.get('descrizione') }}" maxlength="100">
+</p>
+<p class="field-line field-200">
+	<label>Acquisto minimo ordine (#,##) IVA incl.<span>*</span>:</label>
+	<input type="text" name="totale_ordine" class="field valida-required valida-euro" value="{{ item.euro('totale_ordine') }}" maxlength="10"> {{ _h.config('manager_valuta', '&euro;') }}
+</p>
+<p class="field-line field-100">
+	<label>Esegui azione dopo giorni<span>*</span>:</label>
+	<input type="text" name="numero_giorni_dopo" class="field valira-required valida-digitnumber" value="{{ item.get('numero_giorni_dopo') }}" maxlength="3"> gg
+</p>
+<p class="field-line-left field-line field-100">
+	<label>Azione attiva dal<span>*</span>:</label>
+	<input type="text" name="data_dal" class="field valida-required valida-datasimple input-datepicker" value="{{ item.getDate('data_dal') }}">
+</p>
+<p class="field-line field-100">
+	<label>Azione attiva al<span>*</span>:</label>
+	<input type="text" name="data_al" class="field valida-required valida-datasimple input-datepicker" value="{{ item.getDate('data_al') }}">
+</p>
+<div class="clear"></div>
+{{ mc.labelCampiObbligatori() }}
+</div>
+
+<div data-tab="buono_sconto">
+<p class="field-line field-400">
+	<label>Tipo sconto<span>*</span>:</label>
+	<select name="tipo_sconto" class="field  valida-required">
+		{{ mc.listComboOptions([{'id': 0, 'text': 'nessuno sconto'},
+			{'id': 1, 'text': 'percentuale sconto solo prodotti NON scontati'},
+			{'id': 2, 'text': 'percentuale sconto su tutto'},
+			{'id': 3, 'text': 'buono valore euro solo su prodotti NON scontati'},
+			{'id': 4, 'text': 'buono valore euro'},
+			{'id': 8, 'text': 'buono valore euro applicato ad ogni singolo prodotto'},
+			{'id': 9, 'text': 'valore in euro di cashback sulla base dell\'importo dell\'ordine'}
+		], item.get('tipo_sconto')) }}
+	</select>
+</p>	
+<p class="field-line field-100">
+	<label>Prefisso per ogni codice<span style="color: #4285f4;">*</span>:</label>
+	<input type="text" name="prefisso" class="field" maxlength="10" value="{{ item.get('prefisso') }}">
+</p>
+<p class="field-line field-100">
+	<label>Sconto/valore (% o {{ _h.config('manager_valuta', '&euro;') }})<span style="color: #4285f4;">*</span>:</label>
+	<input type="text" name="sconto" class="field valida-euro" maxlength="10" value="{{ item.get('sconto') }}">
+</p>
+<p class="field-line field-100">
+	<label>Acquisto minimo (o valore minimo articolo in caso di sconto su valore singolo articolo)<span style="color: #4285f4;">*</span>:</label>
+	<input type="text" name="acquisto_minimo" class="field valida-digitnumber" maxlength="5" value="{{ item.get('acquisto_minimo') }}"> {{ _h.config('manager_valuta', '&euro;') }}
+</p>
+<p class="field-line field-100">
+	<label>Giorni validià buono sconto<span style="color: #4285f4;">*</span>:</label>
+	<input type="text" name="giorni_validita_buono_sconto" class="field valida-digitnumber" value="{{ item.get('giorni_validita_buono_sconto') }}" maxlength="3"> gg
+</p>
+{{ mc.labelCampiObbligatori() }}
+</div>
+
+{% for l in listLang %}
+<div data-tab="{{ l }}">
+	<div class="message-center-block" data-message-center="{{ _h.util.messageCenter('ordine_azione') }}">
+	<div class="message-center-block-expandible" data-type="email">
+		<div class="message-center-block-expandible-title">Contenuto E-Mail</div>
+		<div class="message-center-block-expandible-body">
+			{{ mc.contenutiInLingua(l) }}
+			<p class="field-line field-400">
+				<label>{{ mc.labelLang(l) }} Oggetto e-mail<span>*</span>:</label>
+				<input type="text" name="oggetto_email_{{ l }}" class="field" value="{{ item.get('oggetto_email_' ~ l) }}">
+			</p>
+			<div class="field-line field-400">
+				<label>{{ mc.labelLang(l) }} Testo e-mail<span>*</span>:</label>
+				<textarea name="testo_email_{{ l }}" class="visual-editor">{{ item.get('testo_email_' ~ l) }}</textarea>
+			</div>
+		</div>
+	</div>
+	<div class="message-center-block-expandible" data-type="wapp">
+		<div class="message-center-block-expandible-title">Contenuto WhatsApp</div>
+		<div class="message-center-block-expandible-body">
+			{{ mc.contenutiInLingua(l) }}
+			<div class="field-line field-400 field-line-textarea">
+				<label>{{ mc.labelLang(l) }} Testo messaggio<span>*</span>:</label>
+				<textarea name="testo_wapp_{{ l }}" class="field">{{ item.get('testo_wapp_' ~ l) }}</textarea>
+			</div>
+		</div>
+	</div>
+	<div class="message-center-block-expandible" data-type="sms">
+		<div class="message-center-block-expandible-title">Contenuto SMS</div>
+		<div class="message-center-block-expandible-body">
+			{{ mc.contenutiInLingua(l) }}
+			<div class="field-line field-400 field-line-textarea">
+				<label>{{ mc.labelLang(l) }} Testo messaggio<span>*</span>:</label>
+				<textarea name="testo_sms_{{ l }}" class="field">{{ item.get('testo_sms_' ~ l) }}</textarea>
+			</div>
+		</div>
+	</div>
+	</div>
+</div>
+{% endfor %}
+</div>
+
+
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/azioneordine/ex-edit')) }}	

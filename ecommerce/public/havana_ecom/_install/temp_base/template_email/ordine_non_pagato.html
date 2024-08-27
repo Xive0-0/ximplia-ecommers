@@ -1,0 +1,170 @@
+{% set _lble = _h.labels('email', lang) %}
+{% set _lblc = _h.labels('checkout', lang) %}
+{% import _h.template('_macro.html') as mc %}
+
+
+<p style="{{ mc.style_fontBase() }}">{{ _lble.ciao }} <strong style="{{ mc.style_fontTitolo() }}">{{ ordine.spedizione.nome }}</strong></p>
+<div style="{{ mc.margin() }}">
+<div style="{{ mc.style_fontBase() }}">{{ testo }}</div>
+</div>
+
+<div style="{{ mc.margin() }}">
+	<h3 style="{{ mc.style_h3() }}">{{ _lble.title_problemi_con_pagamento }}</h3>
+	
+	<div style="{{ mc.style_fontBase() }}">{{ _lble.descr_problemi_con_pagamento }} <a href="{{ link }}"><strong>{{ _lble.esegui_pagamento }}</strong></a></div>
+</div>
+
+<div style="{{ mc.margin() }}">
+	<div style="{{ mc.style_fontBase() }}">{{ _lble.riferimento_tuo_ordine }}: <strong style="{{ mc.style_fontTitolo() }}">{{ item.get('codice') }}</strong></div>
+</div>	
+
+{% if inserisci_articoli %}
+<div style="{{ mc.margin() }}">
+	<table width="100%" cellspacing="0" cellpadding="0" border="0">
+	<tbody>
+	{{ mc.ordine_spedizione(_h, ordine) }}
+	</tbody>
+	</table>
+	<br>
+	<div style="{{ mc.margin() }}">
+	<h2 style="{{ mc.style_h2() }}">{{ _lble.title_dettagli_ordine }}</h2>
+	{{ mc.ordine_articoli(_h, ordine) }}
+	</div>
+	<br><br>
+	
+	<h2 style="{{ mc.style_h2() }}">{{ _lble.title_dettagli_pagamento_fatturazione }}</h2>
+	<table width="100%" cellspacing="0" cellpadding="0" border="0">
+	<tbody>
+	<tr>
+		<td width="45%" valign="top">
+			<div style="{{ mc.block() }}">
+				<em style="{{ mc.style_label() }}">{{ _lblc.documento }}:</em> 
+				<div style="{{ mc.style_block_details() }}">
+					{% if ordine.richiesta_fatturazione == 1 %}
+						{{ _lblc.fattura }}
+					{% else %}
+						{{ _lblc.ricevuta }}
+					{% endif %}
+				</div>
+			</div>
+			
+			<div style="{{ mc.block() }}">
+				<em style="{{ mc.style_label() }}">{{ _lblc.intestato_a }}:</em>
+				<div style="{{ mc.style_block_details() }}">
+					{{ ordine.fattura.nome }}<br>
+					{% if ordine.fattura.p_iva %}
+						<em style="{{ mc.style_labelSmall() }}">{{ _lblc.p_iva }}</em> {{ ordine.fattura.p_iva }}<br>
+					{% endif %}
+					{% if ordine.fattura.codice_fiscale %}
+						<em style="{{ mc.style_labelSmall() }}">{{ _lblc.codice_fiscale_small }}</em> {{ ordine.fattura.codice_fiscale }}<br>
+					{% endif %}	
+					{% if ordine.fattura.data_nascita %}
+						<em style="{{ mc.style_labelSmall() }}">{{ _lblc.data_nascita }}</em> {{ ordine.fattura.data_nascita }}<br>
+					{% endif %}	
+					{% if ordine.fattura.luogo_nascita %}
+						<em style="{{ mc.style_labelSmall() }}">{{ _lblc.luogo_nascita }}</em> {{ ordine.fattura.luogo_nascita }}<br>
+					{% endif %}			
+					{{ ordine.fattura.via }}, {{ ordine.fattura.num_civico }}<br>
+					{{ ordine.fattura.cap }} {{ ordine.fattura.localita }} ({{ ordine.fattura.provincia }})<br>
+					{{ ordine.fattura.nazione }}
+				</div>
+			</div>
+		</td>
+		<td width="55%" valign="top">
+			<div style="{{ mc.block() }}">
+				<em style="{{ mc.style_label() }}">{{ _lblc.tipo_pagamento }}:</em>
+				<div>
+					{% if ordine.tipo_pagamento == 1 %}
+					<strong>{{ _lblc.tipo_pag_carta_credito }}</strong>
+					{% elseif ordine.tipo_pagamento == 2 %}
+					<strong>{{ _lblc.tipo_pag_paypal }}</strong>
+					{% elseif ordine.tipo_pagamento == 3 %}
+					<strong>{{ _lblc.tipo_pag_bonifico }}</strong>
+						{% if interna %}
+						{% else %}
+						<div style="padding: 15px 0">
+							{{ _lblc.descr_bonifico }}:
+							<div>
+							<em style="{{ mc.style_label() }}">{{ _lblc.nome_banca }}:</em> <strong>{{ _h.settings(lang).get('checkout_banca_nome') }}</strong><br>
+							<em style="{{ mc.style_label() }}">{{ _lblc.carta_intestata_a }}:</em> <strong>{{ _h.settings(lang).get('checkout_banca_intestazione') }}</strong><br>
+							<em style="{{ mc.style_label() }}">{{ _lblc.iban }}:</em> <strong>{{ _h.settings(lang).get('checkout_banca_iban') }}</strong><br>
+							<em style="{{ mc.style_label() }}">{{ _lblc.codice_swift_bic }}:</em> <strong>{{ _h.settings(lang).get('checkout_banca_swift') }}</strong>
+							</div>
+							{{ _lblc.descr_ricezione_ordine }}<br>
+							{{ _lblc.descr_bonifico_causale }}
+						</div>
+						{% endif %}
+					{% elseif ordine.tipo_pagamento == 4 %}
+						<strong>{{ _lblc.tipo_pag_contrassegno }}</strong>
+						{% if interna %}
+						{% else %}
+						<div>
+						{{ _lblc.descr_contrassegno_1 }}<br>
+						{{ _lblc.descr_contrassegno_2 }}
+						</div>
+						{% endif %}
+					{% elseif ordine.tipo_pagamento == 5 %}
+						<strong>{{ _lblc.tipo_pag_poste_pay }}</strong>
+						{% if interna %}
+						{% else %}
+						<div style="padding: 15px 0">
+							{{ _lblc.descr_ricarica_postepay }}:
+							<div>
+							<em style="{{ mc.style_label() }}">carta intestata a:</em> <strong>{{ _h.settings(lang).get('checkout_postepay_intestatario') }}</strong><br>
+							<em style="{{ mc.style_label() }}">codice:</em> <strong>{{ _h.settings(lang).get('checkout_postepay_numero') }}</strong><br>
+							<em style="{{ mc.style_label() }}">codice Fiscale/P.IVA:</em> <strong>{{ _h.settings(lang).get('checkout_postepay_codice') }}</strong>
+							</div>
+							{{ _lblc.descr_ricezione_ordine }}<br>
+							{{ _lblc.descr_ricarica_postepay_nominativo }}
+						</div>
+						{% endif %}
+					{% elseif ordine.tipo_pagamento == 6 %}
+						<strong>{{ _lblc.tipo_pag_ricarica }}</strong>
+						{% if interna %}
+						{% else %}
+						<div style="padding: 15px 0">
+							{{ _lblc.descr_ricarica_telefonica }}:
+							<div>
+							<em style="{{ mc.style_label() }}">{{ _lblc.intestato_a }}:</em> <strong>{{ _h.settings(lang).get('checkout_ricarica_intestatario') }}</strong><br>
+							<em style="{{ mc.style_label() }}">{{ _lblc.numero_telefono }}:</em> <strong>{{ _h.settings(lang).get('checkout_ricarica_numero') }}</strong><br>
+							</div>
+							{{ _lblc.descr_ricezione_ordine }}
+						</div>
+						{% endif %}
+					{% endif %}
+				</div>
+			</div>
+			
+			<div style="{{ mc.block() }}">
+				<em style="{{ mc.style_label() }}">{{ _lble.riepilogo_spesa_ordine }}:</em>
+				<table width="100%" cellspacing="0" cellpadding="0" border="0">
+				<tbody>
+				{% if iva %}
+					<tr><td style="padding: 5px; width:160px;"><em style="{{ mc.style_label() }}">{{ _lblc.tot_articoli }}:</em></td><td style="padding:5px;text-align:right;{{ mc.style_fontBase() }}"><strong>{{ _h.util.valuta(ordine.total_articoli, ordine.currency) }}</strong></td></tr>
+				{% else %}
+					<tr><td style="padding: 5px; width:160px;"><em style="{{ mc.style_label() }}">{{ _lblc.articoli_imponibile }}:</em></td><td style="padding:5px;text-align:right;{{ mc.style_fontBase() }}"><strong>{{ _h.util.valuta(ordine.total_articoli_imponibile, ordine.currency) }}</strong></td></tr>
+					<tr><td style="padding: 5px; width:160px;"><em style="{{ mc.style_label() }}">{{ _lblc.articoli_iva }}:</em></td><td style="padding:5px;text-align:right;{{ mc.style_fontBase() }}"><strong>{{ _h.util.valuta(ordine.total_articoli_iva, ordine.currency) }}</strong></td></tr>
+				{% endif %}
+				{% if not(ordine.solo_digitali) %}
+					<tr><td style="padding: 5px; width:160px;"><em style="{{ mc.style_label() }}">{{ _lblc.tot_spedizione }}:</em></td><td style="padding:5px;text-align:right;{{ mc.style_fontBase() }}"><strong>{{ _h.util.valuta(ordine.total_spedizione + ordine.total_spedizione_opzione, ordine.currency) }}</strong></td></tr>
+					<tr><td style="padding: 5px; width:160px;"><em style="{{ mc.style_label() }}">{{ _lblc.tot_opz_pagamento }}:</em></td><td style="padding:5px;text-align:right;{{ mc.style_fontBase() }}"><strong>{{ _h.util.valuta(ordine.total_pagamento, ordine.currency) }}</strong></td></tr>
+				{% endif %}
+				{% if iva %}
+					<tr><td style="padding: 5px; width:160px;"><em style="{{ mc.style_label() }}">{{ _lblc.sconto_gift }}:</em></td><td style="padding:5px;text-align:right;{{ mc.style_fontBase() }}"><strong>- {{ _h.util.valuta(ordine.total_sconto, ordine.currency) }}</strong></td></tr>
+				{% else %}
+					<tr><td style="padding: 5px; width:160px;"><em style="{{ mc.style_label() }}">{{ _lblc.sconto_imponibile }}:</em></td><td style="padding:5px;text-align:right;{{ mc.style_fontBase() }}"><strong>- {{ _h.util.valuta(ordine.total_sconto_imponibile, ordine.currency) }}</strong></td></tr>
+					<tr><td style="padding: 5px; width:160px;"><em style="{{ mc.style_label() }}">{{ _lblc.sconto_iva }}:</em></td><td style="padding:5px;text-align:right;{{ mc.style_fontBase() }}"><strong>- {{ _h.util.valuta(ordine.total_sconto_iva, ordine.currency) }}</strong></td></tr>
+				{% endif %}
+					<tr><td style="padding: 5px; width:160px;text-align:right"><em style="{{ mc.style_label() }}">{{ _lblc.totale }}:</em></td><td style="border-top:1px solid #231f20;padding:5px;text-align:right;{{ mc.style_fontTitolo() }}"><strong>{{ _h.util.valuta(ordine.total_ordine, ordine.currency) }}</strong></td></tr>		
+				{% if ordine.add_iva != '' %}
+					<tr><td style="padding: 5px;" colspan="2">{{ ordine.nazione_esenzione_legge }}</td></tr>
+				{% endif %}
+				</tbody>
+				</table>
+			</div>
+		</td>
+	</tr>
+	</tbody>
+	</table>
+</div>
+{% endif %}

@@ -1,0 +1,28 @@
+{% import _h.template('manager/_macro_items.html') as mci %}
+{% set imp = _h.config('template').manager.item.articolo %}
+<table class="h-list item-autoload-total h-fixed-header-table h-list-slingle-selection" cellpadding="0" cellspacing="0" border="0" data-total="{{ result.total }}">
+<thead>
+<tr class="h-list-header">
+	<th style="width: 10px; padding: 0; overflow: hidden;">&nbsp;</th>
+	<th style="width: 20px;">&nbsp;</th>
+	<th style="width: 30px;" data-order="avvisa_lang" data-order-type="{{ result.order_type_avvisa_lang }}">L</th>
+	<th style="width: 110px;" data-order="avvisa_data_inserimento" data-order-type="{{ result.order_type_avvisa_data_inserimento }}">Data ins.</th>
+	<th style="width: 110px;" data-order="avvisa_data_risposta" data-order-type="{{ result.order_type_avvisa_data_risposta }}">Data risposta</th>
+	<th style="width: 250px;" data-order="avvisa_e_mail" data-order-type="{{ result.order_type_avvisa_e_mail }}">E-Mail</th>
+	<th style="width: 150px;" data-order="avvisa_telefono" data-order-type="{{ result.order_type_avvisa_telefono }}">Telefono</th>
+	<th style="width: 60px; text-align: center">&nbsp;</th>
+	{% if imp.id %}
+	<th style="width: 50px;" data-order="a.id" data-order-type="{{ result.order_type_a_id }}">ID</th>
+	{% endif %}
+	{% if imp.codice %}
+	<th style="width: 100px;" data-order="a.codice" data-order-type="{{ result.order_type_a_codice }}">COD</th>
+	{% endif %}
+	<th data-order="al.nome" data-order-type="{{ result.order_type_al_nome }}">Nome</th>
+</tr>
+</thead>
+<tbody>
+{% for item in result.list %}		
+	{{ mci.item_avvisoprodottoesaurito(_h, item) }}
+{% endfor %}
+</tbody>
+</table>

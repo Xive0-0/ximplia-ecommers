@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<items>
+	{% set mapAttributo = _h.context('mapAttributo') %}
+	{% for item in list %}
+	<item>
+		<language>{{ _h.lang }}</language>
+		<name><![CDATA[{{item.get('nome')}}]]></name>
+		<category><![CDATA[{% for cat in item.get('id_categoria')|reverse %}{% if loop.index0 > 0%} &gt; {% endif %}{{ mapAttributo.get(cat).get('nome') }}{% endfor %}]]></category>
+		<sku>{{ item.codice }}</sku>
+		<url>{{ _h.webAppUrl }}{{ item.url }}</url>
+		<image>{{ _h.webAppUrl }}{{ item.imageUrl(_h.config('template').web.feed_item_image_dim) }}</image>
+		<description><![CDATA[{{ item.getWithClean('descrizione')|escape }}]]></description>
+		{% if item.azienda.id > 0 %}
+		<brand><![CDATA[{{item.azienda.get('nome') }}]]></brand>
+		{% endif %}
+		<price>{{ item.prezzo('simple', true)|replace({',': '.'}) }}</price>
+	</item>
+	{% endfor %}
+</items>

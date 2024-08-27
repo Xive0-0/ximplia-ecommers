@@ -1,0 +1,63 @@
+{% import _h.template('_macro.html') as mc %}
+{% set _lblw = _h.labels.get('website') %}
+
+{% if not(_h.context.isApp()) %}
+	{% if result.collezione %}
+	<div class="breadcrumbs clear">
+		{{ mc.breadcrumbs_home(_h) }}
+		{{ mc.breadcrumbs_separatore() }}
+		<a href="{{ _h.xurl('easydive-point') }}" title="blog">Easydive Point</a>
+		{% if result.collezione %}
+			{{ mc.breadcrumbs_separatore() }}
+			<a>{{ result.collezione.get('nome') }}</a>
+		{% endif %}
+	</div>
+	{% else %}
+	{{ mc.banner_header(listBanner['11'], 'Easydive Point') }}
+	{% endif %}
+{% endif %}
+
+{% if result.collezione %}
+	<h1>{{ result.collezione.get('nome') }}</h1>
+	{% if result.collezione.get('descrizione') %}
+		<div class="html col-margin">{{ result.collezione.get('descrizione') }}</div>
+	{% endif %}
+{% else %}
+	<h1>Easydive Point</h1>
+
+	{% if testo_blog %}
+		<div class="html col-margin">{{ testo_blog.getWithMerge('testo') }}</div>
+	{% endif %}
+{% endif %}
+
+
+<div class="clear blog-toolbar">
+	<label>{{ _lblw.filtra_per }}</label>
+	<select class="action-open-url-on-change">
+	<option value="0" data-url="{{ _h.xurl('easydive-point') }}">{{ _lblw.categoria }}</option>
+	{% for c in listCategoriaBlog %}
+	<option value="{{ c.id }}" data-url="{{ c.url }}"{% if c.id == result.collezione.id %} selected{% endif %}>{{ c.get('nome') }}</option>
+	{% endfor %}
+	</select>
+	<a href="{{ _h.xurl('easydive-point') }}">{{ _lblw.cancella }}</a>
+</div>
+
+<div class="clear">
+	{% if result.list|length > 0 %}
+		{% for item in result.list %}
+			{{ mc.item_easydivepoint(_h, item) }}
+		{% endfor %}
+		{% if result.prevStart >= 0 or result.nextStart < result.total %}
+			<div class="col-blog-paginazione clear">
+			{% if result.prevStart >= 0 %}
+				<a href="{{ _h.context.requestUrl }}?start=0&{{ result.urlAddParams }}" title="prima pagina" class="col-blog-paginazione-prev">|&lt;</a>
+				<a href="{{ _h.context.requestUrl }}?start={{ result.prevStart }}&{{ result.urlAddParams }}" title="pagina precedente" class="col-blog-paginazione-prev">Pagina precedente</a>
+			{% endif %}
+			{% if result.nextStart < result.total %}
+				<a href="{{ _h.context.requestUrl }}?start={{ result.lastStart }}&{{ result.urlAddParams }}" title="ultima pagina" class="col-blog-paginazione-next">&gt;|</a>
+				<a href="{{ _h.context.requestUrl }}?start={{ result.nextStart }}&{{ result.urlAddParams }}" title="pagina successiva" class="col-blog-paginazione-next">Pagina successiva</a>
+			{% endif %}
+			</div>
+		{% endif %}
+	{% endif %}
+</div>

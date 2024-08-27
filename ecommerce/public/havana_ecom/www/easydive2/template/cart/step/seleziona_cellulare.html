@@ -1,0 +1,19 @@
+{% set _lbl = _h.labels.get('step_acquisto') %}
+<div class="step hide-button" data-step="">
+	<h3>{{ _lbl.step_cellulare_titolo }}</h3>
+	<p class="evidenzia">{{ _lbl.step_cellulare_descrizione }}</p>
+	<div class="field-line">
+		<div class="field">
+			<label>{{ _lbl.step_cellulare_field }}</label>
+			<select name="id_cellulare" class="action-step-show-button-on-change" data-type="cellulare">
+				<option></option>
+				{{ treeOption }}
+			</select>
+		</div>
+	</div>
+	<button class="next" data-url="seleziona-predisposizione-bracci-cellulare" data-callback="combo_value,param_cellulare">{{ _lbl.btn_procedi }}</button>
+	<p><a href="{{ _h.url('scrivi-servizio-clienti') }}" class="link-servizio-clienti">{{ _lbl.step_cellulare_non_trovi }}</a></p>
+	<div class="clear step-bottombar">
+		<a class="item-acquista-step-close">{{ _lbl.btn_annulla }}</a>
+	</div>
+</div>

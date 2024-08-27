@@ -1,0 +1,55 @@
+{% if _h.device.type() == 'app' %}
+	<div class="window" style="margin: 10px; text-align: center;">
+		<p style="padding-top: 20px">Accedi alla tua area riservata per utilizzare la funzionalità</p>
+		<div class="field-button" style="margin-top: 20px">
+			<a class="app-button action-login">
+				<strong>
+					Effettua il login
+				</strong>
+			</a>
+		</div>
+	</div>
+	<script>
+	AppProxy.titolo('My Area');
+	$('.action-login').on('click', function() {
+		AppProxy.login('');
+	});
+	AppProxy.login('');
+	</script>
+{% else %}
+	<div class="window">
+		<a class="window-close" href="{{ _h.xurl('index') }}"><img src="/assets/website/img/ico-close.png"></a>
+		<div class="window-header">
+			<img src="/assets/website/img/logo-app.png">
+		</div>
+		<div class="window-body">
+			<h1>MY Area</h1>
+			
+			<form>
+				<p>Accedi alla tua area riservata</p>
+				<div class="form-error-message"></div>
+				<div class="field-line">
+					<div class="field">
+						<label>E-Mail</label>
+						<input type="text" name="e_mail" class="valida-required valida-email">
+					</div>
+				</div>
+				<div class="field-line">
+					<div class="field">
+						<label>Password</label>
+						<input type="password" name="password" class="valida-required input-return-submit">
+					</div>
+				</div>
+				<div class="field-text">
+					<a href="{{ _h.xurl('_app/account/password') }}" class="link">Dimenticato la password?</a>
+				</div>
+				<div class="field-button">
+					<a class="button-red button submit-form" href="javascript:void(0)" data-action='{"url": "{{ _h.xurl('_app/login') }}"}'><span>Entra</span></a>
+				</div>
+				<div class="field-text">
+					<a class="button-red button button-white" href="{{ _h.xurl('_app/account/registrati') }}" class="link bottone-registrati">Registrati</a>
+				</div>
+			</form>
+		</div>
+	</div>
+{% endif %}

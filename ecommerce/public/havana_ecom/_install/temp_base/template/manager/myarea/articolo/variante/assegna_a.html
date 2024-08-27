@@ -1,0 +1,17 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% set lang = _h.input('lang', _h.config('default_language', 'it')) %}
+
+{{ mc.slideBoxHeader(_h, 'Assegna ad altro articolo') }}
+<input type="hidden" name="lang" value="{{ lang }}">
+<input type="hidden" name="list_id" value="{{ _h.input('id') }}">
+
+<div class="field-line field-400">
+	<label>Articolo da associare<span>*</span>:</label>
+	<input type="hidden" name="altro_articolo_id" value="" class="valida-required">
+	<input type="text" name="relazione_nome" class="field autocomplete" placeholder="cerca" value="" data-action='{"url": "{{ _h.url('manager/myarea/articolo/list-autocomplete') }}"}'>
+</div>
+
+{{ mc.labelCampiObbligatori() }}
+
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/articolo/variante/ex-assegna-a'), '"reload": ["#variante-content", "#h-layout-center-content"]') }}	

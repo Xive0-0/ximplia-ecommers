@@ -1,0 +1,117 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Cookie policy / Script') }}
+<input type="hidden" name="id" value="{{ item.id }}">
+{% if not(item) %}
+<input type="hidden" name="entita_id" value="{{ _h.input('entita_id') }}">
+<input type="hidden" name="entita_tipo" value="{{ _h.input('entita_tipo') }}">
+{% endif %}
+
+<div class="h-tab">
+	<div data-tab-rif="cookie">Cookie</div>
+	{% for lang in listLang %}
+		{% if lang != 'it' %}
+		<div data-tab-rif="{{ lang }}">{{ lang|upper }}</div>
+		{% endif %}
+	{% endfor %}
+	<div data-tab="cookie">
+		<p class="field-line field-400">
+			<label>Nome fornitore<span>*</span>:</label>
+			<input type="text" name="nome" class="field valida-required" value="{{ item.nome }}" maxlength="50">
+		</p>
+		<div class="field-line field-line-textarea field-400">
+			<label>Descrizione del fornitore/servizio<span>*</span>:</label>
+			<textarea name="descrizione_it" class="field valida-required">{{ item.descrizione['it'] }}</textarea>
+		</div>
+		<div class="field-line field-400">
+			<label>URL policy<span>*</span>:</label>
+			<input type="text" name="url_policy" class="field valida-required valida-url" value="{{ item.url_policy }}">
+		</div>
+		<div class="field-line field-400">
+			<label>Luogo/nazione gestione/archiviazione dati<span>*</span>:</label>
+			<input type="text" name="luogo" class="field valida-required" value="{{ item.luogo }}">
+		</div>
+		<div class="hrow">
+			<div class="field-line field-line-left field-200">
+				<label>Tipo<span>*</span>:</label>
+				<select type="text" name="tipo" class="field valida-required">
+					<option value=""></option>
+					<option value="necessari"{% if item.tipo == 'necessari' %} selected{% endif %}>Necessari</option>
+					<option value="preferenze"{% if item.tipo == 'preferenze' %} selected{% endif %}>Preferenze</option>
+					<option value="statistiche"{% if item.tipo == 'statistiche' %} selected{% endif %}>Statistiche</option>
+					<option value="marketing"{% if item.tipo == 'marketing' %} selected{% endif %}>Marketing</option>
+					<option value="non_classificati"{% if item.tipo == 'non_classificati' %} selected{% endif %}>Non classificati</option>
+				</select>
+			</div>
+			<div class="field-line field-line-left field-100">
+				<label>Ordine/Peso:</label>
+				<input type="text" name="ordine" class="field valida-digitint" value="{{ item.ordine }}">
+			</div>
+		</div>
+		<div class="field-line field-line-textarea field-400">
+			<label>Consenso interdominio (specificare i domini separati da vigola o con andata a capo):</label>
+			<textarea name="cross_domain" class="field">{{ item.cross_domain|join("\n") }}</textarea>
+		</div>
+	{% if _h.input('entita_tipo') == '' and (not(item) or item.entita_id == 0) %}
+		<div class="hrow">
+			<strong>Posizione dove attivare/inserire script</strong>
+			<div style="float: left; width: 33%;">
+			{{ mc.checkbox(('index' in item.posizione), 1, 'pagina_index', 'Home page') }}
+			{{ mc.checkbox(('search' in item.posizione), 1, 'pagina_search', 'Categoria/elenco prodotti') }}
+			{{ mc.checkbox(('item' in item.posizione), 1, 'pagina_item', 'Scheda prodotto') }}
+			</div>
+			<div style="float: left; width: 33%;">
+			{{ mc.checkbox(('checkout_thankyou' in item.posizione), 1, 'pagina_checkout_thankyou', 'Thankyou ordine') }}
+			{{ mc.checkbox(('checkout' in item.posizione), 1, 'pagina_checkout', 'Checkout') }}
+			{{ mc.checkbox(('page' in item.posizione), 1, 'pagina_page', 'Pagina generica sito') }}
+			{{ mc.checkbox(('all' in item.posizione), 1, 'pagina_all', 'Tutto il sito') }}
+			</div>
+			<div style="float: left; width: 33%;">
+			{{ mc.checkbox(('search_blog' in item.posizione), 1, 'pagina_search_blog', 'Categoria blog') }}
+			{{ mc.checkbox(('item_blog' in item.posizione), 1, 'pagina_item_blog', 'Articolo blog') }}
+			{{ mc.checkbox(('search_evento_news' in item.posizione), 1, 'pagina_search_evento_news', 'Categoria Evento/News') }}
+			{{ mc.checkbox(('item_evento_news' in item.posizione), 1, 'pagina_item_evento_news', 'Articolo Evento/News') }}
+			</div>
+		</div>
+	{% endif %}
+	
+		<div class="field-line field-line-textarea field-400">
+			<label>Codice in HEAD del sito:</label>
+			<textarea name="script_head" class="field">{{ item.script['head'] }}</textarea>
+		</div>
+		<div class="field-line field-line-textarea field-400">
+			<label>Codice a inizio BODY del sito:</label>
+			<textarea name="script_body_inizio" class="field">{{ item.script['body_header'] }}</textarea>
+		</div>
+		<div class="field-line field-line-textarea field-400">
+			<label>Codice a fine BODY del sito:</label>
+			<textarea name="script_body_fine" class="field">{{ item.script['body_footer'] }}</textarea>
+		</div>
+		
+		<div class="list-cookie-wrapper" style="margin-top: 15px">
+			<div class="hrow">
+				<div class="h-nav-button-wrapper">
+					<a href="javascript:void(0);" class="h-nav-button h-nav-button-click h-action-alttext h-action-add-cookie" data-alttext="nuovo ciikie">
+						<img src="/assets/manager/havana-js/img/icon/ico-new.svg" align="top" />
+					</a>
+				</div>	
+				<strong class="h-nav-button-wrapper" style="line-height: 40px;">Aggiungi un cookie</strong>
+			</div>				
+			<div class="list-cookie">{{ item.cookie }}</div>		
+		</div>
+	</div>
+	{% for lang in listLang %}
+		{% if lang != 'it' %}
+		<div data-tab="{{ lang }}">
+			{{ mc.contenutiInLingua(lang) }}
+			<div class="field-line field-line-textarea field-400">
+				<label>Descrizione del fornitore/servizio:</label>
+				<textarea name="descrizione_{{ lang }}" class="field">{{ item.descrizione[lang] }}</textarea>
+			</div>
+			<div class="list-descrizione-cookie"></div>
+		</div>
+		{% endif %}
+	{% endfor %}
+</div>
+
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/cookiepolicy/ex-edit'), '"reload": "#testo-cookiepolicy-content"') }}	

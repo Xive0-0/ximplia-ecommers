@@ -1,0 +1,11 @@
+{% set _lblm = _h.labels.get('my') %}
+
+<div class="page">
+	<h1>{{ contratto.get('titolo') }}</h1>
+	<div>{{ _lblm.versione }} <strong>{{ contratto.get('versione') }}</strong></div>
+	<div>{{ _lblm.inserita_il }} <strong>{{ contratto.getDateTime('data_inserimento') }}</strong></div><br><br>
+	<div class="html">
+	{{ contratto.get('testo') }}
+	</div>
+
+</div>

@@ -1,0 +1,19 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Elimina') }}
+<p class="field-line field-line-left field-100">
+	<label>Inserito dal:</label>
+	<input type="text" name="data_dal" class="field valida-datasimple input-datepicker" value="">
+</p>
+<p class="field-line field-line-left field-100">
+	<label>Inserito al:</label>
+	<input type="text" name="data_al" class="field valida-datasimple input-datepicker" value="">
+</p>
+<div class="clear-line"></div>
+<div class="field-line field-300">
+	<div class="h-checkbox-wrapper"><span class="h-checkbox h-checkbox-checked" data-value="1"><input type="hidden" name="carrelli_senza_email" value="1" /></span> <strong>Carrelli senza una e-mail associata</strong></div>
+</div>
+<div class="field-line field-300">
+	<div class="h-checkbox-wrapper"><span class="h-checkbox" data-value="1"><input type="hidden" name="non_conclusi" /></span> <strong>Carrelli NON conclusi</strong></div>
+</div>
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/carrello/ex-delete'), '"reload": ["#h-layout-center-content"]') }}

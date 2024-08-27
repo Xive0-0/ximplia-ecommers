@@ -1,0 +1,400 @@
+{% set ordine = item.dettaglio.ordine %}
+{% include _h.template('manager/myarea/ordini/documenti/template_header.html') %}
+	
+	{% if ordine.spedizione.id_nazione == 108 or ordine.spedizione.id_nazione == 188 %}
+		{% set _lbl = _h.labels('fattura', 'it') %}
+	{% else %}
+		{% set _lbl = _h.labels('fattura', 'en') %}
+	{% endif %}
+	
+	{% set documento_fattura = false %}
+	{% if proforma %}
+		{% set tipo_documento = _lbl.tipo_documento_fattura_proforma %}
+		{% set descrizione_piede = _lbl.descrizione_piede_proforma %}
+		{% set documento_fattura = true %}
+	{% else %}
+		{% if nazione_fattura and not(nazione_fattura.get('cee')) and _h.settings.get('fatturazione_extra_cee_no_separa_iva', '') != '' %}
+			{% set tipo_documento = _lbl.tipo_documento_fattura %}
+			{% set documento_fattura = false %}
+			{% set descrizione_piede = _lbl.descrizione_piede_fattura_extra_cee %}
+		{% elseif ordine.richiesta_fatturazione == '' %}
+			{% set tipo_documento = _lbl.tipo_documento_ricevuta %}
+			{% set descrizione_piede = _lbl.descrizione_piede_ricevuta %}
+			{% set documento_fattura = false %}
+		{% else %}
+			{% set tipo_documento = _lbl.tipo_documento_fattura %}
+			{% if nazione_fattura.id == 108 %}
+				{% set descrizione_piede = _lbl.descrizione_piede_fattura_italia %}
+			{% elseif nazione_fattura.get('cee') %}
+				{% set descrizione_piede = _lbl.descrizione_piede_fattura_cee %}
+			{% else %}
+				{% set descrizione_piede = _lbl.descrizione_piede_fattura_extra_cee %}
+			{% endif %}
+			{% set documento_fattura = true %}
+		{% endif %}
+	{% endif %}
+	{% if _h.settings.get('fatturazione_no_numero_ordine', '') == '' %}
+	<div><em>{{ _lbl.ordine_numero }}:</em> {{ item.get('codice') }}</div>
+	{% endif %}
+	{% if _h.settings.get('checkout_spunta_autoconsumo', '') != '' %}
+	<br><div><em>{{ _lbl.acquisto_autoconsumo }}</em> {% if item.get('autoconsumo', false) %}{{ _lbl.si }}{% else %}{{ _lbl.no }}{% endif %}</div>
+	{% endif %}
+	
+	{% if _h.settings.get('fatturazione_visualizza_iva_in_ricevuta', '') != '' %}
+		{% set documento_fattura = true %}
+	{% endif %}
+	<br><br>
+	<table border="0" cellpadding="0" cellspacing="0" style="width: 100%" style="margin-top: 10pt">
+	<tr>
+		<td style="width: 50%" class="dati-intestazione-fattura">
+			<div class="riga"><span>{{ _lbl.documento }}:</span><br>{{ tipo_documento }}</div>
+			<div class="riga"><span>{{ _lbl.numero_fattura }}:</span><br>{{ num_fattura }}</div>
+			<div class="riga"><span>{{ _lbl.data }}:</span><br>{{ data_fattura }}</div>
+		</td>
+		<td style="width: 50%" class="intestazione-fattura">
+			<div style="margin: 7pt 10pt;">
+				<div class="title">{{ _lbl.intestazione }} {{ tipo_documento }}:</div>
+				<div class="riga">{{ ordine.fattura.nome }}</div>
+				<div class="riga">{{ ordine.fattura.via }}, {{ ordine.fattura.num_civico }}</div>
+				<div class="riga">{{ ordine.fattura.cap }} {{ ordine.fattura.localita }} ({{ ordine.fattura.provincia }})</div>
+				<div class="riga">{{ ordine.fattura.nazione }}</div>
+				{% if ordine.fattura.p_iva %}
+					<div class="riga"><em>{{ _lbl.piva }}</em> {{ ordine.fattura.p_iva }}</div>
+				{% endif %}
+				{% if ordine.fattura.codice_fiscale %}
+					<div class="riga"><em>{{ _lbl.codice_fiscale }}</em> {{ ordine.fattura.codice_fiscale }}</div>
+				{% endif %}
+				{% if ordine.fattura.sdi %}
+					<div class="riga"><em>SDI</em> {{ ordine.fattura.sdi }}</div>
+				{% endif %}
+				{% if ordine.fattura.pec %}
+					<div class="riga"><em>E-mail pec</em> {{ ordine.fattura.pec }}</div>
+				{% endif %}
+				{% if ordine.fattura.data_nascita %}
+					<div class="riga"><em>{{ _lbl.data_nascita }}</em> {{ ordine.fattura.data_nascita }}</div>
+				{% endif %}
+				{% if ordine.fattura.luogo_nascita %}
+					<div class="riga"><em>{{ _lbl.luogo_nascita }}</em> {{ ordine.fattura.luogo_nascita }}</div>
+				{% endif %}
+			</div>
+		</td>
+	</tr>
+	</table>
+	<br><br>
+	<table border="0" cellpadding="0" cellspacing="0" style="width: 100%">
+	<tr>
+		<td style="width: 50%" class="dati-intestazione-spedizione">
+			<div class="riga"><span>{{ _lbl.tipo_pagamento }}:</span><br>
+			{{ checkout_util.getPagamento(item.get('tipo_pagamento')) }}</div>
+		{% if corriere %}
+			<div class="riga"><span>{{ _lbl.spedito_con }}:</span><br>
+			{{ checkout_util.getCorriere(corriere).label }}</div>
+		{% endif %}
+		{% if ddt %}
+			<div class="riga"><span>{{ _lbl.riferimento_ddt }}:</span><br>
+			{{ ddt }}</div>
+		{% endif %}
+		</td>
+		<td style="width: 50%" class="intestazione-spedizione">
+			<div style="margin: 7pt 10pt;">
+			{% if ordine.tipo_spedizione == 2 %}
+				<div class="title">Ritiro da parte del cliente presso la sede:</div>
+				<div class="riga">{{ ordine.sede_ritiro.nome }}</div>
+				<div class="riga">{{ ordine.sede_ritiro.via }}, {{ ordine.sede_ritiro.num_civico }}</div>
+				<div class="riga">{{ ordine.sede_ritiro.cap }} {{ ordine.sede_ritiro.localita }} ({{ ordine.sede_ritiro.provincia }})</div>
+				{% if _h.settings.get('fatturazione_no_recapiti', '') == '' %}
+				<div class="title" style="margin-top: 8pt">Recapiti del cliente:</div>
+				<div class="riga">{{ ordine.e_mail }}</div>
+				<div class="riga">{{ ordine.spedizione.telefono }}</div>
+				{% endif%}
+			{% else %}
+				<div class="title">{{ _lbl.indirizzo_spedizione }}:</div>
+				<div class="riga">{{ ordine.spedizione.nome }} {{ ordine.spedizione.cognome }}</div>
+				{% if ordine.spedizione.presso %}
+				<div class="riga"><em>{{ _lbl.presso }}:</em> {{ ordine.spedizione.presso }}</div>
+				{% endif %}
+				{% if ordine.spedizione.nome_campanello %}
+				<div class="riga"><em>{{ _lbl.nome_campanello }}:</em> {{ ordine.spedizione.nome_campanello }}</div>
+				{% endif %}
+				<div class="riga">{{ ordine.spedizione.via }}, {{ ordine.spedizione.num_civico }}</div>
+				<div class="riga">{{ ordine.spedizione.cap }} {{ ordine.spedizione.localita }} ({{ ordine.spedizione.provincia }})</div>
+				<div class="riga">{{ ordine.spedizione.nazione }}</div>
+				{% if ordine.spedizione.indicazioni %}
+				<div class="riga"><em>{{ _lbl.indicazioni }}:</em> {{ ordine.spedizione.indicazioni }}</div>
+				{% endif %}
+				{% if _h.settings.get('fatturazione_no_recapiti', '') == '' %}
+				<div class="title" style="margin-top: 5pt">{{ _lbl.recapiti }}:</div>
+				<div class="riga">{{ ordine.e_mail }}</div>
+				<div class="riga">{{ ordine.spedizione.telefono }}</div>
+				{% endif %}
+			{% endif %}
+			</div>
+		</td>
+	</tr>
+	</table>
+	<br><br>
+	<table class="fattura" border="0" cellpadding="0" cellspacing="0" style="width: 100%">
+	<tr class="fattura-intestazione">
+		<td	class="col-codice">
+			<div class="valore">{{ _lbl.codice }}</div>
+		</td>
+		<td	class="col-descrizione">
+			<div class="valore">{{ _lbl.descrizione }}</div>
+		</td>
+		{% if _h.settings.get('checkout_marca_da_bollo_fattura', '') == '' and documento_fattura %}
+		<td	class="col-prezzo">
+			<div class="valore">{{ _lbl.prezzo_unitario }}</div>
+		</td>
+		<td	class="col-quantita">
+			<div class="valore">{{ _lbl.qta }}</div>
+		</td>
+		<td	class="col-iva">
+			{% if ordine.add_iva == '' %}<div class="valore">{{ _lbl.iva }}</div>{% endif %}
+		</td>
+		<td	class="col-subtotale">
+			<div class="valore">{{ _lbl.subtotale }}</div>
+		</td>
+		{% else %}
+		<td	class="col-prezzo">
+			<div class="valore">{{ _lbl.prezzo_unitario_base }}</div>
+		</td>
+		<td	class="col-quantita">
+			<div class="valore">{{ _lbl.qta }}</div>
+		</td>
+		<td	class="col-subtotale">
+			<div class="valore">{{ _lbl.subtotale_base }}</div>
+		</td>
+		{% endif %}
+	</tr>
+
+	{% set map = _h.context('mapAttributo') %}
+	{% set mapType = _h.context('mapAttributoType') %}
+	{% set listItems = item.listItems() %}
+	{% for art in listItems %}
+	<tr class="fattura-linea">
+		<td	class="col-codice"><div class="valore valore-codice">{{ art.item.codice|split('', 13)|join('<br>') }}</div></td>
+		<td	class="col-descrizione">
+			<div class="valore">
+			{{ art.item.nome }}<br>
+			{% for attr in art.attr %}
+				{% if attr.id != '' %}
+					{% set a = map.get(attr.id) %}
+					<div class="small"><em>{{ mapType.get(a.get('tipo')).nome }}:</em> {{ a.get('nome') }}</div>
+				{% endif %}
+			{% endfor %}
+			</div>
+		</td>
+		{% if _h.settings.get('checkout_marca_da_bollo_fattura', '') == '' and documento_fattura %}
+			<td class="col-prezzo euro"><div class="valore">
+				{{ _h.util.euro(art.item.prezzo_imponibile) }} {{ _h.config('manager_valuta', '&euro;') }}<br>	
+				{% if art.item.is_pacchetto %}
+				<span class="small">{{ art.item.nome_pacchetto }}</span><br>
+				{% elseif art.item.is_sconto %}
+				<span class="small">{{ _lbl.sconto }}: -{{ art.item.sconto }}%</span><br>
+				<span class="small prezzo-old">{{ _h.util.euro(art.item.prezzo_originale_imponibile) }} {{ _h.config('manager_valuta', '&euro;') }}</span>
+				{% endif %}
+			</div></td>
+			<td class="col-quantita euro"><div class="valore">{{ art.qta }}</div></td>
+			<td class="col-iva euro"><div class="valore">
+				{% if ordine.add_iva == '' %}{{ art.item.iva }}%{% endif %}
+			</div></td>
+			<td class="col-subtotale euro"><div class="valore">{{ _h.util.euro(art.total_imponibile) }} {{ _h.config('manager_valuta', '&euro;') }}</div></td>
+		{% else %}
+			<td class="col-prezzo euro"><div class="valore">
+				{{ _h.util.euro(art.item.prezzo) }} {{ _h.config('manager_valuta', '&euro;') }}<br>	
+				{% if art.item.is_pacchetto %}
+				<span class="small">{{ art.item.nome_pacchetto }}</span><br>
+				{% elseif art.item.is_sconto %}
+				<span class="small">{{ _lbl.sconto }}: -{{ art.item.sconto }}%</span><br>
+				<span class="small prezzo-old">{{ _h.util.euro(art.item.prezzo_originale) }} {{ _h.config('manager_valuta', '&euro;') }}</span>
+				{% endif %}
+			</div></td>
+			<td class="col-quantita euro"><div class="valore">{{ art.qta }}</div></td>
+			<td class="col-subtotale euro"><div class="valore">{{ _h.util.euro(art.total) }} {{ _h.config('manager_valuta', '&euro;') }}</div></td>		
+		{% endif %}
+	</tr>
+	{% endfor %}
+	
+	{% if _h.settings.get('checkout_marca_da_bollo_fattura', '') == '' %}
+		{% set colspan_totale = 5 %}
+		{% if documento_fattura %}
+			<tr class="fattura-linea fattura-linea-subtotale">
+				<td	class="col-testo" colspan="5"><div class="valore">
+					{{ _lbl.subtotale_articoli }}
+				</div></td>
+				<td class="col-subtotale euro"><div class="valore">{{ _h.util.euro(ordine.total_articoli_imponibile) }} {{ _h.config('manager_valuta', '&euro;') }}</div></td>
+			</tr>
+			{% if separa_iva_spedizione %}
+				<tr class="fattura-linea fattura-linea-subtotale">
+					<td	class="col-testo" colspan="5"><div class="valore">
+						{{ _lbl.spedizione }}
+					</div></td>
+					<td class="col-subtotale euro"><div class="valore">{{ _h.util.euro(spedizione.total_spedizione_imponibile + spedizione.total_spedizione_opzione_imponibile) }} {{ _h.config('manager_valuta', '&euro;') }}</div></td>
+				</tr>
+				{% if ordine.total_pagamento > 0 %}
+				<tr class="fattura-linea fattura-linea-subtotale">
+					<td	class="col-testo" colspan="5"><div class="valore">
+						{{ _lbl.pagamento }}
+					</div></td>
+					<td class="col-subtotale euro"><div class="valore">{{ _h.util.euro(spedizione.total_pagamento_imponibile) }} {{ _h.config('manager_valuta', '&euro;') }}</div></td>
+				</tr>
+				{% endif %}
+			{% endif %}
+			{% if ordine.total_sconto > 0 %}
+			<tr class="fattura-linea fattura-linea-subtotale">
+				<td	class="col-testo" colspan="5"><div class="valore">
+					{{ _lbl.sconto }}
+				</div></td>
+				<td class="col-subtotale euro"><div class="valore">-{{ _h.util.euro(ordine.total_sconto_imponibile) }} {{ _h.config('manager_valuta', '&euro;') }}</div></td>
+			</tr>
+			{% endif %}
+			<tr class="fattura-linea fattura-linea-subtotale">
+				<td	class="col-testo" colspan="5"><div class="valore">
+					{{ _lbl.imponibile }}
+				</div></td>
+				<td class="col-subtotale euro"><div class="valore">{{ _h.util.euro(ordine.total_articoli_imponibile - ordine.total_sconto_imponibile + spedizione.total_spedizione_imponibile + spedizione.total_spedizione_opzione_imponibile + spedizione.total_pagamento_imponibile) }} {{ _h.config('manager_valuta', '&euro;') }}</div></td>
+			</tr>
+
+			{% if ordine.add_iva == '' %}
+			<tr class="fattura-linea fattura-linea-subtotale">
+				<td	class="col-testo" colspan="5"><div class="valore">
+					{{ _lbl.totale_iva }}
+				</div></td>
+				<td class="col-subtotale euro">
+					<div class="valore">{{ _h.util.euro(ordine.total_articoli_iva - ordine.total_sconto_iva + spedizione.total_spedizione_iva + spedizione.total_spedizione_opzione_iva + spedizione.total_pagamento_iva) }} {{ _h.config('manager_valuta', '&euro;') }}</div>
+				</td>
+			</tr>
+			{% else %}
+				{% if ordine.nazione_esenzione_legge %}
+				<tr class="fattura-linea fattura-linea-subtotale">
+					<td	class="col-testo" colspan="5"><div class="valore">
+						{{ _lbl.iva_esente }}<br>
+						<em>({{ ordine.nazione_esenzione_legge }})</em>
+					</div></td>
+					<td class="col-subtotale euro"><div class="valore">-</div></td>
+				</tr>
+				{% endif %}
+			{% endif %}
+			{% if not(separa_iva_spedizione) %}
+				<tr class="fattura-linea fattura-linea-subtotale">
+					<td	class="col-testo" colspan="5"><div class="valore">
+						{{ _lbl.spedizione }}<br><em>{{ _lbl.esenzione_spese_spedizione }}</em>
+					</div></td>
+					<td class="col-subtotale euro"><div class="valore">{{ _h.util.euro(ordine.total_spedizione + ordine.total_spedizione_opzione) }} {{ _h.config('manager_valuta', '&euro;') }}</div></td>
+				</tr>
+				{% if ordine.total_pagamento > 0 %}
+				<tr class="fattura-linea fattura-linea-subtotale">
+					<td	class="col-testo" colspan="5"><div class="valore">
+						{{ _lbl.spese_incasso }}<br><em>{{ _lbl.contrassegno }} {{ _lbl.esenzione_spese_spedizione }}</em>
+					</div></td>
+					<td class="col-subtotale euro"><div class="valore">{{ _h.util.euro(ordine.total_pagamento) }} {{ _h.config('manager_valuta', '&euro;') }}</div></td>
+				</tr>
+				{% endif %}
+			{% endif %}
+		{% else %}
+			{% set colspan_totale = 4 %}
+			<tr class="fattura-linea fattura-linea-subtotale">
+				<td	class="col-testo" colspan="4"><div class="valore">
+					{{ _lbl.subtotale_articoli }}
+				</div></td>
+				<td class="col-subtotale euro"><div class="valore">{{ _h.util.euro(ordine.total_articoli) }} {{ _h.config('manager_valuta', '&euro;') }}</div></td>
+			</tr>
+			<tr class="fattura-linea fattura-linea-subtotale">
+				<td	class="col-testo" colspan="4"><div class="valore">
+					{{ _lbl.spedizione }}
+				</div></td>
+				<td class="col-subtotale euro"><div class="valore">{{ _h.util.euro(ordine.total_spedizione + ordine.total_spedizione_opzione) }} {{ _h.config('manager_valuta', '&euro;') }}</div></td>
+			</tr>
+			{% if ordine.total_pagamento > 0 %}
+			<tr class="fattura-linea fattura-linea-subtotale">
+				<td	class="col-testo" colspan="4"><div class="valore">
+					{{ _lbl.spese_incasso }}
+				</div></td>
+				<td class="col-subtotale euro"><div class="valore">{{ _h.util.euro(ordine.total_pagamento) }} {{ _h.config('manager_valuta', '&euro;') }}</div></td>
+			</tr>
+			{% endif %}
+			{% if ordine.total_sconto > 0 %}
+			<tr class="fattura-linea fattura-linea-subtotale">
+				<td	class="col-testo" colspan="4"><div class="valore">
+					{{ _lbl.sconto }}
+				</div></td>
+				<td class="col-subtotale euro"><div class="valore">-{{ _h.util.euro(ordine.total_sconto) }} {{ _h.config('manager_valuta', '&euro;') }}</div></td>
+			</tr>
+			{% endif %}
+		{% endif %}
+		<tr class="fattura-linea fattura-linea-subtotale fattura-linea-totale">
+			<td	class="col-testo" colspan="{{ colspan_totale }}"><div class="valore">
+				{{ _lbl.totale }}
+			</div></td>
+			<td class="col-subtotale euro"><div class="valore">{{ _h.util.euro(ordine.total_ordine) }} {{ _h.config('manager_valuta', '&euro;') }}</div></td>
+		</tr>
+	{% else %}
+		<tr class="fattura-linea fattura-linea-subtotale">
+			<td	class="col-testo" colspan="4"><div class="valore">
+				{{ _lbl.subtotale_articoli }}
+			</div></td>
+			<td class="col-subtotale euro"><div class="valore">{{ _h.util.euro(ordine.total_articoli) }} {{ _h.config('manager_valuta', '&euro;') }}</div></td>
+		</tr>
+		<tr class="fattura-linea fattura-linea-subtotale">
+			<td	class="col-testo" colspan="4"><div class="valore">
+				{{ _lbl.spedizione }}
+			</div></td>
+			<td class="col-subtotale euro"><div class="valore">{{ _h.util.euro(ordine.total_spedizione + ordine.total_spedizione_opzione) }} {{ _h.config('manager_valuta', '&euro;') }}</div></td>
+		</tr>
+		{% if ordine.total_pagamento > 0 %}
+		<tr class="fattura-linea fattura-linea-subtotale">
+			<td	class="col-testo" colspan="4"><div class="valore">
+				{{ _lbl.pagamento }}
+			</div></td>
+			<td class="col-subtotale euro"><div class="valore">{{ _h.util.euro(ordine.total_pagamento) }} {{ _h.config('manager_valuta', '&euro;') }}</div></td>
+		</tr>
+		{% endif %}
+		{% if ordine.total_sconto > 0 %}
+		<tr class="fattura-linea fattura-linea-subtotale">
+			<td	class="col-testo" colspan="4"><div class="valore">
+				{{ _lbl.sconto }}
+			</div></td>
+			<td class="col-subtotale euro"><div class="valore">-{{ _h.util.euro(ordine.total_sconto) }} {{ _h.config('manager_valuta', '&euro;') }}</div></td>
+		</tr>
+		{% endif %}
+		{% if item.get('marca_da_bollo', 0) > 0 %}
+		<tr class="fattura-linea fattura-linea-subtotale">
+			<td	class="col-testo" colspan="4"><div class="valore">
+				{{ _lbl.marca_da_bollo }}
+			</div></td>
+			<td class="col-subtotale euro"><div class="valore">
+				{{ _h.util.euro(item.get('marca_da_bollo', 0)) }} {{ _h.config('manager_valuta', '&euro;') }}
+			</div></td>
+		</tr>
+		{% endif %}
+		<tr class="fattura-linea fattura-linea-subtotale fattura-linea-totale">
+			<td	class="col-testo" colspan="4"><div class="valore">
+				{{ _lbl.totale }}
+			</div></td>
+			<td class="col-subtotale euro"><div class="valore">{{ _h.util.euro(ordine.total_ordine) }} {{ _h.config('manager_valuta', '&euro;') }}</div></td>
+		</tr>
+	{% endif %}
+	</table>
+	
+	{% if _h.settings.get('checkout_marca_da_bollo_fattura', '') == '' and list_iva|length > 0 and documento_fattura %}
+		<table class="fattura" border="0" cellpadding="0" cellspacing="0" style="width: 100%" style="margin-top: 15pt;">
+		<tr>
+			<td	class="col-riepilogo">
+				<div class="riga">{{ _lbl.riepilogo_iva }}</div>
+				{% for item_iva in list_iva %}
+				<div class="riga"><span>{{ _lbl.iva }} {{ item_iva.codice }}%:</span> {{ _h.util.euro(item_iva.valore) }} {{ _h.config('manager_valuta', '&euro;') }}</div>
+				{% endfor %}
+			</td>
+		</tr>
+		</table>
+	{% endif %}
+	{% if _h.settings.get('checkout_marca_da_bollo_fattura', '') != '' %}
+	<br><br>
+	<div class="riga"><em>{{ ordine.regime_marca_bollo_dicitura }}</em></div>
+	{% endif %}
+	{% if descrizione_piede %}
+	<br><br>
+	<div class="riga"><em>{{ descrizione_piede }}</em></div>
+	{% endif %}
+</body>
+</html>

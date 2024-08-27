@@ -1,0 +1,55 @@
+{% set _lbl = _h.labels.get('step_acquisto') %}
+{% macro lista(_h, _lbl, list, next_url) %}
+	{% for item in list %}
+	<div class="step-item-accessorio{% if item.get('consigliato') %} step-item-accessorio-consigliato{% endif %}">
+		<div class="step-item-accessorio-consigliato-text">{{ _lbl.consigliato_easydive }}</div>
+		<div class="clear">
+			<div class="step-item-accessorio-img">
+				<img src="{{ item.imageUrl('300x300') }}">
+			</div>
+			<div class="step-item-accessorio-nome">
+			<div class="step-item-accessorio-nome-inner">
+				<div class="step-item-accessorio-descrizione">{{ item.get('nome') }}</div>
+				{% if item.get('step_acquisto_testo') %}
+				<div class="step-item-accessorio-descrizione-dettaglio">{{ item.get('step_acquisto_testo') }}</div>
+				{% endif %}
+				<div class="step-item-accessorio-prezzo">{{ item.prezzo('e', false) }}</div>
+				<button class="add-item" data-callback="luci" data-id="{{ item.id }}" data-type="luci" data-url="{{ next_url }}" data-nome="{{ item.get('nome') }}" data-img="{{ item.imageUrl('300x300') }}" data-prezzo="{{ item.prezzo('', false) }}" data-prezzo-euro="{{ item.prezzo('e', false) }}">{{ _lbl.btn_aggiungi }}</button>
+			</div>
+			</div>
+		</div>
+	</div>
+	{% endfor %}
+{% endmacro %}
+
+{% if _h.input('id_articolo') == 766 %}
+	{% set next_url = 'seleziona-kit-bracci' %}
+{% else %}
+	{% set next_url = 'seleziona-trigger' %}
+{% endif %}
+<div class="step step-no-clear" data-step="">
+	<h3>{{ _lbl.step_luci_flash_titolo }}</h3>
+	<p class="evidenzia">{{ _lbl.step_luci_flash_descrizione }}</p>
+
+	{% if listLuci|length > 0 and listFlash|length > 0 %}
+	<div class="tab-wrapper">
+		<div data-tab-rif="luci"><strong>{{ _lbl.luci }}</strong></div>
+		<div data-tab-rif="flash"><strong>{{ _lbl.flash }}</strong></div>
+		<div data-tab="luci">
+		{{ _self.lista(_h, _lbl, listLuci, next_url) }}
+		</div>
+		<div data-tab="flash">
+		{{ _self.lista(_h, _lbl, listFlash, next_url) }}
+		</div>
+	</div>
+	{% elseif listLuci|length > 0 %}
+		{{ _self.lista(_h, _lbl, listLuci, next_url) }}
+	{% elseif listFlash|length > 0 %}
+		{{ _self.lista(_h, _lbl, listFlash, next_url) }}
+	{% endif %}
+	<button class="next light" data-url="{{ next_url }}">{{ _lbl.btn_procedi_senza }}</button>
+	<div class="clear step-bottombar">
+		<a class="prev">&lt; {{  _lbl.btn_torna_indietro }}</a>
+		<a class="item-acquista-step-close">{{ _lbl.btn_annulla }}</a>
+	</div>
+</div>

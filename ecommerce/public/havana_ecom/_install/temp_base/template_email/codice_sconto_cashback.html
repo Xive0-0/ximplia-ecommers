@@ -1,0 +1,15 @@
+{% set _lbl = _h.labels('email', lang) %}
+{% import _h.template('_macro.html') as mc %}
+
+
+<div style="{{ mc.style_fontBase() }}">{{ _lbl.ciao }} {{ nome }}<br>
+	{{ _lbl.descrizione_cashback|replace({'%valore%': valore}) }}<br>
+</div>	
+<div style="{{ mc.style_fontTitolo() }};{{ mc.style_link() }};text-align:center"><strong>{{ codice }}</strong></div>
+{% if data_scadenza %}
+<div><em>{{ _lbl.codice_sconto_valido_fino_a }}: {{ data_scadenza }}</em></div>
+{% endif %}
+{% if acquisto_minimo %}
+<div><em>{{ _lbl.codice_sconto_acquisto_minimo }}: {{ acquisto_minimo }}</em></div>
+{% endif %}
+

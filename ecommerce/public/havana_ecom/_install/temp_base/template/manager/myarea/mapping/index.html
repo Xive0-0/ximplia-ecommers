@@ -1,0 +1,8 @@
+{% import _h.template('manager/_macro.html') as mc %}
+{{ mc.index_page_header(_h, 'Mappatura manuale Acvitity') }}
+		
+	{{ mc.navButtonNew(_h, 'nuovo', 'mapping') }}
+	{{ mc.navButtonUpdate(_h, 'modifica', 'mapping') }}
+	{{ mc.navButtonDelete(_h, 'elimina', 'mapping') }}		
+
+{{ mc.index_page_footer(_h, result, 'mapping') }}

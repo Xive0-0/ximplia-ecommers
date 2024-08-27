@@ -1,0 +1,47 @@
+<div class="h-layout-content-wrapper h-layout-show-topbar h-layout-show-bottombar">
+	<div class="h-layout-topbar">
+		<div class="h-layout-content-wrapper">
+			Filtra
+		</div>
+	</div>
+	<form>
+	<div class="h-layout-content">
+		<fieldset>
+			<p class="field-line field-200">
+				<label>Cerca per codice:</label>
+				<input type="text" name="codice" class="field" maxlength="50">
+			</p>
+			<p class="field-line field-200">
+				<label>Cerca per nome e/o cognome cliente:</label>
+				<input type="text" name="nome" class="field" maxlength="50">
+			</p>
+			<p class="field-line field-200">
+				<label>Cerca per parola chiave:</label>
+				<input type="text" name="query" class="field" maxlength="50">
+			</p>
+			<div class="field-line">
+				<div><span class="h-checkbox" data-value="1"><input type="hidden" name="ticket_aperto" value=""></span>segnalazione / ticket aperto</div>
+			</div>
+			<p class="field-line field-line-left field-80">
+				<label>Data dal:</label>
+				<input type="text" name="data_dal" class="field valida-datasimple input-datepicker" maxlength="10">
+			</p>
+			<p class="field-line field-80">
+				<label>Data al:</label>
+				<input type="text" name="data_da" class="field valida-datasimple input-datepicker" maxlength="10">
+			</p>
+			<div class="field-line">
+				<div><span class="h-checkbox" data-value="1"><input type="hidden" name="trasformato_in_ordine" value=""></span>solo preventivi convertiti in ordine</div>
+			</div>
+			<div class="field-line">
+				<div><span class="h-checkbox" data-value="1"><input type="hidden" name="da_inviare_al_cliente" value=""></span>da inviare al cliente</div>
+			</div>
+		</fieldset>
+	</div>
+	<div class="h-layout-bottombar">
+		<div class="h-layout-content-wrapper">
+			<a href="javascript:void(0);" class="h-bar-button h-bar-button-blu h-action-filter" data-action='{"load": "#h-layout-center-content", "reset": "#azzera-filtro"}'>Filtra</a>
+		</div>
+	</div>
+	</form>
+</div>

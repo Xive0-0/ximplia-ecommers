@@ -1,0 +1,14 @@
+{% import _h.template('manager/_macro.html') as mc %}
+{% import _h.template('manager/_macro_items.html') as mci %}
+
+{% set lang = _h.input('lang', _h.config('default_language', 'it')) %}
+
+{{ mc.slideBoxHeader(_h, 'Associa articoli: ' ~ item.get('nome')) }}
+<input type="hidden" name="id_da_spostare" value="{{ item.id }}">
+<div class="tree h-list h-list-slingle-selection" data-tree-id-hide="{{ item.id }}">
+{% for elem in list %}		
+	{{ mci.item_attributoTree(_h, elem, true) }}
+{% endfor %}
+</div>
+
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/attributo/ex-associa-articolo'), null, '', '', 'Associa') }}	

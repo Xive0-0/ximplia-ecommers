@@ -1,0 +1,6 @@
+{
+	"on:": [
+		{"name": "list-azienda-simple", "params": {"orderby": "ordine", "list": "listAzienda"}}
+	],
+	"on:view": "aziende"
+}

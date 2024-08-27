@@ -1,0 +1,21 @@
+{% set _lblm = _h.labels.get('my') %}
+{% set _lblf = _h.labels.get('form') %}
+
+<h2>{{ _lblm.title_file }}</h2>
+
+<table class="table-list" cellpadding="0" cellspacing="0" border="0">
+{% for item in list %}
+<tr data-id="{{ item.id }}">
+	<td class="details">
+		<strong>{{ item.get('titolo') }}</strong>
+		{% if item.get('descrizione') %}
+		<small>{{ item.get('descrizione') }}</small>
+		{% endif %}
+		<small>[{{ item.getDateTime('ultimo_aggiornamento') }}] <em>{{ item.get('file_nome') }}</em></small>
+	</td>
+	<td class="action-bar action-bar-text">
+		<a href="{{ _h.url('account/download-file') }}/{{ item.id}}" target="_blank">download</a>	
+	</td>
+</tr>
+{% endfor %}
+</table>

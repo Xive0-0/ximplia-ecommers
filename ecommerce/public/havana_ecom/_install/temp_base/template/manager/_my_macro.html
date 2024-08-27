@@ -1,0 +1,405 @@
+{% macro item_variante(_h, item) %}
+	<tr data-id="{{ item.id }}">
+		<td style="background: {% if item.abilitato() %}#34a853{% else %}#aaaaaa{% endif %}; width: 10px; padding: 0; overflow: hidden;">&nbsp;</td>
+		<td class="td-checkbox">
+			{% if item.id == item.get('id_variante') %}
+				&nbsp;
+			{% else %}
+			<span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="relazione_id[]" value="" /></span>
+			{% endif %}
+		</td>
+		<td>{{ item.codice }}</td>
+		<td>{{ item.get('ordine_variante') }}</td>
+		<td><img class="image image-articolo" src="{{ item.imageUrl(_h.config('template').manager.item_image_dim) }}"></td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					{{ item.get('nome') }}
+					{% if item.get('nome_simbolico') %}
+					- {{ item.get('nome_simbolico') }}
+					{% endif %}
+				</div>
+			</div>
+		</td>
+		{{ _self.item_variante_add(_h, item) }}
+	</tr>
+{% endmacro %}
+
+{% macro ordine_menu_email_add(_h, item) %}
+{% endmacro %}
+
+{% macro header_item_articolo_add(_h, item) %}
+{% endmacro %}
+{% macro header_item_relazione_add(_h, item) %}
+{% endmacro %}
+{% macro header_item_variante_add(_h, item) %}
+{% endmacro %}
+
+{% macro item_articolo_add(_h, item) %}
+{% endmacro %}
+{% macro item_relazione_add(_h, item) %}
+{% endmacro %}
+{% macro item_variante_add(_h, item) %}
+{% endmacro %}
+
+{% macro item_relazione(_h, item) %}
+	<tr data-id="{{ item.id }}">
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="relazione_id[]" value="" /></span></td>
+		<td>{{ item.codice }}</td>
+		<td><img class="image image-articolo" src="{{ item.imageUrl(_h.config('template').manager.item_image_dim) }}"></td>
+		<td>{{ item.get('ordine_relazione') }}</td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					{{ item.get('nome') }}
+					{% if item.get('nome_simbolico') %}
+					- {{ item.get('nome_simbolico') }}
+					{% endif %}
+				</div>
+			</div>
+		</td>
+		{{ _self.item_relazione_add(_h, item) }}
+	</tr>
+{% endmacro %}
+
+{% macro item_articolo_details(_h, item) %}
+	<table class="h-list" cellpadding="0" cellspacing="0" border="0">
+	<tbody>
+	<tr data-id="{{ item.id }}">
+		<td style="width: 100px;">
+			<a class="link" href="{{ _h.url('item-articolo') }}?id={{ item.id }}" title="apri pagina" target="_blank">{{ item.codice }}</a>
+		</td>	
+		<td style="width: 45px;"><img class="image image-articolo" src="{{ item.imageUrl(_h.config('template').manager.item_image_dim) }}"></td>
+		<td>
+			<div class="h-list-cell-auto-wrapper">
+				<div class="h-list-cell-auto">
+					{{ item.get('nome') }}
+				</div>
+			</div>
+		</td>
+		<td style="width: 120px;">
+			<div><em>prezzo:</em> <strong>{{ item.euro('prezzo') }}</strong></div>
+			<div><em>sconto:</em> <strong>{{ item.sconto }} %</strong></div>
+			<div><em>spediz:</em> <strong>{{ item.get('spese_spedizione')|upper }}</strong></div>
+		</td>
+	</tr>
+	</tbody>
+	</table>
+{% endmacro %}
+
+{% macro immagine_articolo_ordine(_h, art) %}	
+	<img src="/images/{{ _h.config('template').manager.item_image_dim }}/{{ art.item.image }}" style="max-width: 60px;">
+{% endmacro %}		
+
+{% macro _item_articolo_nome(_h, item) %}
+	<div class="h-list-cell-auto-wrapper h-action-alttext" data-alttext="{{ item.getEscape('nome') }}">
+		<div class="h-list-cell-auto">
+			<span class="h-edit-table-value" data-key="nome">{{ item.getEscape('nome') }}</span>
+		</div>
+	</div>
+{% endmacro %}
+
+{% macro item_articolo(_h, item) %}
+	{% set _lbl = _h.labels.get('manager') %}
+	{% set imp = _h.config('template').manager.item.articolo %}
+	<tr data-id="{{ item.id }}" class="item-autoload">
+	{% if item.abilitato() %}
+		<td class="h-action-selected-execute" data-action='{"url": "{{ _h.url('manager/myarea/articolo/ex-disabilita') }}", "confirm": "Confermi di voler disabilitare?", "params": {"id": {{ item.id }}}, "replace_item": true}' style="cursor: pointer; background: #34a853; width: 10px; padding: 0; overflow: hidden;">&nbsp;</td>
+	{% else %}
+		<td class="h-action-selected-execute" data-action='{"url": "{{ _h.url('manager/myarea/articolo/ex-abilita') }}", "confirm": "Confermi di voler abilitare?", "params": {"id": {{ item.id }}}, "replace_item": true}' style="cursor: pointer; background: #aaaaaa; width: 10px; padding: 0; overflow: hidden;">&nbsp;</td>
+	{% endif %}
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}"><input type="hidden" name="id[]" value="" /></span></td>
+		{% if imp.id %}
+		<td><a class="link" href="{{ _h.url('item-articolo') }}?id={{ item.id }}&__ct=1" title="apri pagina" target="_blank">#{{ item.id }}</a></td>
+		{% endif %}
+		{% if imp.codice %}
+		<td>
+			<a class="link" href="{{ _h.url('item-articolo') }}?id={{ item.id }}&__ct=1" title="apri pagina" target="_blank"><span class="h-edit-table-value" data-key="codice">{{ item.get('codice') }}</span></a>
+		</td>	
+		{% endif %}
+		{% if imp.codice_fornitore %}
+		<td>
+			<div class="h-list-cell-auto-wrapper h-action-alttext" data-alttext="{{ item.get('codice_fornitore') }}">
+				<div class="h-list-cell-auto">
+					<span class="h-edit-table-value" data-key="codice_fornitore">{{ item.get('codice_fornitore') }}</span>
+				</div>
+			</div>
+		</td>	
+		{% endif %}		
+		<td class="h-edit-table-hide"><img class="image image-articolo h-action-selected-open-window" data-alttext="immagini" data-action='{"window": {"type": "slide-right", "url": "{{ _h.url('manager/myarea/articolo/immagine/index') }}", "params": {"id": {{ item.id }}}}}' src="{{ item.imageUrl(_h.config('template').manager.item_image_dim) }}"></td>
+		<td><span class="h-edit-table-value" data-key="ordine">{{ item.get('ordine') }}</span></td>
+		{% if _h.config('vendita_articoli_digitali', false) %}
+		<td>
+			{% if item.get('documento_digitale_id') > 0 %} 
+			<img src="/assets/manager/havana-js/img/icon/ico-disk.svg" class="h-action-alttext" data-alttext="contenuto digitale">
+			{% else %}
+			&nbsp;
+			{% endif %}
+		</td>
+		{% endif %}
+		<td  class="h-edit-table-hide">
+			{% if item.get('esaurito') %} 
+			<img src="/assets/manager/havana-js/img/icon/ico-reset.svg" class="h-action-alttext" data-alttext="esaurito">
+			{% else %}
+			&nbsp;
+			{% endif %}
+		</td>
+		<td>
+			{{ _self._item_articolo_nome(_h, item) }}
+			{% set tree_categoria = _h.context('tree_categoria') %}
+			{% if tree_categoria %}
+				{% set categoria = tree_categoria.get(item.get('id_categoria_principale')) %}
+				{% if categoria.path %}
+				<div class="articolo-categoria-path action-filtra-coll-id"  data-action='{"load": "#h-layout-center-content", "reset": "#azzera-filtro", "params": {"coll_id": "{{ categoria.id}}"}}'>{{ categoria.path }}</div>
+				{% endif %}
+				<div class="articolo-categoria">
+				{% if item.get('id_categoria')|length > 0 %}
+					<div>
+						{% for idc in item.get('id_categoria') %}
+							{% set categoria = tree_categoria.get(idc) %}
+							<span class="h-action-alttext action-filtra-coll-id" data-action='{"load": "#h-layout-center-content", "reset": "#azzera-filtro", "params": {"coll_id": "{{ categoria.id}}"}}' data-alttext="{{ categoria.path }}">[{{ categoria.nome }}]</span>
+						{% endfor %}				
+					</div>
+				{% endif %}
+				<div class="articolo-categoria">
+				{% if item.get('id_selezione')|length > 0 %}
+					<div>
+						{% for idc in item.get('id_selezione') %}
+							{% set categoria = tree_categoria.get(idc) %}
+							<span class="h-action-alttext action-filtra-coll-id" data-action='{"load": "#h-layout-center-content", "reset": "#azzera-filtro", "params": {"coll_id": "{{ categoria.id}}"}}' data-alttext="{{ categoria.path }}">[{{ categoria.nome }}]</span>
+						{% endfor %}				
+					</div>
+				{% endif %}
+				</div>
+			{% endif %}
+		</td>
+		{% if imp.nome_simbolico %}
+		<td>
+			<div class="h-list-cell-auto-wrapper h-action-alttext" data-alttext="{{ item.get('nome_simbolico') }}">
+				<div class="h-list-cell-auto">
+					<span class="h-edit-table-value" data-key="nome_simbolico">{{ item.get('nome_simbolico') }}</span>
+				</div>
+			</div>
+		</td>
+		{% endif %}
+		{% if imp.azienda %}
+		<td>
+			<div class="h-list-cell-auto-wrapper h-action-alttext" data-alttext="{{ item.get('nome_azienda') }}">
+				<div class="h-list-cell-auto">
+					<span class="h-edit-table-value" data-key="id_azienda" data-id="{{ item.id_azienda }}" data-type="combo-azienda">{{ item.get('nome_azienda') }}</span>
+				</div>
+			</div>
+		</td>
+		{% endif %}
+		{% if imp.tipo %}
+		<td>{{ item.tipoScheda }}</td>
+		{% endif %}
+		{% if _h.session.params.user.accesso != 3 %}
+		<td valign="middle" class="h-edit-table-hide">
+			<img src="/assets/manager/havana-js/img/icon/ico-varianti.svg" class="h-action-alttext h-action-selected-open-window" data-alttext="{{ _lbl.list_varianti }}" data-action='{"window": {"type": "slide-right", "url": "{{ _h.url('manager/myarea/articolo/variante/index') }}", "params": {"id": {{ item.id }}}}}' align="top">
+			{% set num_variante = item.get('num_variante') %}
+			{% if num_variante > 0 and _h.config('articolo_variante_nasconti_principale', false) %}
+				{% set num_variante = num_variante - 1 %}
+			{% endif %}
+			{{ num_variante }}
+		</td>
+		{% endif %}
+		{{ _self.item_articolo_add(_h, item) }}
+		{% if imp.spedizione %}
+		<td style="text-align: center"><span class="h-edit-table-value" data-key="spese_spedizione" data-id="{{ item.get('spese_spedizione') }}" data-type="combo-spese-spedizione">{{ item.get('spese_spedizione')|upper }}</span></td>
+		{% endif %}
+		{% if not(imp.hide_prezzo) %}
+		<td style="text-align: right;"><span class="h-edit-table-value" data-key="prezzo" data-type="euro">{{ item.euro('prezzo') }}</span></td>
+		<td style="text-align: right;"><span class="h-edit-table-value" data-key="sconto" data-type="int">{{ item.sconto }}</span> %</td>
+		{% endif %}
+		{% if _h.config('gestione_magazzino', false) %}
+		<td style="text-align: right;"><span class="h-edit-table-value" data-key="quantita_magazzino" data-type="int">{{ item.get('quantita_magazzino') }}</span></td>
+		{% endif %}
+		{% if imp.prezzo_acquisto %}
+		<td style="text-align: right;"><span class="h-edit-table-value" data-key="prezzo_acquisto" data-type="euro">{{ item.euro('prezzo_acquisto') }}</span></td>
+		{% endif %}
+	</tr>
+{% endmacro %}
+
+{% macro item_fornitore_articolo(_h, item) %}
+	{% set _lbl = _h.labels.get('manager') %}
+	{% set imp = _h.config('template').manager.item.articolo %}
+	{% set mapCodiceFornitore = _h.view('mapCodiceFornitore') %}
+	{% if mapCodiceFornitore.get(item.id ~ '_' ~ item.get('id_fornitore_articolo')) %}
+		{{ item.set('codice_fornitore', mapCodiceFornitore.get(item.id ~ '_' ~ item.get('id_fornitore_articolo'))) }}
+	{% endif %}
+	<tr data-id="{{ item.id }}_{{ item.get('id_fornitore_articolo') }}" class="item-autoload">
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}_{{ item.get('id_fornitore_articolo') }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>{{ item.get('fornitore_nome') }}</td>
+		<td style="text-align: right;">{{ item.get('fornitore_in_arrivo') }}</td>
+		{% if _h.config('gestione_magazzino', false) %}
+		<td style="text-align: right;">{{ item.get('quantita_magazzino') }}</td>
+		{% endif %}
+		{% if imp.id %}
+		<td><a class="link" href="{{ _h.url('item-articolo') }}?id={{ item.id }}" title="apri pagina" target="_blank">#{{ item.id }}</a></td>
+		{% endif %}
+		{% if imp.codice %}
+		<td>
+			<a class="link" href="{{ _h.url('item-articolo') }}?id={{ item.id }}&__ct=1" title="apri pagina" target="_blank"><span class="h-edit-table-value" data-key="codice">{{ item.get('codice') }}</span></a>
+		</td>	
+		{% endif %}
+		<td>
+			<div class="h-list-cell-auto-wrapper h-action-alttext" data-alttext="{{ item.get('codice_fornitore') }}">
+				<div class="h-list-cell-auto">
+					<span class="h-edit-table-value" data-key="codice_fornitore">{{ item.get('codice_fornitore') }}</span>
+				</div>
+			</div>
+		</td>	
+		<td class="h-edit-table-hide"><img class="image image-articolo h-action-selected-open-window" data-alttext="immagini" data-action='{"window": {"type": "slide-right", "url": "{{ _h.url('manager/myarea/articolo/immagine/index') }}", "params": {"id": {{ item.id }}}}}' src="{{ item.imageUrl(_h.config('template').manager.item_image_dim) }}"></td>
+		<td>
+			{{ _self._item_articolo_nome(_h, item) }}
+			{% set tree_categoria = _h.context('tree_categoria') %}
+			{% if tree_categoria %}
+				{% set categoria = tree_categoria.get(item.get('id_categoria_principale')) %}
+				{% if categoria.path %}
+				<div class="articolo-categoria-path action-filtra-coll-id"  data-action='{"load": "#h-layout-center-content", "reset": "#azzera-filtro", "params": {"coll_id": "{{ categoria.id}}"}}'>{{ categoria.path }}</div>
+				{% endif %}
+				<div class="articolo-categoria">
+				{% if item.get('id_categoria')|length > 0 %}
+					<div>
+						{% for idc in item.get('id_categoria') %}
+							{% set categoria = tree_categoria.get(idc) %}
+							<span class="h-action-alttext action-filtra-coll-id" data-action='{"load": "#h-layout-center-content", "reset": "#azzera-filtro", "params": {"coll_id": "{{ categoria.id}}"}}' data-alttext="{{ categoria.path }}">[{{ categoria.nome }}]</span>
+						{% endfor %}				
+					</div>
+				{% endif %}
+				<div class="articolo-categoria">
+				{% if item.get('id_selezione')|length > 0 %}
+					<div>
+						{% for idc in item.get('id_selezione') %}
+							{% set categoria = tree_categoria.get(idc) %}
+							<span class="h-action-alttext action-filtra-coll-id" data-action='{"load": "#h-layout-center-content", "reset": "#azzera-filtro", "params": {"coll_id": "{{ categoria.id}}"}}' data-alttext="{{ categoria.path }}">[{{ categoria.nome }}]</span>
+						{% endfor %}				
+					</div>
+				{% endif %}
+				</div>
+			{% endif %}
+		</td>
+		<td>
+			<div>3 m.: {{ item.euro('totale3_venduta')}}</div>
+			<div>6 m.: {{ item.euro('totale6_venduta')}}</div>
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro item_fornitore_articolo_movimento(_h, item) %}
+	{% set _lbl = _h.labels.get('manager') %}
+	{% set imp = _h.config('template').manager.item.articolo %}
+	{% set mapCodiceFornitore = _h.view('mapCodiceFornitore') %}
+	{% if mapCodiceFornitore.get(item.id ~ '_' ~ item.get('id_fornitore_articolo')) %}
+		{{ item.set('codice_fornitore', mapCodiceFornitore.get(item.id ~ '_' ~ item.get('id_fornitore_articolo'))) }}
+	{% endif %}
+	<tr data-id="{{ item.get('id_fornitore_articolo_movimento') }}" class="item-autoload">
+		<td class="td-checkbox"><span class="h-checkbox" data-value="{{ item.id }}_{{ item.get('id_fornitore_articolo') }}"><input type="hidden" name="id[]" value="" /></span></td>
+		<td>{{ item.get('fornitore_nome') }}</td>
+		<td>{{ item.getDate('data_inserimento_ordine') }}</td>
+		<td style="text-align: right;">{% if item.get('qta_ordinata') > 0 %}{{ item.get('qta_ordinata') }}{% endif %}</td>
+		<td style="text-align: right;">{% if item.get('qta_consegnata') > 0 %}{{ item.get('qta_consegnata') }}{% endif %}</td>
+		{% if imp.id %}
+		<td><a class="link" href="{{ _h.url('item-articolo') }}?id={{ item.id }}" title="apri pagina" target="_blank">#{{ item.id }}</a></td>
+		{% endif %}
+		{% if imp.codice %}
+		<td>
+			<a class="link" href="{{ _h.url('item-articolo') }}?id={{ item.id }}&__ct=1" title="apri pagina" target="_blank"><span class="h-edit-table-value" data-key="codice">{{ item.get('codice') }}</span></a>
+		</td>	
+		{% endif %}
+		<td>
+			<div class="h-list-cell-auto-wrapper h-action-alttext" data-alttext="{{ item.get('codice_fornitore') }}">
+				<div class="h-list-cell-auto">
+					<span class="h-edit-table-value" data-key="codice_fornitore">{{ item.get('codice_fornitore') }}</span>
+				</div>
+			</div>
+		</td>	
+		<td class="h-edit-table-hide"><img class="image image-articolo h-action-selected-open-window" data-alttext="immagini" data-action='{"window": {"type": "slide-right", "url": "{{ _h.url('manager/myarea/articolo/immagine/index') }}", "params": {"id": {{ item.id }}}}}' src="{{ item.imageUrl(_h.config('template').manager.item_image_dim) }}"></td>
+		<td>
+			{{ _self._item_articolo_nome(_h, item) }}
+			{% set tree_categoria = _h.context('tree_categoria') %}
+			{% if tree_categoria %}
+				{% set categoria = tree_categoria.get(item.get('id_categoria_principale')) %}
+				{% if categoria.path %}
+				<div class="articolo-categoria-path action-filtra-coll-id"  data-action='{"load": "#h-layout-center-content", "reset": "#azzera-filtro", "params": {"coll_id": "{{ categoria.id}}"}}'>{{ categoria.path }}</div>
+				{% endif %}
+				<div class="articolo-categoria">
+				{% if item.get('id_categoria')|length > 0 %}
+					<div>
+						{% for idc in item.get('id_categoria') %}
+							{% set categoria = tree_categoria.get(idc) %}
+							<span class="h-action-alttext action-filtra-coll-id" data-action='{"load": "#h-layout-center-content", "reset": "#azzera-filtro", "params": {"coll_id": "{{ categoria.id}}"}}' data-alttext="{{ categoria.path }}">[{{ categoria.nome }}]</span>
+						{% endfor %}				
+					</div>
+				{% endif %}
+				<div class="articolo-categoria">
+				{% if item.get('id_selezione')|length > 0 %}
+					<div>
+						{% for idc in item.get('id_selezione') %}
+							{% set categoria = tree_categoria.get(idc) %}
+							<span class="h-action-alttext action-filtra-coll-id" data-action='{"load": "#h-layout-center-content", "reset": "#azzera-filtro", "params": {"coll_id": "{{ categoria.id}}"}}' data-alttext="{{ categoria.path }}">[{{ categoria.nome }}]</span>
+						{% endfor %}				
+					</div>
+				{% endif %}
+				</div>
+			{% endif %}
+		</td>
+	</tr>
+{% endmacro %}
+
+{% macro menuArticolo(_h) %}
+{% endmacro %}
+
+{% macro menuImpostazioniNazione(_h) %}
+{% endmacro %}
+
+{% macro menuAllNuovoArticolo(_h) %}
+	{% set _lbl = _h.labels.get('manager') %}
+	<a href="javascript:void(0);" class="h-action-window h-action-close-popup-menu" data-action='{"type": "slide-right", "url": "{{ _h.url('manager/myarea/articolo/edit') }}"}'>
+		{{ _lbl.articolo_base }}
+	</a>
+	{{ _self.menuNuovoArticolo(_h) }}
+	<a href="javascript:void(0);" class="h-action-window h-action-close-popup-menu" data-action='{"type": "slide-right", "url": "{{ _h.url('manager/myarea/articolo/edit-gift') }}"}'>
+		Gift card
+	</a>	
+	<a href="javascript:void(0);" class="h-action-window h-action-close-popup-menu" data-action='{"type": "slide-right", "url": "{{ _h.url('manager/myarea/articolo/edit-articolo-carrello') }}"}'>
+		Articolo speciale in carrello
+	</a>
+{% endmacro %}
+
+{% macro menuNuovoArticolo(_h) %}
+{% endmacro %}
+
+{% macro dettaglio_articolo_ordine(_h, art) %}
+{% endmacro %}
+
+{% macro menuImpostazioniManager(_h) %}
+{% endmacro %}
+
+{% macro menuAutomatismiManager(_h) %}
+{% endmacro %}
+
+{% macro menuSistemaManager(_h) %}
+{% endmacro %}
+
+{% macro menuFatturazioneManager(_h) %}
+{% endmacro %}
+
+{% macro menuDettaglioOrdineManager(_h, item) %}
+{% endmacro %}
+
+{% macro menuEsportaOrdiniManager(_h) %}
+{% endmacro %}
+
+{% macro navButtonArticolo(_h) %}
+{% endmacro %}
+
+{% macro navButtonCliente(_h) %}	
+{% endmacro %}
+
+{% macro navButtonAttributo(_h) %}	
+{% endmacro %}
+
+{% macro menuArticoloEsporta(_h) %}
+{% endmacro %}

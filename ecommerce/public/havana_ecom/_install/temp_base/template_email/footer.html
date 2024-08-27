@@ -1,0 +1,46 @@
+{% import _h.template('_macro.html') as mc %}
+{% set _lbl = _h.labels('email', lang) %}
+
+
+
+<p>&nbsp;</p>
+	<p style="{{ mc.style_fontBase() }}">{{ _h.settings(lang).get('firma_messaggio') }}</p>
+	<p style="{{ mc.style_fontBase() }}">{{ _h.settings(lang).get('firma_testo') }}</p>
+	<p style="{{ mc.style_fontBaseSmall() }}">{{ _lbl.per_supporto_scrivi }}: <a href="mailto:{{ _h.settings(lang).get('firma_email') }}" style="{{ mc.style_link() }}">{{ _h.settings(lang).get('firma_email') }}</a><br>
+	{{ _lbl.visita_protale }}: <a href="{{ link_sito }}" style="{{ mc.style_link() }}">{{ link_sito }}</a></p>
+				</td></tr>
+				</tbody>
+				</table>
+			</td></tr></tbody></table>
+		</td>
+	</tr>
+	</td></tr>
+	<tr><td>
+		<div style="line-height:1em;{{ mc.style_font() }};font-size:11px;padding:10px;color:#727272">
+		{{ _h.settings(lang).get('firma_copy') }}&nbsp;&nbsp;<a href="{{ link_sito }}" style="line-height:1em;font-size:11px;{{ mc.style_font() }};{{ mc.style_link() }}">{{ link_sito }}</a>
+		</div>
+		
+		<br><br>
+		{% if link_unsubscribe %}
+			<div style="line-height:1em;{{ mc.style_font() }};font-size:11px;padding:10px;color:#727272">
+			{{ _lbl.motivo_ricezione_email_automatica }}<br>
+			<a href="{{ link_privacy_policy }}" style="line-height:1em;font-size:11px;{{ mc.style_font() }};{{ mc.style_link() }}">{{ _lbl.privacy_policy }}</a><br>
+			{% if link_termini_condizioni %}
+				{{ _lbl.visualizza_testo_termini_accettati }}: <a href="{{ link_termini_condizioni }}" style="line-height:1em;font-size:11px;{{ mc.style_font() }};{{ mc.style_link() }}">{{ _lbl.termini_condizioni }}</a><br>
+			{% endif %}
+			{{ _lbl.descrizione_blocca_invio_email_automatica }} <a href="{{ link_unsubscribe }}" style="line-height:1em;font-size:11px;{{ mc.style_font() }};{{ mc.style_link() }}">{{ _lbl.btn_blocca_invio_email_automatica }}</a>
+			</div>
+		{% else %}
+			<div style="line-height:1em;{{ mc.style_font() }};font-size:11px;padding:10px;color:#727272">
+			{{ _lbl.visualizza_testo_privacy_policy }}: <a href="{{ link_privacy_policy }}" style="line-height:1em;font-size:11px;{{ mc.style_font() }};{{ mc.style_link() }}">{{ _lbl.privacy_policy }}</a>
+			</div>
+		{% endif%}
+	</td></tr>
+	</tbody></table>
+	
+	</td></tr>
+	</tbody></table>
+	
+</td></tr>
+</tbody></table>
+</div>

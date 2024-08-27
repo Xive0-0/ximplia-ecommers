@@ -1,0 +1,81 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Sconti iscrizione') }}
+
+{% macro blocco_sconto(_h, text, prefix) %}
+	{% import _h.template('manager/_macro.html') as mc %}
+	<div class="field-line field-text">
+		{{ text }}
+	</div>
+	<div class="field-line field-200">
+		{% if _h.settings.get('sconto_' ~ prefix ~ '_abilitato', '') == '' %} 
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% else %}
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="sconto_{{ prefix }}_abilitato" value="{{ value }}" /></span> <strong>Abilitato</strong></div>
+	</div>
+	<div class="field-line field-400">
+		{% if _h.settings.get('sconto_' ~ prefix ~ '_codice_riutilizzabile', '') == '' %} 
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% else %}
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="sconto_{{ prefix }}_codice_riutilizzabile" value="{{ value }}" /></span> <strong>Stesso codice utilizzabile più volte</strong></div>
+	</div>
+	<div class="field-line field-400">
+		{% if _h.settings.get('sconto_' ~ prefix ~ '_non_valido_ritiro_sede', '') == '' %} 
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% else %}
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% endif %}
+		<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="sconto_{{ prefix }}_non_valido_ritiro_sede" value="{{ value }}" /></span> <strong>Non utilizzabile per ritiro in sede</strong></div>
+	</div>
+	<p class="field-line field-400">
+		<label>Tipo sconto:</label>
+		<select name="sconto_{{ prefix }}_tipo" class="field ">
+			{% set value = _h.settings.get('sconto_' ~ prefix ~ '_tipo', '') %}
+			{{ mc.listComboOptions([{'id': 0, 'text': ''},{'id': 1, 'text': 'percentuale sconto solo prodotti NON scontati'},{'id': 2, 'text': 'percentuale sconto su tutto'},{'id': 3, 'text': 'buono valore euro solo su prodotti NON scontati'},{'id': 4, 'text': 'buono valore euro'},{'id': 8, 'text': 'buono valore euro applicato ad ogni singolo prodotto'},{'id': 9, 'text': 'cashback in percentuale su importo ordine'}], value) }}
+		</select>
+	</p>	
+	<p class="field-line field-100">
+		<label>Prefisso per ogni codice:</label>
+		<input type="text" name="sconto_{{ prefix }}_prefisso" class="field" maxlength="10" value="{{ _h.settings.get('sconto_' ~ prefix ~ '_prefisso', '') }}">
+	</p>
+	<p class="field-line field-100">
+		<label>Sconto/valore (% o):</label>
+		<input type="text" name="sconto_{{ prefix }}_sconto" class="field valida-euro" maxlength="10" value="{{ _h.settings.get('sconto_' ~ prefix ~ '_sconto', '') }}">
+	</p>
+	<p class="field-line field-100">
+		<label>Acquisto minimo (o valore minimo articolo in caso di sconto su valore singolo articolo):</label>
+		<input type="text" name="sconto_{{ prefix }}_acquisto_minimo" class="field valida-digitnumber" maxlength="5" value="{{ _h.settings.get('sconto_' ~ prefix ~ '_acquisto_minimo', '') }}">
+	</p>
+	<p class="field-line field-100">
+		<label>Giorni validià buono sconto:</label>
+		<input type="text" name="sconto_{{ prefix }}_giorni_validita_buono_sconto" class="field valida-digitnumber" value="{{ _h.settings.get('sconto_' ~ prefix ~ '_giorni_validita_buono_sconto', '') }}" maxlength="3"> gg
+	</p>
+{% endmacro %}
+
+<div class="h-tab">
+<div data-tab-rif="registrazione">Registrazione</div>
+<div data-tab-rif="newsletter">Newsletter</div>
+<div data-tab-rif="compleanno">Compleanno</div>
+<div data-tab="registrazione">
+	{{ _self.blocco_sconto(_h, 'Sconto inviato in automatico al completamento della registrazione', 'registrazione') }}
+</div>
+<div data-tab="newsletter">
+	{{ _self.blocco_sconto(_h, 'Sconto inviato in automatico al completamento iscrizione newsletter', 'newsletter') }}
+</div>
+<div data-tab="compleanno">
+	{{ _self.blocco_sconto(_h, 'Sconto inviato in automatico il giorno del compleanno', 'compleanno') }}
+</div>
+</div>
+
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/ex-edit-impostazioni-sconti')) }}	
+

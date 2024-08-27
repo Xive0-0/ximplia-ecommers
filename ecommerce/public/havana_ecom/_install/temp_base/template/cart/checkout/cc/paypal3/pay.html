@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title></title>
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+	<link rel="icon" href="{{ _h.res('assets/website/img/favicon.png') }}{{ _build }}" type="image/x-icon" >
+	<link rel="stylesheet" type="text/css"  href="https://www.paypalobjects.com/webstatic/en_US/developer/docs/css/cardfields.css"/>
+	<script src="https://www.paypal.com/sdk/js?currency=EUR&client-id={{ _h.config('checkout_paypal2_client_id', '') }}&components=buttons,hosted-fields" data-client-token="{{ client_token }}"></script>
+	<style>
+	* {
+		font-family: Tahoma;
+	}
+	.overlay--visible {
+		position: relative;
+	}
+	.overlay--visible:after {
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background: #999;
+		color: #fff;
+		content: 'caricamento in corso';
+		text-align: center;
+	}
+	</style>
+</head>
+<body>
+{% include _h.template('cart/checkout/cc/paypal3/_header.html') %}	
+<div id="paypal-button-container" class="paypal-button-container"></div>
+<div class="card_container">
+	<div style="border: 1px solid #ccc; padding: 0 10px; margin-bottom: 10px; color: #777;">
+		<p>Riferimento ordine per qualsiasi comunicazione: <strong>{{ ordine.codice }}</strong><br>
+		Importo totale ordine <strong style="color: #3b9d00; font-size: 1.1em">{{ _h.util.euro(ordine.total_ordine) }} &euro;</strong> incluso tasse e spese di spedizione.</p>
+	</div>
+  <form id="card-form" style="background: #eee; padding: 10px;">
+	<p><strong>Paga ora con carta di credito, compila i dati nei campi sottostanti:</strong></p>
+	<label for="card-number">Numero di carta di credito</label>
+	<div id="card-number" class="card_field"></div>
+	<div style="display: flex; flex-direction: row;">
+	  <div>
+		<label for="expiration-date">Data scadenza</label>
+		<div id="expiration-date" class="card_field"></div>
+	  </div>
+	  <div style="margin-left: 10px;">
+		<label for="cvv">CVV</label>
+		<div id="cvv" class="card_field"></div>
+	  </div>
+	</div>
+	<label for="card-holder-name">Nome sulla carta</label>
+	<input
+	  type="text"
+	  id="card-holder-name"
+	  name="card-holder-name"
+	  autocomplete="off"
+	  placeholder="Nome sulla carta"
+	/>
+	 
+	<br /><br />
+	<button value="submit" id="submit" class="btn" style="width: 100%; background: #3b9d00; color: #fff; border: none; text-transform: uppercase; font-weight: bold;">Paga ora</button>
+  </form>
+</div>
+
+<script>
+paypal.Buttons({
+	createOrder: function (data, actions) {
+		return fetch('/cart/checkout/cc/paypal3/create-order', {
+			method: "post",
+		})
+		.then((response) => response.json())
+		.then((order) => order.id);
+	},
+	onApprove: function (data, actions) {
+		return fetch('/cart/checkout/cc/paypal3/capture-order', {
+			method: "post",
+			body: JSON.stringify({
+					payment_type: 2,
+					paypal_order_id: data.orderID
+				})
+		})
+		.then((response) => response.json())
+		.then((orderData) => {
+			location.href = "{{ _h.xurl('cart/thanks') }}";
+		});
+	},
+})
+.render("#paypal-button-container");
+if (paypal.HostedFields.isEligible()) {
+	let orderId;
+	paypal.HostedFields.render({
+			createOrder: () => {
+				return fetch('/cart/checkout/cc/paypal3/create-order', {
+					method: 'post'
+				})
+				.then((res) => res.json())
+				.then((orderData) => {
+					orderId = orderData.id;
+					return orderData.id
+				})
+			},
+			styles: {
+				'.valid': {
+					color: 'green'
+				},
+				'.invalid': {
+					color: 'red'
+				}
+			},
+			fields: {
+				number: {
+					selector: "#card-number",
+					placeholder: "4111 1111 1111 1111"
+				},
+				cvv: {
+					selector: "#cvv",
+					placeholder: "123"
+				},
+				expirationDate: {
+					selector: "#expiration-date",
+					placeholder: "MM/YY"
+				}
+			}
+		})
+		.then((cardFields) => {
+			document.querySelector("#card-form").addEventListener("submit", (event) => {
+				event.preventDefault();
+				cardFields.submit({
+					cardholderName: document.getElementById("card-holder-name").value,
+					billingAddress: {
+						streetAddress: "{{ ordine.spedizione.via }}, {{ ordine.spedizione.num_civico }}",
+						extendedAddress: "",
+						region: "{{ ordine.spedizione.provincia }}",
+						locality: "{{ ordine.spedizione.localita }}",
+						postalCode: "{{ ordine.spedizione.cap }}",
+						countryCodeAlpha2: "{{ ordine.spedizione.nazione_iso }}",
+					},
+				})
+				.then(() => {
+					document.querySelector("#card-form").style = 'display: none';
+					return fetch('/cart/checkout/cc/paypal3/capture-order', {
+						method: "post",
+						body: JSON.stringify({
+								payment_type: 1,
+								paypal_order_id: orderId
+							})
+					})
+					.then((res) => res.json())
+					.then((orderData) => {
+						if (orderData.status == 'PAGATO') {
+							location.href = "{{ _h.xurl('cart/thanks') }}";
+						}
+						else {
+							alert('Transazione negata dalla banca');
+							location.href = "{{ _h.xurl('cart/thanks-return-cc-error') }}";
+						}
+					});
+				})
+				.catch((err) => {
+					alert("Payment could not be captured! " + JSON.stringify(err));
+				});
+			});
+		});
+}
+else {
+	document.querySelector("#card-form").style = 'display: none';
+}
+
+var payBtn = document.getElementById("submit");
+payBtn.addEventListener('click', function() {
+  payBtn.classList.add('overlay--visible');
+  
+  setTimeout(function() {
+    payBtn.classList.remove('overlay--visible');
+  }, 3000);
+})
+</script>
+{% include _h.template('cart/checkout/cc/paypal3/_footer.html') %}	
+</body>
+</html>

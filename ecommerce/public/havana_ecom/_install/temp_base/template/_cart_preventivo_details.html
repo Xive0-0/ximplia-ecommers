@@ -1,0 +1,23 @@
+	
+	<div id="cart-preventivo-details">
+		<div class="cart-items-list">
+		{{ cart_prev.details }}
+		</div>
+		<div class="cart-items-list-loading"></div>
+		<div class="cart-toolbar-total">
+		<div class="cart-toolbar-total-inner">
+			{% if (_h.session.params.user.prezzo_senza_iva or _h.config('prezzi_senza_iva', false)) %}
+				<span class="total"><em>{{ _lblcp.totale_iva_esclusa_small }}:</em> 
+			{% else %}
+				<span class="total"><em>{{ _lblcp.totale }}:</em> 
+			{% endif %}
+				<span class="cart-total-price">{{ _h.util.valuta(cart_prev.total, cart_prev.currency) }}</span>
+				<span class="cart-total-price-imponibile">{{ _h.util.valuta(cart_prev.total_imponibile, cart_prev.currency) }}</span>
+			</span>
+		</div>
+		</div>
+		<div class="cart-toolbar">
+			<a href="javascript:void(0)" title="{{ _lblcp.btn_vuota_carrello }}" class="btn-vuota-carrello">{{ _lblcp.btn_vuota_carrello }}</a>
+			<a href="{{ _h.url('cartprev/checkout/index') }}" title="{{ _lblcp.btn_vai_alla_cassa }}" class="btn-vai-alla-cassa">{{ _lblcp.btn_vai_alla_cassa }}</a>
+		</div>
+	</div>

@@ -1,0 +1,157 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% set lang = _h.input('lang', _h.config('default_language', 'it')) %}
+
+{% if item == null %}
+	{% set title = 'Nuovo popup' %}
+{% else %}
+	{% set title = 'Modifica popup' %}
+{% endif %}
+{{ mc.slideBoxHeader(_h, title) }}
+<div id="banner_edit">
+<input type="hidden" name="lang" value="{{ lang }}">
+<input type="hidden" name="id" value="{{ item.id }}">
+{% if listLang|length > 1 %}
+<div class="h-tab{% if edit_lang %} edit-lang-wrapper{% endif %}">
+<div data-tab-rif="base" class="edit-lang">Popup</div>
+<div data-tab-rif="visibilita">Visibilità</div>
+<div data-tab="base" class="edit-lang">
+{% endif %}
+
+{{ mc.contenutiInLingua(lang) }}
+<div class="field-line">
+	{% if item %} 
+		{% if item.abilitato() %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% else %}
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% endif %}
+	{% else %}
+		{% set cssClass = ' h-checkbox-checked' %}
+		{% set value = 1 %}
+	{% endif %}
+	<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="abilitato" value="{{ value }}" /></span> <strong>Abilitato</strong></div>
+</div>
+<p class="field-line field-100">
+	<label>Peso/posizione<span>*</span>:</label>
+	<input type="text" name="ordine" class="field valida-required valida-digitnumber" value="{% if item %}{{ item.get('ordine') }}{% else %}0{% endif %}">
+</p>
+<p class="field-line field-200 field-line-left">
+	<label>Apertura all'interno del sito<span>*</span>:</label>
+	<select name="posizione" class="field valida-required">
+		{{ mc.listComboOptions([{'id': 1, 'text': 'tutte le pagine'},{'id': 2, 'text': 'home page'},{'id': 3, 'text': 'collezioni'},{'id': 4, 'text': 'pagina prodotto'},{'id': 5, 'text': 'checkout'},{'id': 8, 'text': 'thankyou page'},{'id': 6, 'text': 'login/registrazione'},{'id': 7, 'text': 'myarea'},{'id': 100, 'text': '- personalizzata -'}], item.get('posizione')) }}
+	</select>
+</p>
+<p class="field-line field-200 field-line-left">
+	<label>Visualizza su dispositivo<span>*</span>:</label>
+	<select name="visibile_device" class="field valida-required">
+		{{ mc.listComboOptions([{'id': 0, 'text': 'sia desktop che mobile'},{'id': 1, 'text': 'solo desktop'},{'id': 2, 'text': 'solo mobile'}], item.get('visibile_device')) }}
+	</select>
+</p>
+<div class="clear"></div>
+<div class="field-line  field-400">
+	{% set cssClass = '' %}
+	{% set value = '' %}
+	{% if item %} 
+		{% if item.get('apri_nuova_pagina', 0) %} 
+			{% set cssClass = ' h-checkbox-checked' %}
+			{% set value = 1 %}
+		{% endif %}
+	{% endif %}
+	<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="apri_nuova_pagina" value="{{ value }}" /></span> <strong>Apri in una nuova pagina del browser</strong></div>
+</div>
+<p class="field-line field-400 edit-lang">
+	<label>Nome<span>*</span>:</label>
+	<input type="text" name="nome" class="field valida-required" value="{{ item.get('nome') }}">
+</p>
+<p class="field-line field-150 field-line-left">
+	<label>Apertura<span>*</span>:</label>
+	<select name="tipo_apertura" class="field valida-required">
+		{{ mc.listComboOptions([{'id': 1, 'text': 'ad ogni apertura'},{'id': 2, 'text': 'solo una volta'},{'id': 3, 'text': 'una volta al giorno'},{'id': 4, 'text': 'una volta a settimana'},{'id': 5, 'text': 'una volta al mese'}], item.get('tipo_apertura')) }}
+	</select>
+</p>
+<p class="field-line field-100 field-line-left">
+	<label>Altezza (px)<span>*</span>:</label>
+	<input type="text" name="altezza" class="field" value="{{ item.get('altezza') }}" maxlength="3">
+</p>
+<p class="field-line field-100 field-line-left">
+	<label>Larghezza (px)<span>*</span>:</label>
+	<input type="text" name="larghezza" class="field" value="{{ item.get('larghezza') }}" maxlength="3">
+</p>
+<div class="clear"></div>
+<p class="field-line field-200 field-line-left">
+	<label>Tipo popup<span>*</span>:</label>
+	<select name="tipo" class="field valida-required">
+		<option></option>
+		{{ mc.listComboOptions([{'id': '1', 'text': 'Codice html'},{'id': '2', 'text': 'Immagine'}], item.get('tipo')) }}
+	</select>
+</p>
+<p class="field-line field-100 field-line-left">
+	<label>Codice riferimento:</label>
+	<input type="text" name="codice" class="field" value="{{ item.get('codice') }}" maxlength="50">
+</p>
+<div class="clear"></div>
+<fieldset class="fieldset-box">
+	<p class="field-line field-400 edit-lang">
+		<label>{{ mc.labelLang(lang) }} Codice html:</label>
+		<textarea name="codice_html" class="field" style="height: 100px;">{{ item.get('codice_html') }}</textarea>
+	</p>
+	<p class="field-line field-400 edit-lang">
+		<label>Script:</label>
+		<textarea name="codice_cript" class="field" style="height: 100px;">{{ item.get('codice_script') }}</textarea>
+	</p>
+	<p class="field-line-text">
+	Il codice viene richiamato in automatico dal sistema una volta caricato il popup a video
+	</p>
+</fieldset>
+<fieldset class="fieldset-box">
+	{{ mc.upload_immagine(_h, 'Immagine', item.imageAnteprima()) }}
+
+	<div data-tipo-risorsa-selected="{{ item.get('tipo_entita') }}" style="margin-top: 10px">
+		<p class="field-line field-100 field-line-left">
+			<label>Risorsa da collegare:</label>
+			<select name="tipo_entita" class="field h-action-seleziona-risorsa-elenco">
+				<option></option>
+				{{ mc.listComboOptions([{'id': '1', 'text': 'Articolo'},{'id': '2', 'text': 'Azienda'},{'id': '3', 'text': 'Collezione'},{'id': '4', 'text': 'Pagina'},{'id': '5', 'text': 'URL'},{'id': '6', 'text': 'Blog'},{'id': '8', 'text': 'Evento/News'},{'id': '7', 'text': 'File'},{'id': '1000', 'text': 'Vuoto'}], item.get('tipo_entita')) }}
+			</select>
+		</p>
+		<a data-tipo-risorsa="1" class="h-bar-button h-bar-button-blu h-action-seleziona-risorsa">Scegli articolo</a>
+		<a data-tipo-risorsa="2" class="h-bar-button h-bar-button-blu h-action-seleziona-risorsa">Scegli azienda</a>
+		<a data-tipo-risorsa="3" class="h-bar-button h-bar-button-blu h-action-seleziona-risorsa">Scegli collezione</a>
+		<a data-tipo-risorsa="4" class="h-bar-button h-bar-button-blu h-action-seleziona-risorsa">Scegli pagina</a>
+		<a data-tipo-risorsa="6" class="h-bar-button h-bar-button-blu h-action-seleziona-risorsa">Scegli blog</a>
+		<a data-tipo-risorsa="8" class="h-bar-button h-bar-button-blu h-action-seleziona-risorsa">Scegli evento/news</a>
+		<a data-tipo-risorsa="7" class="h-bar-button h-bar-button-blu h-action-seleziona-risorsa">Scegli file</a>
+		<div class="clear"></div>
+		<div class="h-action-seleziona-risorsa-dettaglio">
+			{{ risorsa_dettaglio }}
+		</div>
+		<p data-tipo-risorsa="5" class="field-line field-400" style="margin-top: 5px">
+			<label>Inserire l'indirizzo (se interno al sito senza il dominio)</label>
+			<input type="text" name="id_entita" class="field" value="{{ item.get('id_entita') }}">
+		</p>
+	</div>
+</fieldset>
+{{ mc.labelCampiObbligatori() }}
+{% if listLang|length > 1 %}
+</div>
+<div data-tab="visibilita">
+	{% set nuovo = true %}
+	{% if item %}
+		{% set nuovo = false %}
+	{% endif %}
+	{% set list_lang = item.get('visibilita_lang', '')|split(',') %}
+	{% for l in listLang %}
+		{% set valore = '' %}
+		{% if nuovo or item.get('visibilita_lang', '') == '-' or l in list_lang %}
+			{% set valore = l %}
+		{% endif %}
+		{{ mc.checkbox(valore, l, 'visibilita_lang', 'Visibilità ' ~ l|upper, l) }}
+	{% endfor %}
+</div>
+</div>
+{% endif %}
+</div>
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/popup/ex-edit'), '"reload": "#h-layout-center-content"') }}	

@@ -1,0 +1,57 @@
+{% macro menuArticolo(_h) %}
+	<a href="javascript:void(0);" class="h-action-selected-open-window h-action-close-popup-menu" data-action='{"window": {"type": "layer", "overlay": true, "width": 400, "height": 350, "url": "{{ _h.url('manager/myarea/articolo/pesi-spedizione-from-upload') }}"}}'>Importa pesi calcolo spedizione</a>
+	<a href="javascript:void(0);" class="h-action-download h-action-close-popup-menu" data-action='{"url": "{{ _h.url('manager/myarea/articolo/export-pesi-spedizione') }}"}'>Esporta pesi calcolo spedizione</a>
+			
+	<a href="javascript:void(0);" class="h-action-selected-open-window h-action-close-popup-menu" data-action='{"select": {"from":"#h-layout-center-content", "check": 0}, "window": {"type": "layer", "overlay": true, "width": 500, "height": 500, "url": "{{ _h.url('manager/myarea/articolo/edit-categoria') }}"}}'>Categoria</a>
+	<a href="javascript:void(0);" class="h-action-selected-open-window h-action-close-popup-menu" data-action='{"select": {"from":"#h-layout-center-content", "check": 0}, "window": {"type": "layer", "overlay": true, "width": 500, "height": 500, "url": "{{ _h.url('manager/myarea/articolo/edit-selezione') }}"}}'>Selezione</a>
+	<a href="javascript:void(0);" class="h-action-selected-open-window h-action-close-popup-menu" data-action='{"select": {"from":"#h-layout-center-content", "check": 0}, "window": {"type": "layer", "overlay": true, "width": 400, "height": 280, "url": "{{ _h.url('manager/myarea/articolo/edit-spese-spedizione') }}"}}'>Spese spedizione</a>
+{% endmacro %}
+
+{% macro menuImpostazioniNazione(_h) %}
+	<a href="javascript:void(0);" class="h-action-selected-open-window h-action-close-popup-menu" data-action='{"window": {"type": "layer", "overlay": true, "width": 400, "height": 350, "url": "{{ _h.url('manager/myarea/nazione/prezzi-from-upload') }}"}}'>Importa prezzi spedizione</a>
+	<a href="javascript:void(0);" class="h-action-selected-open-window h-action-close-popup-menu" data-action='{"window": {"type": "layer", "overlay": true, "width": 400, "height": 450, "url": "{{ _h.url('manager/myarea/nazione/tempi-from-upload') }}"}}'>Importa tempi spedizione</a>
+{% endmacro %}
+
+
+{% macro menuNuovoArticolo(_h) %}
+	<a href="javascript:void(0);" class="h-action-window h-action-close-popup-menu" data-action='{"type": "slide-right", "url": "{{ _h.url('manager/myarea/articolo/edit-kit') }}"}'>
+		Articolo Kit
+	</a>
+{% endmacro %}
+
+{% macro navButtonAttributo(_h) %}	
+	{% import _h.template('manager/_macro.html') as mc %}
+	{{ mc.navSeparatore() }}
+	{{ mc.navButton(_h, 'Obiettivo fotocamera', 'video', 'click', 'h-action-selected-open-window', '{"select": {"from":"#h-layout-center-content", "check": 1}, "window": {"type": "slide-right", "url": "' ~ _h.url('manager/myarea/attributo/obiettivo_fotocamera/edit') ~ '"}}') }}
+	{{ mc.navButton(_h, 'carica off. fot. da file', 'upload', 'click', 'h-action-upload-file', '{"url": "' ~ _h.url('manager/myarea/attributo/obiettivo_fotocamera/upload') ~ '", "fileType": ["xls", "xlsx"]}') }}	
+{% endmacro %}
+
+{% macro menuAutomatismiManager(_h) %}
+	<a href="javascript:void(0)" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"url": "{{ _h.url('manager/myarea/regen-ambassador-image') }}", "confirm": "Procedere con la rigenerazione delle immagini del ambassador? Potrebbero essere necessari diversi minuti."}'>Rigenera immagini ambassador</a>
+	<a href="javascript:void(0)" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"url": "{{ _h.url('manager/myarea/regen-easydivepoint-image') }}", "confirm": "Procedere con la rigenerazione delle immagini del easydive point? Potrebbero essere necessari diversi minuti."}'>Rigenera immagini easydive point</a>
+{% endmacro %}
+	
+{% macro navButtonArticolo(_h) %}	
+	{% import _h.template('manager/_macro.html') as mc %}
+	{{ mc.navSeparatore() }}
+	{{ mc.navButton(_h, 'recensioni', 'list', 'click', 'h-action-selected-open-window', '{"select": {"from":"#h-layout-center-content", "check": 1}, "window": {"type": "slide-right", "url": "' ~ _h.url('manager/myarea/articolo/recensione/index') ~ '"}}') }}
+{% endmacro %}
+
+{% macro dettaglio_articolo_ordine(_h, elem) %}
+	<div class="item-info">
+		{% for a in elem.attr %}
+			{% if a.type == 'fotocamera' %}
+			<div><em>Fotocamera:</em> {{ a.pers }}</div>
+			{% elseif a.type == 'cellulare' %}
+			<div><em>Cellulare:</em> {{ a.pers }}</div>
+			{% elseif a.type == 'obiettivo' %}
+			<div><em>Obiettivo:</em> {{ a.pers }}</div>
+			{% endif %}
+		{% endfor %}
+	</div>	
+{% endmacro %}
+
+{% macro menuSistemaManager(_h) %}
+	<a href="javascript:void(0)" class="h-action-window h-action-close-popup-menu" data-action='{"width": 400, "height": 400, "overlay": true, "type": "layer","url": "{{ _h.url('manager/myarea/upload-fotocamera-obiettivo') }}"}'>Importa fotocamera/obiettivo</a>
+	<a href="javascript:void(0)" class="h-action-window h-action-close-popup-menu" data-action='{"width": 400, "height": 450, "overlay": true, "type": "layer","url": "{{ _h.url('manager/myarea/impostazioni-spedizione') }}"}'>Impostazioni spedizione</a>
+{% endmacro %}

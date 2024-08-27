@@ -1,0 +1,9 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeaderToolbar(_h, 'Indirizzi spedizione: ' ~ item.get('nome') ~ ' ' ~ item.get('cognome'), true) }}
+	{{ mc.navButton(_h, 'nuova', 'new', 'click', 'h-action-selected-open-window', '{"window": {"type": "layer", "overlay": true, "params": {"id_cliente":' ~ item.id ~ '}, "width": 500, "height": 500, "url": "' ~ _h.url('manager/myarea/cliente/spedizione/edit') ~ '"}}') }}
+	{{ mc.navButton(_h, 'modifica', 'update', 'click', 'h-action-selected-open-window', '{"select": {"from":"#dati-content", "check": 1, "errorMessage": "Selezionare una voce"}, "window": {"type": "layer", "url": "' ~ _h.url('manager/myarea/cliente/spedizione/edit') ~ '", "width": 500, "height": 500, "overlay": true, "params": {"id_cliente":' ~ item.id ~ '}}}') }}
+	{{ mc.navButton(_h, 'elimina', 'delete', 'click', 'h-action-selected-execute', '{"select": {"from":"#dati-content", "check": 0, "errorMessage": "Selezionare almeno una voce"}, "confirm": "Eliminare la voce selezionata?", "params": {"id_cliente":' ~ item.id ~ '}, "url": "' ~ _h.url('manager/myarea/cliente/spedizione/delete') ~ '", "reload": ["#dati-content"]}') }}
+{{ mc.slideBoxHeaderToolbarEnd() }}
+
+{{ mc.box_footer(_h, 'dati', 'cliente/spedizione', list, '{"id": ' ~ item.id ~ '}') }}

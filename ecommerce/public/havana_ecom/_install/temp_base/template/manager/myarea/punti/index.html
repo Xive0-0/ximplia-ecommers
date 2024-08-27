@@ -1,0 +1,22 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% if procedi %}
+{% set table = _h.input('table') %}
+{{ mc.slideBoxHeaderToolbar(_h, 'Punti', true) }}
+{% if table == 'attributo' %}
+	{{ mc.navButton(_h, 'nuovo', 'new', 'click', 'h-action-selected-open-window', '{"window": {"type": "layer", "url": "' ~ _h.url('manager/myarea/punti/edit-attributo') ~ '", "width": 500, "height": 500, "overlay": true, "params": {"table":"' ~ table ~ '", "id_entita":' ~ _h.input('id') ~ '}}}') }}
+	{{ mc.navButton(_h, 'modifica', 'update', 'click', 'h-action-selected-open-window', '{"select": {"from":"#punti-content", "check": 1, "errorMessage": "Selezionare una promozione"}, "window": {"type": "layer", "url": "' ~ _h.url('manager/myarea/punti/edit-attributo') ~ '", "width": 500, "height": 500, "overlay": true}}') }}
+{% else %}
+	{{ mc.navButton(_h, 'nuovo', 'new', 'click', 'h-action-selected-open-window', '{"window": {"type": "layer", "url": "' ~ _h.url('manager/myarea/punti/edit') ~ '", "width": 500, "height": 500, "overlay": true, "params": {"table":"' ~ table ~ '", "id_entita":' ~ _h.input('id') ~ '}}}') }}
+	{{ mc.navButton(_h, 'modifica', 'update', 'click', 'h-action-selected-open-window', '{"select": {"from":"#punti-content", "check": 1, "errorMessage": "Selezionare una promozione"}, "window": {"type": "layer", "url": "' ~ _h.url('manager/myarea/punti/edit') ~ '", "width": 500, "height": 500, "overlay": true}}') }}
+{% endif %}
+	{{ mc.navButton(_h, 'elimina', 'delete', 'click', 'h-action-selected-execute', '{"select": {"from":"#punti-content", "check": 1, "errorMessage": "Selezionare una promozione"}, "confirm": "Eliminare la voce selezionata?", "url": "' ~ _h.url('manager/myarea/punti/delete') ~ '", "reload": ["#promozione-content"]}') }}
+{{ mc.slideBoxHeaderToolbarEnd() }}
+
+{{ mc.box_footer(_h, 'punti', 'punti', list, '{"table": "' ~ table ~ '", "id": ' ~ _h.input('id') ~ '}') }}
+
+{% else %}
+	{{ mc.slideBoxHeader(_h, 'Punti') }}
+	<p class="field-line-text"><strong>ATTENZIONE!</strong><br>La gestione dei punti è disponibile solo per le categorie principali.</p>
+	{{ mc.slideBoxFooter() }}	
+{% endif %}

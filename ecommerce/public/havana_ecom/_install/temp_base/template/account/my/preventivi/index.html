@@ -1,0 +1,63 @@
+{% set _lblc = _h.labels.get('checkout_preventivo') %}
+{% set _lblm = _h.labels.get('my') %}
+
+<h2>{{ _lblm.title_miei_preventivi }}</h2>
+
+<table class="table-list table-list-ordine" cellpadding="0" cellspacing="0" border="0">
+<tr>
+	<th class="ordine-codice">{{ _lblc.codice }}</th>	
+	<th class="ordine-data">{{ _lblc.data_inserimento_small }}</th>
+	<th class="ordine-data">{{ _lblc.stato }}</th>
+	<th class="ordine-intestazione">{{ _lblc.title_intestazione_preventivo }}</th>
+	<th class="ordine-azioni">&nbsp;</th>
+</tr>
+{% for item in list %}
+<tr data-id="{{ item.id }}">
+	<td class="ordine-codice">
+		<a href="{{ _h.url('account/my/preventivi/item') }}?id={{ item.id }}">{{ item.get('codice') }}</a>
+	</td>	
+	<td class="ordine-data">
+		{{ item.getDateTime('data_inserimento') }}	
+	</td>
+	<td class="ordine-stato">
+		{% if item.get('id_ordine_generato') %}
+			{{ _lblc.stato_concluso_e_trasformato_in_ordine }}
+			<a href="{{ _h.url('account/my/ordini/item') }}?id={{ item.get('id_ordine_generato') }}">{{ item.get('codice_ordine_generato') }}</a>
+		{% elseif item.getDate('data_invio_preventivo') %}
+			{{ _lblc.stato_fatto_e_inviato }}
+			{{ item.getDateTime('data_invio_preventivo') }}	
+		{% else %}
+			{{ _lblc.stato_preso_in_carico }}
+		{% endif %}	
+	</td>
+	<td class="ordine-intestazione">
+		{% set ordine = item.dettaglio().ordine %}
+		{{ ordine.spedizione.nome }} {{ ordine.spedizione.cognome }}<br>
+		{% if ordine.fattura.nome != ordine.spedizione.nome ~ ' ' ~ ordine.spedizione.cognome %}
+		{{ ordine.fattura.nome }}<br>
+		{% endif %}
+		{% if ordine.fattura.p_iva %}
+			<em class="label">{{ _lblc.p_iva }}</em> {{ ordine.fattura.p_iva }}<br>
+		{% endif %}
+		{% if ordine.fattura.codice_fiscale %}
+			<em class="label">{{ _lblc.codice_fiscale_small }}</em> {{ ordine.fattura.codice_fiscale }}<br>
+		{% endif %}	
+		{% if ordine.spedizione.via %}
+		{{ ordine.spedizione.via }}{% if ordine.spedizione.num_civico %}, {{ ordine.spedizione.num_civico }}{% endif %}<br>
+		{{ ordine.spedizione.cap }} {{ ordine.spedizione.localita }} ({{ ordine.spedizione.provincia }})<br>
+		{% endif %}
+		{{ ordine.spedizione.nazione }}		
+	</td>
+	<td class="ordine-azioni">
+		<a href="{{ _h.url('account/my/preventivi/item') }}?id={{ item.id }}" title="{{ _lblc.alt_btn_dettaglio }}">{{ _lblc.btn_dettaglio }}</a>
+	{% if _h.session.params.user.speciale and not(item.id_ordine_generato) %}
+		<a href="{{ _h.url('account/my/preventivi/modifica') }}?id={{ item.id }}" title="{{ _lblc.btn_modifica }}">{{ _lblc.btn_modifica }}</a>
+	{% endif %}
+		<a href="{{ _h.url('cartprev/pdf') }}?id={{ item.id }}" target="_blank">{{ _lblc.stampa }}</a>
+	{% if not(_h.session.params.user.speciale) %}
+		<a href="{{ _h.xurl('scrivi-servizio-clienti') }}?codice={{ item.get('codice') }}" title="{{ _lblc.alt_btn_aiuto }}">{{ _lblc.btn_aiuto }}</a>
+	{% endif %}
+	</td>
+</tr>
+{% endfor %}
+</table>

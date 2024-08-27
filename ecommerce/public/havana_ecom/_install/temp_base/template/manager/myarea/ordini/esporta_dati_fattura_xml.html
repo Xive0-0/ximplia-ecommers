@@ -1,0 +1,26 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Esporta XML fatturazione') }}
+<p class="field-line field-line-left field-100">
+	<label>Data dal:</label>
+	<input type="text" name="data_dal" class="field valida-datasimple input-datepicker" value="">
+</p>
+<p class="field-line field-line-left field-100">
+	<label>Data al:</label>
+	<input type="text" name="data_al" class="field valida-datasimple input-datepicker" value="">
+</p>
+<div class="clear-line"></div>
+<div class="field-line field-300">
+	<div class="h-checkbox-wrapper"><span class="h-checkbox h-checkbox-checked" data-value="1"><input type="hidden" name="solo_ordini_conclusi" value="1" /></span> <strong>Solo ordini pagati e non annullati</strong></div>
+</div>
+
+		<fieldset>
+	</div>
+	<div class="h-layout-bottombar">
+		<div class="h-layout-content-wrapper">
+			<a href="javascript:void(0);" class="h-bar-button h-bar-button-gray h-close-box">Annulla</a>
+			<a href="javascript:void(0);" class="h-bar-button h-bar-button-blu h-action-submit" data-action='{"method": "get", "target": "_blank", "url":"{{ _h.url('manager/myarea/ordini/ex-esporta-dati-fattura-xml') }}", "onComplete": {"closeWin": true}, "loadinMessage": "generazione in corso..."}'>Esporta</a>
+		</div>
+	</div>
+	</form>
+</div>

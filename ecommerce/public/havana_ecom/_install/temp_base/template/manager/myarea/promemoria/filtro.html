@@ -1,0 +1,34 @@
+<div class="h-layout-content-wrapper h-layout-show-topbar h-layout-show-bottombar">
+	<div class="h-layout-topbar">
+		<div class="h-layout-content-wrapper">
+			Filtra
+		</div>
+	</div>
+	<form>
+	<div class="h-layout-content">
+		<fieldset>
+			<p class="field-line field-line-left field-80">
+				<label>Data dal:</label>
+				<input type="text" name="data_dal" class="field valida-datasimple input-datepicker" maxlength="10">
+			</p>
+			<p class="field-line field-80">
+				<label>Data al:</label>
+				<input type="text" name="data_da" class="field valida-datasimple input-datepicker" maxlength="10">
+			</p>
+
+			<div class="clear field-line">
+				<label>Stato:</label>
+				<div><span class="h-checkbox" data-value="0"><input type="hidden" name="stato[]" value=""></span>aperto / da fare</div>
+				<div><span class="h-checkbox" data-value="1"><input type="hidden" name="stato[]" value=""></span>attenzione / problemi</div>
+				<div><span class="h-checkbox" data-value="10"><input type="hidden" name="stato[]" value=""></span>completato</div>
+				<div><span class="h-checkbox" data-value="11"><input type="hidden" name="stato[]" value=""></span>annullato</div>
+			</div>
+		</fieldset>
+	</div>
+	<div class="h-layout-bottombar">
+		<div class="h-layout-content-wrapper">
+			<a href="javascript:void(0);" class="h-bar-button h-bar-button-blu h-action-filter" data-action='{"load": "#h-layout-center-content", "reset": "#azzera-filtro"}'>Filtra</a>
+		</div>
+	</div>
+	</form>
+</div>

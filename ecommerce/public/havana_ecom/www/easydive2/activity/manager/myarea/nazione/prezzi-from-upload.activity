@@ -1,0 +1,9 @@
+{
+	"on:": [
+		"manager/myarea/nazione/list-type"
+	],
+	"on:view": {
+		"template": "manager/myarea/nazione/prezzi_from_upload",
+		"extra": false
+	}
+}

@@ -1,0 +1,12 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% set ordine = item.dettaglio.ordine %}
+{{ mc.slideBoxHeader(_h, 'E-mail per comunicazioni') }}
+<input type="hidden" name="id" value="{{ item.id }}">
+<p class="field-line field-400">
+	<label>E-mail per comunicazioni<span>*</span>:</label>
+	<input type="text" name="e_mail" class="field valida-required valida-email" value="{{ ordine.e_mail }}" maxlength="100">
+</p>
+{{ mc.labelCampiObbligatori() }}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/ordini/ex-edit-email'), '"reload": ["#h-layout-center-content", "#dettaglio-content"]') }}	
+

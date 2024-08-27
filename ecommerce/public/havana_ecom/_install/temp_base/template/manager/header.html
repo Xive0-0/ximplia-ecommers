@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="it">
+<head>
+{% set _build = '?b=116-' ~ _h.config('template').manager.tmpl_build %}
+
+{% macro jsLits(list, build) %}
+	{% for item in list %}
+		{% if item|slice(0, 4) == 'http' %}
+		<script type="text/javascript" src="{{ item }}"></script>
+		{% else %}
+		<script type="text/javascript" src="/assets/manager/{{ item }}.js{{ build }}"></script>
+		{% endif %}
+	{% endfor %}
+{% endmacro %}
+
+{% macro cssLits(list, build) %}
+	{% for item in list %}
+		{% if item|slice(0, 4) == 'http' %}
+		<link rel="stylesheet" type="text/css" href="{{ item }}" >
+		{% else %}
+		<link rel="stylesheet" type="text/css" href="/assets/manager/{{ item }}.css{{ build }}" >
+		{% endif %}
+	{% endfor %}	
+{% endmacro %}
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, target-densitydpi=device-dpi">
+	<meta http-equiv="Content-Language" content="IT">
+	<meta name="copyright" content="Powered by Ximplia srl - Copyright (c) 2019 - All Rights Reserved">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>{{ _h.config('template').manager.name }} :: Manager</title>
+	<link rel="icon" href="/assets/manager/img/favicon.png{{ _build }}" type="image/x-icon" > 
+	<link rel="stylesheet" href="/assets/manager/havana-js/css/h.css{{ _build }}" />
+	<link rel="stylesheet" href="/assets/manager/havana-js/css/h-form.css{{ _build }}" />
+{{ _self.cssLits(css_global, _build) }}				
+{{ _self.cssLits(css, _build) }}				
+	<script src="/assets/manager/havana-js/js/plugin/jquery-1.11.1.min.js{{ _build }}"></script>
+	<script src="/assets/manager/havana-js/js/json2.js{{ _build }}"></script>
+	<script src="/assets/manager/havana-js/js/datepicker.js{{ _build }}"></script>
+	<script src="/assets/manager/havana-js/js/h.js{{ _build }}"></script>
+	<script src="/assets/manager/havana-js/js/h-validator.js{{ _build }}"></script>
+	<script src="/assets/manager/havana-js/js/h-form.js{{ _build }}"></script>
+{{ _self.jsLits(js_global, _build) }}				
+{{ _self.jsLits(js, _build) }}
+	<script>
+		H.loginUrl = '/index.php';
+		H.imagesUrl = '/assets/manager/havana-js/img';
+		H.config.google_maps_geocoder_api_key_client = '{{ _h.config('google_maps_geocoder_api_key_client') }}';
+	</script>
+</head>
+<body data-user-accesso="{{ _h.session.params.user.accesso }}">

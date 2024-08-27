@@ -1,0 +1,40 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Test azione scadenze') }}
+<input type="hidden" name="id" value="{{ _h.input('id') }}">
+
+<div class="field-line field-150" style="margin-bottom: 10px;">
+	<label>Simula data:</label>
+	<input type="text" name="data_simulazione" class="field valida-datasimple input-datepicker" value="" maxlength="10">
+</div>
+
+<div class="message-center-block" data-message-center="email,wapp,sms">
+<div class="message-center-block-expandible" data-type="email">
+	<div class="message-center-block-expandible-title">Test E-Mail</div>
+	<div class="message-center-block-expandible-body">
+		<div class="field-line field-300">
+			<label>E-Mail destinatario test<span>*</span>:</label>
+			<input type="text" name="e_mail" class="field valida-email" value="" maxlength="100">
+		</div>
+	</div>
+</div>
+<div class="message-center-block-expandible" data-type="wapp">
+	<div class="message-center-block-expandible-title">Test WhatsApp</div>
+	<div class="message-center-block-expandible-body">
+		<div class="field-line field-200">
+			<label>Cellulare destinatario test<span>*</span>:</label>
+			<input type="text" name="telefono_wapp" class="field" value="" maxlength="20">
+		</div>
+	</div>
+</div>
+<div class="message-center-block-expandible" data-type="sms">
+	<div class="message-center-block-expandible-title">Test SMS</div>
+	<div class="message-center-block-expandible-body">
+		<div class="field-line field-200">
+			<label>Cellulare destinatario test<span>*</span>:</label>
+			<input type="text" name="telefono_sms" class="field" value="" maxlength="20">
+		</div>
+	</div>
+</div>
+</div>
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/testoemail/ex-test-azione-scadenza')) }}

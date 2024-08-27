@@ -1,0 +1,22 @@
+{% set _lbl = _h.labels.get('global') %}
+
+{% import _h.template('_macro.html') as mc %}
+
+<div class="breadcrumbs clear">
+	{{ mc.breadcrumbs_home(_h) }}
+	{{ mc.breadcrumbs_separatore() }}
+	<a href="{{ _h.xurl('brands') }}" title="blog">Brands</a>
+	{{ mc.breadcrumbs_separatore() }}
+	<a>{{ item.get('nome') }}</a>
+</div>
+
+<h1>{{ item.get('nome') }}</h1>
+{% if item.get('descrizione') %}
+<p class="margin">{{ item.get('descrizione') }}</p>
+{% endif %}
+
+<div class="items-list items-correlati-list clear">
+	{% for art in list %}
+	{{ mc.item_articolo(_h, art) }}
+	{% endfor %}
+</div>

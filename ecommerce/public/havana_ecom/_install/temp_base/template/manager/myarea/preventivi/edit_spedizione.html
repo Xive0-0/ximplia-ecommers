@@ -1,0 +1,68 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% set ordine = item.dettaglio.ordine %}
+{{ mc.slideBoxHeader(_h, 'Riferimenti') }}
+<input type="hidden" name="id" value="{{ item.id }}">
+<p class="field-line field-line-left field-150">
+	<label>Nome/ragione sociale<span>*</span>:</label>
+	<input type="text" name="nome" class="field valida-required" value="{{ ordine.spedizione.nome }}" maxlength="50">
+</p>
+<p class="field-line field-150">
+	<label>Cognome:</label>
+	<input type="text" name="cognome" class="field" value="{{ ordine.spedizione.cognome }}" maxlength="50">
+</p>
+<p class="field-line field-150 field-line-left">
+	<label>P.IVA:</label>
+	<input type="text" name="p_iva" class="field" value="{{ ordine.fattura.p_iva }}" maxlength="20">
+</p>
+<p class="field-line field-150">
+	<label>Codice fiscale:</label>
+	<input type="text" name="codice_fiscale" class="field" value="{{ ordine.fattura.codice_fiscale }}" maxlength="20">
+</p>
+<p class="field-line field-line-left field-150">
+	<label>C/O presso:</label>
+	<input type="text" name="presso" class="field" value="{{ ordine.spedizione.presso }}" maxlength="100">
+</p>
+<p class="field-line field-150">
+	<label>Nome sul campanello:</label>
+	<input type="text" name="nome_campanello" class="field" value="{{ ordine.spedizione.nome_campanello }}" maxlength="100">
+</p>
+<p class="clear field-line field-line-left field-250">
+	<label>Via:</label>
+	<input type="text" name="via" class="field" value="{{ ordine.spedizione.via }}" maxlength="100">
+</p>
+<p class="field-line field-50">
+	<label>Num. civico:</label>
+	<input type="text" name="num_civico" class="field" value="{{ ordine.spedizione.num_civico }}" maxlength="10">
+</p>
+<p class="clear field-line clear field-line-left field-50">
+	<label>CAP:</label>
+	<input type="text" name="cap" class="field valida-digitnumber" value="{{ ordine.spedizione.cap }}" maxlength="5">
+</p>
+<p class="field-line field-250">
+	<label>Località:</label>
+	<input type="text" name="localita" class="field" value="{{ ordine.spedizione.localita }}" maxlength="50">
+</p>
+<p class="clear field-line field-250">
+	<label>Provincia:</label>
+	<input type="text" name="provincia" class="field" value="{{ ordine.spedizione.provincia }}" maxlength="50">
+</p>
+<p class="clear field-line field-250">
+	<label>Nazione<span>*</span>:</label>
+	<select name="nazione" class="field valida-required">
+		{% for n in list %}
+		<option value="{{ n.id }}" {% if ordine.spedizione.id_nazione == n.id %}selected="true"{% endif %}>{{ n.get('nome') }}</option>
+		{% endfor %}
+	</select>
+</p>
+<p class="field-line field-200">
+	<label>Telefono:</label>
+	<input type="text" name="telefono" class="field" value="{{ ordine.spedizione.telefono }}" maxlength="20">
+</p>
+<p class="field-line field-400">
+	<label>Indicazioni per il corriere:</label>
+	<input type="text" name="indicazioni" class="field" value="{{ ordine.spedizione.indicazioni }}" maxlength="100">
+</p>
+{{ mc.labelCampiObbligatori() }}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/preventivi/ex-edit-spedizione'), '"reload": ["#h-layout-center-content", "#dettaglio-content"]') }}	
+

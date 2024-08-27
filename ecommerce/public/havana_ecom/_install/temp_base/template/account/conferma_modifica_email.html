@@ -1,0 +1,55 @@
+{% import _h.template('_macro.html') as mc %}
+{% set _lblm = _h.labels.get('my') %}
+{% set _lblf = _h.labels.get('form') %}
+{% set _lblg = _h.labels.get('global') %}
+
+<div class="breadcrumbs clear">
+	{{ mc.breadcrumbs_home(_h) }}
+	{{ mc.breadcrumbs_separatore() }}
+	<a>{{ _lblm.title_area_riservata }}</a>
+</div>
+
+{% if error %}
+<div class="block-margin">
+	<h2>{{ _lblm.title_conf_codice_non_valido }}</h2>
+	<p>{{ _lblm.descr_conf_codice_non_valido }}</p>
+	<p>{{ _lblg.descr_help }} <a href="{{ _h.xurl('servizio-clienti') }}" title="{{ _lblg.alt_servizio_clienti }}">{{ _lblg.btn_servizio_clienti }}</a>.</p>
+</div>
+{% else %}
+<div class="col-box-left">
+	<h1>{{ _lblm.title_area_riservata }}</h1>
+	<form>
+		<fieldset class="fieldset-box">		
+			<div class="field-text">
+				{{ _lblm.accedi_indirizzo_email }}
+			</div>
+			<div class="form-error-message"></div>
+			<div class="field-line">
+				<div class="field">
+					<label>{{ _lblf.field_email }}</label>
+					<input type="text" name="e_mail" class="valida-required valida-email">
+				</div>
+			</div>
+			<div class="field-line">
+				<div class="field">
+					<label>{{ _lblf.field_password }}</label>
+					<input type="password" name="password" class="valida-required">
+				</div>
+			</div>
+			<div class="field-button field-button-right">
+				<a class="button-red button submit-form" onclick="_ga('send', 'event', 'login', 'entra', 'login_entra')" href="javascript:void(0)" title="{{ _lblf.btn_entra }}" data-action='{"url": "{{ _h.url('account/ex-login') }}"}'><span>{{ _lblf.btn_entra }}</span></a>
+			</div>
+			<div class="field-text">
+				<a href="{{ _h.url('account/recupero-password') }}" class="link" title="{{ _lblf.alt_btn_dimenticato_password }}">{{ _lblf.btn_dimenticato_password }}</a>
+			</div>
+		</fieldset>
+	</form>
+</div>
+<div class="col-box-left-details page-details">
+	<div class="col-box-left-details-inner">
+	<h2>{{ _lblm.title_conf_modifica_email }}</h2>
+	<p>{{ _lblm.descr_conf_modifica_email }}</p>
+	<p>{{ _lblg.descr_help }} <a href="{{ _h.xurl('servizio-clienti') }}" title="{{ _lblg.alt_servizio_clienti }}">{{ _lblg.btn_servizio_clienti }}</a>.</p>
+	</div>
+</div>
+{% endif %}

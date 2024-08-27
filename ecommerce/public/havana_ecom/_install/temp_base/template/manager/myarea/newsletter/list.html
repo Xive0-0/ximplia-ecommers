@@ -1,0 +1,22 @@
+{% import _h.template('manager/_macro_items.html') as mci %}
+<table class="h-list item-autoload-total h-fixed-header-table h-list-slingle-selection" cellpadding="0" cellspacing="0" border="0" data-total="{{ result.total }}">
+<thead>
+<tr class="h-list-header">
+	<th style="width: 20px;">&nbsp;</th>
+	<th style="width: 50px;" data-order="lang" data-order-type="{{ result.order_type_lang }}">Lang</th>
+	<th style="width: 120px;" data-order="data_inserimento" data-order-type="{{ result.order_type_data_inserimento }}">Data iscr.</th>
+	<th style="width: 180px;" data-order="nome" data-order-type="{{ result.order_type_nome }}">Nome</th>
+	<th style="width: 180px;" data-order="cognome" data-order-type="{{ result.order_type_cognome }}">Cognome</th>
+	<th data-order="e_mail" data-order-type="{{ result.order_type_e_mail }}">E-Mail</th>
+	<th style="width: 180px;" data-order="telefono" data-order-type="{{ result.order_type_telefono }}">Telefono</th>
+	<th style="width: 120px;" data-order="gruppo" data-order-type="{{ result.order_type_gruppo }}">Gruppo</th>
+	<th style="width: 40px;" data-order="richiesta_cancellazione" data-order-type="{{ result.order_type_richiesta_cancellazione }}">C</th>
+	<th style="width: 40px;"></th>
+</tr>
+</thead>
+<tbody>
+{% for item in result.list %}		
+	{{ mci.item_newsletter(_h, item) }}
+{% endfor %}
+</tbody>
+</table>

@@ -1,0 +1,105 @@
+{% import _h.template('_macro.html') as mc %}
+{% import _h.template('cartprev/_macro.html') as cmc %}
+{% set _lblc = _h.labels.get('checkout_preventivo') %}
+
+{% set ordine = ordine.ordine %}
+<div class="thanks">
+<div id="pagina">
+
+{% if ordine %}
+<div class="riepilogo">
+	<h2>{{ _lblc.title_il_tuo_preventivo }} {{ codice }}</h2>
+</div>
+
+	{% set itenstazione = item.intestazione() %}
+	<form id="pagina">
+		<input type="hidden" name="id" value="{{ item.id }}">
+		<h3>{{ _lblc.title_personalizza_pdf }}</h3>
+		<div class="field-text">
+			<p>{{ _lblc.descr_personalizza_pdf }}</p>
+		</div>
+		<div class="form-error-message"></div>
+		
+		<div class="field-line">
+			<div class="field">
+				<label>{{ _lblc.field_oggetto }} <span>*</span></label>
+				<input type="text" name="oggetto" class="valida-required" value="{{ itenstazione.oggetto }}">
+			</div>
+		</div>
+		<div class="field-line field-line-textarea">
+			<div class="field">
+				<label>{{ _lblc.field_testo }}</label>
+				<textarea name="testo">{{ itenstazione.testo }}</textarea>
+			</div>
+		</div>
+		<div class="field-line">
+			<div class="field">
+				<label>{{ _lblc.field_validita_offerta }}</label>
+				<input type="text" name="validita_offerta" value="{{ itenstazione.validita_offerta }}">
+			</div>
+		</div>
+		<div class="field-line">
+			<div class="field">
+				<label>{{ _lblc.field_montaggio }}</label>
+				<input type="text" name="montaggio" value="{{ itenstazione.montaggio }}">
+			</div>
+		</div>
+		<div class="field-line">
+			<div class="field">
+				<label>{{ _lblc.field_termini_consegna }}</label>
+				<input type="text" name="termini_consegna" value="{{ itenstazione.termini_consegna }}">
+			</div>
+		</div>
+		<div class="field-line">
+			<div class="field">
+				<label>{{ _lblc.field_pagamento }}</label>
+				<input type="text" name="pagamento" value="{{ itenstazione.pagamento }}">
+			</div>
+		</div>
+		<div class="field-line">
+			<div class="field">
+				<label>{{ _lblc.field_spedizione }}</label>
+				<input type="text" name="spedizione" value="{{ itenstazione.spedizione }}">
+			</div>
+		</div>
+		<div class="field-line">
+			<div class="field">
+				<label>{{ _lblc.field_garanzia }}</label>
+				<input type="text" name="garanzia" value="{{ itenstazione.garanzia }}">
+			</div>
+		</div>
+		
+{{ cmc.riepilogo_ordine(_h, ordine) }}
+
+		<div class="field-line">
+			<div class="field">
+				<label>{{ _lblc.field_sconto }}</label>
+				<input type="text" name="sconto" value="{{ itenstazione.sconto }}">
+			</div>
+		</div>
+		<div class="field-line">
+			<div class="field">
+				<label>{{ _lblc.field_totale }} <span>*</span></label>
+				<input type="text" name="totale" class="valida-required" value="{% if intestazione.totale %}{{ itenstazione.totale }}{% else %}{{_h.util.valuta(ordine.total_ordine, ordine.currency)}}{% endif %}">
+			</div>
+		</div>
+		<div class="field-line field-line-textarea">
+			<div class="field">
+				<label>{{ _lblc.field_altro_testo }}</label>
+				<textarea name="altro_testo">{{ itenstazione.altro_testo }}</textarea>
+			</div>
+		</div>		
+		<div class="field-button field-button-left">
+			<a class="button-red button submit-form" href="javascript:void(0)" title="{{ _lblc.genera_pdf_preventivo }}" data-action='{"url": "{{ _h.url('cartprev/ex-intestazione-preventivo') }}", "onComplete": {"type": "url", "url": "{{ _h.url('cartprev/pdf') }}?id={{ item.id }}"}}'><span>{{ _lblc.genera_pdf_preventivo }}</span></a>
+		</div>
+	</form>
+
+{% endif %}
+
+</div>
+
+<style>
+.riepilogo {
+	margin-bottom: 0;
+}
+</style>

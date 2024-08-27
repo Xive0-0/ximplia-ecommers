@@ -1,0 +1,40 @@
+{% import _h.template('manager/_macro.html') as mc %}
+<div id="h-layout-navigation" class="h-layout h-layout-navigation-with-toolbar h-nav-white">
+	<div class="h-layout-content-wrapper">
+		{{ mc.navMenu(_h, 'statistichemese') }}
+		<div class="h-nav-title" style="margin-right: 50px;">
+		Statistiche mese rif. anno: {{ stat_anno }}{% if _h.config('gestione_magazzino', false) %}, totale magazzino: {{ _h.util.euro(totale_magazzino) }} {{ _h.config('manager_valuta', '&euro;') }}{% endif %}
+		</div>
+
+		
+	<div class="h-nav-button-wrapper">
+		<a href="javascript:void(0);" class="h-nav-button h-action-popup-menu">
+			Anno
+		</a>
+		<div class="h-popup-content h-popup-menu">
+			{% for anno in list_stat_anno %}
+				<a href="{{ _h.url('manager/myarea/statistichemese/index') }}?stat_anno={{ anno }}">{{ anno }}</a>
+			{% endfor %}
+		</div>
+	</div>
+		
+{{ mc.index_page_header_bot() }}
+	
+	{{ mc.navButtonUpdateLang(_h, 'modifica', 'articolo', 'edit-update') }}
+
+	{{ mc.filtro_list() }}
+
+	
+	<div class="h-list-right h-nav-button-group" id="filtri-attivita">
+	{{ mc.navButton(_h, 'filtra', 'filter', 'arrow', 'h-load-in-window', '{"show": ["details-right"], "loadIn": "#h-layout-filtro", "url": "' ~ _h.url('manager/myarea/articolo/filtro') ~ '"}') }}
+	</div>
+	<div class="h-list-right" id="azzera-filtro">
+	{{ mc.navButton(_h, 'azzera filtro', 'reset', 'click', 'h-action-reset-filter', '{"load": "#h-layout-center-content", "reset": "#filtri-attivita"}') }}
+	</div>
+
+{{ mc.index_page_footer(_h, result, 'statistichemese') }}
+
+<div id="h-layout-details-right" class="h-layout h-layout-middle">
+	<div class="h-layout-content-wrapper" id="h-layout-filtro">
+	</div>
+</div>

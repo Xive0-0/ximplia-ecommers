@@ -1,0 +1,20 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeaderToolbar(_h, 'Allegati: ' ~ item.get('nome'), true) }}
+
+	<div class="h-nav-button-wrapper">
+		<a href="javascript:void(0);" class="h-nav-button h-action-popup-menu">
+			<img src="/assets/manager/havana-js/img/icon/ico-new.svg" align="top" />
+			<span>Nuovo</span>
+		</a>
+		<div class="h-popup-content h-popup-menu">
+			<a href="javascript:void(0);" class="h-action-window h-action-close-popup-menu" data-action='{"window": {"type": "layer", "overlay": true, "params": {"id_articolo":{{ item.id }}}, "width": 500, "height": 500, "url": "{{ _h.url('manager/myarea/articolo/allegato/edit') }}"}}'>File</a>
+			<a href="javascript:void(0);" class="h-action-window h-action-close-popup-menu" data-action='{"window": {"type": "layer", "overlay": true, "params": {"id_articolo":{{ item.id }}}, "width": 500, "height": 500, "url": "{{ _h.url('manager/myarea/articolo/allegato/edit-link') }}"}}'>Link a file</a>
+		</div>
+	</div>	
+	
+	{{ mc.navButton(_h, 'modifica', 'update', 'click', 'h-action-selected-open-window', '{"select": {"from":"#allegato-content", "check": 1, "errorMessage": "Selezionare un allegato"}, "window": {"type": "layer", "url": "' ~ _h.url('manager/myarea/articolo/allegato/edit') ~ '", "width": 500, "height": 500, "overlay": true, "params": {"id_articolo":' ~ item.id ~ '}}}') }}
+	{{ mc.navButton(_h, 'elimina', 'delete', 'click', 'h-action-selected-execute', '{"select": {"from":"#allegato-content", "check": 0, "errorMessage": "Selezionare almeno un allegato"}, "confirm": "Eliminare la voce selezionata?", "params": {"id_articolo":' ~ item.id ~ '}, "url": "' ~ _h.url('manager/myarea/articolo/allegato/delete') ~ '", "reload": ["#allegato-content"]}') }}
+{{ mc.slideBoxHeaderToolbarEnd() }}
+
+{{ mc.box_footer(_h, 'allegato', 'articolo/allegato', list, '{"id": ' ~ item.id ~ '}') }}

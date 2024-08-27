@@ -1,0 +1,40 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Fasce sconto') }}
+{% if procedi %}
+	<input type="hidden" name="id_entita" value="{{ _h.input('id', 0) }}">
+	<div class="h-tab">
+		<div data-tab-rif="fasce_base">Base</div>
+		<div data-tab-rif="fasce_azienda">Azienda/Brand</div>
+		
+		<div data-tab="fasce_base">
+		<p class="field-line-text">Impostare il valore di sconto per ogni fascia.<br>Lasciando vuoto viene considerato "nessuno sconto" e il sistema considera il valore più generico.</p>
+		{% for item in listFasce %}
+		<p class="field-line field-100">
+			<label>{{ item.id }}:</label>
+			<input type="text" name="{{ item.id }}" class="field valida-float" value="{{ _h.util.euro(map_valore.get(item.id)) }}"> %
+		</p>
+		{% endfor %}
+		</div>
+		
+		<div data-tab="fasce_azienda">
+		{% for azienda in listAzienda %}
+			<div class="expand-wrapper">
+				<div class="expand-header"><span>{{ azienda.get('nome') }}</span></div>
+				<div class="expand-body">
+				{% for item in listFasce %}
+				<p class="field-line field-100">
+					<label>{{ item.id }}:</label>
+					<input type="text" name="{{ azienda.id }}_{{ item.id }}" class="field valida-float" value="{{ _h.util.euro(map_valore_azienda.get(azienda.id ~ '_' ~ item.id)) }}"> %
+				</p>
+				{% endfor %}
+				</div>
+			</div>
+		{% endfor %}
+		</div>
+	</div>
+	{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/fasciasconto/ex-edit-entita-attributo')) }}	
+{% else %}
+	<p class="field-line-text"><strong>ATTENZIONE!</strong><br>La gestione delle fasce prezzo è disponibile solo per le categorie principali.</p>
+	{{ mc.slideBoxFooter() }}	
+{% endif %}

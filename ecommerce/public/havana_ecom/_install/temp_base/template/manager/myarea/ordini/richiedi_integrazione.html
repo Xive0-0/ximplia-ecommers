@@ -1,0 +1,68 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Scrivi') }}
+<input type="hidden" name="id" value="{{ _h.input('id') }}">
+<p class="field-line field-400" style="width: 450px;">
+	<label>Seleziona articolo<span>*</span>:</label>
+	<input type="hidden" name="articolo_id" value="" class="valida-required">
+	<input type="text" name="relazione_nome" class="field autocomplete" value="" data-action='{"params": {"all": 1}, "url": "{{ _h.url('manager/myarea/articolo/list-autocomplete') }}"}'>
+</p>	
+<p class="field-line field-200">
+	<label>Importo da richiedere {{ item.get('currency')|upper }}<span>*</span>:</label>
+	<input type="text" name="importo" class="field valida-euro valida-required" value="" maxlength="10"> {{ item.get('currency')|upper }}
+</p>
+<div class="message-center-block" data-message-center="{{ _h.util.messageCenter('ordine_richiedi_integrazione') }}">
+<div class="message-center-block-expandible" data-type="email">
+	<div class="message-center-block-expandible-title">Scrivi E-Mail</div>
+	<div class="message-center-block-expandible-body">
+		<div class="field-line field-400">
+			<label>Oggetto<span>*</span>:</label>
+			<input type="text" name="oggetto" class="field">
+		</div>
+		<div class="field-line field-400">
+			<label>Testo e-mail<span>*</span>:</label>
+			<textarea name="testo" class="visual-editor"></textarea>
+		</div>
+		<div style="margin-top: 10px"><em>Campi dinamici:</em><br>
+		- link, link per il pagamento<br>
+		- codice, codice ordine<br>
+		- nome, nome cliente<br>
+		- cognome, cognome cliente<br>
+		- importo, importo richiesto
+		</div>
+	</div>
+</div>
+<div class="message-center-block-expandible" data-type="wapp">
+	<div class="message-center-block-expandible-title">Scrivi WhatsApp</div>
+	<div class="message-center-block-expandible-body">
+		<div class="field-line field-400 field-line-textarea">
+			<label>Testo messaggio<span>*</span>:</label>
+			<textarea name="testo_wapp" class="field"></textarea>
+		</div>
+		<div style="margin-top: 10px"><em>Campi dinamici:</em><br>
+		- link, link per il pagamento<br>
+		- codice, codice ordine<br>
+		- nome, nome cliente<br>
+		- cognome, cognome cliente<br>
+		- importo, importo richiesto
+		</div>
+	</div>
+</div>
+<div class="message-center-block-expandible" data-type="sms">
+	<div class="message-center-block-expandible-title">Scrivi SMS</div>
+	<div class="message-center-block-expandible-body">
+		<div class="field-line field-400 field-line-textarea">
+			<label>Testo SMS<span>*</span>:</label>
+			<textarea name="testo_sms" class="field"></textarea>
+		</div>
+		<div style="margin-top: 10px"><em>Campi dinamici:</em><br>
+		- link, link per il pagamento<br>
+		- codice, codice ordine<br>
+		- nome, nome cliente<br>
+		- cognome, cognome cliente<br>
+		- importo, importo richiesto
+		</div>
+	</div>
+</div>
+</div>
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/ordini/ex-richiedi-integrazione'), null, '', '', 'Invia richiesta') }}

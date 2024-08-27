@@ -1,0 +1,123 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% set lang = _h.input('lang', _h.config('default_language', 'it')) %}
+
+{% if item == null %}
+	{% set title = 'Nuovo Ambassador' %}
+	{% set ordine = 0 %}
+{% else %}
+	{% set title = 'Modifica Ambassador' %}
+	{% set ordine = item.get('ordine', 0) %}
+{% endif %}
+{{ mc.slideBoxHeader(_h, title) }}
+<input type="hidden" name="lang" value="{{ lang }}">
+<input type="hidden" name="id" value="{{ item.id }}">
+
+<div class="h-tab{% if edit_lang %} edit-lang-wrapper{% endif %}">
+
+<div data-tab-rif="base" class="edit-lang">Ambassador</div>
+<div data-tab-rif="recapiti">Recapiti/Social</div>
+<div data-tab-rif="categorie">Categoria</div>
+
+<div data-tab="base" class="edit-lang">
+{{ mc.contenutiInLingua(lang) }}
+<div class="field-line field-150 field-line-left">
+	{% set cssClass = ' h-checkbox-checked' %}
+	{% set value = 1 %}
+	{% if item %} 
+		{% if item.abilitato() %} 
+
+		{% else %}
+			{% set cssClass = '' %}
+			{% set value = '' %}
+		{% endif %}
+	{% endif %}
+	<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="abilitato" value="{{ value }}" /></span> <strong>Abilitato</strong></div>
+</div>
+
+<div class="field-line field-100 field-line-left">
+	<label>Peso/posizione<span>*</span>:</label>
+	<input type="text" name="ordine" class="field valida-required valida-digitnumber" value="{{ ordine }}">
+</div>
+<div class="clear"></div>
+<p class="field-line field-400 edit-lang">
+	<label>{{ mc.labelLang(lang) }} Nome e cognome<span>*</span>:</label>
+	<input type="text" name="nome" class="field valida-required" value="{{ item.get('nome') }}" maxlength="250">
+</p>
+<p class="clear field-line field-250">
+	<label>Nazione<span>*</span>:</label>
+	<select name="nazione" class="field valida-required">
+		{% for n in list %}
+		<option value="{{ n.id }}" {% if item.get('nazione') == n.id %}selected="true"{% endif %}>{{ n.get('nome') }}</option>
+		{% endfor %}
+	</select>
+</p>
+{{ mc.upload_immagine(_h, 'Immagine principale (1290x780px)', item.imageAnteprima()) }}
+{{ mc.upload_immagine(_h, 'Immagine 1 (1290x780px)', item.imageAnteprima('g1'), 'gallery1') }}
+{{ mc.upload_immagine(_h, 'Immagine 2 (1290x780px)', item.imageAnteprima('g2'), 'gallery2') }}
+{{ mc.upload_immagine(_h, 'Immagine 3 (1290x780px)', item.imageAnteprima('g3'), 'gallery3') }}
+<div class="field-line field-400 edit-lang">
+	<label>{{ mc.labelLang(lang) }} Biografia:</label>
+	<textarea name="biografia" class="visual-editor">{{ item.get('biografia') }}</textarea>
+</div>
+<div class="field-line field-400 edit-lang">
+	<label>{{ mc.labelLang(lang) }} Perchè ha scelto easydive:</label>
+	<textarea name="perche_scelto_easydive" class="visual-editor">{{ item.get('perche_scelto_easydive') }}</textarea>
+</div>
+
+<div class="field-line field-400">
+	<label>ID prodotti utilizzati (inserire gli id separati da virgola):</label>
+	<input type="text" name="elenco_prodotti_id" class="field" value="{{ item.get('elenco_prodotti_id') }}">
+</div>
+
+{{ mc.labelCampiObbligatori() }}
+</div>
+
+<div data-tab="recapiti">
+<p class="field-line field-400 edit-lang">
+	<label>E-Mail:</label>
+	<input type="text" name="e_mail" class="field valida-email" value="{{ item.get('e_mail') }}" maxlength="100">
+</p>
+
+<p class="field-line field-400">
+	<label>URL sito web:</label>
+	<input type="text" name="url_sito_web" class="field valida-url" value="{{ item.get('url_sito_web') }}">
+</p>
+<p class="field-line field-400">
+	<label>URL pagina Facebook:</label>
+	<input type="text" name="url_facebook" class="field valida-url" value="{{ item.get('url_facebook') }}">
+</p>
+<p class="field-line field-400">
+	<label>URL pagina Instagram:</label>
+	<input type="text" name="url_instagram" class="field valida-url" value="{{ item.get('url_instagram') }}">
+</p>
+<p class="field-line field-400">
+	<label>URL pagina Youtube:</label>
+	<input type="text" name="url_youtube" class="field valida-url" value="{{ item.get('url_youtube') }}">
+</p>
+<p class="field-line field-400">
+	<label>URL pagina Twitter:</label>
+	<input type="text" name="url_twitter" class="field valida-url" value="{{ item.get('url_twitter') }}">
+</p>
+<p class="field-line field-400">
+	<label>URL pagina Vimeo:</label>
+	<input type="text" name="url_vimeo" class="field valida-url" value="{{ item.get('url_vimeo') }}">
+</p>
+<p class="field-line field-400">
+	<label>URL embed video youtube o video 1:</label>
+	<input type="text" name="url_video" class="field valida-urlyoutube" value="{{ item.get('url_video') }}">
+</p>
+<p class="field-line field-400">
+	<label>URL embed video youtube o video 2:</label>
+	<input type="text" name="url_video_2" class="field valida-urlyoutube" value="{{ item.get('url_video_2') }}">
+</p>
+<p class="field-line field-400">
+	<label>URL embed video youtube o video 3:</label>
+	<input type="text" name="url_video_3" class="field valida-urlyoutube" value="{{ item.get('url_video_3') }}">
+</p>
+</div>
+<div data-tab="categorie">
+{{ mc.dynamicOnlyOneTreeSelect(_h, 'Categoria', listCategoriaAmbassador, item, 'id_categoria', 'categoria_ambassador') }}
+</div>
+
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/ambassador/ex-edit')) }}	

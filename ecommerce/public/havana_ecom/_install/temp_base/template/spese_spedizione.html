@@ -1,0 +1,56 @@
+{% import _h.template('_macro.html') as mc %}
+{% set _lbl = _h.labels.get('global') %}
+
+<div class="breadcrumbs clear">
+	{{ mc.breadcrumbs_home(_h) }}
+	{{ mc.breadcrumbs_separatore() }}
+	<a>{{ _lbl.title_spese_spedizione }}</a>
+</div>
+
+<h1>{{ _lbl.title_spese_spedizione }}</h1>
+
+<div class="html clear">
+{{ item.get('testo') }}
+</div>
+{% if _h.config('visualizza_tabella_spedizioni', true) %}
+{% set spedizione_util = _h.context('spedizione_util') %}
+<table class="table-spese" border="0" cellpadding="0" cellspacing="0">
+<tr>
+	<th class="nome">{{ _lbl.nazione }}</th>
+	<th class="gratis">{{ _lbl.spedizione_gratis }}</th>
+	{% for key in spedizione_util.listType %}
+		<th>{{ key }}</th>
+	{% endfor %}
+</tr>
+{% for item in list %}
+<tr>
+	<td>{{ item.get('nome') }}</td>
+	{% for key in spedizione_util.listKeyType %}
+	<td>
+	{% if item.get(key, 0) > 0 %}
+		{{ item.currentValuta(key) }} 
+	{% else %}
+		{% if loop.index0 == 0 and def.get(key, 0) <= 0 %}
+			&nbsp;
+		{% else %}
+		{{ def.currentValuta(key) }} 
+		{% endif %}
+	{% endif %}
+	</td>
+	{% endfor %}
+</tr>
+{% endfor %}
+<tr>
+	<td>{{ _lbl.altre_nazioni }}</td>
+	{% for key in spedizione_util.listKeyType %}
+	<td>
+		{% if loop.index0 == 0 and def.get(key, 0) <= 0 %}
+			&nbsp;
+		{% else %}
+		{{ def.currentValuta(key) }} 
+		{% endif %}
+	</td>
+	{% endfor %}
+</tr>
+</table>
+{% endif %}

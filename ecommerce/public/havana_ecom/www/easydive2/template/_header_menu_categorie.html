@@ -1,0 +1,83 @@
+{% set _lblg = _h.labels.get('global') %}
+{% set _lblw = _h.labels.get('website') %}
+<section class="menu w-100">
+    <ul class="header-ul">
+        <ul class="mobile-menu">
+            <li>
+                <a id="header-menu-button" onclick="headerVerticalMenu()">
+                    <svg width="25px" height="25px" viewBox="0 0 24 24" id="align-left-2" data-name="Flat Line"
+                         xmlns="http://www.w3.org/2000/svg" class="icon flat-line" fill="#ffffff" stroke="#ffffff">
+                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                        <g id="SVGRepo_iconCarrier">
+                            <path id="primary" d="M3,12H17M3,6H21M3,18H13"
+                                  style="fill: none; stroke: #ffffff; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path>
+                        </g>
+                    </svg>
+                </a>
+            </li>
+            <li>
+                <a id="header-close-menu-button" onclick="headerVerticalMenu()">
+                    <svg width="25px" height="25px" viewBox="0 0 24 24" fill="#fff" xmlns="http://www.w3.org/2000/svg"
+                         stroke="#fffffff">
+                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                        <g id="SVGRepo_iconCarrier">
+                            <path d="M20.7457 3.32851C20.3552 2.93798 19.722 2.93798 19.3315 3.32851L12.0371 10.6229L4.74275 3.32851C4.35223 2.93798 3.71906 2.93798 3.32854 3.32851C2.93801 3.71903 2.93801 4.3522 3.32854 4.74272L10.6229 12.0371L3.32856 19.3314C2.93803 19.722 2.93803 20.3551 3.32856 20.7457C3.71908 21.1362 4.35225 21.1362 4.74277 20.7457L12.0371 13.4513L19.3315 20.7457C19.722 21.1362 20.3552 21.1362 20.7457 20.7457C21.1362 20.3551 21.1362 19.722 20.7457 19.3315L13.4513 12.0371L20.7457 4.74272C21.1362 4.3522 21.1362 3.71903 20.7457 3.32851Z"
+                                  fill="#fffffff"></path>
+                        </g>
+                    </svg>
+                </a>
+            </li>
+            <li>
+                {% include _h.template('_logo.html') %}
+            </li>
+        </ul>
+        <ul class="header-ul options">
+            {{ tree }}
+            <li class="level-base tree-menu shop configura-custodia">
+                <a href="/" class="btn btn-white"><label>{{ _lblw.configura_custodia }}</label></a>
+            </li>
+        </ul>
+        <ul class="header-ul icons">
+            <li id="search">
+                {% include _h.template('_search.html') %}
+                {% include _h.template('_header_cerca_add.html') %}
+            </li>
+            <li>
+                {% include _h.template('_header_user.html') %}
+                {% include _h.template('_header_sublist.html') %}
+            </li>
+            <li id="cart" data-number="{{ cart.number }}">
+                {% if no_cart %}
+                {% else %}
+                    {% include _h.template('_cart_button.html') %}
+                    {% if not(checkout) %}
+                        {% include _h.template('_cart_details.html') %}
+                    {% else %}
+                        <span class="cassa">{{ _lblc.cassa }}</span>
+                    {% endif %}
+                {% endif %}
+            </li>
+            <li>
+                {% if _h.config('gestione_preventivi', false) %}
+                    <section id="cart-preventivo">
+                        {% if no_cart %}
+                        {% else %}
+                            {% if not(checkout) %}
+                                <a href="javascript:void(0);" class="cart-preventivo-button"><span class="details"><span class="label-carrello">{{ _lblcp.carrello }}</span> <span class="item-number-wrapper"><span class="item-number-parentesi">(</span><span class="item-number">{{ cart_prev.number_qta }}</span><span class="item-number-items">{{ cart_prev.number_qta }}</span><span class="item-number-parentesi">)</span></span><span class="arrow"></span></span></a>
+                                {% include _h.template('_cart_preventivo_details.html') %}
+                            {% endif %}
+                        {% endif %}
+                    </section>
+                {% endif %}
+            </li>
+        </ul>
+
+    </ul>
+    <!-- <ul>
+		<li class="lingue tree-menu">			
+			{{ mc.menu_lingua(_h, item_urlLang) }}
+		</li>
+	</ul> -->
+</section>

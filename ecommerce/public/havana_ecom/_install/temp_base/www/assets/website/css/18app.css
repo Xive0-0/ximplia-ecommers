@@ -1,0 +1,146 @@
+* {
+	padding: 0;
+	margin: 0;
+}
+
+ul, ol {
+	list-style-type: none;
+}
+
+img {
+	border: 0;
+}
+
+body {
+	background: #efefef;
+	font-size: 14px;
+	font-family: 'Helvetica', sans-serif;
+}
+.blu {
+	color: #006ab0;
+}
+.verde {
+	color: #3b9d00;
+}
+.container-18app {
+	padding: 20px auto;
+}
+.header-18app img {
+	height: 100px;
+}
+.header-18app {
+	text-align: center;
+}
+.box-18app-inner {
+	border-radius: 10px;
+	background: #fff;
+	padding: 20px;
+	border: 2px solid #006ab0;
+}
+.box-18app {
+	max-width: 500px;
+	margin: 10px auto;
+	width: 100%;
+}
+strong {
+	font-size: 1.3em;
+}
+
+.box-18app-form {
+	margin-top: 20px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: stretch;
+}
+.box-18app-form input[type="text"] {
+	display: block;
+	border: 1px solid #999;
+	padding: 0 10px;
+	font-size: 16px;
+	height: 40px;
+	margin-top: 20px;
+	border-radius: 5px;
+}
+.button-submit {
+	margin-top: 40px;
+	background: #3b9d00;
+}
+.button-error,
+.button-submit {
+	height: 44px;
+	border: none;
+	color: #fff;
+	font-size: 16px;
+	font-weight: bold;
+	text-align: center;
+	display: block;
+	border-radius: 5px;
+	cursor: pointer;
+}
+.button-error {
+	margin-top: 20px;
+	background: #999;
+	display: block;
+	text-decoration: none;
+	line-height: 44px;
+}
+.box-18app-copy a,
+.box-18app-copy {
+	color: #666;
+	text-decoration: none;
+}
+.box-18app-copy {
+	font-size: 11px;
+	text-align: center;
+	margin-top: 20px;
+}
+
+#box-18app-info-pagamento-loading {
+	display: none;
+	text-align: center;
+	padding: 50px 20px;
+}
+
+.box-18app-tipo-servizio {
+	display: flex;
+	align-items: stretch;
+	gap: 20px;
+	justify-content: space-between;
+	margin: 20px 10px;
+}
+
+.box-18app-tipo-servizio .box-18app-tipo-servizio-item strong {
+	display: block;
+	margin-top: 10px;
+}
+.box-18app-tipo-servizio .box-18app-tipo-servizio-item .img {
+	width: 100px;
+	height: 70px;
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: contain;
+	margin: auto;
+}
+.box-18app-tipo-servizio .box-18app-tipo-servizio-item:hover {
+	border-color: #888;
+}
+.box-18app-tipo-servizio .box-18app-tipo-servizio-item {
+	cursor: pointer;
+	border: 5px solid #ddd;
+	padding: 10px;
+	border-radius: 10px;
+	width: 50%;
+	text-align: center;
+}
+
+.box-18app-tipo-servizio .box-18app-tipo-servizio-item.selected {
+	border-color: #3b9d00;
+	color: #3b9d00;
+} 
+
+.box-18app-info ol {
+	list-style-type: normal;
+	margin-left: 20px;
+	margin-top: 10px;
+}

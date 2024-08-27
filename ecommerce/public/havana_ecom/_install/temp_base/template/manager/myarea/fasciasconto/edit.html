@@ -1,0 +1,34 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% if item == null %}
+	{% set title = 'Nuova Fascia Sconto' %}
+{% else %}
+	{% set title = 'Modifica Fascia Sconto' %}
+{% endif %}
+{{ mc.slideBoxHeader(_h, title) }}
+<div class="field-line">
+	{% set cssClass = '' %}
+	{% set value = '' %}
+	{% if item and item.get('default_fascia') %} 
+		{% set cssClass = ' h-checkbox-checked' %}
+		{% set value = 1 %}
+	{% endif %}
+	<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="default_fascia" value="{{ value }}" /></span> <strong>Fascia default per utenti base</strong></div>
+</div>
+{% if item == null %}
+<p class="field-line field-300">
+	<label>Nome<span>*</span>:</label>
+	<input type="text" name="id" class="field valida-required valida-digitalphanum" value="{{ item.id }}">
+</p>
+{% else %}
+<p class="field-line-text">
+	<em>Nome</em> <strong>{{ item.id }}</strong>
+	<input type="hidden" name="id" value="{{ item.id }}">
+</p>
+{% endif %}
+<p class="field-line field-100">
+	<label>Valore default<span>*</span>:</label>
+	<input type="text" name="valore" class="field valida-required valida-float" value="{{ item.euro('valore') }}"> %
+</p>
+{{ mc.labelCampiObbligatori() }}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/fasciasconto/ex-edit'), '"reload": "#fasciasconto-content"') }}	

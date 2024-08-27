@@ -1,0 +1,32 @@
+{% import _h.template('manager/_macro_items.html') as mci %}
+<table class="h-list item-autoload-total h-fixed-header-table" cellpadding="0" cellspacing="0" border="0" data-total="{{ result.total }}">
+<thead>
+<tr class="h-list-header">
+	<th style="width: 10px; padding: 0; overflow: hidden;">&nbsp;</th>
+	<th style="width: 20px;">&nbsp;</th>
+	{% if _h.config('gestione_agenti', false) %}
+	<th style="width: 16px;" data-order="co.id_agente" data-order-type="{{ result.order_type_co_id_agente }}">&nbsp;</th>
+	{% endif %}
+	<th style="width: 16px;" data-order="co.problema" data-order-type="{{ result.order_type_co_problema }}">&nbsp;</th>
+	<th style="width: 20px;">L</th>
+	<th style="width: 90px;" data-order="co.id" data-order-type="{{ result.order_type_id }}">Codice</th>
+	<th style="width: 30px;" data-order="co.numero_articoli_disponibili" data-order-type="{{ result.order_type_co_numero_articoli_disponibili }}">D/O</th>
+	<th style="width: 80px;" data-order="co.data_inserimento" data-order-type="{{ result.order_type_co_data_inserimento }}">Data ric.</th>
+	<th style="width: 80px;" data-order="co.stato" data-order-type="{{ result.order_type_co_stato }}">Stato</th>
+	<th style="width: 90px;" data-order="co.stato_spedizione" data-order-type="{{ result.order_type_co_stato_spedizione }}">Consegna</th>
+	<th style="width: 30px;" data-order="co.tipo_pagamento" data-order-type="{{ result.order_type_co_tipo_pagamento }}">Pag.</th>
+	<th style="width: 30px;" data-order="co.stato_pagamento" data-order-type="{{ result.order_type_co_stato_pagamento }}">S.p.</th>
+	<th style="width: 80px;" data-order="co.data_pagamento" data-order-type="{{ result.order_type_co_data_pagamento }}">Pag. il</th>
+	<th>Nome ed E-mail</th>
+	<th style="width: 140px;" >Documenti</th>
+	<th style="width: 90px;" >Consegna</th>
+	<th style="width: 100px;" >Importo</th>
+	<th style="width: 60px;" data-order="co.data_modifica" data-order-type="{{ result.order_type_co_data_modifica }}">Data modifica</th>
+</tr>
+</thead>
+<tbody>
+{% for item in result.list %}		
+	{{ mci.item_ordine(_h, item) }}
+{% endfor %}
+</tbody>
+</table>

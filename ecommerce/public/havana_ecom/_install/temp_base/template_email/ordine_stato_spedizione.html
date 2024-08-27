@@ -1,0 +1,38 @@
+{% set _lbl = _h.labels('email', lang) %}
+{% import _h.template('_macro.html') as mc %}
+
+<p style="{{ mc.style_fontBase() }}">{{ _lbl.ciao }} <strong>{{ nome }}</strong></p>
+{% if stato == 0 %}	
+<p style="{{ mc.style_fontBase() }}">{{ _lbl.titolo_stato_ordine_0|replace({'%codice%': codice}) }}</p>
+<p style="{{ mc.style_fontBase() }}">{{ _lbl.stato_ordine_0 }}</p>
+{% elseif stato == 1 %}
+<p style="{{ mc.style_fontBase() }}">{{ _lbl.titolo_stato_ordine_1 }}: <strong>{{ codice }}</strong></p>
+<p style="{{ mc.style_fontBase() }}">{{ _lbl.stato_ordine_1|replace({'%corriere%': corriere}) }}</p>
+{% elseif stato == 2 %}
+<p style="{{ mc.style_fontBase() }}">{{ _lbl.titolo_stato_ordine_2 }}: <strong>{{ codice }}</strong>.</p>
+<p style="{{ mc.style_fontBase() }}">{{ _lbl.stato_ordine_2|replace({'%corriere%': corriere}) }}</p>
+{% elseif stato == 3 %}
+<p style="{{ mc.style_fontBase() }}">{{ _lbl.titolo_stato_ordine_3|replace({'%codice%': codice}) }}</p>
+<p style="{{ mc.style_fontBase() }}">{{ _lbl.stato_ordine_3|replace({'%corriere%': corriere}) }}</p>
+{% endif %}
+
+{% if corriere and (tracking or tracking_ddt) %}
+{{ mc.corriere_tracking(_h, tracking, tracking_ddt, corriere) }}
+{% endif %}
+
+{% if testo %}
+<br><p style="{{ mc.style_fontBase() }}">{{ testo }}</p>
+{% endif %}
+
+<div style="{{ mc.margin() }}">
+	<table width="100%" cellspacing="0" cellpadding="0" border="0">
+	<tbody>
+	{{ mc.ordine_spedizione(_h, ordine) }}
+	</tbody>
+	</table>
+	<br>
+	<div style="{{ mc.margin() }}">
+	<h2 style="{{ mc.style_h2() }}">{{ _lble.title_dettagli_ordine }}</h2>
+	{{ mc.ordine_articoli(_h, ordine) }}
+	</div>
+</div>

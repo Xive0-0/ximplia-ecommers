@@ -1,0 +1,38 @@
+{% import _h.template('_macro.html') as mc %}
+{% set _lblw = _h.labels.get('website') %}
+{% set _lblg = _h.labels.get('global') %}
+{% set _lblf = _h.labels.get('form') %}
+
+{{ mc.banner_header(listBanner['9'], _lblg.title_servizio_clienti) }}
+
+
+<h1>{{ _lblg.title_servizio_clienti }}</h1>
+
+{% if testo %}
+	<div class="html col-margin">{{ testo.getWithMerge('testo') }}</div>
+{% endif %}
+
+<div class="col-margin">
+	<div class="col-box-left">
+		<ul class="menu-left">
+		<li>{{ mc.link(_h, _h.xurl('servizio-clienti?page=termini_condizioni'), mapPagine.termini_condizioni.get('titolo'), null, (_h.input('page', '') == 'termini_condizioni' or _h.input('page', '') == '')) }}</li>
+		<li>{{ mc.link(_h, _h.xurl('servizio-clienti?page=spedizioni'), mapPagine.spedizioni.get('titolo'), null, (_h.input('page', '') == 'spedizioni')) }}</li>
+		<li>{{ mc.link(_h, _h.xurl('servizio-clienti?page=privacy'), mapPagine.privacy.get('titolo'), null, (_h.input('page', '') == 'privacy')) }}</li>
+		<li>{{ mc.link(_h, _h.xurl('servizio-clienti?page=cookie_policy'), mapPagine.cookie_policy.get('titolo'), null, (_h.input('page', '') == 'cookie_policy')) }}</li>
+		<li>{{ mc.link(_h, _h.xurl('info/faq'), _lblw.faq) }}</li>
+		<li class="margin-top">{{ mc.link(_h, _h.xurl('scrivi-servizio-clienti'), _lblg.title_contatti) }}</li>
+		</ul>
+	</div>
+	<div class="col-box-right-dynamic-details">
+		<div class="col-box-right-dynamic-details-content">
+			<h2>{{ item.get('titolo') }}</h2>
+			<div class="html">
+			{% if item.get('contenuto_pagina') == 0 %}
+			{{ item.getWithMerge('testo') }}
+			{% else %}
+			{{ item.getWithMerge('html') }}
+			{% endif %}
+			</div>
+		</div>
+	</div>
+</div>

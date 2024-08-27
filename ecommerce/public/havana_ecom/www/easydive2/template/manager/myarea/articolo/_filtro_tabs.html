@@ -1,0 +1,9 @@
+<div data-tab-rif="categoria">Categoria</div>
+<div data-tab-rif="selezione">Selezione</div>
+
+<div data-tab="categoria">
+{{ mc.dynamicBaseTreeSelect(_h, 'Categoria', listCategoria, null, 'coll_id', 'categoria') }}
+</div>
+<div data-tab="selezione">
+{{ mc.dynamicMultipleSelect(_h, 'Selezione', listSelezione, null, 'coll_id', 'selezione') }}
+</div>

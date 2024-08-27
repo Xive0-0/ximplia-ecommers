@@ -1,0 +1,23 @@
+{% set _lbl = _h.labels.get('global') %}
+
+{% import _h.template('_macro.html') as mc %}
+
+<div class="breadcrumbs clear">
+	{{ mc.breadcrumbs_home(_h) }}
+	{{ mc.breadcrumbs_separatore() }}
+	<a>Brands</a>
+</div>
+
+<h1>Brands</h1>
+
+<div class="list-azienda">
+	<div class="clear">
+{% for item in listAzienda %}
+	<div class="item-azienda">
+		<div class="item-azienda-inner">
+			<a href="{{ item.url }}"><img src="{{ item.imageUrl('300x300') }}" alt="{{ item.get('nome') }}"></a>
+		</div>
+	</div>
+{% endfor %}
+	</div>
+</div>

@@ -1,0 +1,29 @@
+{% set _lblm = _h.labels.get('my') %}
+{% set _lblf = _h.labels.get('form') %}
+{% set _lblg = _h.labels.get('global') %}
+<h2>{{ _lblm.title_seleziona_cliente }}</h2>
+
+<form id="pagina">
+	<div class="field-text">
+		{{ _lblm.seleziona_cliente }}
+	</div>
+
+	<div class="form-error-message"></div>
+	<div class="field-line">
+		<div class="field">
+			<label>{{ _lblf.field_cliente }}</label>
+			<select name="id_cliente" class="valida-required h-field-combo" onchange="">
+			<option value=""></option>
+			{% for cliente in list_clienti %}
+			<option value="{{ cliente.id }}"{% if _h.session.params.user.speciale or _h.session.params.user.cliente_agente.id == cliente.id %} selected="true"{% endif %}>[{{ cliente.get('e_mail') }}] {{ cliente.get('nome') }} {{ cliente.get('cognome') }}</option>
+			{% endfor %}		
+			</select>
+		</div>
+	</div>
+	<div class="field-text-obbligatori">{{ _lblf.campi_obbligatori }}</div>
+	<div class="field-button field-button-left">
+		<a class="button-red button submit-form" href="javascript:void(0)" title="{{ btn }}" data-action='{"url": "{{ _h.url('account/my/agente/ex-seleziona-cliente') }}", "onComplete": {"type": "url", "url": "{{_h.url('index') }}"}}'><span>{{ _lblm.btn_seleziona }}</span></a>
+		<a class="button button-gray" href="{{ _h.url('/account/my/agente/nuovo-cliente') }}"><span>{{ _lblg.btn_nuovo_cliente }}</span></a>
+	</div>
+
+</form>

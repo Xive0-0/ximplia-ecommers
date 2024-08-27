@@ -1,0 +1,214 @@
+input, button, select, textarea {
+    font-family: 'Grandis', sans-serif;
+	font-weight: 300;
+}
+.field {
+	box-shadow: none;
+	border-radius: 6px;
+	background: #fff;
+	outline: none;
+	border-color: #fff;
+	height: 48px;
+	line-height: 48px;
+}
+.modal-body .field,
+.checkout-main .field,
+.box-login .field {
+	background: #ebebeb;
+	outline: none;
+	border-color: #ebebeb;
+}
+.obbligatorio,
+.field label span {
+	color: #ed1c24;
+}
+.field select {
+	padding: 6px 6px 0 6px;
+	height: 48px;
+	color: #202020;
+}
+.sub-menu-toolbar .field select {
+	color: #fff;
+}
+.focus.field{
+	border: 1px solid #fff;
+}
+.fieldset-image {
+	position: relative;
+	display: flex;
+	flex-flow: row;
+	justify-content: center;
+	align-items: center;
+	border-top-left-radius: 24px;
+	border-bottom-left-radius: 24px;
+}
+.fieldset-box {
+	border: 1px solid #fff;
+	background: #fff;
+	border-radius: 24px;
+}
+.modal .fieldset-box {
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+}
+.modal-body .button-facebook:hover,
+.modal-body .button-facebook {
+	background-position-x: 33%;
+}
+.touch .field-checkbox-check .checkbox,
+.checkbox {
+	width: 17px;
+	height: 17px;
+	background-image: url('../img/checkbox-square.png');
+	float: left;
+	position: relative;
+	cursor: pointer;
+	margin-right: 5px;
+}
+.touch .checkbox-label span,
+.checkbox-label span {
+	display: block;
+	margin-left: 30px;
+}
+.touch .field-checkbox-check .checkbox-label {
+	line-height: normal;
+}
+.touch .checkbox-label,
+.checkbox-label {
+	width: 100%;
+	padding-top: 4px;
+	float: left;
+	margin-left: -30px;
+	position: relative;
+	cursor: pointer;
+}
+.field-line-checkbox:before,
+.field-line-checkbox:after {
+	content: '';
+    display: table;
+    line-height: 0;
+	clear: both;
+}
+.field select {
+	color: #61646b;
+}
+.field.keypress,
+.field.focus {
+	border: 1px solid #797979;
+}
+.field.focus label {
+	color: #797979;
+}
+.field-error .field {
+	border: 1px solid #ed1c24;
+}
+.field-error .field:after {
+	content: ' ';
+	background: url('../img/ico-errore.png');
+	background-size: 16px;
+	position: absolute;
+	top: 50%;
+	right: 10px;
+	margin-top: -8px;
+	width: 16px;
+	height: 16px;
+	z-index: 10;
+}
+.field input, 
+.field textarea {
+	left: 10px;
+}
+
+.form-error-message {
+	color: #ed1c24;
+}
+.error-text {
+	border: none;
+	color: #ed1c24;
+	font-size: 10px;
+	box-shadow: none;
+	margin-top: 0;
+}
+.error-text:before {
+    display: none;
+}
+.fieldset-box {
+	background: #fff;
+	border: 1px solid transparent;
+	padding: 0;
+}
+.button {
+	height: 30px;
+	line-height: 30px;
+	font-size: 14px;
+}
+
+.button-facebook:hover {
+	background-color: #61646b;
+}
+.message-wrapper-confirm {
+	background: #69ac48;
+}
+.message-wrapper-error {
+	background: #ed1c24;
+}
+
+.field label {
+	color: #797979;
+	top: 6px;
+	left: 12px;
+}
+.keypress label,
+.focus label{
+	top: 0;
+	height: 14px;
+	line-height: 14px;
+	font-size: 9px;
+}
+.field-error .focus.keypress label,
+.field-error .keypress label,
+.field-error .focus label
+.field-error label{
+	color: #ed1c24;
+}
+.focus.keypress label {
+	color: #797979;
+}
+.field-line-value label{
+	color: #797979;
+}
+.field-text-registrazione,
+.field-text-social {
+	display: none;
+}
+.field-text-email {
+	font-weight: bold;
+	text-transform: uppercase;
+	margin-bottom: 30px;
+}
+.field-button-social {
+	margin-bottom: 30px;
+}
+.field-button-right {
+	text-align: left;
+}
+.field-button-right .button {
+	margin-left: 0;
+	margin-right: 10px;
+}
+.field-text-dimenticato-password {
+	display: none;
+}
+.field-text-servizio-clienti,
+.field-text-dimenticato-password.field-text-dimenticato-password-after {
+	display: block;
+	margin-top: 15px;
+}
+.field-text-servizio-clienti a,
+.field-text-dimenticato-password-after a {
+	color: #797979;
+}
+.field-text-servizio-clienti a:hover,
+.field-text-dimenticato-password-after a:hover {
+	color: #797979;
+}

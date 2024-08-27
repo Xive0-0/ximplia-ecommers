@@ -1,0 +1,28 @@
+{% set _lbl = _h.labels('email', lang) %}
+{% import _h.template('_macro.html') as mc %}
+
+
+
+<p style="{{ mc.style_fontBase() }}">{{ _lbl.ciao }} {{ cliente.nome }}</p>
+<p style="{{ mc.style_fontBase() }}">{{ _lbl.testo_compleanno_cliente }}</p>
+
+{% if codice_sconto %}
+<p style="{{ mc.style_fontBase() }}">{{ _lbl.utilizza_codice_sconto_simple }}</p>
+<p style="{{ mc.style_fontTitolo() }};{{ mc.style_link() }};text-align:center"><strong>{{ codice_sconto.codice }}</strong></p>
+	{% if codice_sconto.valido_entro != '' %}
+	<p style="{{ mc.style_fontBase() }};"><em>{{ _lbl.codice_sconto_valido_fino_a }}: {{ codice_sconto.valido_entro }}</em></p>
+	{% endif %}
+	{% if codice_sconto.acquisto_minimo != '' %}
+	<p style="{{ mc.style_fontBase() }};"><em>{{ _lbl.codice_sconto_acquisto_minimo }}: {{ codice_sconto.acquisto_minimo }}</em></p>
+	{% endif %}
+	<p style="{{ mc.style_fontBase() }};"><em>{{ _lbl.codice_sconto_descrizione }}: <strong>{{ codice_sconto.valore }} {% if codice_sconto.tipo == 1 or codice_sconto.tipo == 2 %}%{% else %}{% endif %}</strong></em></p>
+	<p style="{{ mc.style_fontBase() }};"><em>
+	{% if codice_sconto.riutilizzabile %}
+	{{ _lbl.codice_sconto_riutilizzabile }}
+	{% else %}
+	{{ _lbl.codice_sconto_non_riutilizzabile }}
+	{% endif %}
+	</em></p>
+{% endif %}
+
+

@@ -1,0 +1,90 @@
+{% set _lblm = _h.labels.get('my') %}
+{% set _lblf = _h.labels.get('form') %}
+
+<h2>{{ _lblm.title_privacy_policy }}</h2>
+
+<form id="pagina">
+	<div class="field-line-checkbox">
+		<div class="field-checkbox-description">
+			{{ _lblm.descr_abilita_notifiche_generiche }}
+		</div>
+		
+		{% set cssClass = '' %}
+		{% set value = '' %}
+		{% if notifiche_generiche %} 
+			{% set cssClass = ' checkbox-checked' %}
+			{% set value = 1 %}
+		{% endif %}
+		<div class="field-checkbox-check">
+			<span class="checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="notifiche_generiche" value="{{ value }}"></span>
+			<span class="checkbox-label"><span>{{ _lblm.abilita_notifiche_generiche }}</span></span>
+		</div>
+	</div>
+	<div class="field-button field-button-left">
+		<a class="button-red button submit-form" href="javascript:void(0)" title="{{ _lblf.btn_salva }}" data-action='{"url": "{{ _h.url('account/my/terms/ex-modifica-notifiche-generiche') }}", "onComplete": {"type": "show", "show": "#conferma_pagina", "hide": "#pagina"}}'><span>{{ _lblf.btn_salva }}</span></a>
+	</div>
+
+</form>
+<div id="conferma_pagina" class="hide-block">
+	<p>{{ _lblm.descr_conf_abilita_notifiche_generiche }}</p>
+</div>
+<br><br>
+
+<table class="table-list table-list-my" cellpadding="0" cellspacing="0" border="0">
+<tr>
+	<th width="40%">{{ _lblm.contratto }}</th>
+	<th width="40%">{{ _lblm.contratto_stato }}</th>
+	<th width="20%"></th>
+</tr>
+{% for item in list %}
+<tr data-id="{{ item.id }}">
+	<td>
+		<div><a href="{{ _h.url('account/my/terms/page') }}?id={{ item.id }}">{{ item.get('titolo') }}</a></div>
+		<div><em>{{ _lblm.versione }}</em> {{ item.get('versione') }}</div>
+		<div><em>{{ _lblm.inserita_il }}</em> {{ item.getDateTime('data_inserimento') }}</div>
+	</td>
+	<td>
+		<div><em>{{ _lblm.stato_azione }}</em> 
+		{% if item.get('stato') %}
+			{{ _lblm.stato_azione_accettato|upper }}
+		{% else %}
+			{{ _lblm.stato_azione_non_accettato|upper }}
+		{% endif %}</div>
+		<div><em>{{ _lblm.effettuato_il }}</em> {{ item.getDateTime('data_azione') }}</div>
+	</td>
+	<td>
+		<div><a href="{{ _h.url('account/my/terms/page') }}?id={{ item.id }}">{{ _lblm.btn_visualizza }}</a></div>
+		{% if item.get('contratto') == 'marketing_privacy' or item.get('contratto') == 'profile_privacy' %}
+		<div><a href="{{ _h.url('account/my/terms/update') }}?type={{ item.get('contratto') }}">{{ _lblm.btn_modifica }}</a></div>
+		{% endif %}
+	</td>
+</tr>
+{% endfor %}
+</table>
+
+{% if list_da_accettare|length > 0 %}
+<br><br>
+
+<table class="table-list table-list-my" cellpadding="0" cellspacing="0" border="0">
+<tr>
+	<th width="40%">{{ _lblm.contratto }}</th>
+	<th width="40%">{{ _lblm.contratto_stato }}</th>
+	<th width="20%"></th>
+</tr>
+{% for item in list_da_accettare %}
+<tr data-id="{{ item.id }}">
+	<td>
+		<div><a href="{{ _h.url('account/my/terms/page') }}?id={{ item.id }}">{{ item.get('titolo') }}</a></div>
+		<div><em>{{ _lblm.versione }}</em> {{ item.get('versione') }}</div>
+		<div><em>{{ _lblm.inserita_il }}</em> {{ item.getDateTime('data_inserimento') }}</div>
+	</td>
+	<td>
+		{{ _lblm.stato_da_accettare|upper }}
+	</td>
+	<td>
+		<div><a href="{{ _h.url('account/my/terms/update') }}?type={{ item.get('contratto') }}">{{ _lblm.btn_modifica }}</a></div>
+	</td>
+</tr>
+{% endfor %}
+</table>
+{% endif %}

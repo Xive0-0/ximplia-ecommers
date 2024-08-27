@@ -1,0 +1,12 @@
+{% import _h.template('manager/_macro.html') as mc %}
+{{ mc.index_page_header(_h, 'Landing Page', 'landingpage') }}
+	
+	{{ mc.navButtonNew(_h, 'nuova', 'landingpage') }}
+	{{ mc.navButtonUpdateLang(_h, 'modifica', 'landingpage') }}
+	{{ mc.navButtonDelete(_h, 'elimina', 'landingpage') }}
+	{{ mc.navSeparatore() }}
+	{{ mc.navButton(_h, 'esporta dati', 'disk', 'click', 'h-action-download', '{"select": {"from":"#h-layout-center-content", "check": 1, "errorMessage": "Selezionare una voce"}, "url": "' ~ _h.url('manager/myarea/landingpage/export') ~ '"}') }}
+	{{ mc.navSeparatore() }}
+	{{ mc.navButtonMetaInfo(_h, 'landingpage') }}
+	
+{{ mc.index_page_footer(_h, result, 'landingpage') }}

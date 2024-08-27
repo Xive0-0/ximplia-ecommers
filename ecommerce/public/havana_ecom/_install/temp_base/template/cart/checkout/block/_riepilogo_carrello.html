@@ -1,0 +1,83 @@
+{% import _h.template('_macro.html') as mc %}
+{% set _lblc = _h.labels.get('checkout') %}
+
+<div class="riepilogo-cart">
+	<div class="header show"><span>{{ _lblc.riepilogo }}</span></div>
+	<div class="body">
+		<div class="riepilogo-main">
+			<div class="riepilogo-dati-carrello">
+			{% if cart.add_iva == '' and (_h.session.params.user.prezzo_senza_iva or _h.config('prezzi_senza_iva', false)) %}
+				<div class="label"><em>{{ _lblc.tot_imponibile }}:</em><span>{{ _h.util.valua(cart.total_articoli_imponibile, cart.currency) }}</span></div>
+				<div class="label"><em>{{ _lblc.iva_articoli }}:</em><span>{{ _h.util.valua(cart.total_articoli_iva, cart.currency) }}</span></div>
+			{% else %}
+				<div class="label"><em>{{ _lblc.tot_articoli }}:</em><span>{{ _h.util.valua(cart.total_articoli, cart.currency) }}</span></div>
+			{% endif %}
+			{% if not(cart.solo_digitali) %}
+				<div class="label"><em>{{ _lblc.tot_spedizione }}:</em><span>{{ _h.util.valua(cart.total_spedizione + cart.total_spedizione_opzione, cart.currency) }}</span></div>
+				{% if cart.total_pagamento > 0 %}
+				<div class="label"><em>{{ _lblc.tot_opz_pagamento }}:</em><span>{{ _h.util.valua(cart.total_pagamento, cart.currency) }}</span></div>
+				{% endif %}
+			{% endif %}
+			{% if cart.add_iva == '' and (_h.session.params.user.prezzo_senza_iva or _h.config('prezzi_senza_iva', false)) %}			
+				{% if cart.total_sconto_imponibile > 0 %}
+				<div class="label"><em>{{ _lblc.sconto_imponibile }}:</em><span>- {{ _h.util.valua(cart.total_sconto_imponibile, cart.currency) }}</span></div>
+				<div class="label"><em>{{ _lblc.sconto_iva }}:</em><span>- {{ _h.util.valua(cart.total_sconto_iva, cart.currency) }}</span></div>
+				{% endif %}
+			{% else %}
+				{% if cart.total_sconto > 0 %}
+				<div class="label"><em>{{ _lblc.sconto_gift }}:</em><span>- {{ _h.util.valua(cart.total_sconto, cart.currency) }}</span></div>
+				{% endif %}
+			{% endif %}
+				<div class="label label-total"><em>{{ _lblc.totale }}:</em><span>{{ _h.util.valua(cart.total_ordine, cart.currency) }}</span></div>
+				{% if cart.add_iva != '' %}
+				<div class="label label-small">
+					{{ cart.nazione_esenzione_legge }}
+				</div>
+				{% endif %}
+			</div>
+			<div class="riepilogo-item-carrello">
+				{% set width = cart.list|length * 165 %}
+				<div class="riepilogo-item-list" style="width: {{ width }}px">
+			{% set iva = true %}
+			{% if cart.add_iva == '' and (_h.session.params.user.prezzo_senza_iva or _h.config('prezzi_senza_iva', false)) %}
+				{% set iva = false %}
+			{% endif %}
+				{% for art in cart.list %}
+				<div class="item-carrello" data-id="{{ art.item.id }}">
+					{{ mc.item_articolo_carrello_riepilogo(_h, art) }}
+					<div class="item-carrello-price">
+						<div class="item-carrello-price-details">
+							<div class="price item-buy-price">{{ art.item.prezzo('e', iva) }}</div>			
+							{% if art.item.isPacchetto %}
+							<em>{{ art.item.nomePacchettoApplicato }}</em>
+							{% elseif art.item.isSconto %}
+							<div class="price-old">{{ art.item.prezzoOriginale('e', iva) }}</div>
+							{% endif %}
+							{% if cart.add_iva == '' and (_h.session.params.user.prezzo_senza_iva or _h.config('prezzi_senza_iva', false)) %}
+							<em>{{ _lblc.prezzo_iva_escl_small }}</em>
+							{% endif %}
+						</div>
+						<div class="item-carrello-price-total">x <span class="item-buy-qta">{{ art.qta }}</span><strong>
+						{% if cart.add_iva == '' and (_h.session.params.user.prezzo_senza_iva or _h.config('prezzi_senza_iva', false)) %}
+						{{ _h.util.valua(art.total_imponibile, cart.currency) }}
+						{% else %}
+						{{ _h.util.valua(art.total, cart.currency) }}
+						{% endif %}
+						</strong></div>
+					</div>
+				</div>
+				{% endfor %}
+				</div>
+			</div>
+		</div>
+		<div class="clear riepilogo-footer">
+			<div class="riepilogo-dati-carrello">
+				<a href="javascript:void(0)" class="action-page" data-page="3" title="{{ _lblc.btn_modifica_carrello }}">{{ _lblc.btn_modifica_carrello }}</a>
+			</div>
+			<div class="riepilogo-item-carrello">
+				<div class="label"><em>{{ _lblc.email_riferimento }}:</em><span>{{ e_mail }}</span><a href="javascript:void(0)" class="action-page" data-page="1">{{ _lblc.btn_modifica }}</a></div>
+				<div class="label" {% if cart.solo_digitali %}style="display: none;"{% endif %}><em>{{ _lblc.nazione_destinazione }}:</em><span>{{ nazione.get('nome') }}</span><a href="javascript:void(0)" class="action-page" data-page="2">{{ _lblc.btn_modifica }}</a></div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,6 @@
+{
+	"on:": [
+		"manager/myarea/fotocamera/brand/list"
+	],
+	"on:view": "manager/myarea/fotocamera/brand/index"
+}

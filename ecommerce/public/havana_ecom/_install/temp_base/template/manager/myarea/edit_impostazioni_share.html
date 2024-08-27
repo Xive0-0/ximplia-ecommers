@@ -1,0 +1,18 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Impostazioni Condivisione') }}
+<p class="field-line field-100">
+	<label>Percentuale incremento articoli Amazon:</label>
+	<input type="text" name="percentuale_incremento_amazon" class="field valida-digitnumber" value="{{ _h.settings.get('percentuale_incremento_amazon') }}"> %
+</p>
+<p class="field-line field-100">
+	<label>Percentuale incremento articoli EBay:</label>
+	<input type="text" name="percentuale_incremento_ebay" class="field valida-digitnumber" value="{{ _h.settings.get('percentuale_incremento_ebay') }}"> %
+</p>
+<p class="field-line field-100">
+	<label>Percentuale incremento articoli Google Shopping:</label>
+	<input type="text" name="percentuale_incremento_google_shopping" class="field valida-digitnumber" value="{{ _h.settings.get('percentuale_incremento_google_shopping') }}"> %
+</p>
+{{ mc.labelCampiObbligatori() }}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/ex-edit-impostazioni-share')) }}	
+

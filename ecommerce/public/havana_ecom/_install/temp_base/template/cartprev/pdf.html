@@ -1,0 +1,261 @@
+{% import _h.template('_macro.html') as mc %}
+{% import _h.template('cartprev/_macro.html') as cmc %}
+{% set _lblc = _h.labels('checkout_preventivo', lang) %}
+
+{% set ordine = ordine.ordine %}
+<div class="stampa thanks" style="width: 100%; margin: 0;">
+<div id="pagina" style="width: 100%; margin: 0;">
+
+{% if ordine %}
+	{% set itenstazione = item.intestazione() %}
+	
+	<table border="0" width="100%">
+	<tr>
+		<td valign="top" width="50%">
+			<strong>Preventivo n. {{ item.get('codice') }}</strong><br>
+			<strong>{{ item.getDate('data_inserimento') }}</strong>
+		</td>
+		<td width="50%">
+			<div class="intestazione">
+			{{ ordine.spedizione.nome }} {{ ordine.spedizione.cognome }}<br>
+			{% if ordine.fattura.nome != ordine.spedizione.nome ~ ' ' ~ ordine.spedizione.cognome %}
+			{{ ordine.fattura.nome }}<br>
+			{% endif %}
+			{% if ordine.fattura.p_iva %}
+				<em class="label">{{ _lblc.p_iva }}</em> {{ ordine.fattura.p_iva }}<br>
+			{% endif %}
+			{% if ordine.fattura.codice_fiscale %}
+				<em class="label">{{ _lblc.codice_fiscale_small }}</em> {{ ordine.fattura.codice_fiscale }}<br>
+			{% endif %}	
+			{% if ordine.spedizione.via %}
+			{{ ordine.spedizione.via }}{% if ordine.spedizione.num_civico %}, {{ ordine.spedizione.num_civico }}{% endif %}<br>
+			{% endif %}
+			{{ ordine.spedizione.cap }}{% if ordine.spedizione.localita %} {{ ordine.spedizione.localita }}{% endif %}{% if ordine.spedizione.provincia %} ({{ ordine.spedizione.provincia }}){% endif %}<br>
+			{{ ordine.spedizione.nazione }}
+			</div>
+		</td>
+	</tr>
+	</table>
+
+	{% set iva = true %}
+	{% if ordine.add_iva == '' and ordine.prezzo_senza_iva %}
+		{% set iva = false %}
+	{% endif %}
+	
+
+	<div class="preventivo-oggetto">{{ itenstazione.oggetto }}</div>
+	<div class="preventivo-testo">{{ itenstazione.testo }}</div>
+	
+{% if itenstazione.validita_offerta or itenstazione.montaggio or 
+	itenstazione.termini_consegna or itenstazione.pagamento or 
+	itenstazione.spedizione or itenstazione.garanzia %}
+	<table border="0" width="100%" class="preventivo-intestazione" cellpadding="0" cellspacing="0">
+	{% if itenstazione.validita_offerta %}
+	<tr><th valign="top">{{ _lblc.field_validita_offerta }}</th><td>{{ itenstazione.validita_offerta }}</td></tr>
+	{% endif %}
+	{% if itenstazione.montaggio %}
+	<tr><th valign="top">{{ _lblc.field_montaggio }}</th><td>{{ itenstazione.montaggio }}</td></tr>
+	{% endif %}
+	{% if itenstazione.termini_consegna %}
+	<tr><th valign="top">{{ _lblc.field_termini_consegna }}</th><td>{{ itenstazione.termini_consegna }}</td></tr>
+	{% endif %}
+	{% if itenstazione.pagamento %}
+	<tr><th valign="top">{{ _lblc.field_pagamento }}</th><td>{{ itenstazione.pagamento }}</td></tr>
+	{% endif %}
+	{% if itenstazione.spedizione %}
+	<tr><th valign="top">{{ _lblc.field_spedizione }}</th><td>{{ itenstazione.spedizione }}</td></tr>
+	{% endif %}
+	{% if itenstazione.garanzia %}
+	<tr><th valign="top">{{ _lblc.field_garanzia }}</th><td>{{ itenstazione.garanzia }}</td></tr>
+	{% endif %}
+	</table>
+{% endif %}
+	
+	<table border="0" width="100%" class="preventivo pb_before" cellpadding="0" cellspacing="0">
+	<tr>
+		<th class="preventivo-image">{{ _lblc.immagine }}</th>
+		<th class="preventivo-codice">{{ _lblc.codice }}</th>
+		<th class="preventivo-descrizione">{{ _lblc.descrizione }}</th>
+		<th class="preventivo-prezzo">{{ _lblc.prezzo }}</th>
+		<th class="preventivo-quantita">{{ _lblc.quantita }}</th>
+		<th class="preventivo-totale">{{ _lblc.totale }}</th>
+	</tr>
+	{% for art in ordine.list_items %}
+	<tr>
+		<td class="preventivo-image"><img style="max-width: 100px;" src="{{ _h.view('html_to_pdf_www_path') }}/images/{{ _h.config('template').web.item_image_dim }}/{{ art.item.image }}"></td>
+		<td class="preventivo-codice">{{ art.item.codice }}</td>
+		<td class="preventivo-descrizione">
+			<strong>{{ art.item.nome }}</strong>
+			{% if art.item.nome_simbolico %}
+				<div>{{ art.item.nome_simbolico }}</div>
+			{% endif %}
+		</td>
+		<td class="preventivo-prezzo">
+			{% if iva %}
+				{% set prezzo_originale = art.item.prezzo_originale %}
+				{% set prezzo = art.item.prezzo %}
+				{% set total = art.total %}
+			{% else %}
+				{% set prezzo_originale = art.item.prezzo_originale_imponibile %}
+				{% set prezzo = art.item.prezzo_imponibile %}
+				{% set total = art.total_imponibile %}
+			{% endif %}
+			{% if art.item.is_sconto %}
+			<span class="price-old">{{ _h.util.valuta(prezzo_originale, ordine.currency) }}</span>
+			{% endif %}
+			<span class="price item-buy-price">{{ _h.util.valuta(prezzo, ordine.currency) }}</span>		
+		</td>
+		<td class="preventivo-quantita">{{ art.qta }}</td>
+		<td class="preventivo-totale">
+			<strong>{{ _h.util.valuta(total, ordine.currency) }}</strong>
+			{% if not(iva) %}
+			<div class="item-carrello-price-iva">+{{ _lblc.iva }} {{ art.item.iva }}%: {{ _h.util.valuta(art.total_iva, ordine.currency) }}</div>
+			{% endif %}		
+		</td>
+	</tr>
+	{% endfor %}
+	{% for art in ordine.list_items_virtuale %}
+	<tr>
+		<td class="preventivo-image">
+			{% if art.item.image %}
+				<img style="max-width: 100px;" src="{{ _h.view('html_to_pdf_www_path') }}/images/prev/{{ _h.config('template').web.temp_image_dim }}/{{ art.item.image }}">
+			{% else %}
+				<img style="max-width: 100px;" src="{{ _h.view('html_to_pdf_www_path') }}/assets/void_image.png" >
+			{% endif %}
+		</td>
+		<td class="preventivo-codice"></td>
+		<td class="preventivo-descrizione">
+			<strong>{{ art.item.nome }}</strong>
+			{% if art.item.note %}
+				<div>{{ art.item.note }}</div>
+			{% endif %}
+		</td>
+		<td class="preventivo-prezzo">
+			{% if iva %}
+				{% set prezzo = art.item.prezzo %}
+				{% set total = art.total %}
+			{% else %}
+				{% set prezzo = art.item.prezzo_imponibile %}
+				{% set total = art.total_imponibile %}
+			{% endif %}
+			<span class="price item-buy-price">{{ _h.util.valuta(prezzo, ordine.currency) }}</span>		
+		</td>
+		<td class="preventivo-quantita">{{ art.qta }}</td>
+		<td class="preventivo-totale">
+			<strong>{{ _h.util.valuta(total, ordine.currency) }}</strong>
+			{% if not(iva) %}
+			<div class="item-carrello-price-iva">+{{ _lblc.iva }} {{ art.item.iva }}%: {{ _h.util.valuta(art.total_iva, ordine.currency) }}</div>
+			{% endif %}		
+		</td>
+	</tr>
+	{% endfor %}
+	{% if itenstazione.sconto %}
+	<tr  class="preventivo-fine-sconto">
+		<td colspan="5">{{ _lblc.field_sconto }}</td>
+		<td class="preventivo-totale">
+			{{ itenstazione.sconto }}
+		</td>
+	</tr>
+	{% endif %}
+	<tr  class="preventivo-fine-totale">
+		<td colspan="5">{{ _lblc.totale }}</td>
+		<td class="preventivo-totale">
+			{% if _h.config('gestione_preventivi_campi_liberi', true) %}
+			{{ itenstazione.totale }}
+			{% else %}
+			{{ _h.util.valuta(itenstazione.totale, ordine.currency) }}
+			{% endif %}
+		</td>
+	</tr>
+	</table>
+	
+	<div class="preventivo-testo">{{ itenstazione.altro_testo }}</div>
+{% endif %}
+
+</div>
+
+<style>	
+.pb_before {
+	page-break-before: always !important;
+}
+.preventivo-oggetto {
+	font-size: 18px;
+	font-weight: bold;
+	margin: 100px 20px;
+}
+.preventivo-testo {
+	font-size: 18px;
+	margin: 100px 20px;
+}
+.preventivo-intestazione {
+	margin-bottom: 100px;
+}
+.preventivo-intestazione th {
+	font-weight: bold;
+	width: 200px;
+}
+.preventivo-intestazione th,
+.preventivo-intestazione td {
+	padding: 20px;
+	border-bottom: 1px solid #ddd;
+	font-size: 18px;
+	text-align: left;
+}
+
+.preventivo-image {
+	width: 110px;
+}
+.preventivo-codice {
+	width: 150px;
+}
+.preventivo-prezzo {
+	width: 100px;
+	text-align: right;
+}
+.preventivo-totale {
+	width: 150px;
+	text-align: right;
+}
+.preventivo-quantita {
+	width: 50px;
+}
+.preventivo {
+	margin: 20px 0;
+	border-right: 1px solid #111111;
+	border-top: 1px solid #111111;
+}
+.preventivo td {
+	padding: 15px;
+	border-left: 1px solid #111111;
+	border-bottom: 1px solid #111111;
+	font-size: 18px;
+}
+.preventivo th {
+	font-size: 14px;
+	padding: 5px;
+	text-align: center;
+	border-left: 1px solid #111111;
+	border-bottom: 1px solid #111111;
+}
+
+.preventivo-fine-sconto td {
+	text-align: right;
+	font-size: 16px;
+}
+.preventivo-fine-totale td {
+	text-align: right;
+	font-weight: bold;
+	font-size: 24px;
+}
+
+.intestazione {
+	border: 1px solid #111111;
+	padding: 20px;
+	border-radius: 10px;
+	font-size: 22px;
+}
+.stampa .item-carrello-details {
+	font-size: 16px;
+	width: 750px;
+}
+</style>

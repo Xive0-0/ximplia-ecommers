@@ -1,0 +1,45 @@
+{% set _lblg = _h.labels.get('global') %}
+
+{% import _h.template('_macro.html') as mc %}
+<div class="col-box-left menu-myarea">
+	<div class="list-subtitle sublist-arrow">{{ _lblg.title_my_account }}</div>
+	<div class="list-box">
+		<ul class="list-menu">
+			{% if _h.session.params.user.tipo == 'agente' %}
+			<li>{{ mc.link(_h, _h.url('/account/my/agente/index'), _lblg.btn_seleziona_cliente) }}</li>
+			<li>{{ mc.link(_h, _h.url('/account/my/agente/nuovo-cliente'), _lblg.btn_nuovo_cliente) }}</li>
+			<li>{{ mc.link(_h, _h.url('/account/my/ordini/index-clienti'), _lblg.btn_miei_ordini) }}</li>
+			{% else %}
+			<li>{{ mc.link(_h, _h.url('/account/my/ordini/index'), _lblg.btn_miei_ordini) }}</li>
+			<li>{{ mc.link(_h, _h.url('/account/my/file/index'), _lblg.btn_miei_files) }}</li>
+				{% if _h.config('gestione_ticket_cliente', false) %}
+				<li>{{ mc.link(_h, _h.url('/account/my/log/index'), _lblg.btn_comunicazioni) }}</li>
+				{% endif %}
+			{% endif %}
+			{% if _h.config('gestione_preventivi', false) %}
+			<li>{{ mc.link(_h, _h.url('/account/my/preventivi/index'), _lblg.btn_miei_preventivi) }}</li>
+			{% endif %}
+			{% if _h.session.params.user.tipo != 'agente' %}
+			<li>{{ mc.link(_h, _h.url('/account/my/preferiti/index'), _lblg.btn_preferiti) }}</li>
+			<li>{{ mc.link(_h, _h.url('/account/my/indirizzi/index'), _lblg.btn_indirizzi_spedizione) }}</li>
+			<li>{{ mc.link(_h, _h.url('/account/my/fatturazione/index'), _lblg.btn_dati_fatturazione) }}</li>
+				{% if _h.settings.get('form_campo_registrazione_nome', '') != '' or 
+					_h.settings.get('form_campo_registrazione_cognome', '') != '' or 
+					_h.settings.get('registrazione_data_nascita', '') != '' or 
+					_h.settings.get('registrazione_anno_nascita', '') != ''%}
+				<li>{{ mc.link(_h, _h.url('/account/my/dati-personali'), _lblg.btn_dati_personali) }}</li>
+				{% endif %}
+			{% endif %}
+			<li>{{ mc.link(_h, _h.url('/account/my/terms/index'), _lblg.btn_termini_accettati) }}</li>
+			<li>{{ mc.link(_h, _h.url('/account/my/modifica-password'), _lblg.btn_modifica_password) }}</li>
+			<li>{{ mc.link(_h, _h.url('/account/my/modifica-email'), _lblg.btn_modifica_email) }}</li>
+			{% if _h.session.params.user.tipo != 'agente' %}
+			<li>{{ mc.link(_h, _h.url('/account/my/elimina-account'), _lblg.btn_elimina_account) }}</li>
+			{% endif %}
+			<li>{{ mc.link(_h, _h.url('/account/logout'), _lblg.btn_esci) }}</li>
+		</ul>
+	</div>
+</div>
+
+<div class="col-box-left-details page-details">
+	<div class="col-box-left-details-inner">

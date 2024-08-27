@@ -1,0 +1,17 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Impostazioni promemoria') }}
+<p class="field-line field-50">
+	<label>Numero giorni anteprima promemoria successivi:</label>
+	<input type="text" name="promemoria_mostra_prossime_attivita" class="field valida-required valida-digitnumber" value="{{ _h.settings.get('promemoria_mostra_prossime_attivita', 1) }}" maxlength="3">
+</p>
+
+{{ mc.checkbox(_h.settings.get('promemoria_abilita_notifica'), 1, 'promemoria_abilita_notifica', 'Invio riepilogo tramite email 1 volta al giorno') }}
+<p class="clear field-line field-400">
+	<label>Invia notifica a questa e-mail:</label>
+	<input type="text" name="promemoria_email_notifica" class="field valida-email" value="{{ _h.settings.get('promemoria_email_notifica') }}" maxlength="100">
+</p>
+
+{{ mc.labelCampiObbligatori() }}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/ex-edit-impostazioni-promemoria')) }}	
+

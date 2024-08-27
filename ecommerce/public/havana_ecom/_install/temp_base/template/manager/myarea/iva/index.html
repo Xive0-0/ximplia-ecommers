@@ -1,0 +1,14 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeaderToolbar(_h, 'Codici IVA', true) }}
+		{{ mc.navButton(_h, 'nuovo codice iva', 'new', 'click', 'h-action-window', '{"type": "layer", "url": "' ~ _h.url('manager/myarea/iva/edit') ~ '", "overlay": true, "width": 500, "height": 350}') }}
+		{{ mc.navButton(_h, 'modifica codice iva', 'update', 'click', 'h-action-selected-open-window', '{"select": {"from":"#iva-content", "check": 1}, "window": {"type": "layer", "url": "' ~ _h.url('manager/myarea/iva/edit') ~ '", "overlay": true, "width": 500, "height": 350}}') }}
+		{{ mc.navButton(_h, 'elimina codice iva', 'delete', 'click', 'h-action-selected-execute', '{"select": {"from":"#iva-content", "check": 1}, "confirm": "Eliminare il codice iva?", "url": "' ~ _h.url('manager/myarea/iva/delete') ~ '", "reload": "#iva-content"}') }}
+{{ mc.slideBoxHeaderToolbarEnd() }}
+
+	<div id="iva-content" data-action='{"url": "{{ _h.url('manager/myarea/iva/list') }}"}'>
+		{% include _h.template('manager/myarea/iva/list.html') %}	
+	</div>
+	</fieldset>		
+</div>
+</form>

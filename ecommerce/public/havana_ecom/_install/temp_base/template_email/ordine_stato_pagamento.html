@@ -1,0 +1,57 @@
+{% set _lbl = _h.labels('email', lang) %}
+{% set _lblc = _h.labels('checkout', lang) %}
+{% import _h.template('_macro.html') as mc %}
+
+<p style="{{ mc.style_fontBase() }}">{{ _lbl.ciao }} <strong>{{ nome }}</strong></p>
+<p style="{{ mc.style_fontBase() }}">{{ _lbl.descr_ti_contattiamo_per_ordine }}: <strong>{{ codice }}</strong></p>
+<p style="{{ mc.style_fontBase() }}">
+{% if stato == 0 %}	
+{{ _lbl.stato_pagamento_0 }}
+{% elseif stato == 1 %}
+{{ _lbl.stato_pagamento_1 }}
+{% elseif stato == 2 %}
+{{ _lbl.stato_pagamento_2 }}
+{% elseif stato == 3 %}
+	{% if contrassegno %}
+	{{ _lbl.stato_pagamento_3_contrassegno }} 
+	{% else %}
+	{{ _lbl.stato_pagamento_3 }} 
+	{% endif %}
+{% elseif stato == 10 %}
+{{ _lbl.stato_pagamento_10 }}
+{% endif %}	
+</strong>
+</p>
+{% if testo %}
+<p style="{{ mc.style_fontBase() }}">{{ testo }}</p>
+{% endif %}
+
+{% if stato == 3 %}
+	{% if ordine.punti_se_registrazione %}
+	<div style="{{ mc.margin() }}">
+		<h2 style="{{ mc.style_h2() }}">{{ _lblc.title_totale_saldo_punti_thanks_registrati }}</h2>
+		{{ mc.punti(_h, lang, ordine.punti_se_registrazione) }}
+		<div style="{{ mc.style_fontBase() }}">{{ _lblc.totale_saldo_punti_thanks_registrati }}</div>
+		<div style="{{ mc.style_fontBase() }}"><a href="{{ _h.xurl('account/registrati', lang, conutry) }}">{{ _lblc.totale_saldo_punti_thanks_registrati_btn_registrazione }}</a></div>
+	</div>
+	{% elseif ordine.punti_attivi %}
+	<div style="{{ mc.margin() }}">
+		<h2 style="{{ mc.style_h2() }}">{{ _lblc.title_totale_saldo_punti_thanks }}</h2>
+		<div style="{{ mc.style_fontBase() }}">{{ _lblc.totale_saldo_punti_thanks_attesa_conferma }}</div>
+		{{ mc.punti(_h, lang, ordine.punti_attivi) }}
+	</div>
+	{% endif %}
+{% endif %}
+
+<div style="{{ mc.margin() }}">
+	<table width="100%" cellspacing="0" cellpadding="0" border="0">
+	<tbody>
+	{{ mc.ordine_spedizione(_h, ordine) }}
+	</tbody>
+	</table>
+	<br>
+	<div style="{{ mc.margin() }}">
+	<h2 style="{{ mc.style_h2() }}">{{ _lble.title_dettagli_ordine }}</h2>
+	{{ mc.ordine_articoli(_h, ordine) }}
+	</div>
+</div>

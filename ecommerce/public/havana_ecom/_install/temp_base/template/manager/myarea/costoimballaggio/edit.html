@@ -1,0 +1,40 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Costo imballaggio') }}
+<input type="hidden" name="id" value="{{ item.id }}">
+
+<div class="field-line field-line-left field-150">
+	<label>Tipo<span>*</span>:</label>
+	<select name="tipo" class="field valida-required">
+	<option></option>
+	{{ mc.listComboOptions([{'id': 'euro', 'text': 'EURO'},
+		{'id': 'percentuale', 'text': '%'}], item.get('tipo')) }}
+	</select>
+</div>
+<div class="field-line field-line-left field-150">
+	<label>Valore<span>*</span>:</label>
+	<input name="valore" class="field valida-required valida-euro" value="{{ item.euro('valore') }}">
+</div>
+<div class="clear"></div>
+<div class="field-line field-line-left field-150">
+	<label>Da euro<span>*</span>:</label>
+	<input name="da_euro" class="field valida-required valida-euro" value="{{ item.euro('da_euro') }}">
+</div>
+<div class="field-line field-line-left field-150">
+	<label>A euro<span>*</span>:</label>
+	<input name="a_euro" class="field valida-required valida-euro" value="{{ item.euro('a_euro') }}">
+</div>
+<div class="clear"></div>
+<div class="field-line field-200">
+	{% if item and item.get('escluso_ritiro_sede') %} 
+		{% set cssClass = ' h-checkbox-checked' %}
+		{% set value = 1 %}
+	{% else %}
+		{% set cssClass = '' %}
+		{% set value = '' %}
+	{% endif %}
+	<div class="h-checkbox-wrapper"><span class="h-checkbox{{ cssClass }}" data-value="1"><input type="hidden" name="escluso_ritiro_sede" value="{{ value }}" /></span> <strong>Escludi in caso di ritiro in sede</strong></div>
+</div>
+
+{{ mc.labelCampiObbligatori() }}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/costoimballaggio/ex-edit'), '"reload": "#costo-imballaggio-content"') }}	

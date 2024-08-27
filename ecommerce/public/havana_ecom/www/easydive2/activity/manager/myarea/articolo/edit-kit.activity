@@ -1,0 +1,12 @@
+{
+	"on:": [
+		{"name": "manager/myarea/listino/list-all", "params": {"list": "listListino"}},
+		"manager/myarea/iva/list-per-nazione",
+		{"name": "manager/myarea/articolo/list-attributo", "params": {"tipo": "kit"}},
+		{"name": "manager/myarea/articolo/load", "check": "({input}[[id]]!=null)"}
+	],
+	"on:view": {
+		"template": "manager/myarea/articolo/edit_kit",
+		"extra": false
+	}
+}

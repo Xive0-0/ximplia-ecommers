@@ -1,0 +1,109 @@
+.btn-index {
+	display: block;
+	height: 80px;
+	float: left;
+	margin: 0;
+	text-align: center;
+	width: 100px;
+}
+.btn-index:hover {
+	background: #e0e0e0;
+}
+.btn-index .icon {
+	margin: 10px 0 5px 0;
+	height: 40px;
+	display: block;
+}
+.btn-index img {
+	height: 40px;
+	width: 40px;
+}
+.btn-index .text {
+	color: #333;
+	text-transform: uppercase;
+}
+
+.statistiche-wrapper {
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	right: 0;
+	overflow: hidden;
+}
+
+.anteprima-promemoria-title {
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;	
+	height: 20px;
+	line-height: 20px;
+	padding: 0 15px;
+	text-transform: uppercase;
+	font-weight: bold;
+	font-size: 10px;
+	color: #fff;
+}
+.anteprima-promemoria-inner {
+	overflow-y: auto;
+	top: 20px;
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	padding: 10px 15px;
+}
+.anteprima-promemoria {
+	position: absolute;
+	bottom: 90px;
+	width: 40%;
+	background: #fff;
+	height: 100px;
+	border: 1px solid transparent;
+	box-shadow: 0 5px 10px rgba(0, 0, 0, 0.45);
+}
+.anteprima-promemoria-oggi {
+	border-color: #ed4747;
+	left: 10px;
+}
+.anteprima-promemoria-prossimi {
+	border-color: #4285f4;
+	right: 10px;
+}
+.anteprima-promemoria-oggi .anteprima-promemoria-title {
+	background-color: #ed4747;
+}
+.anteprima-promemoria-prossimi .anteprima-promemoria-title {
+	background-color: #4285f4;
+}
+.anteprima-promemoria-item {
+	margin-bottom: 15px;
+	border: 1px solid #e5e5e5;
+	padding: 5px 10px;
+}
+.anteprima-promemoria-close {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 20px;
+	height: 20px;
+	background: url('../havana-js/img/icon/ico-close-box.svg') no-repeat center center;
+	cursor: pointer;
+}
+.anteprima-promemoria-item span {
+	font-size: 10px;
+	color: #909090;
+	font-weight: bold;
+	margin-bottom: 5px;
+	display: block;
+}
+.anteprima-promemoria-item p {
+	margin-bottom: 5px;
+	font-size: 12px;
+}
+.anteprima-promemoria-item small {
+	color: #909090;
+	font-size: 10px;
+	display: block;
+}

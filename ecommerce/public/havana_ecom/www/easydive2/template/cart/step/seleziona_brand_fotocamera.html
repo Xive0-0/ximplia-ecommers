@@ -1,0 +1,18 @@
+{% set _lbl = _h.labels.get('step_acquisto') %}
+<div class="step{% if _h.input('id_brand_fotocamera', '') == '' %} hide-button{% endif %}" data-step="">
+	<h3>{{ _lbl.step_brand_fotocamera_titolo }}</h3>
+	<p class="evidenzia">{{ _lbl.step_brand_fotocamera_descrizione }}</p>
+	<div class="field-brand">
+		{% for elem in list %}
+			<div class="field-brand-item next" data-callback="param_brand_fotocamera" data-url="seleziona-fotocamera" value="{{ elem.id }}">
+				<img src="/assets/website/img/brand/{{ elem.img }}">
+				<strong>{{ elem.nome }}</strong>
+				<span>&#x276F;</span>
+			</div>
+		{% endfor %}
+	</div>
+	
+	<div class="clear step-bottombar">
+		<a class="item-acquista-step-close">{{ _lbl.btn_annulla }}</a>
+	</div>
+</div>

@@ -1,0 +1,35 @@
+{% import _h.template('_macro.html') as mc %}
+{% import _h.template('cartprev/_macro.html') as cmc %}
+{% set _lblc = _h.labels.get('checkout_preventivo') %}
+
+{% set ordine = ordine.ordine %}
+<div class="thanks">
+<div id="pagina">
+
+{% if not(_h.config('gestione_preventivi_semplice', false)) and _h.session.params.user.speciale %}
+	{% set list = _h.config('enabled_languages') %}
+	{% if not(list) or list|length == 1 %}
+	<div class="riepilogo">
+		<a href="{{ _h.url('cartprev/stampa') }}?id={{ item.id }}" class="button button-red btn-stampa-preventivo" target="_blank">{{ _lblc.stampa_preventivo }}</a>
+	</div>
+	{% else %}
+		{% for lang in list %}
+		<div class="riepilogo">
+			<a href="{{ _h.url('cartprev/stampa') }}?lang={{ lang }}&id={{ item.id }}" class="button button-red btn-stampa-preventivo" target="_blank">{{ _lblc.stampa_preventivo }} {{ lang|upper }}</a>
+		</div>
+		{% endfor %}
+	{% endif %}
+{% else %}
+<div class="riepilogo">
+	<h2>{{ _lblc.title_il_tuo_preventivo }}</h2>
+	<div>{{ _lblc.descr_riferimento_preventivo }}: <strong class="codice">{{ codice }}</strong></div>
+</div>
+{% endif %}
+
+{% if ordine %}
+
+	{{ cmc.riepilogo_ordine(_h, ordine) }}
+
+{% endif %}
+
+</div>

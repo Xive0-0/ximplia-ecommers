@@ -1,0 +1,10 @@
+{
+	"on:begin": [
+		{"name": "cart/step/list-relazione-item", "params": {"tipo": "50", "list": "listLuci"}},
+		{"name": "cart/step/list-relazione-item", "params": {"tipo": "51", "list": "listFlash"}}
+	],
+	"on:view": {
+		"template": "cart/step/seleziona_luci_flash",
+		"extra": false
+	}
+}

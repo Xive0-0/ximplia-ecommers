@@ -1,0 +1,22 @@
+{% import _h.template('manager/_macro_items.html') as mci %}
+<table class="h-list item-autoload-total h-fixed-header-table h-list-slingle-selection" cellpadding="0" cellspacing="0" border="0" data-total="{{ result.total }}">
+<thead>
+<tr class="h-list-header">
+	<th style="width: 10px; padding: 0; overflow: hidden;">&nbsp;</th>
+	<th style="width: 20px;">&nbsp;</th>
+	<th style="width: 20px;">&nbsp;</th>
+	<th style="width: 80px;" data-order="id" data-order-type="{{ result.order_type_id }}">ID</th>
+	<th style="width: 100px;">&nbsp;</th>
+	<th style="width: 50px;" data-order="lettera" data-order-type="{{ result.order_type_lettera }}">Let.</th>
+	<th style="width: 50px;" data-order="ordine" data-order-type="{{ result.order_type_ordine }}">Peso</th>
+	<th style="width: 150px;" data-order="data_dal" data-order-type="{{ result.order_type_data_dal }}">Dal/Al</th>
+	<th data-order="titolo" data-order-type="{{ result.order_type_titolo }}">Titolo</th>
+	<th style="width: 120px;" data-order="data_modifica" data-order-type="{{ result.order_type_data_modifica }}">Data modifica</th>
+</tr>
+</thead>
+<tbody>
+{% for item in result.list %}		
+	{{ mci.item_evento_news(_h, item) }}
+{% endfor %}
+</tbody>
+</table>

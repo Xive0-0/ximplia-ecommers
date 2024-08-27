@@ -1,0 +1,48 @@
+{% import _h.template('manager/_macro.html') as mc %}
+{% import _h.template('manager/_macro_items.html') as mci %}
+{% import _h.template('manager/_my_macro.html') as mymc %}
+
+{% include _h.template('manager/myarea/_navigation.html') %}
+
+<div id="h-layout-center" class="h-layout h-layout-middle h-layout-center h-layout-index" {% if _h.session.params.user.accesso >= 3 %}data-action='{"show": ["header", "navigation", "details-right"]}' style="right: 550px;"{% else %}data-action='{"show": ["header", "navigation"]}'{% endif %}>
+	<div class="h-layout-content-wrapper">
+	
+	{% if _h.session.params.user.accesso >= 3 and _h.session.params.user.abilitato_ordini and _h.session.params.user.abilitato_statistiche %}
+		<div class="statistiche-wrapper">
+			<div class="statistiche block-tab">
+				<div class="block-tab-header">
+					<div data-block-tab="mese_01">{{ statistiche.mese_01.label }}</div>
+					<div data-block-tab="mese_02">{{ statistiche.mese_02.label }}</div>
+					<div data-block-tab="mese_03">{{ statistiche.mese_03.label }}</div>
+					<div data-block-tab="anno_01">{{ statistiche.anno_01.label }}</div>
+					<div data-block-tab="anno_02">{{ statistiche.anno_02.label }}</div>
+					<div data-block-tab="tutto">{{ statistiche.tutto.label }}</div>
+					<a href="{{ _h.url('manager/myarea/statistiche/index') }}" data-block-tab="">Statistiche</a>
+				</div>
+				<div data-block-tab-body="mese_01" class="h-load block-tab-body" data-action='{"url": "{{ _h.url('manager/myarea/statistiche/periodo') }}", "check_is_load": true, "params": {"cache": "{{ statistiche.mese_01.cache }}"}}'></div>
+				<div data-block-tab-body="mese_02" class="h-load block-tab-body" data-action='{"url": "{{ _h.url('manager/myarea/statistiche/periodo') }}", "only_manual": true, "check_is_load": true, "params": {"cache": "{{ statistiche.mese_02.cache }}"}}'></div>
+				<div data-block-tab-body="mese_03" class="h-load block-tab-body" data-action='{"url": "{{ _h.url('manager/myarea/statistiche/periodo') }}", "only_manual": true, "check_is_load": true, "params": {"cache": "{{ statistiche.mese_03.cache }}"}}'></div>
+				<div data-block-tab-body="anno_01" class="h-load block-tab-body" data-action='{"url": "{{ _h.url('manager/myarea/statistiche/periodo') }}", "only_manual": true, "check_is_load": true, "params": {"cache": "{{ statistiche.anno_01.cache }}"}}'></div>
+				<div data-block-tab-body="anno_02" class="h-load block-tab-body" data-action='{"url": "{{ _h.url('manager/myarea/statistiche/periodo') }}", "only_manual": true, "check_is_load": true, "params": {"cache": "{{ statistiche.anno_02.cache }}"}}'></div>
+				<div data-block-tab-body="anno_03" class="h-load block-tab-body" data-action='{"url": "{{ _h.url('manager/myarea/statistiche/periodo') }}", "only_manual": true, "check_is_load": true, "params": {"cache": "{{ statistiche.anno_03.cache }}"}}'></div>
+			</div>
+		</div>
+	{% else %}
+	<div class="h-nav-menu-action" style="position: relative; overflow: normal; top: 0;">
+		{{ mc.navMenuActions(_h, '', true) }}
+	</div>
+	{% endif %}
+	
+	</div>
+	
+	{% if _h.session.params.user.accesso >= 5 %}
+		{{ mc.anteprimaPromemoria(_h, listPromemoriaOggi, 'oggi', 'oggi') }}
+		{{ mc.anteprimaPromemoria(_h, listPromemoriaProssimi, 'prossimi', 'prossimi giorni') }}
+	{% endif %}
+	{% include _h.template('manager/myarea/_bottombar.html') %}
+</div>
+
+
+{% if _h.session.params.user.accesso >= 3 and _h.session.params.user.abilitato_ordini %}
+	{% include _h.template('manager/myarea/_ultimi_ordini.html') %}
+{% endif %}

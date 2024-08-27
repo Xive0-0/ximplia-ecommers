@@ -1,0 +1,14 @@
+{
+	"put": {
+		"view": [
+			{"mymetainfo": true}
+		]
+	},
+	"on:": [
+		"item-easydivepoint",
+		{"name": "list-item-easydivepoint", "params": {"number": 4, "list": "listBlogUltimi"}},
+		{"name": "item-tipologia-articolo", "params": {"item": "collezione", "type": "categoria_easydivepoint", "first_level": false}},
+		{"name": "list-hreflang", "params": {"tipo": "ed_easydivepoint"}}
+	],
+	"on:view": "item_easydivepoint"
+}

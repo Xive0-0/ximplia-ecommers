@@ -1,0 +1,6 @@
+{
+	"on:view": {
+		"template": "cart/step/co_riepilogo_acquista",
+		"extra": false
+	}
+}

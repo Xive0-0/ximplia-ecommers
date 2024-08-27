@@ -1,0 +1,9 @@
+{
+	"on:": [
+		"manager/elenco-articoli"
+	],
+	"on:view": {
+		"template": "manager/elenco_articoli",
+		"extra": false
+	}
+}

@@ -1,0 +1,27 @@
+	
+	<div id="cart-details"{% if _h.config('gestione_preventivi', false) and (_h.session.params.user.speciale or (_h.session.isAuth and _h.config('gestione_preventivi_autonoma_utente', false))) %} class="cart-details-preventivo"{% endif%}>
+		<div class="cart-items-list">
+		{{ cart.details }}
+		</div>
+		<div class="cart-items-list-loading"></div>
+		<div class="cart-toolbar-total">
+		<div class="cart-toolbar-total-inner">
+			{% if (_h.session.params.user.prezzo_senza_iva or _h.config('prezzi_senza_iva', false)) %}
+				<span class="total"><em>{{ _lblc.totale_iva_esclusa_small }}:</em> 
+			{% else %}
+				<span class="total"><em>{{ _lblc.totale }}:</em> 
+			{% endif %}
+				<span class="cart-total-price">{{ _h.util.valuta(cart.total, cart.currency) }}</span>
+				<span class="cart-total-price-imponibile">{{ _h.util.valuta(cart.total_imponibile, cart.currency) }}</span>
+			</span>
+			<span class="cart-total-number"><strong class="item-number">{{ cart.number_qta }}</strong><strong class="item-number-items">{{ cart.number }}</strong> {{ _lblc.articoli_nel_carrello }}</span>
+		</div>
+		</div>
+		<div class="cart-toolbar">
+			<a href="javascript:void(0)" title="{{ _lblc.btn_vuota_carrello }}" class="btn-vuota-carrello">{{ _lblc.btn_vuota_carrello }}</a>
+			<a href="{{ _h.url('cart/checkout/index') }}" title="{{ _lblc.btn_vai_alla_cassa }}" class="btn-vai-alla-cassa">{{ _lblc.btn_vai_alla_cassa }}</a>
+			{% if _h.config('gestione_preventivi', false) and (_h.session.params.user.speciale or (_h.session.isAuth and _h.config('gestione_preventivi_autonoma_utente', false))) %}
+			<a href="{{ _h.url('cart/checkout/to-prev') }}" title="{{ _lblcp.btn_crea_preventivo }}" class="btn-vai-alla-cassa-trasforma-preventivo">{{ _lblcp.btn_crea_preventivo }}</a>
+			{% endif %}
+		</div>
+	</div>

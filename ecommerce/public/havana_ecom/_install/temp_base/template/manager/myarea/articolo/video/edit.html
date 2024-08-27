@@ -1,0 +1,42 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Video') }}
+{% if item %}
+	<input type="hidden" name="id_articolo" value="{{ item.get('id_entita') }}">
+	<input type="hidden" name="id" value="{{ item.id }}">
+	{% set ordine = item.get('ordine', 0) %}
+{% else %}
+	<input type="hidden" name="id_articolo" value="{{ _h.input('id_articolo') }}">
+	{% set ordine = 0 %}
+{% endif %}
+<p class="field-line field-100 field-line-left">
+	<label>Peso/posizione<span>*</span>:</label>
+	<input type="text" name="ordine" class="field valida-required valida-digitnumber" value="{{ ordine }}">
+</p>
+<p class="field-line field-100 field-line-left">
+	<label>Codice:</label>
+	<input type="text" name="codice" class="field" value="{{ item.get('codice') }}">
+</p>
+<p class="field-line field-100 field-line-left">
+	<label>Lingua<span>*</span>:</label>
+	<select name="lang" class="field valida-required">
+	{% for l in listLang %}
+	<option value="{{ l }}" {% if l == item.get('lang') %}selected="true"{% endif %}>{{ l|upper }}</option>
+	{% endfor %}
+	</select>
+</p>
+<div class="clear"></div>
+<p class="field-line field-400">
+	<label>URL embed video youtube o video<span>*</span>:</label>
+	<input type="text" name="url" class="field valida-required valida-urlyoutube" value="{{ item.get('url') }}">
+</p>
+<p class="field-line field-400">
+	<label>Nome/Titolo<span>*</span>:</label>
+	<input type="text" name="nome" class="field valida-required" value="{{ item.get('nome') }}" maxlength="250">
+</p>
+<div class="field-line field-400">
+	<label>Descrizione:</label>
+	<textarea name="descrizione" class="visual-editor">{{ item.get('descrizione') }}</textarea>
+</div>
+{{ mc.labelCampiObbligatori() }}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/articolo/video/ex-edit'), '"reload": "#video-content"') }}	

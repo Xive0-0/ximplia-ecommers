@@ -1,0 +1,105 @@
+{% import _h.template('_macro.html') as mc %}
+{% set _lblg = _h.labels.get('global') %}
+{% set _lblf = _h.labels.get('form') %}
+
+{{ mc.banner_header(listBanner['6'], _lblg.title_contatti) }}
+
+<h1>{{ _lblg.title_contatti }}</h1>
+
+{% if testo %}
+	<div class="html col-margin">{{ testo.getWithMerge('testo') }}</div>
+{% endif %}
+
+<div class="col-margin">
+	<div class="col-box-left">
+		<ul class="menu-left">
+		<li>{{ mc.link(_h, _h.xurl('servizio-clienti?page=termini_condizioni'), mapPagine.termini_condizioni.get('titolo'), null, (_h.input('page', '') == 'termini_condizioni')) }}</li>
+		<li>{{ mc.link(_h, _h.xurl('servizio-clienti?page=spedizioni'), mapPagine.spedizioni.get('titolo'), null, (_h.input('page', '') == 'spedizioni')) }}</li>
+		<li>{{ mc.link(_h, _h.xurl('servizio-clienti?page=privacy'), mapPagine.privacy.get('titolo'), null, (_h.input('page', '') == 'privacy')) }}</li>
+		<li>{{ mc.link(_h, _h.xurl('servizio-clienti?page=cookie_policy'), mapPagine.cookie_policy.get('titolo'), null, (_h.input('page', '') == 'cookie_policy')) }}</li>
+		<li>{{ mc.link(_h, _h.xurl('info/faq'), _lblw.faq) }}</li>
+		<li class="margin-top">{{ mc.link(_h, _h.xurl('scrivi-servizio-clienti'), _lblg.title_contatti) }}</li>
+		</ul>
+	</div>
+	<div class="col-box-right-dynamic-details">
+		<div class="col-box-right-dynamic-details-content">
+			<div class="contatti">
+			<div class="block-title">Easydive</div>
+			<ul class="recapiti">
+				<li><img src="/assets/website/img/ico-marker-black.svg" alt="marker easydive"> {{ _h.settings.get('recapito_via') }}<br>{{ _h.settings.get('recapito_citta') }}</li>
+			</ul>
+			<ul class="recapiti">
+			<li><img src="/assets/website/img/ico-phone-black.svg" alt="phone"> +39 0544 962923<br>
+				<em>{{ _lblw.telefono_orari }}</em>
+			</li>
+			<li><a href="https://api.whatsapp.com/send?phone=393389994219"><img alt="phone" src="/assets/website/img/ico-whatsapp-black.svg"> +39 338 9994219</a></li>
+			<li><a href="skype:Easydive.it?call"><img alt="skype" src="/assets/website/img/ico-skype-black.svg"> Easydive.it</a></li>
+			<li><img src="/assets/website/img/ico-email-black.svg" alt="e-mail"> info@easydive.it</li>
+			</ul>
+			</div>
+			<form id="pagina">
+				<div class="block-title uppercase">{{ _lblg.descr_scrivi_staff }}</div>
+				<div class="form-error-message"></div>
+				<div class="field-line">
+					<div class="field">
+						<label>{{ _lblf.field_tuo_nome }} <span>*</span></label>
+						<input type="text" name="nome" class="valida-required" maxlength="50">
+					</div>
+				</div>
+				<div class="field-line">
+					<div class="field">
+						<label>{{ _lblf.field_tuo_email }} <span>*</span></label>
+						<input type="text" name="e_mail" class="valida-required valida-email" maxlength="100">
+					</div>
+				</div>
+				<div class="field-line field-line-textarea">
+					<div class="field">
+						<label>{{ _lblf.field_testo_richiesta }} <span>*</span></label>
+						<textarea name="testo" class="valida-required"></textarea>
+					</div>
+				</div>
+				<div class="field-line-checkbox">
+					<div class="field-checkbox-description">	
+						{{ _lblf.descr_dichiarazione_letto_privacy }}
+						 <a href="{{ mapPagine.privacy.url }}" title="{{ _lblf.btn_ulteriori_informazioni_privacy }}" target="_blank">{{ _lblf.btn_ulteriori_informazioni_privacy }}</a>.
+					</div>
+					<div class="field-checkbox-check">
+						<span class="checkbox" data-value="1"><input type="hidden" name="accetto_privacy" value=""></span>
+						<span class="checkbox-label"><span>{{ _lblf.btn_acconsento }}</span></span>
+					</div>
+				</div>
+				<div class="field-text-obbligatori">{{ _lblf.campi_obbligatori }}</div>
+				<div class="field-button field-button-left">
+					<a class="button-red button submit-form" href="javascript:void(0)" title="Invia" data-action='{"url": "{{ _h.url('ex-scrivi-servizio-clienti') }}", "onComplete": {"type": "show", "show": "#conferma_pagina", "hide": "#pagina"}}'><span>{{ _lblf.btn_invia_richiesta }}</span></a>
+				</div>
+			</form>
+
+			<div id="conferma_pagina" class="hide-block block-margin">
+				<div class="hide-block-title">{{ _lblg.title_grazie }}</div>
+				<p>{{ _lblg.descr_conferma_invio_richiesta }}</p>
+				<p>{{ _h.settings.get('staff_firma') }}.</p>
+			</div>
+						
+			<div class="servizio-clienti-map" id="map-canvas"></div>
+			<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAXPXPc8qDTybzgj1cJ5JvEr4C4N0I-g6k&callback=initMap"></script>
+			<script>
+			function initMap() {
+				var mapCanvas = document.getElementById('map-canvas');
+				var pos = new google.maps.LatLng(44.222721,12.341993);
+				var mapOptions = {
+					zoom: 14,
+					mapTypeId: google.maps.MapTypeId.ROADMAP,
+					center: pos
+				}
+				var map = new google.maps.Map(mapCanvas, mapOptions);
+				new google.maps.Marker({
+						map: map,
+						position: pos
+					});
+			}
+			</script>
+			
+			<iframe width="100%" height="250" style="margin-top: 20px;" allowfullscreen src="https://tourmkr.com/F1RE4CPrby"></iframe>
+		</div>
+	</div>
+</div>

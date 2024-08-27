@@ -1,0 +1,82 @@
+{% import _h.template('manager/_macro.html') as mc %}
+{% import _h.template('manager/_my_macro.html') as mym %}
+{{ mc.index_page_header(_h, 'Cliente', 'cliente') }}
+	
+	{{ mc.navButton(_h, 'abilita', 'confirm', 'click', 'h-action-selected-execute', '{"select": {"from":"#h-layout-center-content", "check": 0}, "confirm": "Abilitare gli utenti selezionati?", "url": "' ~ _h.url('manager/myarea/cliente/accesso') ~ '", "params": {"accesso": 1}, "reload": "#h-layout-center-content"}') }}	
+	{{ mc.navButton(_h, 'disabilita', 'noaccess', 'click', 'h-action-selected-execute', '{"select": {"from":"#h-layout-center-content", "check": 0}, "confirm": "Bloccare gli utenti selezionati?", "url": "' ~ _h.url('manager/myarea/cliente/accesso') ~ '", "params": {"accesso": 0}, "reload": "#h-layout-center-content"}') }}	
+	{{ mc.navSeparatore() }}	
+	{{ mc.navButtonNew(_h, 'nuovo', 'cliente') }}
+	{{ mc.navButtonUpdate(_h, 'modifica', 'cliente') }}
+	{{ mc.navButtonDelete(_h, 'elimina', 'cliente') }}		
+	{{ mc.navSeparatore() }}
+	{% if _h.config('gestione_file_clienti', false) %}
+	{{ mc.navButton(_h, 'file e documenti', 'graffa', 'click', 'h-action-selected-open-window', '{"select": {"from":"#h-layout-center-content", "check": 1}, "window": {"type": "slide-right", "url": "' ~ _h.url('manager/myarea/cliente/file/index') ~ '"}}') }}
+	{% endif %}
+	{{ mc.navButton(_h, 'reset password', 'password', 'click', 'h-action-selected-open-window', '{"select": {"from":"#h-layout-center-content", "check": 1, "errorMessage": "Selezionare una voce"}, "window": {"type": "layer", "overlay": true, "width": 300, "height": 300, "url": "' ~ _h.url('manager/myarea/cliente/edit-password') ~ '"}}') }}
+	{{ mc.navButton(_h, 'scrivi', 'message', 'click', 'h-action-selected-open-window', '{"select": {"from":"#h-layout-center-content", "check": 1, "errorMessage": "Selezionare una voce"}, "window": {"type": "layer", "url": "' ~ _h.url('manager/myarea/cliente/scrivi') ~ '", "overlay": true, "width": 550, "height": 600}}') }}
+	
+	{% if listEMailPredefinite|length > 0 %}
+	<div class="h-nav-button-wrapper">
+		<a href="javascript:void(0);" class="h-nav-button h-action-popup-menu h-action-alttext" data-alttext="invio e-mail">
+			<img src="/assets/manager/havana-js/img/icon/ico-message.svg" align="top" />
+			<span>E-Mail</span>
+		</a>
+		<div class="h-popup-content h-popup-menu">
+		{% for email in listEMailPredefinite %}
+			<a href="javascript:void(0);" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"select": {"from":"#h-layout-center-content", "check": 1, "errorMessage": "Selezionare una voce"}, "confirm": "Inviare e-mail {{ email.get('nome') }}?", "url": "{{ _h.url('manager/myarea/cliente/ex-invia-email-predefinita') }}", "params": {"e_mail": {{ email.id }}}}'>invia e-mail: {{ email.get('nome') }}</a>
+		{% endfor %}
+		</div>
+	</div>
+	{% endif %}
+	
+	{{ mc.navButton(_h, 'attiva conferma', 'user', 'click', 'h-action-selected-execute', '{"select": {"from":"#h-layout-center-content", "check": 0}, "confirm": "Attivare/confermare account per gli utenti selezionati?", "url": "' ~ _h.url('manager/myarea/cliente/attiva') ~ '", "reload": "#h-layout-center-content"}') }}	
+	{{ mc.navSeparatore() }}
+	{{ mc.navButtonPromemoria(_h, 'cliente') }}
+	{{ mc.navButton(_h, 'ordini', 'euro', 'click', 'h-action-selected-open-window', '{"select": {"from":"#h-layout-center-content", "check": 1, "errorMessage": "Selezionare una voce"}, "window": {"type": "slide-right", "url": "' ~ _h.url('manager/myarea/cliente/ordini/index') ~ '"}}') }}
+	{{ mc.navButton(_h, 'punti', 'ticket', 'click', 'h-action-selected-open-window', '{"select": {"from":"#h-layout-center-content", "check": 1, "errorMessage": "Selezionare una voce"}, "window": {"type": "slide-right", "url": "' ~ _h.url('manager/myarea/cliente/punti/index') ~ '"}}') }}
+	{{ mc.navButton(_h, 'acquisti / scadenze', 'calendar', 'click', 'h-action-selected-open-window', '{"select": {"from":"#h-layout-center-content", "check": 1, "errorMessage": "Selezionare una voce"}, "window": {"type": "slide-right", "url": "' ~ _h.url('manager/myarea/cliente/scadenza/index') ~ '"}}') }}
+	{{ mc.navButton(_h, 'dettaglio', 'report', 'click', 'h-action-selected-open-window', '{"select": {"from":"#h-layout-center-content", "check": 1, "errorMessage": "Selezionare una voce"}, "window": {"type": "slide-right", "url": "' ~ _h.url('manager/myarea/cliente/dettaglio') ~ '"}}') }}
+	{{ mc.navButton(_h, 'indirizzi spedizione', 'home', 'click', 'h-action-selected-open-window', '{"select": {"from":"#h-layout-center-content", "check": 1, "errorMessage": "Selezionare una voce"}, "window": {"type": "slide-right", "url": "' ~ _h.url('manager/myarea/cliente/spedizione/index') ~ '"}}') }}
+	{{ mc.navButton(_h, 'dati fatturazione', 'euro', 'click', 'h-action-selected-open-window', '{"select": {"from":"#h-layout-center-content", "check": 1, "errorMessage": "Selezionare una voce"}, "window": {"type": "slide-right", "url": "' ~ _h.url('manager/myarea/cliente/scadenza/index') ~ '"}}') }}
+	{{ mc.navSeparatore() }}
+	{{ mc.navButton(_h, 'gruppi', 'matrix', 'click', 'h-action-selected-open-window', '{"window": {"type": "layer", "overlay": true, "width": 500, "height": 500, "url": "' ~ _h.url('manager/myarea/cliente/gruppo/index') ~ '"}}') }}
+	{{ mc.navButton(_h, 'ticket', 'info', 'click', 'h-action-selected-open-window', '{"select": {"from":"#h-layout-center-content", "check": 1, "errorMessage": "Selezionare una voce"}, "window": {"overlay": true, "type": "layer", "url": "' ~ _h.url('manager/myarea/cliente/log/index') ~ '"}}') }}
+	{{ mc.navSeparatore() }}
+	<div class="h-nav-button-wrapper">
+		<a href="javascript:void(0);" class="h-nav-button h-action-popup-menu">
+			<img src="/assets/manager/havana-js/img/icon/ico-upload.svg" align="top" />
+			<span>Importa</span>
+		</a>
+		<div class="h-popup-content h-popup-menu">
+			<a href="javascript:void(0);" class="h-action-selected-open-window h-action-close-popup-menu" data-action='{"window": {"overlay": true, "width": 450, "height": 400, "type": "layer", "url": "{{ _h.url('manager/myarea/cliente/upload') }}"}}'>Importa dati clienti</a>
+			<a href="javascript:void(0);" class="h-action-selected-open-window h-action-close-popup-menu" data-action='{"window": {"overlay": true, "width": 450, "height": 400, "type": "layer", "url": "{{ _h.url('manager/myarea/cliente/upload-scadenza') }}"}}'>Importa acquisti/scadenze clienti</a>
+		</div>
+	</div>	
+	<div class="h-nav-button-wrapper">
+		<a href="javascript:void(0);" class="h-nav-button h-action-popup-menu">
+			<img src="/assets/manager/havana-js/img/icon/ico-download.svg" align="top" />
+			<span>Esporta</span>
+		</a>
+		<div class="h-popup-content h-popup-menu">
+			<a href="javascript:void(0);" class="h-action-link h-action-close-popup-menu" data-action='{"url": "{{ _h.url('manager/myarea/cliente/export') }}"}'>Esporta dati clienti</a>
+			<a href="javascript:void(0);" class="h-action-selected-open-window h-action-close-popup-menu" data-action='{"window": {"overlay": true, "width": 350, "height": 350, "type": "layer", "url": "{{ _h.url('manager/myarea/cliente/export-privacy') }}"}}'>Esporta link privacy</a>
+		</div>
+	</div>
+
+	{{ mym.navButtonCliente(_h) }}
+	
+	<div class="h-list-right h-nav-button-group" id="filtri-attivita">
+	{{ mc.navButton(_h, 'filtra', 'filter', 'arrow', 'h-load-in-window', '{"show": ["details-right"], "loadIn": "#h-layout-filtro", "url": "' ~ _h.url('manager/myarea/cliente/filtro') ~ '"}') }}
+	</div>
+	<div class="h-list-right" id="azzera-filtro">
+	{{ mc.navButton(_h, 'azzera filtro', 'reset', 'click', 'h-action-reset-filter', '{"load": "#h-layout-center-content", "reset": "#filtri-attivita"}') }}
+	</div>
+	
+	{{ mc.filtro_list() }}
+	
+{{ mc.index_page_footer(_h, result, 'cliente') }}
+
+<div id="h-layout-details-right" class="h-layout h-layout-middle">
+	<div class="h-layout-content-wrapper" id="h-layout-filtro">
+	</div>
+</div>

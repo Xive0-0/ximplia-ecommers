@@ -1,0 +1,5 @@
+{
+	"on:": [
+		"manager/myarea/attributo/obiettivo_fotocamera/upload"
+	]
+}

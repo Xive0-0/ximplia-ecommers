@@ -1,0 +1,8 @@
+{% import _h.template('manager/_macro.html') as mc %}
+{{ mc.index_page_header(_h, 'Files', 'file') }}
+	
+	{{ mc.navButtonNew(_h, 'nuovo', 'file') }}
+	{{ mc.navButtonUpdate(_h, 'modifica file', 'file') }}
+	{{ mc.navButtonDelete(_h, 'elimina file', 'file') }}
+	
+{{ mc.index_page_footer(_h, result, 'file') }}

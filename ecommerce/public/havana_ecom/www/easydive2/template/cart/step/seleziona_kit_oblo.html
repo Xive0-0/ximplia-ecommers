@@ -1,0 +1,48 @@
+{% set _lbl = _h.labels.get('step_acquisto') %}
+<div class="item-kit-list">
+{% for item in list %}
+	<div class="item-kit {% if item.consigliato %} item-kit-consigliato{% endif %}">
+		{% if _lbl.consigliato_easydive %}
+		<div class="item-kit-consigliato-text">{{ _lbl.consigliato_easydive }}</div>
+		{% endif %}
+		<div class="clear">
+			<div class="item-kit-oblo-nome">
+				<strong>{{ item.nome }}</strong>
+				{% if item.step_acquisto_testo %}
+				<p>{{ item.step_acquisto_testo }}</p>
+				{% endif %}
+			</div>
+			<div class="item-kit-oblo-prezzo">
+				{{ _h.util.euro(item.prezzo) }} &euro;
+			</div>
+		</div>
+		<div class="clear item-kit-sub-list">
+		{% for sub in item.sub %}
+			<div class="item-kit-sub">
+				<div class="item-kit-sub-img">
+					<img src="{{ sub.imageUrl('300x300') }}">
+				</div>
+				<div class="item-kit-sub-nome">
+				<div class="item-kit-sub-nome-inner">
+					<div class="item-kit-sub-descrizione">{{ sub.get('nome') }}</div>
+					<div class="item-kit-sub-prezzo">{{ sub.prezzo('e', false) }}</div>
+					<div class="item-kit-sub-checkbox checked" data-id="{{ sub.id }}" data-type="" data-nome="{{ sub.get('nome') }}" data-img="{{ sub.imageUrl('300x300') }}" data-prezzo="{{ sub.prezzo('', false) }}" data-prezzo-euro="{{ sub.prezzo('e', false) }}"></div>
+				</div>
+				</div>				
+			</div>
+		{% endfor %}
+		</div>
+		<div class="clear">
+			{% set url_next = '' %}
+			{% if leo3r %}
+				{% set url_next = 'seleziona-predisposizione-bracci-fotocamera' %}
+			{% else %}
+				{% set url_next = 'seleziona-logo' %}
+			{% endif %}
+		
+			<button class="add-item item-kit-add item-kit-add-checkbox inverse" data-callback="oblo" data-id="{{ item.id }}" data-type="kit_oblo" data-url="{{ url_next }}" data-nome="{{ item.get('nome') }}" data-img="{{ item.imageUrl('300x300') }}" data-prezzo="{{ item.prezzo('', false) }}" data-prezzo-euro="{{ item.prezzo('e', false) }}">{{ _lbl.btn_aggiungi_kit }}</button>
+			<button class="add-item item-kit-add item-kit-add-checkbox item-kit-add-checkbox-button light" data-callback="oblo" data-type="kit_oblo" data-url="{{ url_next }}">{{ _lbl.btn_aggiungi_selezione_kit }}</button>
+		</div>
+	</div>
+{% endfor %}
+</div>

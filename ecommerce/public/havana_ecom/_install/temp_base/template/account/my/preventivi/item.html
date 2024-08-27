@@ -1,0 +1,114 @@
+{% import _h.template('_macro.html') as mc %}
+{% import _h.template('cartprev/_macro.html') as cmc %}
+
+{% if item %}
+{% set ordine = ordine.ordine %}
+{% set intestazione = item.intestazione() %}
+{% set _lblc = _h.labels.get('checkout_preventivo') %}
+
+<h2>{{ _lblc.title_preventivo }} {{ item.get('codice') }}</h2>
+<div class="dettaglio-ordine">
+
+<div class="riepilogo">
+	<div class="line">
+		<em class="label">{{ _lblc.codice_per_comunicazione }}</em> 
+		<div class="rientro font-big">
+			{{ item.get('codice') }}	
+		</div>
+	</div>
+	<div class="line">
+		<em class="label">{{ _lblc.data_effettuazione_preventivo }}</em> 
+		<div class="rientro font-big">
+			{{ item.getDateTime('data_inserimento') }}	
+		</div>
+	</div>
+	<div class="line">
+		<em class="label">{{ _lblc.stato }}:</em> 
+		<div class="rientro font-big">
+		{% if item.get('id_ordine_generato') %}
+			{{ _lblc.stato_concluso_e_trasformato_in_ordine }}
+			<a href="{{ _h.url('account/my/ordini/item') }}?id={{ item.get('id_ordine_generato') }}">{{ item.get('codice_ordine_generato') }}</a>
+		{% elseif item.getDate('data_invio_preventivo') %}
+			{{ _lblc.stato_fatto_e_inviato }}
+			{{ item.getDateTime('data_invio_preventivo') }}	
+		{% else %}
+			{{ _lblc.stato_preso_in_carico }}
+		{% endif %}	
+		</div>
+	</div>	
+</div>
+
+{{ cmc.riepilogo_ordine(_h, ordine) }}
+
+<table border="0" width="100%" class="preventivo-intestazione" cellpadding="0" cellspacing="0">
+{% if intestazione.validita_offerta %}
+<tr><th valign="top">{{ _lblc.field_validita_offerta }}</th><td>{{ intestazione.validita_offerta }}</td></tr>
+{% endif %}
+{% if intestazione.montaggio %}
+<tr><th valign="top">{{ _lblc.field_montaggio }}</th><td>{{ intestazione.montaggio }}</td></tr>
+{% endif %}
+{% if intestazione.termini_consegna %}
+<tr><th valign="top">{{ _lblc.field_termini_consegna }}</th><td>{{ intestazione.termini_consegna }}</td></tr>
+{% endif %}
+{% if intestazione.garanzia %}
+<tr><th valign="top">{{ _lblc.field_garanzia }}</th><td>{{ intestazione.garanzia }}</td></tr>
+{% endif %}
+
+{% if _h.config('gestione_preventivi_campi_liberi', true) %}
+	{% if intestazione.spedizione %}
+	<tr  class="preventivo-totale-spedizione"><th valign="top">{{ _lblc.field_spedizione }}</th><td>{{ intestazione.spedizione }}</td></tr>
+	{% endif %}
+	{% if intestazione.sconto %}
+	<tr class="preventivo-totale-sconto"><th valign="top">{{ _lblc.field_sconto }}</th><td>{{ intestazione.sconto }}</td></tr>
+	{% endif %}
+	{% if intestazione.totale %}
+	<tr class="preventivo-totale-finale"><th valign="top">{{ _lblc.field_totale }}</th><td><strong>{{ intestazione.totale }}</strong></td></tr>
+	{% endif %}
+{% else %}
+	{% if intestazione.spedizione %}
+	<tr  class="preventivo-totale-spedizione"><th valign="top">{{ _lblc.field_spedizione }}</th><td>{{ _h.util.euro(intestazione.spedizione) }} &euro;</td></tr>
+	{% endif %}
+	{% if intestazione.sconto %}
+	<tr class="preventivo-totale-sconto"><th valign="top">{{ _lblc.field_sconto }}</th><td>{{ _h.util.euro(intestazione.sconto) }} &euro;{% if intestazione.sconto_percentuale %} ({{ _h.util.euro(intestazione.sconto_percentuale) }} %){% endif %}</td></tr>
+	{% endif %}
+	{% if intestazione.totale %}
+	<tr class="preventivo-totale-finale"><th valign="top">{{ _lblc.field_totale }}</th><td><strong>{{ _h.util.euro(intestazione.totale) }} &euro;</strong></td></tr>
+	{% endif %}
+{% endif %}
+</table>
+
+<div class="riepilogo">
+{% if _h.session.params.user.speciale %}
+	<a href="{{ _h.url('cartprev/stampa') }}?id={{ item.id }}" class="button button-red btn-stampa-preventivo" target="_blank">{{ _lblc.modifica_intestazione }}</a>
+	{% if not(item.id_ordine_generato) %}
+	<a href="{{ _h.url('account/my/preventivi/modifica') }}?id={{ item.id }}" class="button button-red btn-stampa-preventivo" lass="button button-red btn-stampa-preventivo" title="{{ _lblc.btn_modifica }}">{{ _lblc.btn_modifica }}</a>
+	{% endif %}
+{% endif %}
+<a href="{{ _h.url('cartprev/pdf') }}?id={{ item.id }}" class="button button-red btn-stampa-preventivo" target="_blank">{{ _lblc.stampa_preventivo }}</a>
+{% if not(item.id_ordine_generato) %}
+<a href="{{ _h.url('account/my/preventivi/to-ordine') }}?id={{ item.id }}" class="button button-red btn-stampa-preventivo">{{ _lblc.crea_ordine_da_preventivo }}</a>
+{% endif %}
+</div>
+
+</div>
+{% else %}
+<h2>{{ _lblc.title_preventivo_non_trovato }}</h2>
+{{ _lblc.descr_preventivo_non_trovato }}
+{% endif %}
+
+
+<style>	
+.preventivo-intestazione {
+	margin-bottom: 50px;
+}
+.preventivo-intestazione th {
+	font-weight: bold;
+	width: 200px;
+}
+.preventivo-intestazione th,
+.preventivo-intestazione td {
+	padding: 5px 10px;
+	border-bottom: 1px solid #ddd;
+	text-align: left;
+}
+</style>

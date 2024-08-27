@@ -1,0 +1,83 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% set intestazione = item.intestazione %}
+{% set ordine = item.dettaglio.ordine %}
+
+{{ mc.slideBoxHeader(_h, 'Dettaglio') }}
+<input type="hidden" name="id" value="{{ item.id }}">
+<p class="field-line">
+	<label>Oggetto:</label>
+	<input type="text" name="oggetto" class="field" value="{{ intestazione.oggetto }}">
+</p>
+<p class="field-line field-400">
+	<label>Testo presentazione:</label>
+	<textarea name="testo" class="field">{{ intestazione.testo }}</textarea>
+</p>
+<p class="field-line">
+	<label>Validità offerta:</label>
+	<input type="text" name="validita_offerta" class="field" value="{{ intestazione.validita_offerta }}">
+</p>
+<p class="field-line">
+	<label>Montaggio/installazione:</label>
+	<input type="text" name="montaggio" class="field" value="{{ intestazione.montaggio }}">
+</p>
+<p class="field-line">
+	<label>Termini consegna:</label>
+	<input type="text" name="termini_consegna" class="field" value="{{ intestazione.termini_consegna }}">
+</p>
+<p class="field-line">
+	<label>Pagamento:</label>
+	<input type="text" name="pagamento" class="field" value="{{ intestazione.pagamento }}">
+</p>
+<p class="field-line">
+	<label>Garanzia:</label>
+	<input type="text" name="garanzia" class="field" value="{{ intestazione.garanzia }}">
+</p>
+{% if _h.config('gestione_preventivi_campi_liberi', true) %}
+<p class="field-line">
+	<label>Spedizione:</label>
+	<input type="text" name="spedizione" class="field" value="{{ intestazione.spedizione }}">
+</p>
+<p class="field-line">
+	<label>Sconto:</label>
+	<input type="text" name="sconto" class="field" value="{{ intestazione.sconto }}">
+</p>
+<p class="field-line">
+	<label>Totale finale:</label>
+	<input type="text" name="totale" class="field" value="{{ intestazione.totale }}">
+</p>
+{% else %}
+<div class="h-calcolo-sconto-percentuale-euro-wrapper" separatore-decimali="{{ _h.config('default_separatore_decimali', ',') }}" separatore-migliaia="{{ _h.config('default_separatore_migliaia', '.') }}">
+	<div class="h-calcolo-sconto-percentuale-euro">
+		<p class="field-line">
+			<label>Spedizione:</label>
+			<input data-type-sconto="spedizione" type="text" name="spedizione" class="field valida-euro" value="{{ _h.util.euro(intestazione.spedizione) }}" maxlength="20">
+		</p>		
+		<p class="field-line field-100 field-line-left">
+			<label>Tot. preventivo {{ _h.config('manager_valuta', '&euro;') }}:</label>
+			<input data-type-sconto="prezzo" style="border: none;" type="text" name="totale_preventivo" data-num-dec="{{ _h.config('numero_decimali_prezzo', 2) }}" class="field valida-required valida-digitfloat valida-euro" value="{{ _h.util.euro(ordine.total_articoli + intestazione.spedizione) }}" maxlength="10" readonly="true"> {{ _h.config('manager_valuta', '&euro;') }}
+		</p>
+		<p class="field-line field-75 field-line-left">
+			<label>Sconto (%):</label>
+			<input data-type-sconto="sconto_percentuale" type="text" name="sconto_percentuale" class="field valida-digitfloat valida-float" value="{{ intestazione.sconto_percentuale|number_format(3, ',', '') }}" maxlength="7"> %
+		</p>
+		<p class="field-line field-75 field-line-left">
+			<label>Sconto ({{ _h.config('manager_valuta', '&euro;') }}):</label>
+			<input data-type-sconto="sconto_euro" type="text" name="sconto" class="field valida-digitfloat valida-float" value="{{ _h.util.euro(intestazione.sconto) }}" maxlength="10"> {{ _h.config('manager_valuta', '&euro;') }}
+		</p>
+		<div class="clear-line"></div>
+		<p class="field-line field-100">
+			<label>Totale finale {{ _h.config('manager_valuta', '&euro;') }}:</label>
+			<input data-type-sconto="prezzo_scontato" type="text" name="totale" data-num-dec="{{ _h.config('numero_decimali_prezzo', 2) }}" class="field valida-digitfloat valida-euro" value="{{ _h.util.euro(intestazione.totale) }}" maxlength="10"> {{ _h.config('manager_valuta', '&euro;') }}
+		</p>
+	</div>
+</div>
+
+{% endif %}
+<p class="field-line field-400">
+	<label>Altro testo alla fine del preventivo:</label>
+	<textarea name="altro_testo" class="field">{{ intestazione.altro_testo }}</textarea>
+</p>
+{{ mc.labelCampiObbligatori() }}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/preventivi/ex-edit-dettaglio'), '"reload": ["#h-layout-center-content", "#dettaglio-content"]') }}	
+

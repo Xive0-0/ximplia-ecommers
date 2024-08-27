@@ -1,0 +1,21 @@
+{
+	"put": {
+		"view": [
+			{"mymetainfo": true},
+			{"banner_header": true}
+		]
+	},
+	"on:": [
+		{"name": "testo", "params": {"codice": "testo_easydivepoint", "item": "testo_blog"}},
+		"search-easydivepoint",
+		{"name": "list-hreflang", "params": {"tipo": "collezione"}, "check": "({input}[[autoload]]==null)"}
+	],
+	"on:view": {
+		"template": "search_easydivepoint",
+		"params": {
+			"js": [
+				"blog"
+			]
+		}
+	}
+}

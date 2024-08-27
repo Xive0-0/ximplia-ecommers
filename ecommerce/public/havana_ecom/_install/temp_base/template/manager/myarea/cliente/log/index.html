@@ -1,0 +1,15 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeaderToolbar(_h, 'cliente: ' ~ item.get('cognome') ~ ' ' ~ item.get('nome') ~ ' [' ~ item.get('e_mail') ~ ']', true) }}
+		{{ mc.navButton(_h, 'aggiungi', 'new', 'click', 'h-action-window', '{"type": "layer", "url": "' ~ _h.url('manager/myarea/cliente/log/edit') ~ '", "overlay": true, "width": 500, "height": 350, "params": {"id": ' ~ item.id ~ '}}') }}
+		{{ mc.navButton(_h, 'elimina', 'delete', 'click', 'h-action-selected-execute', '{"select": {"from":"#log-content", "check": 0, "errorMessage": "Selezionare almeno una voce"}, "confirm": "Eliminare la voce selezionata?", "params": {"id_cliente":' ~ item.id ~ '}, "url": "' ~ _h.url('manager/myarea/cliente/log/delete') ~ '", "reload": ["#log-content"]}') }}
+
+{{ mc.slideBoxHeaderToolbarEnd() }}
+	
+	<fieldset id="log-content" data-action='{"url": "{{ _h.url('manager/myarea/cliente/log/list') }}"}' data-load-params='{"id": {{ item.id }}}'>
+		{% include _h.template('manager/myarea/cliente/log/list.html') %}	
+	</fieldset>	
+	
+	</fieldset>		
+</div>
+</form>

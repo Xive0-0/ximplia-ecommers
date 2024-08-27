@@ -1,0 +1,6 @@
+{
+	"on:begin": [
+		"manager/myarea/articolo/export-pesi-spedizione"
+	],
+	"on:view": "download"
+}

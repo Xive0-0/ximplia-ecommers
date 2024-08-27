@@ -1,0 +1,918 @@
+@media screen and (max-width: 1240px) {
+}
+
+/*Inizio codice Federico*/
+@media screen and (max-width: 1250px) {
+    .inner-header-site .header-ul.options li {
+        display: none;
+    }
+
+    .inner-header-site .header-ul.options .configura-custodia {
+        display: block;
+    }
+
+    .inner-header-site .menu .header-ul {
+        justify-content: end;
+    }
+
+    .inner-header .web,
+    .inner-header-site .web {
+        padding: 0 20px;
+    }
+
+    .inner-header-site .mobile-menu svg {
+        display: block;
+        margin-right: 10px;
+    }
+
+    header .options li.tree[data-level="2"] div.ul-tree ul {
+        padding: 0 24px;
+    }
+
+    .item-thumbs .item-thumb {
+        width: 50px;
+    }
+
+    .item-thumbs .slick-arrow {
+        width: 21px;
+    }
+}
+
+@media screen and (max-width: 1200px) {
+    .footer-info {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .footer-info .sub-footer.red,
+    .footer-info .sub-footer.black {
+        width: 100%;
+        padding: 20px;
+    }
+
+    footer .footer-logo {
+        width: 150px;
+        height: auto;
+    }
+
+    .banner_card {
+        flex-direction: column;
+    }
+
+    .banner_big_card,
+    .right-column {
+        width: 100%;
+        flex-direction: row-reverse;
+    }
+
+    .web {
+        padding: 0 20px;
+    }
+
+    .banner_card {
+        display: flex;
+        flex-direction: column;
+        height: auto;
+    }
+
+    .banner-card,
+    .banner_big_card,
+    .right-column {
+        width: 100%;
+    }
+
+    .banner_card .right-column .container {
+        width: 100%;
+    }
+
+    .banner_card .right-column .container .card_immersione {
+        min-width: 0;
+    }
+
+    .banner_big_card,
+    .banner_big_mid,
+    .banner_big_mid,
+    .banner_big_card,
+    .card {
+        padding: 20px;
+    }
+
+    .content_mid h3 {
+        margin-top: 0;
+    }
+
+    .banner_card {
+        margin: 20px;
+    }
+
+    .right-column {
+        flex-direction: column-reverse;
+    }
+
+    .card,
+    .banner_big_mid {
+        height: auto;
+        min-height: 200px;
+    }
+
+    .button_big_card {
+        margin-top: 0;
+    }
+
+    .content h1 {
+        margin: 10px 0;
+    }
+
+    .sub-info-card {
+        flex-direction: column;
+        padding: 20px;
+    }
+
+    .sub-card-text {
+        height: 100%;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+    }
+
+    .sub-card-div-second-third {
+        width: 100%;
+    }
+
+    .carosello-card-container {
+        margin: 20px;
+    }
+
+    [data-tab='contatti'] .recapiti-box,
+    [data-tab='contatti'] .fields-box,
+    [data-tab],
+    .bollino-list {
+        padding: 12px;
+    }
+
+}
+
+@media screen and (max-width: 992px) {
+    #middle.middle-base {
+        padding-top: 80px;
+    }
+
+    header .menu .tree-menu.btn-shop-red > a {
+        padding-right: 10px;
+    }
+
+    header .menu-seleziona-modello-wrapper {
+        right: 170px;
+    }
+
+    .inner-header {
+        display: none;
+    }
+
+    .contacts-card-div {
+        flex-direction: column;
+        padding: 20px;
+        margin-bottom: 40px;
+    }
+
+    .contacts-card {
+        padding: 20px;
+        margin-bottom: 10px;
+    }
+
+    .index .banner-top {
+        padding-top: 66px;
+    }
+
+    .item-quantita-wrapper select {
+        height: 32px;
+    }
+
+    .item-quantita-wrapper {
+        line-height: 32px;
+    }
+
+}
+
+@media screen and (max-width: 730px) {
+    .inner-header-site .header-ul.options .configura-custodia {
+        display: none;
+    }
+
+    .sub-card-div-second-third {
+        flex-direction: column;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    #header-vertical-menu {
+        min-width: 100%;
+    }
+
+    .mobile-header-ul,
+    header .menu .level-base.mobile-tree-menu a {
+        width: 100%;
+    }
+
+    .mobile-dropdown-ul {
+        min-width: 600px;
+    }
+
+    .mobile-dropdown-ul li {
+        width: 90%;
+    }
+
+    .card span,
+    .dna-custom-ul {
+        display: none;
+    }
+
+}
+
+@media screen and (max-width: 450px) {
+    .header-logo {
+        width: 170px;
+    }
+
+    header .menu .level-base {
+        margin-right: 0;
+    }
+
+    header .header-ul .icons li {
+        margin-left: 10px;
+    }
+
+    .item-price-wrapper {
+        float: none;
+        width: 100%;
+    }
+
+    .item-page .price {
+        font-size: 25px;
+        line-height: 1;
+        font-weight: bold;
+    }
+}
+
+
+@media screen and (max-width: 1100px) {
+    .margin-mobile,
+    .banner-testo-inner {
+        margin: 0 10px;
+    }
+
+
+    /*Fine codice Federico*/
+    .checkout-step-page #middle {
+        margin-right: 10px;
+        margin-left: 10px;
+    }
+
+    header .menu .hide-mid-size {
+        display: none;
+    }
+
+    header .menu .show-mid-size {
+        display: inline-block;
+    }
+
+    header .menu .tree-menu.btn-shop-red > a {
+        padding-right: 10px;
+    }
+
+    header .menu .level-base {
+        /* margin-right: 20px; */
+        display: flex;
+    }
+
+    header .menu-seleziona-modello-wrapper {
+        right: 200px;
+    }
+
+    header .menu-seleziona-modello-selezione {
+        width: 150px;
+        margin-right: 0;
+    }
+
+    header .modello-text-title {
+        font-size: 11px;
+    }
+
+    header .modello-text {
+        font-size: 10px;
+    }
+
+    header .menu-seleziona-modello-form {
+        width: 280px;
+    }
+
+    header .menu-seleziona-modello-form .field {
+        width: 160px;
+    }
+
+    header .menu-seleziona-modello-form .field select {
+        width: 220px;
+    }
+
+    .col-box-left,
+    .col-box-right {
+        width: 280px;
+    }
+
+    .menu-left .ul-tree a {
+        font-size: 13px;
+    }
+
+    .search-menu {
+        margin-right: 0;
+        padding-left: 0;
+    }
+
+    .col-box-right-dynamic-details-content {
+        margin-left: 280px;
+    }
+
+    .col-box-right-dynamic-details {
+        margin-left: -280px;
+    }
+
+    .col-left .col-inner {
+        margin-left: 50px;
+    }
+
+    .col-right .col-inner {
+        margin-right: 50px;
+    }
+
+    .col-margin,
+    .page {
+        margin: 0 50px;
+    }
+
+    .anteprima-home-inner {
+        margin: 20px 10px
+    }
+
+    .anteprima-home-align-left .anteprima-home-inner {
+        margin-left: 50px;
+        margin-right: 25px;
+    }
+
+    .anteprima-home-align-right .anteprima-home-inner {
+        margin-left: 25px;
+        margin-right: 50px;
+    }
+
+    .anteprima-home-align-left .anteprima-home-link {
+        left: 50px;
+    }
+
+    .anteprima-home-align-right .anteprima-home-link {
+        right: 50px;
+    }
+
+    .item {
+        width: 50%;
+    }
+
+}
+
+@media screen and (max-width: 850px) {
+
+
+    .col-margin,
+    .page {
+        margin: 0 20px;
+    }
+
+    .banner-sconto .banner-testo {
+        margin: auto 50px;
+    }
+
+    .banner-riquadro .banner-testo p {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+}
+
+@media screen and (max-width: 800px) {
+    /*Inizio codice Federico*/
+    .footer-info .black {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .mobile-horizontal-line {
+        height: 2px;
+        background-color: #363636;
+        width: 100%;
+        margin: 15px 0 20px 0;
+    }
+
+    .card_immersione {
+        min-height: 200px;
+    }
+
+    /*Fine codice Federico*/
+    header .menu-seleziona-modello-selezione {
+        width: 100px;
+        margin-right: 0;
+    }
+
+    header .modello-text {
+        display: none;
+    }
+
+    header .menu-seleziona-modello-form {
+        width: 250px;
+    }
+
+    header .menu-seleziona-modello-form .field {
+        width: 130px;
+    }
+
+    header .menu-seleziona-modello-form .field select {
+        width: 190px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .breadcrumbs {
+        margin-top: 0;
+    }
+
+    .item-details-inner {
+        margin-left: 10px;
+    }
+
+    .item-img-coll-inner {
+        margin-right: 10px;
+    }
+
+    .col-left .col-inner,
+    .col-right .col-inner {
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+
+    .item-blog {
+        width: 33.33%;
+    }
+
+    .banner-sconto p,
+    .banner-sconto h3 {
+        font-size: 20px;
+    }
+
+    .banner-button {
+        margin-top: 30px;
+    }
+
+    .breadcrumbs-banner {
+        top: 47px;
+    }
+
+    .search-window-form {
+        width: 80%;
+        left: 10%;
+    }
+
+    .order-by,
+    .search-menu li[data-level='1'] > .inner-tree .tree-icon-plus,
+    .search-menu li[data-level='1'] > .tree-icon-plus,
+    .menu-left a {
+        height: 32px;
+        line-height: 32px;
+        border-radius: 6px;
+    }
+
+
+    .col-box-left,
+    .col-box-right {
+        float: none;
+        width: auto;
+    }
+
+    .col-box-left-dynamic-details-content,
+    .col-box-left-dynamic-details,
+    .col-box-right-dynamic-details-content,
+    .col-box-right-dynamic-details {
+        float: none;
+        margin: 0;
+        width: auto;
+    }
+
+    .item {
+        margin-bottom: 12px;
+    }
+
+    .item .item-name {
+        margin: 0 12px;
+        font-size: 15px;
+        line-height: 21px;
+    }
+
+    .item-inner {
+        margin: 0 5px;
+    }
+
+    .item .item-dettaglio {
+        height: 150px;
+    }
+    .item-img {
+        height: auto;
+    }
+    .item img {
+        padding: 12px
+    }
+    .item .item-action,
+    .item .item-price-wrapper {
+        bottom: 52px;
+        left: 12px;
+        right: 12px;
+        width: calc(100% - 24px);
+    }
+    .item .item-action {
+        font-size: 9px;
+        line-height: 10.8px;
+        bottom: 12px;
+    }
+    .item .price {
+        font-size: 13px;
+        line-height: 8.32px;
+    }
+    .item .item-price-wrapper {
+        font-size: 11px;
+        line-height: 13.2px;
+    }
+}
+
+@media screen and (max-width: 720px) {
+    .ico-plastic-free-white {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .logo .logo-inner {
+        height: 46px;
+    }
+
+    .made-in-italy em {
+        width: 26px;
+    }
+
+    .logo {
+        left: 50px;
+    }
+
+    .logo img {
+        height: 28px;
+    }
+
+    .made-in-italy {
+        margin-top: 0;
+    }
+
+    .inner-header .web,
+    header,
+    .logo {
+        height: 50px;
+    }
+
+    #middle {
+        padding-top: 0;
+    }
+
+    .item-ambassador,
+    .item-blog {
+        width: 50%;
+    }
+
+    .anteprima-home-items .item {
+        width: 50%;
+    }
+
+    .item-blog-page .col-box-right-margin,
+    .item-blog-page .col-box-right,
+    .item-blog-page .col-box-right-dynamic-details-content,
+    .item-blog-page .col-box-right-dynamic-details
+    .item-blog-page .col-box-left-margin,
+    .item-blog-page .col-box-left,
+    .item-blog-page .col-box-left-dynamic-details-content,
+    .item-blog-page .col-box-left-dynamic-details {
+        float: none;
+        margin: 0;
+        width: auto;
+    }
+
+    .item-blog-page .list-single-item-blog {
+        margin-top: 50px;
+    }
+
+    .list-single-item-blog .item-blog {
+        width: 50%;
+        float: left;
+    }
+
+    .list-single-item-blog .item-blog .item-blog-inner {
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+}
+
+@media screen and (max-width: 630px) {
+    header .mobile-tree-menu {
+        padding-bottom: 0;
+    }
+
+    .line-plastic-free {
+        margin-top: 15px;
+    }
+
+    .item-ambassador h3 {
+        margin-left: 0;
+        margin-right: 0;
+        background-size: 16px;
+    }
+
+    .accessori-custodia .col-box-right-dynamic-details {
+        display: none;
+    }
+
+    .accessori-custodia ul {
+        margin-right: 0;
+    }
+
+    .accessori-custodia ul .menu-link {
+        position: relative;
+        padding-right: 20px;
+        display: block;
+    }
+
+    .accessori-custodia ul .menu-link.selected {
+        color: #000;
+    }
+
+    .accessori-custodia ul .menu-link.selected-mobile {
+        color: #ed1c24;
+        margin-bottom: 15px;
+    }
+
+    .accessori-custodia ul .menu-link.selected-mobile:after {
+        content: '-';
+    }
+
+    .accessori-custodia ul .menu-link:after {
+        content: '+';
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+
+    .bollino {
+        margin-left: 2px;
+        margin-right: 2px;
+    }
+
+    .banner-top .banner-testo-inner {
+        width: auto;
+        max-width: none;
+    }
+
+    .banner-riquadro .banner-image.banner-image-mobile-show {
+        display: block;
+    }
+
+    .banner-riquadro .banner-image {
+        display: none;
+    }
+
+    .banner-riquadro .banner-testo,
+    .banner-riquadro .banner-image-mobile-show {
+        display: block;
+        width: 100%;
+        margin-bottom: 30px;
+    }
+
+    footer .menu h4 {
+        padding-bottom: 0;
+    }
+
+    footer .menu h4:after {
+        display: none;
+    }
+
+    footer .menu section.recapiti ul,
+    footer .menu section ul {
+        margin-left: 20px;
+    }
+
+    footer .menu section.recapiti,
+    footer .menu section {
+        float: none;
+        width: auto;
+        margin: 0 10px 30px 10px;
+        text-align: left;
+    }
+
+    footer .recapiti ul {
+        width: auto;
+    }
+
+    .banner-sconto .banner-testo {
+        margin: 5px 10px;
+    }
+
+    .col-center {
+        margin: 0 10px;
+    }
+
+    .item-blog {
+        width: 50%;
+    }
+
+    .col-left,
+    .col-right {
+        float: none;
+        width: 100%;
+    }
+
+    .col-left .col-inner,
+    .col-right .col-inner {
+        margin: 0 10px;
+    }
+
+    .item-details {
+        float: none;
+        width: 100%;
+    }
+
+    .item-details-inner {
+        margin: 0;
+    }
+
+    .item-page .item-img-slider .item-img-wrapper {
+        display: none;
+    }
+
+    .item-page .item-img-slider {
+        display: block;
+        height: 378px;
+    }
+
+    .item-img-coll {
+        display: none;
+    }
+
+    #slider-item-page {
+        height: 378px;
+    }
+
+    .item-img {
+       /* height: 326px;*/
+    }
+
+
+    .items-correlati-list .item {
+        width: 50%;
+    }
+
+    .mobile-hide {
+        display: none;
+    }
+    .layer-menu-close {
+        right: 0;
+    }
+
+    .etichetta-whatsapp,
+    .etichetta-facebook {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .item-blog-titolo {
+        font-size: 12px;
+        height: 85px;
+    }
+
+    .item-blog-in-evidenza .item-blog {
+        width: 100%;
+    }
+
+    .banner-button a {
+        padding: 0 20px;
+    }
+
+    .order-by li:first-child {
+        display: block;
+    }
+
+    .search-toolbar li {
+        padding: 0 6px;
+    }
+
+    h1 {
+        margin-top: 0;
+    }
+
+    .banner-top .banner-testo-inner {
+        margin: auto 25px;
+    }
+
+    .banner-top p,
+    .banner-bottom p {
+        width: 95%;
+        font-size: 12px;
+    }
+
+    .banner-button {
+        margin-top: 10px;
+    }
+
+    .banner-bottom .banner-testo {
+        margin-left: 25px;
+    }
+
+    .col-box-left-details, .col-box-right-details, .col-box-right, .col-box-left {
+         margin-bottom: 0;
+    }
+}
+
+@media screen and (max-width: 475px) {
+    .banner-image .banner-image-base {
+        display: none;
+    }
+
+    .banner-image .banner-image-mobile {
+        display: block;
+    }
+
+    .anteprima-home-link {
+        position: relative;
+        top: auto;
+        left: auto;
+        right: auto;
+        bottom: auto;
+        display: block;
+        margin-bottom: 20px;
+    }
+
+    .anteprima-home.anteprima-home-align-right,
+    .anteprima-home .anteprima-home-items,
+    .anteprima-home.anteprima-home-align-left,
+    .anteprima-home .anteprima-home-titolo {
+        float: none;
+        margin: 0;
+        width: 100%;
+    }
+
+    .anteprima-home-align-left .anteprima-home-inner {
+        margin-left: 25px;
+        margin-right: 10px;
+    }
+
+    .anteprima-home-align-right .anteprima-home-inner {
+        margin-left: 10px;
+        margin-right: 25px;
+    }
+
+    .col-margin,
+    .page {
+        margin: 0 10px;
+    }
+    .search-window-form {
+        width: 90%;
+        left: 5%;
+    }
+
+    .item-quantita-wrapper span {
+        margin-right: 5px;
+    }
+
+    .item-quantita-wrapper select {
+        margin-right: 0;
+    }
+
+    .banner-sconto p {
+        font-size: 15px;
+        line-height: 21px;
+        margin-bottom: 6px;
+    }
+
+    .banner-top a {
+        font-size: 11px;
+    }
+
+}
+
+@media screen and (max-width: 380px) {
+    header .search {
+        margin-right: 0;
+    }
+
+    header .menu-user,
+    header #search a.preferiti {
+        display: none;
+    }
+}

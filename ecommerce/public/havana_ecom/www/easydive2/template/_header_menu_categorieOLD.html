@@ -1,0 +1,47 @@
+{% set _lblg = _h.labels.get('global') %}
+{% set _lblw = _h.labels.get('website') %}
+	<section class="menu">
+	<ul>
+	<li class="level-base tree-menu shop btn-shop-red"><a href="{{ _h.xurl('shop') }}">{{ _lblw.tutti_i_prodotti }}</a>
+		<ul class="submenu-auto-width">
+			<div class="web">
+				{{ tree }}
+			</div>
+		</ul>
+	</li>
+	<li class="level-base tree-menu shop">{{ mc.link(_h, "javascript:void(0);", 'EASYDIVE') }}
+		<ul>
+			<li>{{ mc.link(_h, mapPagine.plastic_free.url, mapPagine.plastic_free.get('titolo')) }}</li>
+			<li data-level="1"><a href="javascript:void(0);" class="level1">EASYDIVE</a>
+				<ul>
+					<li>{{ mc.link(_h, mapPagine.chi_siamo.url, mapPagine.chi_siamo.get('titolo')) }}</li>
+					<li>{{ mc.link(_h, mapPagine.perche_easydive.url, mapPagine.perche_easydive.get('titolo')) }}</li>
+					<li>{{ mc.link(_h, mapPagine.garanzia_easydive.url, mapPagine.garanzia_easydive.get('titolo')) }}</li>
+					<li>{{ mc.link(_h, mapPagine.must.url, mapPagine.must.get('titolo')) }}</li>
+					<li>{{ mc.link(_h, _h.xurl('info/faq'), 'FAQ') }}</li>
+				</ul>
+			</li>
+			<li>{{ mc.link(_h, _h.xurl('ambassador'), 'Ambassador') }}</li>
+			<li data-level="1"><a href="{{ _h.xurl('blog') }}" class="level1">{{ _lblw.blog }}</a>
+				<ul>
+					{% for c in listCategoriaBlog %}
+					<li>{{ mc.link(_h, c.url, c.get('nome')) }}</li>
+					{% endfor %}
+				</ul>	
+			</li>
+		</ul>	
+	</li>
+	<li class="level-base"><a href="https://www.youtube.com/user/Easydivechannel" target="_blank" class="btn-channel">Channel</a></li>
+	<li class="level-base"><a href="{{ _h.xurl('scrivi-servizio-clienti') }}" target="_blank">{{ _lblw.contatti }}</a></li>
+	<li class="level-base"><a href="https://tourmkr.com/F1RE4CPrby" target="_blank">{{ _lblw.virtual_tour }}</a></li>
+	</ul>
+	</section>
+	
+	<section class="menu-lingue">
+		<ul>
+			<li class="lingue tree-menu">			
+				{{ mc.menu_lingua(_h, item_urlLang) }}
+			</li>
+		</ul>
+	</section>
+	<img class="ico-plastic-free-white" src="/assets/website/img/plastic-free-white2.gif" data-open-url="{{ mapPagine.plastic_free.url }}">

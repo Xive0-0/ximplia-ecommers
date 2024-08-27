@@ -1,0 +1,412 @@
+@media screen and (max-width: 1240px) {
+.checkout-controlla {
+	width: 250px;
+}
+.checkout-dati-riepilogo {
+	width: 450px;
+}
+.checkout-nav {
+	margin-left: 10px;
+	margin-right: 10px;
+}
+.checkout-dati {
+	width: 330px;
+}
+.checkout-dati-spedizione {
+	margin-right: 40px;
+}
+.riepilogo-item-carrello {
+	width: 450px;
+}
+.col-box-100 {
+	width: 700px;
+}
+.checkout-margin {
+	margin: 0 150px 100px;
+}
+.col-box-50 {
+	width: 360px;
+	margin-right: 25px;
+}
+.col-box-faq {
+	width: 170px;
+}
+.col-box-faq .faq {
+	margin: 10px;
+}
+.ck-articolo {
+	width: 270px;
+}
+.ck-prezzo-unitario {
+	width: 80px;
+}
+.ck-quantita  {
+	width: 70px;
+}
+.ck-azioni {
+	width: 30px;
+}
+.ck-footer .ck-prezzo-totale, 
+.ck-line .ck-prezzo-totale {
+	width: 110px;
+}
+.ck-descrizione {
+	width: 610px;
+}
+.ck-checkbox-descrizione {
+	width: 360px;
+}
+.ck-checkbox-descrizione-1 {
+	width: 290px;
+	font-size: 12px;
+}
+.ck-cc-descrizione {
+	width: 90px;
+	line-height: auto;
+}
+.label-title {
+	font-size: 14px;
+}
+.ck-line .ck-prezzo-totale {
+	font-size: 16px;
+}
+.ck-footer .ck-prezzo-totale {
+	font-size: 18px;
+}
+.ck-totale-ordine .ck-prezzo-totale {
+	font-size: 22px;
+}
+.checkout-main[data-page='3'] .col-box-100 {
+	margin-right: 20px;
+	width: 740px;
+}
+.ck-articolo .label-simple{
+	font-size: 12px;
+}
+}
+@media screen and (max-width: 1000px) {
+.col-box-faq {
+	background: none;
+}
+.col-box-100 h2, 
+.col-box-50 h2 {
+	margin: 20px;
+}
+.tab-title span {
+	padding: 5px;
+	display: block;
+	border: 2px solid #f0f0f0;
+	height: 40px;
+	font-size: 12px;
+}
+.tab-title {
+	cursor: pointer;
+	position: absolute;
+	left: 0;
+	top: 0;
+	text-transform: uppercase;
+	width: 31%;
+}
+.col-box-50:first-child .tab-title {
+	left: 0;
+}
+[data-page="3"] .tab-content,
+[data-page="4"] .tab-content,
+[data-page="5"] .tab-content {
+	background: none;
+	border-top: 10px solid #f0f0f0;
+}
+[data-page="4"] .tab-content:first-child {
+	padding: 0 10px;
+}
+.riepilogo-cart .header {
+	display: none;
+}
+.tab-selected .tab-title{
+	background: #f0f0f0;
+	font-weight: bold;
+}
+.tab-selected .tab-content{
+	display: block;
+}
+.tab-title-2,
+.col-box-50 .tab-title {
+	left: 32%;
+}
+.col-box-faq .tab-title {
+	left: 64%;
+}
+.checkout-main {
+	position: relative;
+}
+.tab-content {
+	margin-top: 50px;
+	display: none;
+	border-top: 1px solid #f0f0f0;
+	background: #f0f0f0;
+	min-height: 200px;
+	padding-bottom: 20px;
+}
+.tab-content .checkout-margin h2 {
+	margin-right: 0;
+	margin-left: 0;
+}
+.tab-content .checkout-margin {
+	margin: 20px;
+}
+.col-box-100 {
+	float: none;
+}
+.checkout-main[data-page='3'] .col-box-100,
+.col-box-50,
+.col-box-100 {
+	width: auto;
+	margin-right: 0;
+}
+.col-box-faq {
+	clear: both;
+	width: auto;
+	float: none;
+	border: 1px solid transparent;
+}
+.col-box-50 {
+	margin: 0;
+	float: none;
+}
+.tab-title {
+	display: block;
+}
+
+}
+@media screen and (max-width: 800px) {
+.riepilogo-item-carrello {
+	width: 350px;
+}
+.checkout-dati-riepilogo,
+.checkout-controlla,
+.checkout-dati {
+	width: auto;
+	float: none;
+	clear: both;
+	display: block;
+}
+.checkout-dati-spedizione {
+	margin-right: 0;
+}
+.ck-image img {
+	max-width: 45px;
+	max-height: 60px;
+}
+.ck-image {
+	width: 55px;
+}
+.ck-line-articolo .ck-cell {
+	height: 150px;
+}
+.ck-footer .ck-prezzo-totale, 
+.ck-line .ck-prezzo-totale {
+	width: 100px;
+}
+.ck-descrizione {
+	width: 480px;
+}
+.ck-checkbox {
+	width: 150px;
+	font-size: 12px;
+}
+.ck-checkbox-descrizione {
+	width: 320px;
+	font-size: 12px;
+}
+.ck-evidenza strong {
+	font-size: 16px;
+}
+.ck-checkbox-descrizione-2 {
+	font-size: 12px;
+	width: 40px;
+}
+.ck-checkbox-descrizione-1 {
+	width: 270px;
+}
+.ck-codice-promozionale .field-line {
+	width: 250px;
+}
+.ck-totale-ordine .ck-prezzo-totale {
+	font-size: 20px;
+}
+.ck-footer .ck-prezzo-totale, 
+.ck-line .ck-prezzo-totale {
+	padding-right: 2px;
+}
+.button-prev {
+	font-size: 16px;
+	padding: 0 15px;
+}
+.ck-quantita input {
+	width: 30px;
+}
+.ck-quantita .action-aggiorna{
+	width: 50px;
+	font-size: 10px;
+}
+.ck-articolo {
+	width: 200px;
+}
+.ck-line .ck-cell {
+	padding-right: 10px;
+	margin-right: 10px;
+}
+.checkout-margin {
+	margin: 0 100px 100px;
+}
+}
+@media screen and (max-width: 600px) {
+.tab-content .button-prev, 
+.tab-content .button-next {
+	display: block;
+}
+.ck-header {
+	display: none;
+}
+.ck-line-articolo .ck-cell {
+	height: auto;
+}
+.ck-articolo {
+	width: auto;
+}
+.action-elimina,
+.ck-quantita input, 
+.ck-prezzo-unitario .price {
+	margin-top: 0;
+}
+.ck-prezzo-unitario {
+	width: 135px;
+}
+.ck-descrizione {
+	width: auto;
+	padding-left: 20px;
+	text-align: left;
+}
+.ck-line .ck-articolo {
+	width: 100%;
+	margin-left: -70px;
+	float: right;
+	position: relative;
+	margin-right: 0;
+}
+.ck-line-spedizione .ck-cell {
+	height: auto;
+}
+.ck-checkbox-descrizione-1,
+.ck-checkbox-descrizione-2 {
+	width: auto;
+	clear: both;
+}
+.ck-cc-descrizione {
+	height: auto;
+	line-height: 16px;
+	width: auto;
+	display: block;
+	float: none;
+	margin-bottom: 10px;
+}
+.ck-checkbox {
+	width: 100%;
+}
+.checkout-footer-toolbar .button-next {
+	line-height: 60px;
+	height: 60px;
+	font-size: 20px;
+}
+.ck-line-pagamento .ck-checkbox-descrizione-2 {
+	display: none;
+}
+.ck-articolo-content {
+	margin-left: 70px;
+}
+.ck-image {
+	position: relative;
+	z-index: 1;
+}
+.ck-footer .ck-cell {
+	height: auto;
+	min-height: auto;
+	float: none;
+	display: block;
+	line-height: 20px;
+}
+.ck-checkbox-descrizione {
+	width: auto;
+}
+.ck-line-spedizione .ck-prezzo-totale{
+	height: auto;
+	min-height: auto;
+}
+.ck-footer .ck-prezzo-totale, 
+.ck-line .ck-prezzo-totale {
+	width: auto;
+}
+.checkout-footer-toolbar .button-next, 
+.checkout-footer .button-prev {
+	float: none;
+	margin-bottom: 20px;
+	display: block;
+	width: auto;
+}
+.ck-prezzo-totale {
+	clear: both;
+	width: auto;
+	text-align: right;
+	float: none;
+}
+.ck-codice-promozionale .ck-line .ck-prezzo-totale,
+.ck-line-pagamento .ck-prezzo-totale {
+	display: none;
+}
+.ck-prezzo-totale span {
+	position: relative;
+}
+.ck-prezzo-totale {
+	min-height: auto;
+}
+.ck-image,
+.ck-articolo {
+	min-height: 90px;
+}
+.ck-prezzo-unitario {
+	clear: both;
+}
+.ck-line .ck-cell {
+	border-right: none;
+}
+.checkout-margin {
+	margin: 0 0 100px;
+}
+.checkout-main[data-page='1'] .col-box-50 h2 {
+	height: auto;
+}
+.field-line-void {
+	display: none;
+}
+.checkout-block .col-box-50:first-child,
+.col-box-50:first-child,
+.checkout-block .col-box-50,
+.col-box-50 {
+	width: auto;
+	float: none;
+	margin-right: 0;
+}
+.box-login fieldset {
+	height: auto;
+}
+.checkout-nav span {
+	display: none;
+}
+}
+@media screen and (max-width: 440px) {
+.checkout-footer-toolbar .button-next {
+	height: auto;
+	line-height: normal;
+	padding: 10px 5px;
+}
+}

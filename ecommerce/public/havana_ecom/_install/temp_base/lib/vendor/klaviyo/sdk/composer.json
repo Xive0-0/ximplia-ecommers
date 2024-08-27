@@ -1,0 +1,33 @@
+{
+    "name" : "klaviyo/sdk",
+    "type": "library",
+    "description": "Empowering creators to own their destiny",
+    "keywords": [
+        "klaviyo",
+        "php",
+        "sdk",
+        "rest",
+        "api",
+        "email",
+        "sms"
+    ],
+    "homepage": "https://developers.klaviyo.com/en",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Klaviyo",
+            "homepage": "https://developers.klaviyo.com/en"
+        }
+    ],
+    "require": {
+        "php": "^7.3 || ^8.0",
+        "ext-curl": "*",
+        "ext-json": "*",
+        "ext-mbstring": "*",
+        "guzzlehttp/guzzle": "^7.3",
+        "guzzlehttp/psr7": "^1.7 || ^2.0"
+    },
+    "autoload": {
+        "psr-4": { "Klaviyo\\" : "lib/" }
+    }
+}

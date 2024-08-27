@@ -1,0 +1,70 @@
+.h-layout-content-cassa {
+	position: absolute
+}
+.h-layout-content-cassa {
+	right: 300px;
+}
+.h-layout-topbar-cassa {
+	height: 70px;
+}
+.cassa .h-layout-content-cassa,
+.cassa .h-layout-content-riepilogo {
+	top: 70px;
+}
+.h-layout-content-riepilogo {
+	width: 300px;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	background: #efefef;
+}
+.cassa-find-articolo .h-bar-button {
+	margin: 2px 0 0 2px;
+	text-transform: capitalize;
+}
+.cassa-find-articolo .field-300 {
+	width: 320px;
+}
+.cassa-find-articolo {
+	position: absolute;
+	left: 200px;
+	top: 10px;
+	line-height: normal;
+}
+.cassa-find-articolo .autocomplete-content {
+	color: #333;
+	font-weight: normal;
+	z-index: 10;
+}
+.cassa .autocomplete-content-value {
+	font-weight: normal;
+	font-size: 11px
+}
+.h-layout-content-cassa input.sconto {
+	width: 20px;
+}
+.h-layout-content-cassa input.quantita {
+	width: 30px;
+}
+.prezzo-originale {
+	text-decoration: line-through;
+	color: #909090;
+}
+.line-totale-ordine {
+	margin: 10px 30px;
+	font-size: 20px;
+	text-align: right;
+}
+.line-totale-sconto {
+	margin: 10px 30px;
+	text-align: right;
+}
+.line-totale-sconto input {
+	width: 50px;
+	font-size: 16px;
+}
+.line-totale-ordine-finale {
+	font-size: 30px;
+	margin: 10px 30px 50px;
+	text-align: right;
+}

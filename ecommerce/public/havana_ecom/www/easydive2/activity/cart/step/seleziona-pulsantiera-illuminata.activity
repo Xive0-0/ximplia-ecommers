@@ -1,0 +1,9 @@
+{
+	"on:begin": [
+		{"name": "cart/step/list-relazione-item", "params": {"tipo": "56"}}
+	],
+	"on:view": {
+		"template": "cart/step/seleziona_pulsantiera_illuminata",
+		"extra": false
+	}
+}

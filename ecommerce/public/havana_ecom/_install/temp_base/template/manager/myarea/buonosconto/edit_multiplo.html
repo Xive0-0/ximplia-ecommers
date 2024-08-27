@@ -1,0 +1,79 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+
+{{ mc.slideBoxHeader(_h, 'Nuovo buono sconto univoco per cliente') }}
+<div class="h-tab">
+<div data-tab-rif="base">Buono sconto</div>
+<div data-tab-rif="nazione">Nazione</div>
+
+<div data-tab="base">
+	<p class="field-line-text">
+	Codice buono sconto generato da sistema, ogni codice è univoco e avrà come prefisso il valore indicato nel campo "prefisso".
+	<p>
+	<p class="field-line field-400">
+		<label>Descrizione<span>*</span>:</label>
+		<input type="text" name="nome" class="field valida-required" value="" maxlength="50">
+	</p>
+	<p class="field-line field-200">
+		<label>Prefisso per ogni codice buono sconto<span>*</span>:</label>
+		<input type="text" name="prefisso" class="field valida-required" value="" maxlength="10">
+	</p>
+	{{ mc.checkbox(item.get('singolo_in_anno_per_e_mail'), 1, 'singolo_in_anno_per_e_mail', 'Riutilizzabile una volta ogni anno') }}
+	{{ mc.checkbox(item.get('non_valido_ritiro_sede'), 1, 'non_valido_ritiro_sede', 'Non utilizzabile per ritiro in sede') }}
+	<p class="field-line field-100">
+		<label>Numero minimo fisso caratteri in aggiunta al prefisso (lasciando il campo vuoto il sistema imposta in autonomia, valore minimo 6):</label>
+		<input type="text" name="numero_caratteri" class="field valida-digitnumber" value="" maxlength="2">
+	</p>
+	<p class="field-line field-400">
+		<label>Tipo:</label>
+		<select name="tipo" class="field">
+			{{ mc.listComboOptions([
+				{'id': 1, 'text': 'percentuale sconto solo prodotti NON scontati'},
+				{'id': 2, 'text': 'percentuale sconto su tutto'},
+				{'id': 3, 'text': 'buono valore euro solo su prodotti NON scontati'},
+				{'id': 4, 'text': 'buono valore euro, utilizzabile in unico acquisto'},
+				{'id': 5, 'text': 'spese spedizione gratis'},
+				{'id': 8, 'text': 'buono valore euro applicato ad ogni singolo prodotto'},
+				{'id': 9, 'text': 'cashback in percentuale su importo ordine'},
+				{'id': 10, 'text': 'omaggio in aggiunta, nessuno sconto applicato'},
+				{'id': 100, 'text': 'gift'}
+			]) }}
+		</select>
+	</p>
+	<div class="field-line">
+		<div class="h-checkbox-wrapper"><span class="h-checkbox" data-value="1"><input type="hidden" name="codice_riutilizzabile" value="" /></span> <strong>Stesso codice utilizzabile più volte</strong></div>
+	</div>
+	<p class="field-line field-100">
+		<label>Sconto/valore (% o {{ _h.config('manager_valuta', '&euro;') }})<span>*</span>:</label>
+		<input type="text" name="sconto" class="field valida-required valida-euro" value="0" maxlength="10">
+	</p>
+	<p class="field-line field-100">
+		<label>Acquisto minimo (o valore minimo articolo in caso di sconto su valore singolo articolo)<span>*</span>:</label>
+		<input type="text" name="acquisto_minimo" class="field valida-required valida-digitnumber" value="0" maxlength="5"> {{ _h.config('manager_valuta', '&euro;') }}
+	</p>
+	<p class="field-line field-100">
+		<label>Numero buoni da creare<span>*</span>:</label>
+		<input type="text" name="numero" class="field valida-required valida-digitnumber" value="">
+	</p>
+	<p class="field-line field-100">
+		<label>Data scadenza<span>*</span>:</label>
+		<input type="text" name="data_scadenza" class="field valida-required valida-datasimple input-datepicker" value="">
+	</p>
+	<p class="field-line field-line-textarea field-400">
+		<label>Limita l'utilizzo alle seguent e-mail (se più e-mail separare da virgola o spazio):</label>
+		<textarea name="limita_e_mail" class="field"></textarea>
+	</p>
+	<p class="field-line field-400">
+		<label>Invia e-mail a completamento ordine quando utilizzato buono sconto (se più e-mail separare da virgola o spazio):</label>
+		<input type="text" name="notifica_e_mail" class="field" value="">
+	</p>
+
+	{{ mc.labelCampiObbligatori() }}
+
+</div>
+<div data-tab="nazione">
+{{ mc.dynamicMultipleSelect(_h, 'Nazione destinazione dove lo sconto è abilitato (selezionare SOLO in caso di restrizione su alcune nazioni, diversamente per default lo sconto è attivo su tutte le nazioni)', listNazione, null, 'id_nazione') }}
+</div>
+
+</div>
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/buonosconto/ex-edit')) }}	

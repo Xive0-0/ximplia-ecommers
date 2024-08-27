@@ -1,0 +1,25 @@
+{% import _h.template('_macro.html') as mc %}
+{% set _lblm = _h.labels.get('my') %}
+
+<div class="breadcrumbs clear">
+	{{ mc.breadcrumbs_home(_h) }}
+	{{ mc.breadcrumbs_separatore() }}
+	<a>{{ _lblm.title_blocco_notifiche_automatiche }}</a>
+</div>
+
+<form id="pagina" class="block-margin">
+	<input type="hidden" name="ref_id" value="{{ _h.input('ref_id') }}">
+	<input type="hidden" name="ref_token" value="{{ _h.input('ref_token') }}">
+	<h2>{{ _lblm.title_blocco_notifiche_automatiche }}</h2>
+	<div class="field-text">
+		<p>{{ _lblm.descr_blocco_notifiche_automatiche }}</p>
+	</div>
+	<div class="field-button field-button-left">
+		<a class="button-red button submit-form" href="javascript:void(0)" title="{{ _lblm.btn_conferma }}" data-action='{"url": "{{ _h.url('account/ex-block-notifiche') }}", "onComplete": {"type": "show", "show": "#conferma_pagina", "hide": "#pagina"}}'><span>{{ _lblm.btn_conferma }}</span></a>
+	</div>
+</form>
+
+<div id="conferma_pagina" class="hide-block block-margin">
+	<div class="hide-block-title">{{ _lblm.title_grazie }}</div>
+	<p>{{ _lblm.descr_conf_blocco_notifiche_automatiche }}</p>
+</div>

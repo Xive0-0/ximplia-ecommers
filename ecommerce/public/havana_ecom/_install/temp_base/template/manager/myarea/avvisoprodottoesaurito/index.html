@@ -1,0 +1,26 @@
+{% import _h.template('manager/_macro.html') as mc %}
+{{ mc.index_page_header(_h, 'Richieste avviso prodotto esaurito', 'avvisoprodottoesaurito') }}
+
+	{{ mc.navButton(_h, 'gestito', 'confirm', 'click', 'h-action-selected-execute', '{"select": {"from":"#h-layout-center-content", "check": 0}, "confirm": "Considerare come gestito?", "url": "' ~ _h.url('manager/myarea/avvisoprodottoesaurito/gestione') ~ '", "params": {"gestione": 1}, "reload": "#h-layout-center-content"}') }}	
+	{{ mc.navButton(_h, 'non gestito', 'noaccess', 'click', 'h-action-selected-execute', '{"select": {"from":"#h-layout-center-content", "check": 0}, "confirm": "Ripristinare a non gestito?", "url": "' ~ _h.url('manager/myarea/avvisoprodottoesaurito/gestione') ~ '", "params": {"gestione": 0}, "reload": "#h-layout-center-content"}') }}	
+	{{ mc.navSeparatore() }}	
+	
+	{{ mc.navButton(_h, 'esporta e-mail', 'disk', 'click', 'h-action-link', '{"url": "' ~ _h.url('manager/myarea/avvisoprodottoesaurito/export') ~ '"}') }}
+	{{ mc.navButton(_h, 'scrivi', 'message', 'click', 'h-action-selected-open-window', '{"select": {"from":"#h-layout-center-content", "check": 1, "errorMessage": "Selezionare una voce"}, "window": {"type": "layer", "url": "' ~ _h.url('manager/myarea/avvisoprodottoesaurito/scrivi') ~ '", "overlay": true, "width": 550, "height": 600}}') }}
+	{% if _h.session.params.user.accesso >= 5 %}
+	{{ mc.navButtonDelete(_h, 'elimina', 'avvisoprodottoesaurito') }}		
+	{% endif %}
+	
+	<div class="h-list-right h-nav-button-group" id="filtri-attivita">
+	{{ mc.navButton(_h, 'filtra', 'filter', 'arrow', 'h-load-in-window', '{"show": ["details-right"], "loadIn": "#h-layout-filtro", "url": "' ~ _h.url('manager/myarea/avvisoprodottoesaurito/filtro') ~ '"}') }}
+	</div>
+	<div class="h-list-right" id="azzera-filtro">
+	{{ mc.navButton(_h, 'azzera filtro', 'reset', 'click', 'h-action-reset-filter', '{"load": "#h-layout-center-content", "reset": "#filtri-attivita"}') }}
+	</div>
+	
+{{ mc.index_page_footer(_h, result, 'avvisoprodottoesaurito') }}
+
+<div id="h-layout-details-right" class="h-layout h-layout-middle">
+	<div class="h-layout-content-wrapper" id="h-layout-filtro">
+	</div>
+</div>

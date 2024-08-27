@@ -1,0 +1,37 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% set lang = _h.input('lang', _h.config('default_language', 'it')) %}
+{{ mc.slideBoxHeader(_h, 'Gruppo opzione') }}
+<input type="hidden" name="id" value="{{ item.id }}">
+<input type="hidden" name="lang" value="{{ lang }}">
+<p class="field-line field-300">
+	<label>{{ mc.labelLang(lang) }} Nome<span>*</span>:</label>
+	<input type="text" name="nome" class="field valida-required" value="{{ item.get('nome') }}" maxlength="100">
+</p>
+<p class="field-line">
+	<label>Aspetto<span>*</span>:</label>
+	<select name="aspetto" class="field">
+		{{ mc.listComboOptions([{'id': '0', 'text': 'Testo'},{'id': '1', 'text': 'Immagine'},{'id': '2', 'text': 'Testo + immagine'}], item.get('aspetto')) }}
+	</select>
+</p>
+<p class="field-line field-150">
+	<label>Codice:</label>
+	<input type="text" name="codice" class="field" value="{{ item.get('codice') }}" maxlength="50">
+</p>
+{% if _h.config('gestione_azienda_account', false) %}
+	{% if _h.session.params.user.id_azienda > 0 %}
+	<input name="id_azienda" type="hidden" value="{{ _h.session.params.user.id_azienda }}">
+	{% else %}
+	<div class="field-line field-300">
+		<label>Visibile solo per azienda:</label>
+		<select name="id_azienda" class="field">
+			<option value="0">- nessuna -</option>
+		{% for i in listAzienda %}
+			<option value="{{ i.id }}" {% if i.id == item.get('id_azienda') %}selected{% endif %}>{{ i.get('nome') }}</option>
+		{% endfor %}	
+		</select> 
+	</div>
+	{% endif %}
+{% endif %}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/attributo/ex-edit-extra'), '"reload": "#attributo-extra-content"') }}	
+

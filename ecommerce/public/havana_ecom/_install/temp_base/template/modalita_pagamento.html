@@ -1,0 +1,121 @@
+{% set _lbl = _h.labels.get('checkout') %}
+<div class="page">
+<h1>{{ _lbl.title_modalita_pagamento }}</h1>
+		
+<div class="html clear">
+{% if item.get('contenuto_pagina') == 0 %}
+{{ item.getWithMerge('testo') }}
+{% else %}
+{{ item.getWithMerge('html') }}
+{% endif %}
+</div>
+{% if _h.settings.get('checkout_pagamento_cc') != '' %}
+	<div class="block-pagamento">
+		<h3>{{ _lbl.tipo_pag_carta_credito }}</h3>
+		<p>{{ _lbl.descr_carta_di_credito }} <strong>{{ _h.settings.get('checkout_cc_circuito') }}</strong></p>
+		{% if _lbl.descr_add_carta_di_credito %}
+		<p>{{ _lbl.descr_add_carta_di_credito }}</p>
+		{% endif %}
+	</div>
+{% endif %}
+{% if _h.settings.get('checkout_pagamento_paypal') != '' %}
+	<div class="block-pagamento">
+		<h3>{{ _lbl.tipo_pag_paypal }}</h3>
+		<p>{{ _lbl.descr_paypal }}</p>
+	</div>
+{% endif %}
+{% if _h.settings.get('checkout_pagamento_bonifico') != '' %}
+	<div class="block-pagamento">
+		<h3>{{ _lbl.tipo_pag_bonifico }}</h3>
+		<p>{{ _lbl.descr_bonifico }}</p>
+		<div class="block-pagamento-dettaglio">
+			<div><em>{{ _lbl.nome_banca }}:</em> <strong>{{ _h.settings.get('checkout_banca_nome') }}</strong></div>
+			<div><em>{{ _lbl.conto_intestato_a }}:</em> <strong>{{ _h.settings.get('checkout_banca_intestazione') }}</strong></div>
+			<div><em>{{ _lbl.iban }}:</em> <strong>{{ _h.settings.get('checkout_banca_iban') }}</strong></div>
+			{% if _h.settings.get('checkout_banca_swift') %}
+			<div><em>{{ _lbl.codice_swift_bic }}:</em> <strong>{{ _h.settings.get('checkout_banca_swift') }}</strong></div>
+			{% endif %}
+		</div>
+		<p>{{ _lbl.descr_ricezione_ordine }}<br>
+		{{ _lbl.descr_bonifico_causale }}</p>
+	</div>
+{% endif %}
+{% if _h.settings.get('checkout_pagamento_contrassegno') != '' %}
+	<div class="block-pagamento">
+		<h3>{{ _lbl.tipo_pag_contrassegno }}</h3>
+		<p>{{ _lbl.descr_contrassegno_1 }}</p>
+		<p>{{ _lbl.descr_contrassegno_2 }}</p>
+		<p>{{ _lbl.descr_contrassegno_3 }}</p>
+		<p>{{ _lbl.descr_contrassegno_4 }} {{ _h.util.currentValuta(_h.settings.get('checkout_contrassegno_spesa', 0)) }}</p>
+	</div>
+{% endif %}
+{% if _h.settings.get('checkout_pagamento_postepay') != '' %}
+	<div class="block-pagamento">
+		<h3>{{ _lbl.tipo_pag_poste_pay }}</h3>
+		{% if _h.settings.get('checkout_postepay_visibile_solo_acquisto', '') == '' %}
+		<p>{{ _lbl.descr_ricarica_postepay }}</p>
+		<div class="block-pagamento-dettaglio">
+			<div><em>{{ _lbl.carta_intestata_a }}:</em> <strong>{{ _h.settings.get('checkout_postepay_intestatario') }}</strong></div>
+			<div><em>{{ _lbl.codice }}:</em> <strong>{{ _h.settings.get('checkout_postepay_numero') }}</strong></div>
+			{% if _h.settings.get('checkout_postepay_codice') %}
+			<div><em>{{ _lbl.codice_fiscale_p_iva }}:</em> <strong>{{ _h.settings.get('checkout_postepay_codice') }}</strong></div>
+			{% endif %}
+		</div>
+		{% endif %}
+		<p>{{ _lbl.descr_ricezione_ordine }}<br>
+		{{ _lbl.descr_ricarica_postepay_nominativo }}</p>
+	</div>
+{% endif %}
+{% if _h.settings.get('checkout_pagamento_ricarica') != '' %}
+	<div class="block-pagamento">
+		<h3>{{ _lbl.tipo_pag_poste_pay }}</h3>
+		<p>{{ _lbl.tipo_pag_ricarica }}</p>
+		<div class="block-pagamento-dettaglio">
+			<div><em>{{ _lbl.intestato_a }}:</em> <strong>{{ _h.settings.get('checkout_ricarica_intestatario') }}</strong>/<div>
+			<div><em>{{ _lb.numero_telefono }}:</em> <strong>{{ _h.settings.get('checkout_ricarica_numero') }}</strong></div>
+		</div>
+		<p>{{ _lbl.descr_ricezione_ordine }}</p>
+	</div>
+{% endif %}
+{% if _h.settings.get('checkout_pagamento_ritiro_sede') != '' %}
+	<div class="block-pagamento">
+		<h3>{{ _lbl.tipo_pag_ritiro_sede }}</h3>
+		<p>{{ _lbl.descr_tipo_pag_ritiro_sede }}</p>
+	</div>
+{% endif %}
+{% if _h.settings.get('checkout_pagamento_scalapay') != '' %}
+<div class="block-pagamento">
+	<h3>{{ _lbl.tipo_pag_scalapay }}</h3>
+	<p>{{ _lbl.descr_scalapay }}</p>
+</div>
+<br>
+{% endif %}
+{% if _h.settings.get('checkout_pagamento_satispay') != '' %}
+<div class="block-pagamento">
+	<h3>{{ _lbl.tipo_pag_satispay }}</h3>
+	<p>{{ _lbl.descr_satispay }}</p>
+</div>
+<br>
+{% endif %}
+{% if _h.settings.get('checkout_pagamento_bancontact') != '' %}
+<div class="block-pagamento">
+	<h3>{{ _lbl.tipo_pag_bancontact }}</h3>
+	<p>{{ _lbl.descr_bancontact }}</p>
+</div>
+<br>
+{% endif %}
+{% if _h.settings.get('checkout_pagamento_18app') != '' %}
+<div class="block-pagamento">
+	<h3>{{ _lbl.tipo_pag_18app }}</h3>
+	<p>{{ _lbl.descr_18app }}</p>
+</div>
+<br>
+{% endif %}
+{% if _h.settings.get('checkout_pagamento_oney') != '' %}
+<div class="block-pagamento">
+	<h3>{{ _lbl.tipo_pag_oney }}</h3>
+	<p>{{ _lbl.descr_oney }}</p>
+</div>
+<br>
+{% endif %}
+</div>

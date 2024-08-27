@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<Products>
+	{% set mapAttributo = _h.context('mapAttributo') %}
+	{% for item in list %}
+		<Product>
+			<id>{{ item.id }}</id>
+			<title><![CDATA[{{item.get('nome')}}]]></title>
+			<link>{{ _h.webAppUrl }}{{ _h.xurl('item-articolo') }}?id={{ item.id }}&#38;__ct=1</link>
+			{% if item.getWithClean('descrizione')|escape %}
+			<description><![CDATA[{{ item.getWithClean('descrizione')|escape }}]]></description>
+			{% else %}
+			<description><![CDATA[{{item.get('nome')}}]]></description>
+			{% endif %}
+			<price>{{ item.prezzo(2, true) }}</price>
+			<image_link>{{ _h.webAppUrl }}{{ item.imageUrl(_h.config('template').web.feed_item_image_dim) }}</image_link>
+			<categories><![CDATA[{{item.azienda.get('nome') }}{% for cat in item.get('id_categoria')|reverse %}, {{ mapAttributo.get(cat).get('nome') }}{% endfor %}]]></categories>
+		</Product>
+	{% endfor %}	
+</Products>

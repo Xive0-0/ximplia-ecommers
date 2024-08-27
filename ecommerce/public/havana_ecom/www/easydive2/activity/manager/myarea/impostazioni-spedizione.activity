@@ -1,0 +1,6 @@
+{
+	"on:view": {
+		"template": "manager/myarea/impostazioni_spedizione",
+		"extra": false
+	}
+}

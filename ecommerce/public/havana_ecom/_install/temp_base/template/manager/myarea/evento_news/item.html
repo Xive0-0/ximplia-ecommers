@@ -1,0 +1,4 @@
+{% import _h.template('manager/_macro_items.html') as mc %}
+{% for item in list %}
+{{ mc.item_evento_news(_h, item) }}
+{% endfor %}

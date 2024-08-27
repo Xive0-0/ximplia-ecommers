@@ -1,0 +1,86 @@
+{% import _h.template('manager/_macro.html') as mc %}
+{% set _lbl = _h.labels.get('manager') %}
+
+<div class="h-layout-content-wrapper h-layout-show-topbar h-layout-show-bottombar">
+	<div class="h-layout-topbar">
+		<div class="h-layout-content-wrapper">
+			Filtra
+		</div>
+	</div>
+	<form>
+	<div class="h-layout-content">
+		<fieldset>
+			<div class="field-line field-200">
+				<label>Periodo di riferimento:</label>
+				<select name="riferimento" class="field">
+				<option value="totale" selected="true">Totale</option>
+				<option value="corrente">{{ now|date('Y') }}</option>
+				<option value="1">{{ now|date('Y')-1 }}</option>
+				<option value="2">{{ now|date('Y')-2 }}</option>
+				<option value="3">{{ now|date('Y')-3 }}</option>
+				</select>
+			</div>
+			<div class="field-line">
+				<div><span class="h-checkbox" data-value="1"><input type="hidden" name="cliente_registrato" value=""></span>Cliente registrato</div>
+			</div>			
+			<div style="margin-top: 10px"><strong>Numero ordini</strong></div>
+			<div class="field-line field-line-left field-80" style="margin-top: 0">
+				<label>Da:</label>
+				<input type="text" name="numero_ordini_dal" class="field valida-int valida-digitint" maxlength="10">
+			</div>
+			<div class="field-line field-line-left field-80" style="margin-top: 0">
+				<label>A:</label>
+				<input type="text" name="numero_ordini_al" class="field valida-int valida-digitint" maxlength="10">
+			</div>
+			<div class="clear"></div>
+			<div style="margin-top: 10px"><strong>Valore &euro; ordini</strong></div>
+			<div class="field-line field-line-left field-80" style="margin-top: 0">
+				<label>Da &euro;:</label>
+				<input type="text" name="valore_ordini_dal" class="field valida-euro valida-digiteuro" maxlength="10">
+			</div>
+			<div class="field-line field-line-left field-80" style="margin-top: 0">
+				<label>A &euro;:</label>
+				<input type="text" name="valore_ordini_al" class="field valida-euro valida-digiteuro" maxlength="10">
+			</div>
+			<div class="clear"></div>
+			<div style="margin-top: 10px"><strong>Numero medio articoli in ordine</strong></div>
+			<div class="field-line field-line-left field-80" style="margin-top: 0">
+				<label>Da:</label>
+				<input type="text" name="numero_medio_articoli_dal" class="field valida-int valida-digitint" maxlength="10">
+			</div>
+			<div class="field-line field-line-left field-80" style="margin-top: 0">
+				<label>A:</label>
+				<input type="text" name="numero_medio_articoli_al" class="field valida-int valida-digitint" maxlength="10">
+			</div>
+			<div class="clear"></div>
+			<div style="margin-top: 10px"><strong>Valore medio articoli</strong></div>
+			<div class="field-line field-line-left field-80" style="margin-top: 0">
+				<label>Da &euro;:</label>
+				<input type="text" name="valore_medio_articoli_dal" class="field valida-euro valida-digiteuro" maxlength="10">
+			</div>
+			<div class="field-line field-line-left field-80" style="margin-top: 0">
+				<label>A &euro;:</label>
+				<input type="text" name="valore_medio_articoli_al" class="field valida-euro valida-digiteuro" maxlength="10">
+			</div>
+			<div class="clear"></div>
+		
+
+			<div style="margin-top: 10px"><strong>Distanza media in giorni tra ordini</strong></div>
+			<div class="field-line field-line-left field-80" style="margin-top: 0">
+				<label>Da:</label>
+				<input type="text" name="giorni_distanza_media_dal" class="field valida-int valida-digitint" maxlength="10">
+			</div>
+			<div class="field-line field-line-left field-80" style="margin-top: 0">
+				<label>A:</label>
+				<input type="text" name="giorni_distanza_media_al" class="field valida-int valida-digitint" maxlength="10">
+			</div>
+		
+		</fieldset>
+	</div>
+	<div class="h-layout-bottombar">
+		<div class="h-layout-content-wrapper">
+			<a href="javascript:void(0);" class="h-bar-button h-bar-button-blu h-action-filter" data-action='{"load": "#h-layout-center-content", "reset": "#azzera-filtro"}'>Filtra</a>
+		</div>
+	</div>
+	</form>
+</div>

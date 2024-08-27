@@ -1,0 +1,9 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Invia Fattura/Ricevuta') }}
+<input type="hidden" name="id" value="{{ _h.input('id') }}">
+<p class="field-line field-400">
+	<label>Eventuale messaggio per il cliente:</label>
+	<textarea name="testo" class="field"></textarea>
+</p>
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/ordini/documenti/ex-invia-fattura')) }}

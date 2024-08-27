@@ -1,0 +1,117 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% set ordine = item.dettaglio.ordine %}
+{{ mc.slideBoxHeader(_h, 'Fatturazione') }}
+<input type="hidden" name="id" value="{{ item.id }}">
+<p class="clear field-line field-250">
+	<label>Tipo pagamento<span>*</span>:</label>
+	<select name="tipo_pagamento" class="field valida-required">
+	{% if _h.settings.get('checkout_pagamento_cc') %}
+		<option value="1" {% if ordine.tipo_pagamento == 1 %}selected="true"{% endif %}>Carta di credito</option>
+	{% endif %}
+	{% if _h.settings.get('checkout_pagamento_paypal') %}
+		<option value="2" {% if ordine.tipo_pagamento == 2 %}selected="true"{% endif %}>PayPal</option>
+	{% endif %}
+	{% if _h.settings.get('checkout_pagamento_bonifico') %}
+		<option value="3" {% if ordine.tipo_pagamento == 3 %}selected="true"{% endif %}>Bonifico</option>
+	{% endif %}
+	{% if _h.settings.get('checkout_pagamento_contrassegno') %}
+		<option value="4" {% if ordine.tipo_pagamento == 4 %}selected="true"{% endif %}>Contrassegno</option>
+	{% endif %}
+	{% if _h.settings.get('checkout_pagamento_postepay') %}
+		<option value="5" {% if ordine.tipo_pagamento == 5 %}selected="true"{% endif %}>Postepay</option>
+	{% endif %}
+	{% if _h.settings.get('checkout_pagamento_ricarica') %}
+		<option value="6" {% if ordine.tipo_pagamento == 6 %}selected="true"{% endif %}>Ricarica telefonica</option>
+	{% endif %}
+	{% if _h.settings.get('checkout_pagamento_ritiro_sede') %}
+		<option value="7" {% if ordine.tipo_pagamento == 7 %}selected="true"{% endif %}>In sede</option>
+	{% endif %}
+	{% if _h.settings.get('checkout_pagamento_scalapay') %}
+		<option value="9" {% if ordine.tipo_pagamento == 9 %}selected="true"{% endif %}>Scalapay</option>
+	{% endif %}
+	{% if _h.settings.get('checkout_pagamento_satispay') %}
+		<option value="20" {% if ordine.tipo_pagamento == 20 %}selected="true"{% endif %}>Satispay</option>
+	{% endif %}
+	{% if _h.settings.get('checkout_pagamento_bancontact') %}
+		<option value="21" {% if ordine.tipo_pagamento == 21 %}selected="true"{% endif %}>Bancontact</option>
+	{% endif %}
+	{% if _h.settings.get('checkout_pagamento_18app') %}
+		<option value="22" {% if ordine.tipo_pagamento == 22 %}selected="true"{% endif %}>Carta giovani</option>
+	{% endif %}
+	{% if _h.settings.get('checkout_pagamento_oney') %}
+		<option value="23" {% if ordine.tipo_pagamento == 23 %}selected="true"{% endif %}>Oney</option>
+	{% endif %}
+	{% if _h.settings.get('checkout_pagamento_punti') %}
+		<option value="1000" {% if ordine.tipo_pagamento == 1000 %}selected="true"{% endif %}>Punti</option>
+	{% endif %}
+	</select>
+</p>
+<p class="clear field-line field-250">
+	<label>Documento<span>*</span>:</label>
+	<select name="documento" class="field valida-required">
+		<option value="0">Ricevuta</option>
+		<option value="1" {% if ordine.richiesta_fatturazione == 1 %}selected="true"{% endif %}>Fattura</option>
+	</select>
+</p>
+<p class="field-line field-400">
+	<label>Ragione Sociale/Nome e cognome<span>*</span>:</label>
+	<input type="text" name="nome" class="field valida-required" value="{{ ordine.fattura.nome }}" maxlength="100">
+</p>
+<p class="field-line field-150 field-line-left">
+	<label>P.IVA:</label>
+	<input type="text" name="p_iva" class="field" value="{{ ordine.fattura.p_iva }}" maxlength="20">
+</p>
+<p class="field-line field-150">
+	<label>Codice fiscale:</label>
+	<input type="text" name="codice_fiscale" class="field" value="{{ ordine.fattura.codice_fiscale }}" maxlength="20">
+</p>
+<div class="clear"></div>
+<p class="field-line clear field-line-left field-100">
+	<label>Data nascita:</label>
+	<input type="text" name="data_nascita" class="field valida-datasimple input-datepicker" value="{{ ordine.fattura.data_nascita }}" maxlength="10">
+</p>
+<p class="field-line field-250 field-line-left">
+	<label>Luogo di nascita:</label>
+	<input type="text" name="luogo_nascita" class="field" value="{{ ordine.fattura.luogo_nascita }}" maxlength="100">
+</p>
+<div class="clear"></div>
+<p class="field-line field-250 field-line-left">
+	<label>E-Mail PEC:</label>
+	<input type="text" name="pec" class="field valida-email" value="{{ ordine.fattura.pec }}" maxlength="100">
+</p>
+<p class="field-line field-100">
+	<label>Codice Destinatario SDI:</label>
+	<input type="text" name="sdi" class="field valida-digitalphanum valida-sdi" value="{{ ordine.fattura.sdi }}" maxlength="7">
+</p>
+<p class="clear field-line field-line-left field-250">
+	<label>Via<span>*</span>:</label>
+	<input type="text" name="via" class="field valida-required" value="{{ ordine.fattura.via }}" maxlength="100">
+</p>
+<p class="field-line field-50">
+	<label>Num. civico<span>*</span>:</label>
+	<input type="text" name="num_civico" class="field valida-required" value="{{ ordine.fattura.num_civico }}" maxlength="10">
+</p>
+<p class="clear field-line clear field-line-left field-50">
+	<label>CAP<span>*</span>:</label>
+	<input type="text" name="cap" class="field valida-digitnumber valida-required" value="{{ ordine.fattura.cap }}" maxlength="5">
+</p>
+<p class="field-line field-250">
+	<label>Località<span>*</span>:</label>
+	<input type="text" name="localita" class="field valida-required" value="{{ ordine.fattura.localita }}" maxlength="50">
+</p>
+<p class="clear field-line field-250">
+	<label>Provincia<span>*</span>:</label>
+	<input type="text" name="provincia" class="field valida-required" value="{{ ordine.fattura.provincia }}" maxlength="50">
+</p>
+<p class="clear field-line field-250">
+	<label>Nazione<span>*</span>:</label>
+	<select name="nazione" class="field valida-required">
+		{% for n in list %}
+		<option value="{{ n.id }}" {% if ordine.fattura.id_nazione == n.id %}selected="true"{% endif %}>{{ n.get('nome') }}</option>
+		{% endfor %}
+	</select>
+</p>
+{{ mc.labelCampiObbligatori() }}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/ordini/ex-edit-fatturazione'), '"reload": ["#h-layout-center-content", "#dettaglio-content"]') }}	
+

@@ -1,0 +1,88 @@
+{% import _h.template('manager/_macro.html') as mc %}
+{% set _lbl = _h.labels.get('manager') %}
+
+{% set lang = _h.input('lang', _h.config('default_language', 'it')) %}
+
+{{ mc.slideBoxHeader(_h, 'Profilo') }}
+<input type="hidden" name="lang" value="{{ lang }}">
+<input type="hidden" name="id" value="{{ item.id }}">
+<div class="h-tab{% if edit_lang %} edit-lang-wrapper{% endif %}">
+
+	<div data-tab-rif="base" class="edit-lang">Scheda</div>
+	<div data-tab-rif="sede">Indirizzo sede</div>
+	<div data-tab="base" class="edit-lang">
+	<p class="field-line field-350">
+		<label>Ragione sociale/Nome<span>*</span>:</label>
+		<input type="text" name="nome" class="field valida-required" value="{{ item.get('nome') }}" maxlength="100">
+	</p>
+	{{ mc.upload_immagine(_h, 'Logo/immagine', item.imageAnteprima()) }}
+	{{ mc.upload_immagine(_h, 'Banner', item.imageAnteprima('b'), 'banner') }}
+	<div class="field-line field-400 edit-lang">
+		<label>Descrizione breve:</label>
+		<textarea name="descrizione_breve" class="visual-editor">{{ item.get('descrizione_breve') }}</textarea>
+	</div>
+	<div class="field-line field-400 edit-lang">
+		<label>Descrizione:</label>
+		<textarea name="descrizione" class="visual-editor">{{ item.get('descrizione') }}</textarea>
+	</div>				
+	{{ mc.labelCampiObbligatori() }}
+	</div>
+	
+	<div data-tab="sede">
+	{{ mc.dynamicSelect(_h, 'Regione/Nazione', listRegione, item, 'id_regione', 'regione', false) }}
+	<p class="field-line field-line-left">
+		<label>Via:</label>
+		<input type="text" name="via" class="field" value="{{ item.get('via') }}" maxlength="100">
+	</p>
+	<p class="field-line field-50">
+		<label>Num. civico:</label>
+		<input type="text" name="num_civico" class="field" value="{{ item.get('num_civico') }}" maxlength="10">
+	</p>
+	<p class="clear field-line clear field-line-left field-50">
+		<label>CAP:</label>
+		<input type="text" name="cap" class="field valida-digitnumber" value="{{ item.get('cap') }}" maxlength="5">
+	</p>
+	<p class="field-line">
+		<label>Località:</label>
+		<input type="text" name="localita" class="field" value="{{ item.get('localita') }}" maxlength="50">
+	</p>
+	<p class="clear field-line">
+		<label>Provincia:</label>
+		<input type="text" name="provincia" class="field" value="{{ item.get('provincia') }}" maxlength="50">
+	</p>
+	<p class="field-line">
+		<label>Telefono:</label>
+		<input type="text" name="telefono" class="field" value="{{ item.get('telefono') }}" maxlength="20">
+	</p>
+	<p class="field-line field-350">
+		<label>E-Mail:</label>
+		<input type="text" name="e_mail" class="field valida-email" value="{{ item.get('e_mail') }}" maxlength="100">
+	</p>
+	<p class="field-line field-350">
+		<label>Sito web:</label>
+		<input type="text" name="sito_web" class="field valida-url" value="{{ item.get('sito_web') }}" maxlength="100">
+	</p>
+	<p class="field-line field-350">
+		<label>Pagina facebook:</label>
+		<input type="text" name="url_facebook" class="field valida-url" value="{{ item.get('url_facebook') }}">
+	</p>
+	<p class="field-line field-350">
+		<label>Pagina linkedin:</label>
+		<input type="text" name="url_linkedin" class="field valida-url" value="{{ item.get('url_linkedin') }}">
+	</p>
+	<p class="field-line field-350">
+		<label>Pagina twitter:</label>
+		<input type="text" name="url_twitter" class="field valida-url" value="{{ item.get('url_twitter') }}">
+	</p>
+	<p class="field-line field-350">
+		<label>Pagina youtube:</label>
+		<input type="text" name="url_youtube" class="field valida-url" value="{{ item.get('url_youtube') }}">
+	</p>
+	<p class="field-line field-350">
+		<label>Pagina instagram:</label>
+		<input type="text" name="url_instagram" class="field valida-url" value="{{ item.get('url_instagram') }}">
+	</p>
+
+	</div>
+</div>
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/azienda/ex-profilo'), item) }}	

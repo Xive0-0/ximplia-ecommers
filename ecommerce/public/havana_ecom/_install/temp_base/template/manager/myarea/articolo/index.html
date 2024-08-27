@@ -1,0 +1,212 @@
+{% import _h.template('manager/_macro.html') as mc %}
+{% import _h.template('manager/_my_macro.html') as mymc %}
+{% set _lbl = _h.labels.get('manager') %}
+{% set imp_articolo = _h.config('template').manager.item.articolo %}
+<div id="h-layout-navigation" class="h-layout h-layout-navigation-with-toolbar h-nav-white">
+	<div class="h-layout-content-wrapper">
+		{{ mc.navMenu(_h, 'articolo') }}
+		<div class="h-nav-title" style="margin-right: 50px;">
+		{{ _lbl.prodotti }}
+		</div>
+{% set edit_table = false %}
+{% if _h.input('edit', '') != '' %}
+{% set edit_table = true %}
+{% endif %}
+{% if (_h.session.params.user.accesso >= 5 or (_h.config('gestione_azienda_account_full', false) and _h.session.params.user.accesso == 3)) and not(imp_articolo.hide_edit_table) %}
+<div class="h-nav-button-wrapper">
+	<a class="h-nav-button h-action-alttext h-nav-button-white{% if not(edit_table) %} selected{% endif %}" data-alttext="elenco classico" href="{{ _h.url('manager/myarea/articolo/index') }}">
+		<img align="top" src="/assets/manager/havana-js/img/icon/ico-list.svg">
+	</a>
+</div>
+<div class="h-nav-button-wrapper">
+	<a class="h-nav-button h-action-alttext h-nav-button-white{% if edit_table %} selected{% endif %}" data-alttext="elenco editabile" href="{{ _h.url('manager/myarea/articolo/index') }}?edit=1">
+		<img align="top" src="/assets/manager/havana-js/img/icon/ico-update.svg">
+	</a>
+</div>
+{% endif %}
+
+{% set listLang = _h.config('enabled_languages') %}
+{% if listLang|length > 0 and (_h.session.params.user.accesso != 3 or (_h.config('gestione_azienda_account_full', false) and _h.session.params.user.accesso == 3)) %}
+	<div class="h-nav-button-wrapper">
+		<a href="javascript:void(0);" class="h-nav-button h-action-popup-menu">
+			Lingua base
+		</a>
+		<div class="h-popup-content h-popup-menu">
+		{% for l in listLang %}
+			<a href="{{ _h.url('manager/myarea/articolo/index') }}?lang={{ l }}&tipo={{ _h.input('tipo', '') }}">{{ l|upper }}</a>
+		{% endfor %}
+		</div>
+	</div>
+{% endif %}
+
+{{ mc.index_page_header_bot() }}
+	
+	{% if _h.istanza.isMaster() and _h.session.params.user.accesso >= 5 or (_h.config('gestione_azienda_account_full', false) and _h.session.params.user.accesso == 3) %}
+	
+	<div class="h-nav-button-wrapper">
+		<a href="javascript:void(0);" class="h-nav-button h-action-popup-menu">
+			<img src="/assets/manager/havana-js/img/icon/ico-new.svg" align="top" />
+			<span>Nuovo</span>
+		</a>
+		<div class="h-popup-content h-popup-menu">
+			{{ mymc.menuAllNuovoArticolo(_h) }}
+		</div>
+	</div>	
+	{% endif %}
+	{% if _h.session.params.user.accesso >= 5 or _h.session.params.user.accesso < 3 or (_h.config('gestione_azienda_account_full', false) and _h.session.params.user.accesso == 3) %}
+	{{ mc.navButtonUpdateLang(_h, 'modifica', 'articolo', 'edit-update') }}
+	{% endif %}
+	{% if _h.session.params.user.accesso >= 5 %}
+		{% if _h.settings.get('gestione_ordini_fornitore', '') != '' %}
+		{{ mc.navButton(_h, 'ordina a fornitore', 'cart', 'click', 'h-action-selected-open-window', '{"select": {"from":"#h-layout-center-content", "check": 1, "errorMessage": "Selezionare una voce"}, "window": {"type": "layer", "url": "' ~ _h.url('manager/myarea/fornitore/edit-articolo-fornitore') ~ '", "overlay": true, "width": 500, "height": 400}}') }}
+		{% endif %}
+	{% endif %}
+	{% if _h.session.params.user.accesso >= 5 or (_h.config('gestione_azienda_account_full', false) and _h.session.params.user.accesso == 3) %}
+	<div class="h-nav-button-wrapper">
+		<a href="javascript:void(0);" class="h-nav-button h-action-popup-menu">
+			<img src="/assets/manager/havana-js/img/icon/ico-menu.svg" align="top" />
+			<span>Impostazioni</span>
+		</a>
+		<div class="h-popup-content h-popup-menu">
+			<a href="javascript:void(0);" class="h-action-selected-execute h-action-close-popup-menu articolo-menu-abilita-disabilita" data-action='{"select": {"from":"#h-layout-center-content", "check": 0}, "url": "{{ _h.url('manager/myarea/articolo/set-visibility') }}", "confirm":"Abilitare gli articoli selezionati?" , "params": {"abilitato": 1}, "reload": "#h-layout-center-content"}'>Abilita</a>
+			<a href="javascript:void(0);" class="h-action-selected-execute h-action-close-popup-menu articolo-menu-abilita-disabilita" data-action='{"select": {"from":"#h-layout-center-content", "check": 0}, "url": "{{ _h.url('manager/myarea/articolo/set-visibility') }}", "confirm":"Disabilitare gli articoli selezionati?", "params": {"abilitato": 0}, "reload": "#h-layout-center-content"}'>Disabilita</a>
+			<a href="javascript:void(0);" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"select": {"from":"#h-layout-center-content", "check": 0}, "url": "{{ _h.url('manager/myarea/articolo/set-esaurito') }}", "confirm":"Indicare come esauriti gli articoli selezionati?" , "params": {"esaurito": 1}, "reload": "#h-layout-center-content"}'>Esaurito</a>
+			<a href="javascript:void(0);" class="h-action-selected-execute h-action-close-popup-menu" data-action='{"select": {"from":"#h-layout-center-content", "check": 0}, "url": "{{ _h.url('manager/myarea/articolo/set-esaurito') }}", "confirm":"Indicare come NON esauriti gli articoli selezionati?", "params": {"esaurito": 0}, "reload": "#h-layout-center-content"}'>NON esaurito</a>
+			<a href="javascript:void(0);" class="h-action-selected-open-window h-action-close-popup-menu" data-action='{"window": {"type": "layer", "overlay": true, "width": 500, "height": 400, "url": "{{ _h.url('manager/myarea/articolo/impostazione-from-upload') }}"}}'>Impostazioni da file</a>
+			{% if _h.config('gestione_parametri_extra_articoli') %}
+				<a href="javascript:void(0);" class="h-action-selected-open-window h-action-close-popup-menu" data-action='{"window": {"type": "layer", "overlay": true, "width": 500, "height": 400, "url": "{{ _h.url('manager/myarea/articolo/extra-from-upload') }}"}}'>Importa extra valori</a>
+				<a href="javascript:void(0);" class="h-action-selected-open-window h-action-close-popup-menu" data-action='{"window": {"type": "layer", "overlay": true, "width": 350, "height": 300, "url": "{{ _h.url('manager/myarea/articolo/export-extra-from-lang') }}"}}'>Esporta extra valori</a>
+			{% endif %}
+			{% if not(imp_articolo.hide_prezzo) %}
+			<a href="javascript:void(0);" class="h-action-selected-open-window h-action-close-popup-menu articolo-menu-prezzo-da-file" data-action='{"window": {"type": "layer", "overlay": true, "width": 500, "height": 500, "url": "{{ _h.url('manager/myarea/articolo/prezzo-from-upload') }}"}}'>Prezzi da file</a>
+			<a href="javascript:void(0);" class="h-action-selected-open-window h-action-close-popup-menu articolo-menu-iva" data-action='{"window": {"type": "layer", "overlay": true, "width": 500, "height": 400, "url": "{{ _h.url('manager/myarea/articolo/iva-from-upload') }}"}}'>IVA da file</a>
+			<a href="javascript:void(0);" class="h-action-selected-open-window h-action-close-popup-menu" data-action='{"select": {"from":"#h-layout-center-content", "check": -1}, "window": {"type": "layer", "overlay": true, "width": 250, "height": 280, "url": "{{ _h.url('manager/myarea/articolo/edit-sconto') }}"}}'>Sconto</a>
+			<a href="javascript:void(0);" class="h-action-selected-open-window h-action-close-popup-menu" data-action='{"select": {"from":"#h-layout-center-content", "check": -1}, "window": {"type": "layer", "overlay": true, "width": 280, "height": 280, "url": "{{ _h.url('manager/myarea/articolo/add-prezzo') }}"}}'>Inc./dec. prezzo</a>
+			<a href="javascript:void(0);" class="h-action-selected-open-window h-action-close-popup-menu articolo-menu-iva" data-action='{"select": {"from":"#h-layout-center-content", "check": 0}, "window": {"type": "layer", "overlay": true, "width": 500, "height": 300, "url": "{{ _h.url('manager/myarea/articolo/edit-codice-iva') }}"}}'>Codice IVA</a>
+			{% endif %}
+			{{ mymc.menuArticolo(_h) }}
+		</div>
+	</div>	
+	{{ mc.navButton(_h, 'duplica', 'copia', 'click', 'h-action-selected-execute', '{"select": {"from":"#h-layout-center-content", "check": 0}, "url": "/manager/myarea/articolo/ex-duplica", "confirm":"Procedere con la duplicazione?", "params": {}, "reload": "#h-layout-center-content"}') }}
+
+	{{ mc.navButtonDelete(_h, 'elimina', 'articolo', true) }}		
+	{% endif %}
+	
+	{% set list = _h.config('enabled_languages') %}
+	{% if not(list) or list|length == 1 %}
+	{% else %}
+		{% if _h.session.params.user.accesso != 3 or (_h.config('gestione_azienda_account_full', false) and _h.session.params.user.accesso == 3) %}
+			{{ mc.navSeparatore() }}
+			<div class="h-nav-button-wrapper">
+				<a href="javascript:void(0);" class="h-nav-button h-action-popup-menu">
+					<img src="/assets/manager/havana-js/img/icon/ico-fascetta.svg" align="top" />
+					<span>Anteprima</span>
+				</a>
+				<div class="h-popup-content h-popup-menu">
+				{% for lang in list %}
+					<a href="javascript:void(0);" class="h-nav-button-click h-action-close-popup-menu h-action-link" data-action='{"select": {"from":"#h-layout-center-content", "check": 1}, "url": "/{{ lang }}/item-articolo"}' data-params-lang="{{ lang }}">Anteprima {{ lang|upper }}</a>
+				{% endfor %}
+				</div>
+			</div>	
+		{% endif %}
+	{% endif %}
+
+	{% if _h.session.params.user.accesso >= 5 or (_h.config('gestione_azienda_account_full', false) and _h.session.params.user.accesso == 3)%}
+	{{ mc.navSeparatore() }}	
+	{{ mc.navButtonPromemoria(_h, 'articolo') }}
+	{{ mc.navSeparatore() }}
+	{{ mc.navButton(_h, 'immagini articolo', 'image', 'click', 'h-action-selected-open-window', '{"select": {"from":"#h-layout-center-content", "check": 1}, "window": {"type": "slide-right", "url": "' ~ _h.url('manager/myarea/articolo/immagine/index') ~ '"}}') }}
+	{{ mc.navButton(_h, 'gallery video', 'video', 'click', 'h-action-selected-open-window', '{"select": {"from":"#h-layout-center-content", "check": 1}, "window": {"type": "slide-right", "url": "' ~ _h.url('manager/myarea/articolo/video/index') ~ '"}}') }}
+	{{ mc.navButton(_h, 'allegati', 'graffa', 'click', 'h-action-selected-open-window', '{"select": {"from":"#h-layout-center-content", "check": 1}, "window": {"type": "slide-right", "url": "' ~ _h.url('manager/myarea/articolo/allegato/index') ~ '"}}') }}
+	{{ mc.navButton(_h, 'immagini aggiuntive', 'gallery', 'click', 'h-action-selected-open-window', '{"select": {"from":"#h-layout-center-content", "check": 1}, "window": {"type": "slide-right", "url": "' ~ _h.url('manager/myarea/galleryimmagini/index') ~ '", "params": {"tipo_entita": "articolo_extra"}}}') }}
+	{{ mc.navButton(_h, 'banner', 'matrix', 'click', 'h-action-selected-open-window', '{"select": {"from":"#h-layout-center-content", "check": 1}, "window": {"type": "slide-right", "url": "' ~ _h.url('manager/myarea/bannerentita/index') ~ '", "params": {"tabella": "articolo"}}}') }}
+	{{ mc.navSeparatore() }}
+	{{ mc.navButton(_h, _lbl.list_varianti, 'varianti', 'click', 'h-action-selected-open-window', '{"select": {"from":"#h-layout-center-content", "check": 1}, "window": {"type": "slide-right", "url": "' ~ _h.url('manager/myarea/articolo/variante/index') ~ '"}}') }}
+	{{ mc.navButton(_h, 'consigliati / correlati', 'relazione', 'click', 'h-action-selected-open-window', '{"select": {"from":"#h-layout-center-content", "check": 1}, "window": {"type": "slide-right", "url": "' ~ _h.url('manager/myarea/articolo/relazione/index') ~ '", "params": {"type": 1}}}') }}
+	
+	{% if list_tipo_relazione|length == 0 %}
+		{{ mc.navButton(_h, 'accessori', 'matrix', 'click', 'h-action-selected-open-window', '{"select": {"from":"#h-layout-center-content", "check": 1}, "window": {"type": "slide-right", "url": "' ~ _h.url('manager/myarea/articolo/relazione/index') ~ '", "params": {"type": 2}}}') }}
+	{% else %}
+		<div class="h-nav-button-wrapper">
+			<a href="javascript:void(0);" class="h-nav-button h-action-popup-menu">
+				<img src="/assets/manager/havana-js/img/icon/ico-matrix.svg" align="top" />
+				<span>accessori</span>
+			</a>
+			<div class="h-popup-content h-popup-menu">
+			{% for elem in list_tipo_relazione %}
+				<a href="javascript:void(0);" class="h-nav-button-click h-action-close-popup-menu h-action-selected-open-window" data-action='{"select": {"from":"#h-layout-center-content", "check": 1}, "window": {"type": "slide-right", "url": "{{ _h.url('manager/myarea/articolo/relazione/index') }}", "params": {"type": "{{ elem.tipo }}", "label": "{{ elem.label }}"}}}'>{{ elem.label }}</a>
+			{% endfor %}
+			</div>
+		</div>	
+	{% endif %}
+		
+	{{ mc.navSeparatore() }}
+	
+	<div class="h-nav-button-wrapper">
+		<a href="javascript:void(0);" class="h-nav-button h-action-popup-menu">
+			<img src="/assets/manager/havana-js/img/icon/ico-disk.svg" align="top" />
+			<span>Esporta</span>
+		</a>
+		<div class="h-popup-content h-popup-menu">
+			<a href="javascript:void(0);" class="h-action-download h-action-close-popup-menu" data-action='{"url": "{{ _h.url('manager/myarea/articolo/export') }}"}'>Esporta dati</a>
+			<a href="javascript:void(0);" class="h-action-download h-action-close-popup-menu" data-action='{"url": "{{ _h.url('manager/myarea/articolo/export-prezzi') }}"}'>Esporta prezzi</a>
+			<a href="javascript:void(0);" class="h-action-download h-action-close-popup-menu" data-action='{"url": "{{ _h.url('manager/myarea/articolo/export-iva') }}"}'>Esporta IVA</a>
+			<a href="javascript:void(0);" class="h-action-download h-action-close-popup-menu" data-action='{"url": "{{ _h.url('manager/myarea/articolo/export-danea') }}"}'>Esporta per DANEA</a>
+			<a href="javascript:void(0);" class="h-action-download h-action-close-popup-menu" data-action='{"url": "{{ _h.url('manager/myarea/articolo/export-amazon-prezzi') }}"}'>Esporta per AMAZON agg. prezzi</a>
+			{{ mymc.menuArticoloEsporta(_h) }}
+			{% set list_lang = _h.config('enabled_languages') %}
+			{% if not(list_lang) %}
+				{% set list_lang = ['it']%}
+			{% endif %}
+			{% for lang in list_lang %}
+				<a href="javascript:void(0);" class="h-action-download h-action-close-popup-menu" data-action='{"url": "{{ _h.url('manager/myarea/articolo/export-completo') }}?lang={{ lang }}"}'>Esporta dati completo lingua {{ lang|upper }}</a>
+			{% endfor %}
+		</div>
+	</div>	
+	
+	{{ mymc.navButtonArticolo(_h) }}
+	{{ mc.navSeparatore() }}
+	{{ mc.navButtonPromozioni(_h, 'articolo') }}
+	{{ mc.navButtonPunti(_h, 'articolo') }}
+	{{ mc.navButton(_h, 'pacchetti', 'euro', 'click', 'h-action-selected-open-window', '{"select": {"from":"#h-layout-center-content", "check": 1}, "window": {"type": "slide-right", "url": "' ~ _h.url('manager/myarea/articolo/pacchetto/index') ~ '"}}') }}
+	{{ mc.navButtonFasciaSconto(_h, 'articolo') }}
+
+	{% else %}
+	{{ mymc.navButtonArticolo(_h) }}
+	{% endif %}
+
+	{% if _h.session.params.user.accesso != 3 %}
+	{{ mc.navButtonMetaInfo(_h, 'articolo') }}	
+	{% endif %}
+	
+	{{ mc.filtro_list() }}
+
+	
+	<div class="h-list-right h-nav-button-group" id="filtri-attivita">
+	{{ mc.navButton(_h, 'filtra', 'filter', 'arrow', 'h-load-in-window', '{"show": ["details-right"], "loadIn": "#h-layout-filtro", "url": "' ~ _h.url('manager/myarea/articolo/filtro') ~ '"}') }}
+	</div>
+	<div class="h-list-right" id="azzera-filtro">
+	{{ mc.navButton(_h, 'azzera filtro', 'reset', 'click', 'h-action-reset-filter', '{"load": "#h-layout-center-content", "reset": "#filtri-attivita"}') }}
+	</div>
+
+{{ mc.index_page_footer(_h, result, 'articolo', edit_table) }}
+
+<div class="h-edit-table-combo" data-type="combo-azienda">
+	<select name="edit_value">
+		<option value="0">- nessuna -</option>
+	{% for i in listAzienda %}	
+		<option value="{{ i.id }}">{{ i.get('nome') }}</option>
+	{% endfor %}	
+	</select> 
+</div>
+<div class="h-edit-table-combo" data-type="combo-spese-spedizione">
+	<select name="edit_value">
+		<option value=""></option>
+		{{ mc.listComboOptions([{'id': 'a', 'text': 'A'},{'id': 'b', 'text': 'B'},{'id': 'c', 'text': 'C'},{'id': 'd', 'text': 'D'},{'id': 'e', 'text': 'E'},{'id': 'f', 'text': 'F'},{'id': 'g', 'text': 'G'},{'id': 'h', 'text': 'H'}]) }}
+	</select>
+</div>
+
+<div id="h-layout-details-right" class="h-layout h-layout-middle">
+	<div class="h-layout-content-wrapper" id="h-layout-filtro">
+	</div>
+</div>

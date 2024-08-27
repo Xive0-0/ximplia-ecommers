@@ -1,0 +1,285 @@
+{% import _h.template('_macro.html') as mc %}
+{% set _lblc = _h.labels.get('checkout_preventivo') %}
+{% set _lblf = _h.labels.get('form') %}
+
+<div class="checkout-main clear" data-page="3">
+
+	<div class="col-box-100">		
+		<div class="tab-selected">
+		<div class="tab-title"><span>{% if cart.solo_digitali or cart.tipo_spedizione == 2 %}
+					{{ _lblc.title_dati_destinazione_merce_solo_digitali }}:
+				{% else %}
+					{{ _lblc.title_dati_destinazione_merce }}:
+				{% endif %}</span></div>
+		<div class="tab-content clear">
+{% if testo %}
+	<div class="html clear">{{ testo.getWithMerge('testo') }}</div>
+{% endif %}
+
+	{% set richiesta_fatturazione = true %}
+	{% set css_richiesta_fatturazione = 'richiesta-fatturazione' %}
+	{% set css_dati_fiscali = '' %}
+		
+	<form id="form-dati">
+		<div class="checkout-dati-spedizione checkout-dati col-box-50">
+			{% if testo_dati_spedizione %}
+				<div class="html clear">{{ testo_dati_spedizione.getWithMerge('testo') }}</div>
+			{% endif %}
+			<div class="form-error-message"></div>
+			{% if listFatturazione|length > 0 %}
+			<div class="field-text">
+				<a class="button-next action-fatturazione-predefinita" href="javascript:void(0);">{{ _lblf.field_elenco_fatture }}</a>
+			</div>
+			{% endif %}
+			<div class="field-text">
+				<strong>{% if cart.solo_digitali or cart.tipo_spedizione == 2 %}
+					{{ _lblc.title_dati_destinazione_merce_solo_digitali }}:
+				{% else %}
+					{{ _lblc.title_dati_destinazione_merce }}:
+				{% endif %}</strong>
+			</div>
+			<div class="field-line-50-50">
+				<div class="field-line">
+					<div class="field">
+						<label>{{ _lblf.field_nome }} <span>*</span></label>
+						<input type="text" name="spedizione_nome" class="valida-required" maxlength="50" value="{{ cart.spedizione.nome }}">
+					</div>
+				</div>
+				<div class="field-line">
+					<div class="field">
+						<label>{{ _lblf.field_cognome }} <span>*</span></label>
+						<input type="text" name="spedizione_cognome" class="valida-required" maxlength="50" value="{{ cart.spedizione.cognome }}">
+					</div>
+				</div>
+			</div>
+			<div class="field-line">
+				<div class="field">
+					<label>{{ _lblf.field_ragione_sociale }}</label>
+					<input type="text" name="fattura_nome" maxlength="100" value="{{ cart.fattura.nome }}">
+				</div>
+			</div>
+			<div class="field-line-50-50">
+				<div class="field-line">
+					<div class="field">
+						<label>{{ _lblf.field_p_iva }}</label>
+						<input type="text" name="fattura_p_iva" class="valida-digitalphanum{% if _h.lang == 'it'%} valida-pivait{% endif %}" maxlength="20" value="{{ cart.fattura.p_iva }}">
+					</div>
+				</div>
+				<div class="field-line">
+					<div class="field">
+						<label>{{ _lblf.field_codice_fiscale }}</label>
+						<input type="text" name="fattura_codice_fiscale" class="valida-digitalphanum{% if _h.lang == 'it'%} valida-codicefiscaleit{% endif %}" maxlength="20" value="{{ cart.fattura.codice_fiscale }}">
+					</div>
+				</div>
+			</div>
+			<div class="field-line-80-20">
+				<div class="field-line">
+					<div class="field">
+						<label>{{ _lblf.field_indirizzo }}</label>
+						<input type="text" name="spedizione_via" maxlength="100" value="{{ cart.spedizione.via }}">
+					</div>
+				</div>
+				<div class="field-line">
+					<div class="field">
+						<label>{{ _lblf.field_civico }}</label>
+						<input type="text" name="spedizione_num_civico" maxlength="10" value="{{ cart.spedizione.num_civico }}">
+					</div>
+				</div>
+			</div>
+			<div class="field-line-30-70">
+				<div class="field-line">
+					<div class="field">
+						<label>{{ _lblf.field_cap }}</label>
+						<input type="text" name="spedizione_cap" maxlength="10" value="{{ cart.spedizione.cap }}">
+					</div>
+				</div>
+				<div class="field-line">
+					<div class="field">
+						<label>{{ _lblf.field_localita }}</label>
+						<input type="text" name="spedizione_localita" maxlength="50" value="{{ cart.spedizione.localita }}">
+					</div>
+				</div>
+			</div>
+			<div class="field-line-50-50">
+				<div class="field-line">
+					<div class="field">
+						<label>{{ _lblf.field_provincia }}</label>
+						{% if _h.settings.get('provincia_nazione_da_tendina') and nazione.id == 108 %}
+						<select name="spedizione_provincia" class="{{ css_required }}">
+						<option></option>
+						{% for prov in listProvinciaNazione %}
+							<option value="{{ prov.get('sigla') }}" {% if cart.spedizione.provincia == prov.get('sigla') %}selected="true"{% endif%}>{{ prov.get('nome') }}</option>
+						{% endfor %}
+						</select>
+						{% else %}
+						<input type="text" name="spedizione_provincia" maxlength="50" value="{{ cart.spedizione.provincia }}">
+						{% endif %}
+					</div>
+				</div>
+				<div class="field-line">
+					<div class="field">
+						<label>{{ _lblf.field_nazione }} <span>*</span></label>
+						<select name="spedizione_id_nazione" class="valida-required">
+							<option value=""></option>
+							{% for naz in listNazione %}
+							<option value="{{ naz.id }}" {% if cart.spedizione.id_nazione and cart.spedizione.id_nazione == naz.id %}selected="true"{% endif %}>{{ naz.get('nome') }}</option>
+							{% endfor %}
+						</select>
+					</div>
+				</div>
+			</div>
+
+
+			<div class="field-line-50-50">
+				<div class="field-line">
+					<div class="field">
+						<label>{{ _lblf.field_telefono }}</label>
+						<input type="text" name="spedizione_telefono" class="field-country-phone" maxlength="20" value="{{ cart.spedizione.telefono }}">
+					</div>
+				</div>
+			</div>
+			<div class="field-text-obbligatori">{{ _lblf.campi_obbligatori }}</div>
+		</div>
+
+		<div class="checkout-dati-fatturazione checkout-dati col-box-50">
+			<div class="field-text">
+				<strong>{{ _lblc.title_eventuali_comunicazioni }}:</strong>
+			</div>
+			<div class="field-line field-line-textarea">
+				<div class="field">
+					<label>{{ _lblf.field_testo_richiesta }}</label>
+					<textarea name="spedizione_indicazioni">{{ cart.spedizione.indicazioni }}</textarea>
+				</div>
+			</div>
+		</div>
+		<div class="clear"></div>
+		<div class="checkout-dati-terminicondizioni checkout-dati">
+			<div class="field-line-checkbox">
+				<div class="field-checkbox-description">
+					{{ _lblf.dichiarazione_letto }} <a href="{{ mapPagine.termini_condizioni.url }}" title="leggi Termini e Condizioni" target="_blank">{{ _lblf.btn_termini_condizioni }}</a>.
+				</div>
+				<div class="field-checkbox-check">
+					<span class="checkbox checkbox-termini-condizioni" data-value="1"><input type="hidden" name="accetto_termini_condizioni" value=""></span>
+					<span class="checkbox-label"><span>{{ _lblf.btn_accetto }}</span></span>
+				</div>
+			</div>
+			
+			{% if _h.session.isAuth %}
+			{% else %}
+				{% if _h.settings.get('accettazione_privacy_inserimento_dati', '') != '' %}
+				<div class="field-line-checkbox">
+					{% if _h.settings.get('testo_privacy_visibile_in_box', '') != '' %}
+					<div class="riquadro-testo-policy" data-contratto="privacy"></div>
+					{% endif %}
+					<div class="field-checkbox-description">
+						{{ _lblf.descr_dichiarazione_letto_privacy }} <a href="{{ mapPagine.privacy.url }}" title="{{ _lblf.alt_btn_ulteriori_informazioni_privacy }}" target="_blank">{{ _lblf.btn_ulteriori_informazioni_privacy }}</a>
+					</div>
+					<div class="field-checkbox-check-acconsento clear checkbox-group">
+						<div class="field-checkbox-check">
+							<span class="checkbox" data-value="1"><input type="hidden" name="no_accetto_privacy" value="1"></span>
+							<span class="checkbox-label"><span>{{ _lblf.btn_non_acconsento }}</span></span>
+						</div>
+						<div class="field-checkbox-check">
+							<span class="checkbox" data-value="1"><input type="hidden" name="accetto_privacy" value=""></span>
+							<span class="checkbox-label"><span>{{ _lblf.btn_acconsento_uso_dati }}</span></span>
+						</div>
+					</div>
+				</div>
+				{% endif %}
+			{% endif %}
+			
+			{% if non_iscritto_newsletter %}
+				{{ mc.field_newsletter_gruppo_extra(_h) }}
+				<div class="field-line-checkbox">
+					<div class="field-checkbox-description">
+						{{ _lblf.descr_iscrivimi_newsletter }} <a href="{{ mapPagine.privacy.url }}" title="{{ _lblf.alt_btn_ulteriori_informazioni_privacy }}" target="_blank">{{ _lblf.btn_ulteriori_informazioni_privacy }}</a>.
+					</div>
+					<div class="field-checkbox-check-acconsento clear checkbox-group">
+						<div class="field-checkbox-check">
+							<span class="checkbox" data-value="1"><input type="hidden" name="no_iscrizione_newsletter"></span>
+							<span class="checkbox-label"><span>{{ _lblf.btn_no_iscrivi }}</span></span>
+						</div>
+						<div class="field-checkbox-check">
+							<span class="checkbox checkbox-newsletter" data-value="1"><input type="hidden" name="iscrizione_newsletter"></span>
+							<span class="checkbox-label"><span>{{ _lblf.btn_iscrivi_newsletter }}</span></span>
+						</div>
+					</div>
+				</div>
+				
+
+				{% if _h.settings.get('gestione_marketing_privacy', '') != '' %}
+				<div class="field-line-checkbox">
+					<div class="field-checkbox-description">
+						{{ _lblf.descr_dichiarazione_letto_marketing_privacy }} <a href="{{ mapPagine.marketing_privacy.url }}" title="{{ _lblf.btn_ulteriori_informazioni_marketing_privacy }}" target="_blank">{{ _lblf.btn_ulteriori_informazioni_marketing_privacy }}</a>
+					</div>
+					<div class="field-checkbox-check-acconsento clear checkbox-group">
+						<div class="field-checkbox-check">
+							<span class="checkbox" data-value="1"><input type="hidden" name="no_accetto_marketing_privacy"></span>
+							<span class="checkbox-label"><span>{{ _lblf.btn_non_acconsento }}</span></span>
+						</div>
+						<div class="field-checkbox-check">
+							<span class="checkbox" data-value="1"><input type="hidden" name="accetto_marketing_privacy" value=""></span>
+							<span class="checkbox-label"><span>{{ _lblf.btn_acconsento_uso_marketing_privacy }}</span></span>
+						</div>
+					</div>
+				</div>
+				{% endif %}
+			{% endif %}
+		</div>
+		
+		<div class="checkout-footer-toolbar clear">
+			<a href="javascript:void(0)" onclick="_ga('send', 'event', 'checkout_preventivo', 'fase3', 'checkout_fase3_riepilogo2_procedi')" title="{{ _lblc.btn_procedi_con_acquisto }}" class="button-next action-submit-3">{{ _lblc.btn_procedi_con_acquisto }}</a>
+		</div>
+	</form>
+	
+	
+	</div>
+	</div>
+	</div>
+</div>
+{% if not(_h.context.isApp()) %}
+<div class="checkout-footer clear">
+<a href="javascript:void(0)" title="{{ _lblc.btn_precedente }}" class="button-prev action-prev-page">{{ _lblc.btn_precedente }}</a>
+</div>
+{% endif %}
+
+{% if listFatturazione|length > 0 %}
+<div style="display: none">
+	{% for ind in listFatturazione %}
+	<div class="item-fattura" data-id="{{ ind.id }}" data-id-nazione="{{ ind.get('nazione') }}">
+		<div class="item-fatturazione-titolo">
+			<span data-name="fattura_nome">{{ ind.get('nome') }}</span>
+		</div>
+		<div>
+			<span data-name="spedizione_nome">{{ ind.get('referente_nome') }}</span>
+			<span data-name="spedizione_cognome">{{ ind.get('referente_cognome') }}</span>
+		</div>
+		<div>
+			<em>{{ _lblf.field_p_iva }}</em> <span data-name="fattura_p_iva">{{ ind.get('p_iva') }}</span>
+		</div>
+		<div>
+			<em>{{ _lblf.field_codice_fiscale }}</em> <span data-name="fattura_codice_fiscale">{{ ind.get('codice_fiscale') }}</span>
+		</div>
+		<div>
+			<span data-name="spedizione_via">{{ ind.get('via') }}</span>,
+			<span data-name="spedizione_num_civico">{{ ind.get('num_civico') }}</span>
+		</div>
+		<div>
+			<span data-name="spedizione_cap">{{ ind.get('cap') }}</span>
+			<span data-name="spedizione_localita">{{ ind.get('localita') }}</span>
+			(<span data-name="spedizione_provincia">{{ ind.get('provincia') }}</span>)
+		</div>
+		<div>
+			<span data-name="spedizione_id_nazione">{{ ind.get('nazione') }}</span>
+			<span data-name="spedizione_nazione">{{ ind.get('nazione') }}</span>
+			<span data-name="spedizione_nazione_nome">{{ mapNazione[ind.get('nazione')].get('nome') }}</span>
+		</div>
+		{% if ind.get('telefono') %}
+		<div>
+			<span data-name="spedizione_telefono">{{ ind.get('telefono') }}</span>
+		</div>
+		{% endif %}
+	</div>
+	{% endfor %}
+</div>
+{% endif %}

@@ -1,0 +1,14 @@
+{% import _h.template('manager/_macro.html') as mc %}
+{{ mc.index_page_header(_h, 'Meta info specifico per URL') }}
+		
+	{{ mc.navButtonNew(_h, 'nuovo', 'urlmeta') }}
+	{{ mc.navButtonUpdate(_h, 'modifica', 'urlmeta') }}
+	{{ mc.navButtonDelete(_h, 'elimina', 'urlmeta') }}	
+	{{ mc.navSeparatore() }}
+	{{ mc.navButton(_h, 'banner', 'matrix', 'click', 'h-action-selected-open-window', '{"select": {"from":"#h-layout-center-content", "check": 1}, "window": {"type": "slide-right", "url": "' ~ _h.url('manager/myarea/bannerentita/index') ~ '", "params": {"tabella": "urlmeta"}}}') }}	
+	{{ mc.navSeparatore() }}
+	{{ mc.navButton(_h, 'importa', 'report', 'click', 'h-action-upload-file', '{"url": "' ~ _h.url('manager/myarea/urlmeta/import') ~ '", "fileType": ["csv"], "onComplete": {"reload": "#h-layout-center-content"}}') }}
+
+	{{ mc.filtro_list() }}
+	
+{{ mc.index_page_footer(_h, result, 'urlmeta') }}

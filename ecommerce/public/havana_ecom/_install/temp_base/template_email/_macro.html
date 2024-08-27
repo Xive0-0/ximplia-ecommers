@@ -1,0 +1,539 @@
+{% macro style_fontHeader() %}
+font-family:'Open Sans',Arial,sans-serif
+{% endmacro %}
+
+{% macro style_font() %}
+font-family:'Open Sans',Arial,sans-serif
+{% endmacro %}
+
+{% macro style_fontBase() %}
+{{ _self.style_font() }};font-size:14px;color:{{ _self.colore_nero() }}
+{% endmacro %}
+
+{% macro style_fontBaseSmall() %}
+{{ _self.style_font() }};font-size:12px;color:{{ _self.colore_nero() }}
+{% endmacro %}
+
+{% macro style_fontTitolo() %}
+{{ _self.style_font() }};font-size:22px;margin-bottom:20px
+{% endmacro %}
+
+{% macro style_p() %}
+padding-bottom:16px
+{% endmacro %}
+
+{% macro style_cella() %}
+padding-bottom:10px;padding-right:15px
+{% endmacro %}
+
+{% macro style_bold() %}
+font-weight:bold
+{% endmacro %}
+
+{% macro style_label() %}
+font-style:italic
+{% endmacro %}
+
+{% macro style_rosso() %}
+color:{{ _self.colore_rosso() }}
+{% endmacro %}
+
+{% macro style_link() %}
+color:{{ _self.colore_link() }}
+{% endmacro %}
+
+{% macro colore_sfondo() %}
+#efefef
+{% endmacro %}
+
+{% macro punti(_h, lang, puntiAttivi) %}
+	{% if puntiAttivi and puntiAttivi.punti > 0 %}
+		{% set _lble = _h.labels('email', lang) %}
+		<div style="{{ self.style_fontBase() }}">
+			{{ _lble.punti_guadagnati }}
+			<strong>{{ puntiAttivi.punti }}</strong>
+			{{ _lble.punti_guadagnati_per_valore_euro }}
+			<strong>{{ _h.util.currentValuta(puntiAttivi.punti_valore) }}</strong>
+		</div>
+	{% endif  %}
+{% endmacro %}
+
+{% macro tableHeader() %}
+    <table border="0" cellpadding="0" cellspacing="0">
+{% endmacro %}
+
+
+{% macro tableFooter() %}
+    </table>
+{% endmacro %}
+
+
+{% macro rowTitle(label) %}
+    <tr><td colspan="2" style="{{ _self.style_fontBase() }};font-weight:bold;{{ _self.style_p() }};{{ _self.style_bold() }}">{{ label }}</td></tr>
+{% endmacro %}
+
+
+{% macro row(label, value) %}
+	{% if value %}
+	<tr>
+	<td valign="top" style="{{ _self.style_fontBase() }};{{ _self.style_cella() }};{{ _self.style_label() }}">
+	{% if label == '' %}
+		&nbsp;
+	{% else %}
+		{{ label }}:
+	{% endif %}
+	</td>
+	<td valign="top" style="{{ _self.style_fontBase() }};{{ _self.style_cella() }}">
+	{{ value }}
+	</td>
+	</tr>
+	{% endif %}
+{% endmacro %}
+
+{% macro item_articolo(_h, art, show_codice_fornitore) %}
+{% if _h.config('template').web['item_image_dim'] %}
+<td style="width: 65px" align="left" valign="top"><img src="{{ _h.webAppUrl }}/images/{{ _h.config('template').web['item_image_dim'] }}/{{ art.item.image }}" style="max-width: 50px"></td>
+{% endif %}
+<td style="padding: 0 10px;">
+	{{ _self._item_articolo(_h, art, show_codice_fornitore) }}
+</td>
+{% endmacro %}
+
+{% macro _item_articolo_dettaglio(_h, art) %}
+{% endmacro %}
+
+{% macro _item_articolo(_h, art, show_codice_fornitore) %}
+	<strong style="{{ _self.style_fontBaseSmall() }}">{{ art.item.nome }}</strong><br>
+	{% if art.item.nome_simbolico %}
+		<span style="{{ _self.style_fontBaseSmall() }}">{{ art.item.nome_simbolico }}</span><br>
+	{% endif %}
+	{% set lang = _h.context('email_lang') %}
+	{% set _lbl = _h.labels('checkout', lang) %}
+	<div style="{{ _self.style_fontBaseSmall() }}">
+		{% if _h.config('show_codice_articolo', true) and art.item.codice %}
+		<div><em style="{{ _self.style_labelSmall() }}">{{ _lbl.codice }}:</em> {{ art.item.codice }}</div>
+		{% endif %}
+		{% if show_codice_fornitore and art.item.get('codice_fornitore', '') != '' %}
+		<div><em style="{{ _self.style_labelSmall() }}">{{ _lbl.codice_fornitore }}:</em> {{ art.item.get('codice_fornitore') }}</div>
+		{% endif %}
+		{% if art.item.tipo == 1 %}
+		<div><em style="{{ _self.style_labelSmall() }}">{{ _lbl.valore_gift_card }}:</em> {{ _h.util.valuta(art.item.valore_gift, art.item.currency) }}</div>
+		{% endif %}
+		{% set map = _h.context('mapAttributo') %}
+		{% set mapType = _h.context('mapAttributoType') %}
+		{% for attr in art.attr %}
+			{% if attr.type matches '/^_extra_*/' %}
+				{% if attr.pers != null and attr.pers != '' %}
+				<div><em>{{ attr.label }}:</em> {{ attr.pers }}</div>
+				{% endif %}
+			{% elseif attr.id != 0 %}
+				{% set a = map.get(attr.id) %}
+				<div><em style="{{ _self.style_labelSmall() }}">{{ mapType.get(a.get('tipo')).nome }}:</em> {{ a.get('nome') }}</div>
+			{% endif %}
+		{% endfor %}
+		{{ _self._item_articolo_dettaglio(_h, art) }}
+	</div>
+{% endmacro %}
+
+
+{% macro margin() %}
+margin-bottom: 30px
+{% endmacro %}
+
+{% macro block() %}
+margin-bottom: 20px
+{% endmacro %}
+
+{% macro style_h2() %}
+font-size: 20px;font-family:'Open Sans',Arial,sans-serif
+{% endmacro %}
+
+{% macro style_h3() %}
+font-size: 16px;font-family:'Open Sans',Arial,sans-serif
+{% endmacro %}
+
+{% macro style_block_details() %}
+font-weight: bold;line-height:20px;font-family:'Open Sans',Arial,sans-serif
+{% endmacro %}
+
+{% macro style_label() %}
+color: #727272;font-weigh:normal;font-family:'Open Sans',Arial,sans-serif;font-size:14px
+{% endmacro %}
+
+{% macro style_labelSmall() %}
+color: #727272;font-weigh:normal;font-family:'Open Sans',Arial,sans-serif;font-size:12px
+{% endmacro %}
+
+{% macro ordine_articoli(_h, ordine, show_codice_fornitore) %}
+{% set lang = _h.context('email_lang') %}
+{% set _lbl = _h.labels('checkout', lang) %}
+{% set _lble = _h.labels('email', lang) %}
+	<table width="100%" cellspacing="0" cellpadding="0" border="0">
+	<tbody>
+	{% set iva = true %}
+	{% if ordine.add_iva == '' and ordine.prezzo_senza_iva %}
+		{% set iva = false %}
+	{% endif %}
+	{% set gift_card = false %}
+	
+	{% for art in ordine.list_items %}
+	<tr>
+		{{ _self.item_articolo(_h, art, show_codice_fornitore) }}
+		<td style="text-align: right;width: 100px">
+			<div style="margin-bottom: 10px;">
+			{% if art.item.tipo == 1 %}
+				{% set gift_card = true %}
+			{% endif %}
+			{% if iva %}
+				{% set prezzo_originale = art.item.prezzo_originale %}
+				{% set prezzo = art.item.prezzo %}
+				{% set total = art.total %}
+			{% else %}
+				{% set prezzo_originale = art.item.prezzo_originale_imponibile %}
+				{% set prezzo = art.item.prezzo_imponibile %}
+				{% set total = art.total_imponibile %}
+			{% endif %}
+			
+				{% if art.item.is_pacchetto %}
+				<div style="{{ _self.style_labelSmall() }}">{{ art.item.nome_pacchetto }}</div>
+				{% elseif art.item.is_sconto %}
+				<div style="{{ _self.style_labelSmall() }};text-decoration:line-through">{{ _h.util.valuta(prezzo_originale, art.item.currency) }}</div>
+				{% endif %}
+				<div style="{{ _self.style_fontBaseSmall() }}">{{ _h.util.valuta(prezzo, art.item.currency) }}</div>			
+			</div>
+			<div style="{{ _self.style_fontBaseSmall() }}">x {{ art.qta }}</div>
+			<div style="{{ _self.style_fontBase() }}"><strong>{{ _h.util.valuta(total, art.item.currency) }}</strong></div>
+			{% if not(iva) %}
+			<div style="{{ _self.style_fontBaseSmall() }}">+{{ _lbl.iva }} {{ art.item.iva }}%: {{ _h.util.valuta(art.total_iva, art.item.currency) }}</div>
+			{% endif %}
+		</td>
+	</tr>
+	<tr><td colspan="3">&nbsp;</td></tr>
+	{% endfor %}
+	{% for art in ordine.list_items_virtuale %}
+	<tr>
+		{% if _h.config('template').web['item_image_dim'] %}
+		<td style="width: 65px" align="left" valign="top">
+			{% if art.item.image %}
+				<img src="{{ _h.webAppUrl }}/images/prev/{{ _h.config('template').web.temp_image_dim }}/{{ art.item.image }}" style="max-width: 50px">
+			{% else %}
+				<img src="{{ _h.webAppUrl }}/assets/void_image.png" style="max-width: 50px">
+			{% endif %}		
+		</td>
+		{% endif %}	
+		<td style="padding: 0 10px;">
+			<div style="{{ _self.style_fontBaseSmall() }}">
+				<strong>{{ art.item.nome }}</strong>
+				{% if art.item.note %}
+					<br><span>{{ art.item.note }}</span>
+				{% endif %}
+			</div>
+		</td>
+		<td style="text-align: right;width: 100px">
+			<div style="margin-bottom: 10px;">
+				{% if iva %}
+					{% set prezzo = art.item.prezzo %}
+					{% set total = art.total %}
+				{% else %}
+					{% set prezzo = art.item.prezzo_imponibile %}
+					{% set total = art.total_imponibile %}
+				{% endif %}
+				<div style="{{ _self.style_fontBaseSmall() }}">{{ _h.util.valuta(prezzo, art.item.currency) }}</div>			
+			</div>
+			<div style="{{ _self.style_fontBaseSmall() }}">x {{ art.qta }}</div>
+			<div style="{{ _self.style_fontBase() }}"><strong>{{ _h.util.valuta(total, art.item.currency) }}</strong></div>
+			{% if not(iva) %}
+			<div style="{{ _self.style_fontBaseSmall() }}">+{{ _lbl.iva }} {{ art.item.iva }}%: {{ _h.util.valuta(art.total_iva, art.item.currency) }}</div>
+			{% endif %}
+		</td>
+	</tr>
+	<tr><td colspan="3">&nbsp;</td></tr>
+	{% endfor %}
+	</tbody>
+	</table>
+	{% if gift_card %}
+	<div style="{{ _self.margin() }}">
+		<div style="{{ _self.style_fontBase() }}">{{ _lble.descr_gift_cart }}</div>
+	</div>
+	{% endif %}
+	{% if ordine.tipo_buono_sconto == 10 %}
+	<div style="{{ _self.margin() }}">
+		<div style="{{ _self.style_fontBase() }}">{{ _lble.descr_buono_sconto_omaggio }}</div>
+	</div>
+	{% endif %}
+{% endmacro %}
+	
+{% macro ordine_spedizione(_h, ordine, interna) %}
+{% set lang = _h.context('email_lang') %}
+{% set _lbl = _h.labels('checkout', lang) %}
+	<tr>
+		<td width="47%" valign="top">
+	{% if not(ordine.solo_digitali) or interna %}
+		{% if ordine.spedizione.nome or ordine.spedizione.cognome %}
+		<div style="{{ _self.block() }}">
+			<em style="{{ _self.style_label() }}">
+			{% if ordine.tipo_spedizione == 1 and not(ordine.solo_digitali) %}
+				{{ _lbl.indirizzo_destinazione }}
+			{% else %}
+				{{ _lbl.title_intestazione_ordine }}
+			{% endif %}
+			</em> 
+			<div style="{{ _self.style_block_details() }}">
+				{{ ordine.spedizione.nome }} {{ ordine.spedizione.cognome }}<br>
+				{% if ordine.spedizione.presso %}
+				<em style="{{ _self.style_labelSmall() }}">{{ _lbl.presso }}:</em> {{ ordine.spedizione.presso }}<br>
+				{% endif %}
+				{% if ordine.spedizione.nome_campanello %}
+				<em style="{{ _self.style_labelSmall() }}">{{ _lbl.nome_campanello_small }}:</em> {{ ordine.spedizione.nome_campanello }}<br>
+				{% endif %}
+				{% if ordine.spedizione.via %}
+				{{ ordine.spedizione.via }}, {{ ordine.spedizione.num_civico }}<br>
+				{% endif %}
+				{{ ordine.spedizione.cap }} {{ ordine.spedizione.localita }} {% if ordine.spedizione.provincia %}({{ ordine.spedizione.provincia }}){% endif %}<br>
+				{{ ordine.spedizione.nazione }}
+			</div>
+		</div>
+		{% else %}
+		&nbsp;
+		{% endif %}
+	</td>
+	<td width="47%" valign="top">
+			{% if ordine.tipo_spedizione == 1 and ordine.spedizione_opzione.list|length > 0 %}
+			<div style="{{ _self.block() }}">
+				<em style="{{ _self.style_label() }}">
+				{{ _lbl.title_opzioni_spedizione }}:
+				</em> 
+				<div style="{{ _self.style_block_details() }}">
+					{% for op in ordine.spedizione_opzione.list %}
+						<div>{{ op.nome }}</div>
+					{% endfor %}		
+				</div>
+			</div>
+			{% endif %}
+		<div style="{{ _self.block() }}">
+			<em style="{{ _self.style_label() }}">
+			{% if ordine.tipo_spedizione == 1 %}
+			{{ _lbl.notifiche_spedizione }}:
+			{% else %}
+			{{ _lbl.notifiche }}:
+			{% endif %}
+			</em> 
+			<div style="{{ _self.style_block_details() }}">
+				{{ ordine.e_mail }}<br>
+				{{ ordine.spedizione.telefono }}
+			</div>
+		</div>
+		{% if ordine.spedizione.indicazioni %}
+		<div style="{{ _self.block() }}">
+			<em style="{{ _self.style_label() }}">{{ _lbl.indicazione_spedizione }}:</em> 
+			<div style="{{ _self.style_block_details() }}">
+				{{ ordine.spedizione.indicazioni }}
+			</div>
+		</div>
+		{% endif %}
+	{% else %}
+	<div style="{{ _self.block() }}">
+		<em style="{{ _self.style_label() }}">{{ _lbl.notifiche }}:</em> 
+		<div style="{{ _self.style_block_details() }}">
+			{{ ordine.e_mail }}<br>
+			{{ ordine.spedizione.telefono }}
+		</div>
+	</div>
+	{% endif %}
+	</td>
+</tr>
+{% if ordine.tipo_spedizione == 2 %}
+<tr>
+	<td colspan="2" valign="top">
+		<div style="{{ _self.block() }}">
+			<em style="{{ _self.style_label() }}">{{ _lbl.title_dove_ritirare_merce }}:</em> 
+			<div style="{{ _self.style_block_details() }}">
+				{{ ordine.sede_ritiro.nome }}<br>
+				{{ ordine.sede_ritiro.via }}, {{ ordine.sede_ritiro.num_civico }}<br>
+				{{ ordine.sede_ritiro.cap }} {{ ordine.sede_ritiro.localita }} ({{ ordine.sede_ritiro.provincia }})</strong>
+				{% if ordine.sede_ritiro.telefono %}
+				<br><em style="{{ _self.style_label() }}">{{ _lbl.numero_telefono }}:</em>{{ ordine.sede_ritiro.telefono }}
+				{% endif %}
+				{% if ordine.sede_ritiro.note %}
+				<br><br>{{ ordine.sede_ritiro.note }}
+				{% endif %}
+				{% if ordine.sede_ritiro.orario_lunedi or 
+					ordine.sede_ritiro.orario_martedi or 
+					ordine.sede_ritiro.orario_mercoledi or
+					ordine.sede_ritiro.orario_giovedi or
+					ordine.sede_ritiro.orario_venerdi or
+					ordine.sede_ritiro.orario_sabato or
+					ordine.sede_ritiro.orario_domenica  %}
+				<br><br><div style="margin-left: 20px;">
+					{{ _lbl.orario_apertura }}:
+					{% if ordine.sede_ritiro.orario_lunedi %}
+						<div><em style="{{ _self.style_label() }}">{{ _lbl.orario_lunedi }}:</em> {{ ordine.sede_ritiro.orario_lunedi }}</div>
+					{% endif %}
+					{% if ordine.sede_ritiro.orario_martedi %}
+						<div><em style="{{ _self.style_label() }}">{{ _lbl.orario_martedi }}:</em> {{ ordine.sede_ritiro.orario_martedi }}</div>
+					{% endif %}
+					{% if ordine.sede_ritiro.orario_mercoledi %}
+						<div><em style="{{ _self.style_label() }}">{{ _lbl.orario_mercoledi }}:</em> {{ ordine.sede_ritiro.orario_mercoledi }}</div>
+					{% endif %}
+					{% if ordine.sede_ritiro.orario_giovedi %}
+						<div><em style="{{ _self.style_label() }}">{{ _lbl.orario_giovedi }}:</em> {{ ordine.sede_ritiro.orario_giovedi }}</div>
+					{% endif %}
+					{% if ordine.sede_ritiro.orario_venerdi %}
+						<div><em style="{{ _self.style_label() }}">{{ _lbl.orario_venerdi }}:</em> {{ ordine.sede_ritiro.orario_venerdi }}</div>
+					{% endif %}
+					{% if ordine.sede_ritiro.orario_sabato %}
+						<div><em style="{{ _self.style_label() }}">{{ _lbl.orario_sabato }}:</em> {{ ordine.sede_ritiro.orario_sabato }}</div>
+					{% endif %}
+					{% if ordine.sede_ritiro.orario_domenica %}
+						<div><em style="{{ _self.style_label() }}">{{ _lbl.orario_domenica }}:</em> {{ ordine.sede_ritiro.orario_domenica }}</div>
+					{% endif %}
+				</div>
+				{% endif %}		
+			</div>
+			{% if _lbl.messaggio_ritiro_presso_la_sede %}
+			<div style="{{ _self.style_block_details() }}">
+				{{ _lbl.messaggio_ritiro_presso_la_sede }}
+			</div>
+			{% endif %}
+		</div>
+	</td>	
+</tr>
+{% endif %}
+{% if not(interna) %}
+	{% if ordine.is_digitali and not(ordine.is_gift_card) and not(ordine.is_voucher) %}
+	<tr>
+		<td colspan="2" valign="top">
+			<div style="{{ _self.block() }}">
+				<em style="{{ _self.style_label() }}">{{ _lbl.informazioni_download }}:</em> 
+				<div style="{{ _self.style_block_details() }}">
+					{{ _lbl.info_articoli_digitali_download }}
+				</div>
+			</div>
+		</td>
+	</tr>
+	{% endif %}	
+	{% if ordine.is_gift_card %}
+	<tr>
+		<td colspan="2" valign="top">
+			<div style="{{ _self.block() }}">
+				<em style="{{ _self.style_label() }}">{{ _lbl.informazioni_gift_card }}:</em> 
+				<div style="{{ _self.style_block_details() }}">
+					{{ _lbl.info_articoli_gift_card }}
+				</div>
+			</div>
+		</td>
+	</tr>
+	{% endif %}
+	{% if ordine.is_voucher %}
+	<tr>
+		<td colspan="2" valign="top">
+			<div style="{{ _self.block() }}">
+				<em style="{{ _self.style_label() }}">{{ _lbl.informazioni_voucher }}:</em> 
+				<div style="{{ _self.style_block_details() }}">
+					{{ _lbl.info_articoli_voucher }}
+				</div>
+			</div>
+		</td>
+	</tr>
+	{% endif %}
+{% endif %}
+{% endmacro %}
+
+{% macro ordine_dati_preventivo(_h, ordine) %}
+{% set lang = _h.context('email_lang') %}
+{% set _lbl = _h.labels('checkout_preventivo', lang) %}
+{% if not(_h.config('gestione_preventivi_semplice', false)) %}
+<div style="{{ _self.block() }}">
+	<em style="{{ _self.style_label() }}">
+	{{ _lbl.title_il_tuo_preventivo }}:
+	</em> 
+	<div style="{{ _self.style_block_details() }}">
+		{{ ordine.spedizione.nome }} {{ ordine.spedizione.cognome }}<br>
+		{% if ordine.fattura.nome != ordine.spedizione.nome ~ ' ' ~ ordine.spedizione.cognome %}
+		{{ ordine.fattura.nome }}<br>
+		{% endif %}
+		{% if ordine.fattura.p_iva %}
+			<em>{{ _lblc.p_iva }}</em> {{ ordine.fattura.p_iva }}<br>
+		{% endif %}
+		{% if ordine.fattura.codice_fiscale %}
+			<em>{{ _lblc.codice_fiscale_small }}</em> {{ ordine.fattura.codice_fiscale }}<br>
+		{% endif %}	
+		{% if ordine.fattura.data_nascita %}
+			<em>{{ _lblc.data_nascita }}</em> {{ ordine.fattura.data_nascita }}<br>
+		{% endif %}	
+		{% if ordine.fattura.luogo_nascita %}
+			<em>{{ _lblc.luogo_nascita }}</em> {{ ordine.fattura.luogo_nascita }}<br>
+		{% endif %}
+		{% if ordine.fattura.pec %}
+			<em>{{ _lblc.pec }}</em> {{ ordine.fattura.pec }}<br>
+		{% endif %}
+		{% if ordine.fattura.sdi %}
+			<em>{{ _lblc.sdi }}</em> {{ ordine.fattura.sdi }}<br>
+		{% endif %}
+		{% if ordine.spedizione.via %}
+		{{ ordine.spedizione.via }}, {{ ordine.spedizione.num_civico }}<br>
+		{% endif %}
+		{% if ordine.spedizione.cap or ordine.spedizione.localita %}
+		{{ ordine.spedizione.cap }} {{ ordine.spedizione.localita }} {% if ordine.spedizione.provincia %}({{ ordine.spedizione.provincia }}){% endif %}<br>
+		{% endif %}
+		{{ ordine.spedizione.nazione }}
+	</div>
+</div>
+{% endif %}
+<div style="{{ _self.block() }}">
+	<em style="{{ _self.style_label() }}">
+	{{ _lbl.notifiche_spedizione }}:
+	</em> 
+	<div style="{{ _self.style_block_details() }}">
+		{{ ordine.e_mail }}<br>
+		{{ ordine.spedizione.telefono }}
+	</div>
+</div>
+{% if ordine.spedizione.indicazioni %}
+<div style="{{ _self.block() }}">
+	<em style="{{ _self.style_label() }}">{{ _lbl.indicazione_preventivo }}:</em> 
+	<div style="{{ _self.style_block_details() }}">
+		{{ ordine.spedizione.indicazioni }}
+	</div>
+</div>
+{% endif %}
+{% endmacro %}
+
+{% macro corriere_tracking(_h, tracking, tracking_ddt, corriere) %}
+{% if tracking or tracking_ddt %}
+	{% set lang = _h.context('email_lang') %}
+	{% set _lbl = _h.labels('email', lang) %}
+	<p style="{{ mc.style_fontBase() }}">{{ _lbl.tracciamento_ordine }} 
+		{% set url = '' %}
+		{% if corriere|lower == 'brt' %}
+			{% if tracking_ddt %}
+				{% set url = 'https://vas.brt.it/vas/sped_RicDocMit_load.hsm?ksu=' ~ _h.settings(lang).get('export_indirizzi_brt_codice_cliente') ~ '&rma=' ~ tracking_ddt ~ '&m_cMode=hyperlink' %}
+			{% else %}
+				{% set url = 'https://vas.brt.it/vas/sped_det_show.hsm?chisono=' ~ tracking %}
+			{% endif %}
+		{% elseif corriere|lower == 'tnt' %}
+			{% set url = 'https://www.tnt.it/tracking/getTrack?WT=1&ConsigNos=' ~ tracking %}
+		{% elseif corriere|lower == 'sda' %}
+			{% set url = 'https://www.sda.it/SITO_SDA-WEB/dispatcher?invoker=home&LEN=&execute2=ActionTracking.doGetTrackingHome&button=Vai&id_ldv=' ~ tracking %}
+		{% elseif corriere|lower == 'gls' %}
+			{% set url = 'https://www.gls-italy.com/?option=com_gls&view=track_e_trace&mode=search&tipo_codice=nazionale&numero_spedizione=' ~ tracking %}
+		{% endif %}
+		{% if url %}
+		<a href="{{ url }}" style="{{ _self.style_link() }};font-weight:bold;">			
+			{% if tracking %}
+			<strong>{{ tracking }}</strong>
+			{% else %}
+			<strong>{{ tracking_ddt }}</strong>
+			{% endif %}
+		</a>
+		<br>{{ _lbl.tracciamento_ordine_clicca }}: <a href="{{ url }}" style="{{ _self.style_link() }};font-weight:bold;">{{ _lbl.tracciamento_ordine_clicca_bottone }}</a>
+		{% else %}
+			{% if tracking %}
+			<strong>{{ tracking }}</strong>
+			{% else %}
+			<strong>{{ tracking_ddt }}</strong>
+			{% endif %}
+		{% endif %}
+	</p>
+{% endif %}
+{% endmacro %}

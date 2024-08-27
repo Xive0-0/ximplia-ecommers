@@ -1,0 +1,28 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeader(_h, 'Gestione abilitazione per gruppo') }}
+
+<p class="field-line field-200">
+	<label>Tipo azione<span>*</span>:</label>
+	<select name="tipo_azione" class="field valida-required">
+		<option value=""></option>
+		<option value="abilita">Abilita</option>
+		<option value="disabilita">Disabilita</option>
+	</select>
+</p>
+
+<p class="field-line field-200">
+	<label>Considera nazioni appartenenti a:</label>
+	<select name="appartenenza" class="field">
+		<option value="tutte" selected="true">Tutte</option>
+		<option value="cee">Appartenenti alla CEE</option>
+		<option value="europa">Europa</option>
+		<option value="asia">Asia</option>
+		<option value="africa">Africa</option>
+		<option value="oceania">Oceania</option>
+		<option value="america_nord">America del nord</option>
+		<option value="america_sud">America del sud</option>
+	</select>
+</p>
+
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/nazione/ex-edit-abilitazione')) }}	

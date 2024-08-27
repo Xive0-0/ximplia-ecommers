@@ -1,0 +1,11 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeaderToolbar(_h, 'Indirizzi aggiuntivi', true) }}
+	{{ mc.navButton(_h, 'nuovo', 'new', 'click', 'h-action-selected-open-window', '{"window": {"type": "layer", "overlay": true, "width": 600, "height": 550, "url": "' ~ _h.url('manager/myarea/ordini/extraindirizzo/edit') ~ '"}}') }}
+	{{ mc.navButtonUpdate(_h, 'modifica', 'ordini/extraindirizzo', '', 'ordini-extraindirizzo-content', '"type": "layer", "overlay": true, "width": 600, "height": 550,') }}
+	{{ mc.navButton(_h, 'elimina', 'delete', 'click', 'h-action-selected-execute', '{"select": {"from":"#ordini-extraindirizzo-content", "check": 1}, "confirm": "Eliminare la voce selezionata?", "url": "' ~ _h.url('manager/myarea/ordini/extraindirizzo/delete') ~ '", "reload": "#ordini-extraindirizzo-content"}') }}		
+	{{ mc.navSeparatore() }}
+	{{ mc.navButton(_h, 'export', 'download', 'click', 'h-action-selected-open-window', '{"window": {"type": "layer", "url": "' ~ _h.url('manager/myarea/ordini/extraindirizzo/esporta') ~ '", "overlay": true, "width": 400, "height": 280}}') }}
+{{ mc.slideBoxHeaderToolbarEnd() }}
+
+{{ mc.box_footer(_h, 'ordini-extraindirizzo', 'ordini/extraindirizzo', list) }}

@@ -1,0 +1,50 @@
+{% if item.get('css_class_pagina') %}
+<div class="{{ item.get('css_class_pagina') }}">
+{% endif %}
+	{% if item.get('css_pagina') %}
+	<style>{{ item.get('css_pagina') }}</style>
+	{% endif %}
+
+	{% if item.get('contenuto_pagina') >= 5 %}
+		{% if item.isImage('g1') %}
+		<div class="landing-page-template-5-image-form data-dynamic-image">
+			<img {{ item.mobileImageParams(['1400x650', 'g1'], ['640x960', 'g2']) }}>
+			{% if item.get('form') %}
+			<div class="landing-page-template-5-form-content" data-overlay="{{ item.get('form_overlay') }}" data-align="{{ item.get('form_allinea') }}">
+				{{ form }}
+			</div>
+			{% endif %}
+		</div>
+		{% endif %}
+		{% if item.isImage('g3') %}
+		<div class="landing-page-template-5-image2">
+			<img {{ item.mobileImageParams(['1400x320', 'g3'], ['640x505', 'g4']) }}>
+		</div>
+		{% endif %}
+	{% else %}
+		{% if item.get('form') %}
+		<div class="clear">
+			<div class="landing-page-html">
+			<div class="landing-page-html-inner">
+		{% endif %}
+		<div class="html">
+		{{ item.getWithMerge('html_pagina') }}
+		</div>
+
+		{% if item.get('form') %}
+			</div>
+			</div>
+			<div class="landing-page-form">
+			{{ form }}
+			</div>
+		</div>
+		{% endif %}
+	{% endif %}
+	
+	
+{% if item.get('css_class_pagina') %}
+</div>
+{% endif %}
+{% if item.get('script_pagina') %}
+<script>{{ item.get('script_pagina') }}</script>
+{% endif %}

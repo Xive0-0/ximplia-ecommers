@@ -1,0 +1,14 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{{ mc.slideBoxHeaderToolbar(_h, 'Vendite extra ecommerce UE', true) }}
+		{{ mc.navButton(_h, 'nuovo', 'new', 'click', 'h-action-window', '{"type": "layer", "url": "' ~ _h.url('manager/myarea/venditeextraue/edit') ~ '", "overlay": true, "width": 500, "height": 350}') }}
+		{{ mc.navButton(_h, 'modifica', 'update', 'click', 'h-action-selected-open-window', '{"select": {"from":"#venditeextraue-content", "check": 1}, "window": {"type": "layer", "url": "' ~ _h.url('manager/myarea/venditeextraue/edit') ~ '", "overlay": true, "width": 500, "height": 350}}') }}
+		{{ mc.navButton(_h, 'elimina', 'delete', 'click', 'h-action-selected-execute', '{"select": {"from":"#venditeextraue-content", "check": 1}, "confirm": "Eliminare la voce?", "url": "' ~ _h.url('manager/myarea/venditeextraue/delete') ~ '", "reload": "#venditeextraue-content"}') }}
+{{ mc.slideBoxHeaderToolbarEnd() }}
+
+	<div id="venditeextraue-content" data-action='{"url": "{{ _h.url('manager/myarea/venditeextraue/list') }}"}'>
+		{% include _h.template('manager/myarea/venditeextraue/list.html') %}	
+	</div>
+	</fieldset>		
+</div>
+</form>

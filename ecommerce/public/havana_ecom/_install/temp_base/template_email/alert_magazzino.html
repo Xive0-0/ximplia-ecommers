@@ -1,0 +1,22 @@
+{% set _lbl = _h.labels('email', lang) %}
+{% import _h.template('_macro.html') as mc %}
+
+<p style="{{ mc.style_fontBase() }}">{{ testo }}</p>
+<div style="{{ mc.margin() }}">
+	<table border="0" cellpadding="0" cellspacing="0">
+	<tr>
+		<td style="{{ mc.style_fontBase() }};font-weight:bold;{{ mc.style_p() }};{{ mc.style_bold() }}">ID</td>
+		<td style="{{ mc.style_fontBase() }};font-weight:bold;{{ mc.style_p() }};{{ mc.style_bold() }}">Codice</td>
+		<td style="{{ mc.style_fontBase() }};font-weight:bold;{{ mc.style_p() }};{{ mc.style_bold() }}">Nome</td>
+	</tr>
+	{% for item in list %}
+		<tr>
+		<td valign="top" style="{{ mc.style_fontBase() }};{{ mc.style_cella() }}">#{{ item.id }}</td>
+		<td valign="top" style="{{ mc.style_fontBase() }};{{ mc.style_cella() }}">{{ item.codice }}</td>
+		<td valign="top" style="{{ mc.style_fontBase() }};{{ mc.style_cella() }}">{{ item.get('nome') }}</td>
+		</tr>
+	{% endfor %}
+	</table>
+</div>
+
+

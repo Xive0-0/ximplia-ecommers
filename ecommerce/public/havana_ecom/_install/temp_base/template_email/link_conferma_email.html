@@ -1,0 +1,12 @@
+{% set _lbl = _h.labels('email', lang) %}
+{% import _h.template('_macro.html') as mc %}
+
+
+
+<p style="{{ mc.style_fontBase() }}">{{ _lbl.ciao }} <strong>{{ nome }}</strong></p>
+<p style="{{ mc.style_fontBase() }}">{{ _lbl.descr_completa_registrazione }} <a href="{{ link }}" style="{{ mc.style_link() }}">{{ _lbl.completa_iscrizione }}</a>, {{ _lbl.descr_oppure_copia_incolla }}</p>
+
+<div style="{{ mc.style_link() }}"><pre>
+{{ link }}
+</pre></div>
+

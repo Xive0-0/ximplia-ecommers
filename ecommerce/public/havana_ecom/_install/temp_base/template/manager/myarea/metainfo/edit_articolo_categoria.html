@@ -1,0 +1,28 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% set lang = _h.input('lang', _h.config('default_language', 'it')) %}
+
+{{ mc.slideBoxHeader(_h, 'Meta info') }}
+<p class="field-line field-100">
+	<label>Lingua<span>*</span>:</label>
+	<select name="lang" class="field valida-required">
+	{% for l in listLang %}
+	<option value="{{ l }}" {% if l == lang %}selected="true"{% endif %}>{{ l|upper }}</option>
+	{% endfor %}
+	</select>
+</p>
+
+<p class="field-line field-400">
+	<label>Titolo:</label>
+	<input type="text" name="title_template" class="field" value="">
+</p>
+<p class="field-line field-400">
+	<label>Meta keywords:</label>
+	<input type="text" name="keywords_template" class="field" value="">
+</p>
+<p class="field-line field-400">
+	<label>Meta description:</label>
+	<textarea name="description_template" class="field"></textarea>
+</p>
+{% include _h.template('manager/myarea/metainfo/_articolo_categoria.html') %}
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/metainfo/ex-edit-articolo-categoria'), '"none": true') }}	

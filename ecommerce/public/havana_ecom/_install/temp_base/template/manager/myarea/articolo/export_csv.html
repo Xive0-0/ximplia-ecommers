@@ -1,0 +1,3 @@
+HID;PESO;CODICE;CODICE FORNITORE;NOME;PREZZO;SCONTO;PREZZO ACQ.;QTA;CATEGORIA PRIMO LIVELLO;CATEGORIA;ALBERO CATEGORIA;
+{% for item in list %}{{ item.id }};{{ item.get('ordine', 0) }};{{ item.codice }};{{ item.getExportCsv('codice_fornitore','') }};{{ item.getExportCsv('nome','') }};{{ item.euro('prezzo') }};{{ item.sconto }}%;{{ item.euro('prezzo_acquisto') }};{{ item.get('quantita_magazzino', 0) }};{{ item.get('_categoria_primo_livello') }};{{ item.get('_categoria') }};{{ item.get('_categoria_albero') }};
+{% endfor %}

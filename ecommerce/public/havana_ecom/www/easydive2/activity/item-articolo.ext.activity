@@ -1,0 +1,27 @@
+{
+	"put": {
+		"view": [
+			{"mymetainfo": true}
+		]
+	},
+	"on:": [
+		"item-articolo-con-variante",
+		{"name": "list-hreflang", "params": {"tipo": "articolo"}},
+		{"name": "list-simple-variante-articolo", "params": {"list": "listArticoloVariante", "context": true}},
+		"list-compatibilita-articolo",
+		"list-accessori-custodie",
+		"list-recensioni",
+		{"name": "relazione-articolo", "params": {"list": "listBundle", "tipo": 1000}},
+		{"name": "item-tipologia-articolo-tree", "params": {"list": "listCollezioneTree", "type": "categoria"}},
+		{"name": "item-attributo-template", "params": {"list": "listAttributoTemplate"}}
+	],
+	"on:view": {
+		"template": "item_articolo",
+		"params": {
+			"js": [
+				"jquery.zoom.min",
+				"item"
+			]
+		}
+	}
+}

@@ -1,0 +1,465 @@
+{% set _lblc = _h.labels.get('checkout') %}
+{% set _lblf = _h.labels.get('form') %}
+
+{% import _h.template('_macro.html') as mc %}
+
+<div class="checkout-main clear" data-page="5"{% if cart.solo_digitali %} data-solo-digitali="si"{% endif%}>
+
+{% set cart_tipo_pagamento = '' %}
+{% if cart.tipo_pagamento == 1 %}
+	{% if cart.richiesta_fatturazione == '' or cart.spedizione_uguale_fatturazione == 1 %}
+		{% set cc_nome_debitore = cart.spedizione.nome ~ ' ' ~ cart.spedizione.cognome %}
+	{% else %}
+		{% set cc_nome_debitore = cart.fattura.nome %}
+	{% endif %}
+	{% if _h.config('checkout_cc') == 'cartasi' %}
+		{{ mc.pagamento_cc_cartasi(_h, 
+			_h.config('checkout_cc_alias'), 
+			_h.settings.get('checkout_cc_ultimateCreditorName'), 
+			_h.settings.get('checkout_cc_address'),  
+			cart.total_ordine, cart.currency, cc_nome_debitore, e_mail, 'ITA', 
+			_h.settings.get('checkout_cc_descrizione')) }}
+		{% set cart_tipo_pagamento = 'cc' %}
+	{% elseif _h.config('checkout_cc') == 'nexi' %}
+		{{ mc.pagamento_cc_nexi(_h, 
+			_h.config('checkout_cc_alias'), 
+			_h.settings.get('checkout_cc_ultimateCreditorName'), 
+			_h.settings.get('checkout_cc_address'),  
+			cart.total_ordine, cart.currency, cc_nome_debitore, e_mail, 'ITA', 
+			_h.settings.get('checkout_cc_descrizione')) }}
+		{% set cart_tipo_pagamento = 'cc' %}
+	{% elseif _h.config('checkout_cc') == 'tgp' %}
+		{{ mc.pagamento_cc_tgp(_h) }}
+		{% set cart_tipo_pagamento = 'cc' %}
+	{% elseif _h.config('checkout_cc') == 'payplug' %}
+		{{ mc.pagamento_cc_payplug(_h) }}
+		{% set cart_tipo_pagamento = 'cc' %}
+	{% elseif _h.config('checkout_cc') == 'pagonline' %}
+		{{ mc.pagamento_cc_pagonline(_h) }}
+		{% set cart_tipo_pagamento = 'cc' %}	
+	{% elseif _h.config('checkout_cc') == 'axepta' %}
+		{{ mc.pagamento_cc_axepta(_h) }}
+		{% set cart_tipo_pagamento = 'cc' %}	
+	{% elseif _h.config('checkout_cc') == 'payway' %}
+		{{ mc.pagamento_cc_payway(_h) }}
+		{% set cart_tipo_pagamento = 'cc' %}	
+	{% elseif _h.config('checkout_cc') == 'stripe' %}
+		{{ mc.pagamento_cc_stripe(_h) }}
+		{% set cart_tipo_pagamento = 'cc' %}	
+	{% elseif _h.config('checkout_cc') == 'paytabs' %}
+		{{ mc.pagamento_cc_paytabs(_h) }}
+		{% set cart_tipo_pagamento = 'cc' %}	
+	{% elseif _h.config('checkout_cc') == 'monetaweb' %}
+		{{ mc.pagamento_cc_monetaweb(_h) }}
+		{% set cart_tipo_pagamento = 'cc' %}			
+	{% elseif _h.config('checkout_cc') == 'plainplay' %}
+		{{ mc.pagamento_cc_plainplay(_h, 
+			_h.settings.get('checkout_cc_label'),  
+			_h.config('checkout_cc_alias'),  
+			_h.settings.get('checkout_cc_abi'),  
+			cart.total_ordine, cart.currency, e_mail) }}
+		{% set cart_tipo_pagamento = 'cc' %}
+	{% else %}
+		{{ mc.pagamento_paypal(_h, _h.settings.get('checkout_paypal_email'), _h.settings.get('checkout_paypal_intestazione'), cart.total_ordine) }}
+		{% set cart_tipo_pagamento = 'paypal' %}
+	{% endif %}
+{% elseif cart.tipo_pagamento == 2 %}
+	{{ mc.pagamento_paypal(_h, _h.settings.get('checkout_paypal_email'), _h.settings.get('checkout_paypal_intestazione'), cart.total_ordine) }}
+	{% set cart_tipo_pagamento = 'paypal' %}
+{% elseif cart.tipo_pagamento == 3 %}
+	{% set cart_tipo_pagamento = 'bonifico' %}
+{% elseif cart.tipo_pagamento == 4 %}
+	{% set cart_tipo_pagamento = 'contrassegno' %}
+{% elseif cart.tipo_pagamento == 5 %}
+	{% set cart_tipo_pagamento = 'postepay' %}
+{% elseif cart.tipo_pagamento == 6 %}
+	{% set cart_tipo_pagamento = 'ricarica' %}
+{% elseif cart.tipo_pagamento == 7 %}
+	{% set cart_tipo_pagamento = 'ritiro_sede' %}
+{% elseif cart.tipo_pagamento == 8 %}
+	{% set cart_tipo_pagamento = 'come_da_accordi' %}
+{% elseif cart.tipo_pagamento == 9 %}
+	{{ mc.pagamento_scalapay(_h) }}
+	{% set cart_tipo_pagamento = 'scalapay' %}
+{% elseif cart.tipo_pagamento == 20 %}
+	{{ mc.pagamento_satispay(_h) }}
+	{% set cart_tipo_pagamento = 'satispay' %}
+{% elseif cart.tipo_pagamento == 21 %}
+	{{ mc.pagamento_bancontact(_h) }}
+	{% set cart_tipo_pagamento = 'bancontact' %}
+{% elseif cart.tipo_pagamento == 22 %}
+	{{ mc.pagamento_18app(_h) }}
+	{% set cart_tipo_pagamento = '18app' %}
+{% elseif cart.tipo_pagamento == 23 %}
+	{{ mc.pagamento_oney(_h) }}
+	{% set cart_tipo_pagamento = 'oney' %}
+{% elseif cart.tipo_pagamento == 1000 %}
+	{{ mc.pagamento_punti(_h) }}
+	{% set cart_tipo_pagamento = 'punti' %}
+{% endif %}
+
+{% if cart.total_ordine > 0 %}
+	{% if cart.tipo_pagamento > 2 %}
+		{% set label_button_completa = _lblc.btn_completa_ordine %}
+	{% else %}
+		{% set label_button_completa = _lblc.btn_procedi_pagamento %}
+	{% endif %}
+{% else %}
+	{% set label_button_completa = _lblc.btn_completa_ordine %}
+	{% set cart_tipo_pagamento = '' %}
+{% endif %}
+
+{% if _h.config('checkout_block_riepilogo_finale', true) %}
+
+	<div class="col-box-100">
+		{% if not(_h.context.isApp()) %}
+		<div class="checkout-riepilogo-carrello">
+			<div class="tab-title tab-title-2"><span>{{ _lblc.riepilogo }}</span></div>
+			<div class="tab-content clear">
+				{% include _h.template('cart/checkout/block/_riepilogo_carrello.html') %}
+			</div>
+		</div>
+		{% endif %}
+		<div class="tab-selected">
+		<div class="tab-title"><span>{{ _lblc.riepilogo_dati_ordine }}</span></div>
+		<div class="tab-content clear">
+		{% if testo %}
+			<div class="html clear">{{ testo.getWithMerge('testo') }}</div>
+		{% endif %}
+		
+		<div class="checkout-controlla">
+		{% set dicitura_descrizione_bottone = '' %}
+		{% if cart.total_ordine > 0 %}
+			{% if cart.tipo_pagamento == 1 %}
+				<div class="checkout-controlla-verifica">{{ _lblc.descr_verifica_paga_carta_di_credito }}</div>
+				{% set dicitura_descrizione_bottone = _lblc.indicazione_sito_banca %}
+			{% elseif cart.tipo_pagamento == 2 %}
+				<div class="checkout-controlla-verifica">{{ _lblc.descr_verifica_paga_paypal }}</div>
+				{% set dicitura_descrizione_bottone = _lblc.indicazione_sito_paypal %}
+			{% elseif cart.tipo_pagamento == 3 %}
+				<div class="checkout-controlla-verifica">{{ _lblc.descr_verifica_paga_altro }}</div>
+				<div class="checkout-controlla-banca">
+					{{ _lblc.descr_bonifico }}<br>
+					<span>
+					<em>{{ _lblc.nome_banca }}:</em> <strong>{{ _h.settings.get('checkout_banca_nome') }}</strong><br>
+					<em>{{ _lblc.conto_intestato_a }}:</em> <strong>{{ _h.settings.get('checkout_banca_intestazione') }}</strong><br>
+					<em>{{ _lblc.iban }}:</em> <strong>{{ _h.settings.get('checkout_banca_iban') }}</strong><br>
+					<em>{{ _lblc.codice_swift_bic }}:</em> <strong>{{ _h.settings.get('checkout_banca_swift') }}</strong>
+					</span>
+					{{ _lblc.descr_ricezione_ordine }}<br>
+					{{ _lblc.descr_bonifico_causale }}
+				</div>
+			{% elseif cart.tipo_pagamento == 4 %}
+				<div class="checkout-controlla-verifica">{{ _lblc.descr_verifica_paga_altro }}</div>
+				<div class="checkout-controlla-banca">
+					{{ _lblc.descr_contrassegno_1 }}<br>
+					{{ _lblc.descr_contrassegno_2 }}
+				</div>
+			{% elseif cart.tipo_pagamento == 5 %}
+				<div class="checkout-controlla-verifica">{{ _lblc.descr_verifica_paga_altro }}</div>
+				<div class="checkout-controlla-banca">
+					{{ _lblc.descr_ricarica_postepay }}<br>
+					<span>
+					<em>{{ _lblc.carta_intestata_a }}:</em> <strong>{{ _h.settings.get('checkout_postepay_intestatario') }}</strong><br>
+					<em>{{ _lblc.codice }}:</em> <strong>{{ _h.settings.get('checkout_postepay_numero') }}</strong><br>
+					<em>{{ _lblc.codice_fiscale_p_iva }}:</em> <strong>{{ _h.settings.get('checkout_postepay_codice') }}</strong>
+					</span>
+					{{ _lblc.descr_ricezione_ordine }}<br>
+					{{ _lblc.descr_ricarica_postepay_nominativo }}
+				</div>
+			{% elseif cart.tipo_pagamento == 6 %}
+				<div class="checkout-controlla-verifica">{{ _lblc.descr_verifica_paga_altro }}</div>
+				<div class="checkout-controlla-banca">
+					{{ _lblc.descr_ricarica_telefonica }}<br>
+					<span>
+						<em>{{ _lblc.intestato_a }}:</em> <strong>{{ _h.settings.get('checkout_ricarica_intestatario') }}</strong><br>
+						<em>{{ _lblc.numero_telefono }}:</em> <strong>{{ _h.settings.get('checkout_ricarica_numero') }}</strong><br>
+					</span>
+					{{ _lblc.descr_ricezione_ordine }}
+				</div>
+			{% elseif cart.tipo_pagamento == 7 %}
+				<div class="checkout-controlla-verifica">{{ _lblc.descr_verifica_paga_altro }}</div>
+				<div class="checkout-controlla-banca">
+					{{ _lblc.descr_pagamento_sede }}<br>
+					<span>
+					<strong>{{ cart.sede_ritiro.nome }}<br>
+					{{ cart.sede_ritiro.via }}{% if cart.sede_ritiro.num_civico %}, {{ cart.sede_ritiro.num_civico }}{% endif %}<br>
+					{{ cart.sede_ritiro.cap }} {{ cart.sede_ritiro.localita }} ({{ cart.sede_ritiro.provincia }})</strong>
+					{% if cart.sede_ritiro.telefono %}
+					<br>{{ cart.sede_ritiro.telefono }}
+					{% endif %}
+					</span>
+				</div>
+			{% elseif cart.tipo_pagamento == 8 %}
+				<div class="checkout-controlla-verifica">{{ _lblc.descr_verifica_paga_altro }}</div>
+				<div class="checkout-controlla-banca">
+					{{ _lblc.descr_pagamento_come_da_accordi }}
+				</div>
+			{% elseif cart.tipo_pagamento == 9 %}
+				<div class="checkout-controlla-verifica">{{ _lblc.descr_verifica_paga_altro }}</div>
+				<div class="checkout-controlla-banca">
+					{{ _lblc.tipo_pag_scalapay }}
+				</div>
+			{% elseif cart.tipo_pagamento == 20 %}
+				<div class="checkout-controlla-verifica">{{ _lblc.descr_verifica_paga_altro }}</div>
+				<div class="checkout-controlla-banca">
+					{{ _lblc.tipo_pag_satispay }}
+				</div>
+			{% elseif cart.tipo_pagamento == 21 %}
+				<div class="checkout-controlla-verifica">{{ _lblc.descr_verifica_paga_altro }}</div>
+				<div class="checkout-controlla-banca">
+					{{ _lblc.tipo_pag_bancontact }}
+				</div>
+			{% elseif cart.tipo_pagamento == 22 %}
+				<div class="checkout-controlla-verifica">{{ _lblc.descr_verifica_paga_altro }}</div>
+				<div class="checkout-controlla-banca">
+					{{ _lblc.tipo_pag_18app }}
+				</div>
+			{% elseif cart.tipo_pagamento == 23 %}
+				<div class="checkout-controlla-verifica">{{ _lblc.descr_verifica_paga_altro }}</div>
+				<div class="checkout-controlla-banca">
+					{{ _lblc.tipo_pag_oney }}
+				</div>
+			{% elseif cart.tipo_pagamento == 1000 %}
+				<div class="checkout-controlla-verifica">{{ _lblc.descr_verifica_paga_altro }}</div>
+				<div class="checkout-controlla-banca">
+					{{ _lblc.tipo_pag_punti }}
+				</div>
+			{% endif %}
+			<div class="action-modifica-pagamento"><a href="javascript:void(0)" title="{{ _lblf.btn_modifica_metodo_pagamento }}" class="action-page" data-page="3">{{ _lblf.btn_modifica_metodo_pagamento }}</a></div>
+		{% endif %}
+			<div class="checkout-controlla-email">{{ _lblc.all_indirizzo_email }} <strong>{{ e_mail }}</strong> 
+				{% if cart.solo_digitali %}
+				{{ _lblc.riceverai_riepilogo_solo_digitali }}
+				{% else %}
+				{{ _lblc.riceverai_riepilogo }}
+				{% endif %}
+			</div>
+			{% if cart.is_digitali %}
+			<div class="checkout-controlla-email checkout-controlla-email-digitali">{{ _lblc.all_indirizzo_email }} <strong>{{ e_mail }}</strong> 
+				{{ _lblc.info_articoli_digitali_download }}
+			</div>
+			{% endif %}
+			{% if not(cart.solo_digitali) %}
+			<div class="checkout-controlla-telefono">
+				{{ _lblc.descr_controlla_dati }}
+			</div>
+			{% endif %}
+			<div class="checkout-controlla-fattura">{{ _lblc.descr_ricezione_fattura }}</div>
+		</div>
+		<div class="checkout-dati-riepilogo">
+			<div class="checkout-riepilogo-block checkout-riepilogo-block-email">
+				<span>{{ _lblc.title_indirizzo_email_riferimento }}</span>
+				<div>
+				{{ e_mail }}
+				</div>
+				<a href="javascript:void(0)" title="{{ _lblf.alt_btn_modifica_email_riferimento }}" class="action-page" data-page="1">{{ _lblf.btn_modifica }}</a>
+			</div>
+			<div class="checkout-riepilogo-block checkout-riepilogo-block-spedizione">
+				<span>
+				{% if cart.solo_digitali or cart.tipo_spedizione == 1 %}
+				{{ _lblc.title_intestazione_ordine }}
+				{% else %}
+				{{ _lblc.title_dove_viene_spedita_merce }}
+				{% endif %}
+				</span>
+				<div>
+				{{ cart.spedizione.nome }} {{ cart.spedizione.cognome }}<br>
+				{% if cart.spedizione.presso %}
+				<span>{{ _lblc.presso }}:</span> {{ cart.spedizione.presso }}<br>
+				{% endif %}
+				{% if cart.spedizione.nome_campanello %}
+				<span>{{ _lblc.nome_campanello_small }}:</span> {{ cart.spedizione.nome_campanello }}<br>
+				{% endif %}
+				{{ cart.spedizione.via }}{% if cart.spedizione.num_civico %}, {{ cart.spedizione.num_civico }}{% endif %}<br>
+				{{ cart.spedizione.cap }} {{ cart.spedizione.localita }} ({{ cart.spedizione.provincia }})<br>
+				{{ nazione.get('nome') }}
+				{% if cart.spedizione.indicazioni %}
+					<br><br><span>{{ _lblc.indicazione_spedizione }}:</span> {{ cart.spedizione.indicazioni }}
+				{% endif %}
+				</div>
+				<a href="javascript:void(0)" title="{{ _lblf.alt_btn_modifica_dati_spedizione }}" class="action-page" data-page="4">{{ _lblf.btn_modifica }}</a>
+			</div>
+			
+			{% if cart.tipo_spedizione == 1 %}
+				{% if cart.spedizione_opzione.list|length > 0 %}
+				<div class="checkout-riepilogo-block checkout-riepilogo-block-spedizione-opzione">
+					<span>{{ _lblc.title_opzioni_spedizione }}</span>
+					<div>
+						<ul>
+						{% for op in cart.spedizione_opzione.list %}
+							<li>{{ op.nome }}</li>
+						{% endfor %}
+						</ul>
+					</div>
+					<a href="javascript:void(0)" title="{{ _lblf.btn_modifica }}" class="action-page" data-page="3">{{ _lblf.btn_modifica }}</a>
+				</div>
+				{% endif %}
+			{% elseif cart.tipo_spedizione == 2 %}
+			<div class="checkout-riepilogo-block checkout-riepilogo-block-ritiro-merce">
+				<span>{{ _lblc.title_dove_ritirare_merce }}</span>
+				<div>
+					{{ cart.sede_ritiro.nome }}<br>
+					{{ cart.sede_ritiro.via }}, {{ cart.sede_ritiro.num_civico }}<br>
+					{{ cart.sede_ritiro.cap }} {{ cart.sede_ritiro.localita }} ({{ cart.sede_ritiro.provincia }})</strong>
+					{% if cart.sede_ritiro.telefono %}
+					<br><span>{{ _lblc.numero_telefono }}:</span>{{ cart.sede_ritiro.telefono }}
+					{% endif %}
+					{% if cart.sede_ritiro.note %}
+					<div class="block-note">{{ cart.sede_ritiro.note }}</div>
+					{% endif %}
+					{% if cart.sede_ritiro.orario_lunedi or 
+						cart.sede_ritiro.orario_martedi or 
+						cart.sede_ritiro.orario_mercoledi or
+						cart.sede_ritiro.orario_giovedi or
+						cart.sede_ritiro.orario_venerdi or
+						cart.sede_ritiro.orario_sabato or
+						cart.sede_ritiro.orario_domenica  %}
+					<div class="block-note">
+						{{ _lblc.orario_apertura }}:
+						<ul>
+						{% if cart.sede_ritiro.orario_lunedi %}
+							<li><em>{{ _lblc.orario_lunedi }}:</em> {{ cart.sede_ritiro.orario_lunedi }}</li>
+						{% endif %}
+						{% if cart.sede_ritiro.orario_martedi %}
+							<li><em>{{ _lblc.orario_martedi }}:</em> {{ cart.sede_ritiro.orario_martedi }}</li>
+						{% endif %}
+						{% if cart.sede_ritiro.orario_mercoledi %}
+							<li><em>{{ _lblc.orario_mercoledi }}:</em> {{ cart.sede_ritiro.orario_mercoledi }}</li>
+						{% endif %}
+						{% if cart.sede_ritiro.orario_giovedi %}
+							<li><em>{{ _lblc.orario_giovedi }}:</em> {{ cart.sede_ritiro.orario_giovedi }}</li>
+						{% endif %}
+						{% if cart.sede_ritiro.orario_venerdi %}
+							<li><em>{{ _lblc.orario_venerdi }}:</em> {{ cart.sede_ritiro.orario_venerdi }}</li>
+						{% endif %}
+						{% if cart.sede_ritiro.orario_sabato %}
+							<li><em>{{ _lblc.orario_sabato }}:</em> {{ cart.sede_ritiro.orario_sabato }}</li>
+						{% endif %}
+						{% if cart.sede_ritiro.orario_domenica %}
+							<li><em>{{ _lblc.orario_domenica }}:</em> {{ cart.sede_ritiro.orario_domenica }}</li>
+						{% endif %}
+						</ul>
+					</div>
+					{% endif %}
+				</div>
+				<a href="javascript:void(0)" title="{{ _lblf.btn_modifica }}" class="action-page" data-page="3">{{ _lblf.btn_modifica }}</a>
+			</div>
+			{% endif %}			
+			
+			<div class="checkout-riepilogo-block checkout-riepilogo-block-telefono">
+				<span>{{ _lblc.title_numero_telefono_comunicazioni }}</span>
+				<div>
+				{{ cart.spedizione.telefono }}
+				</div>
+				<a href="javascript:void(0)" title="{{ _lblf.alt_btn_modifica_telefono }}" class="action-page" data-page="4">{{ _lblf.btn_modifica }}</a>
+			</div>
+			<div class="checkout-riepilogo-block checkout-riepilogo-block-totale">
+				<span>{{ _lblc.title_importo_totale }}</span>
+				<div>
+				{{ _h.util.valuta(cart.total_ordine, cart.currency) }}
+				</div>
+				<a href="javascript:void(0)" title="{{ _lblf.alt_btn_modifica_articoli }}" class="action-page" data-page="3">{{ _lblf.btn_modifica_articoli }}</a>
+			</div>
+			{% if cart.total_ordine > 0 %}
+			<div class="checkout-riepilogo-block checkout-riepilogo-block-pagamento">
+				<span>{{ _lblc.title_tipo_pagamento}}</span>
+				<div>
+				{{ _h.context('checkout_util').getPagamento(cart.tipo_pagamento) }}
+				</div>
+				<a href="javascript:void(0)" title="{{ _lblf.btn_modifica }}" class="action-page" data-page="3">{{ _lblf.btn_modifica }}</a>
+			</div>
+			{% endif %}
+			<div class="checkout-riepilogo-block checkout-riepilogo-block-fatturazione">
+				<span>{% if cart.richiesta_fatturazione == 1 %}
+					{{ _lblc.title_intestazione_fattura }}
+					{% else %}
+					{{ _lblc.title_intestazione_ricevuta }}
+					{% endif %}</span>
+				<div>
+				{% if cart.richiesta_fatturazione == '' or cart.spedizione_uguale_fatturazione == 1 %}
+					{{ cart.spedizione.nome }} {{ cart.spedizione.cognome }}<br>
+				{% else %}
+					{{ cart.fattura.nome }}<br>
+				{% endif %}
+
+				{% if cart.fattura.p_iva %}
+					<span>{{ _lblc.p_iva }}</span> {{ cart.fattura.p_iva }}<br>
+				{% endif %}
+				{% if cart.fattura.codice_fiscale %}
+					<span>{{ _lblc.codice_fiscale_small }}</span> {{ cart.fattura.codice_fiscale }}<br>
+				{% endif %}
+				{% if cart.fattura.pec %}
+					<span>{{ _lblc.pec }}</span> {{ cart.fattura.pec }}<br>
+				{% endif %}
+				{% if cart.fattura.sdi %}
+					<span>{{ _lblc.sdi }}</span> {{ cart.fattura.sdi }}<br>
+				{% endif %}
+				{% if cart.fattura.data_nascita %}
+					<span>{{ _lblc.data_nascita }}</span> {{ cart.fattura.data_nascita }}<br>
+				{% endif %}
+				{% if cart.fattura.luogo_nascita %}
+					<span>{{ _lblc.luogo_nascita }}</span> {{ cart.fattura.luogo_nascita }}<br>
+				{% endif %}
+				
+				{% if cart.richiesta_fatturazione == '' or cart.spedizione_uguale_fatturazione == 1 %}
+					{{ cart.spedizione.via }}{% if cart.spedizione.num_civico %}, {{ cart.spedizione.num_civico }}{% endif %}<br>
+					{{ cart.spedizione.cap }} {{ cart.spedizione.localita }} ({{ cart.spedizione.provincia }})<br>
+					{{ cart.spedizione.nazione }}
+				{% else %}
+					{{ cart.fattura.via }}{% if cart.fattura.num_civico %}, {{ cart.fattura.num_civico }}{% endif %}<br>
+					{{ cart.fattura.cap }} {{ cart.fattura.localita }} ({{ cart.fattura.provincia }})<br>
+					{{ cart.fattura.nazione }}
+				{% endif %}
+				</div>
+				<a href="javascript:void(0)" title="{{ _lblf.alt_btn_modifica_dati_fatturazione }}" class="action-page" data-page="4">{{ _lblf.btn_modifica }}</a>
+			</div>
+			{% for gift in list_gift_card %}
+			<div class="checkout-riepilogo-block checkout-riepilogo-block-giftcard">
+				<span>{{ _lblc.personalizza_gift_card }} "{{ gift.item.get('nome') }}", {{ _lblc.valore_gift_card }} {{ gift.item.valoreGift('e') }}</span>
+				{% if gift.destinatario_email or gift.destinatario_telefono %}
+					{% if gift.destinatario_nome %}
+					<div><span>{{ _lblc.field_gift_card_destinatario_nome }}</span><br>{{ gift.destinatario_nome }}</div>
+					{% endif %}
+					{% if gift.destinatario_email %}
+					<div><span>{{ _lblc.field_gift_card_destinatario_email }}</span><br>{{ gift.destinatario_email }}</div>
+					{% endif %}
+					{% if gift.destinatario_telefono %}
+					<div><span>{{ _lblc.field_gift_card_destinatario_telefono }}</span><br>{{ gift.destinatario_telefono }}</div>
+					{% endif %}
+					{% if gift.destinatario_messaggio %}
+					<div><span>{{ _lblc.field_gift_card_destinatario_messaggio }}</span><br>{{ gift.destinatario_messaggio }}</div>
+					{% endif %}
+				{% else %}
+				<div>{{ _lblc.gift_card_nessuna_personalizzazione }}</div>
+				{% endif %}
+				<a href="javascript:void(0)" title="{{ _lblf.btn_modifica }}" class="action-page" data-page="4">{{ _lblf.btn_modifica }}</a>
+			</div>
+			{% endfor %}
+		
+			{% if dicitura_descrizione_bottone %}
+			<div class="checkout-footer-toolbar checkout-footer-toolbar-descrizione clear">
+			{{ dicitura_descrizione_bottone }}
+			</div>			
+			{% endif %}
+			<div class="checkout-footer-toolbar clear">
+				<a href="javascript:void(0)" title="{{ label_button_completa }}" class="button-next button-next-cart action-submit-5" data-pagamento="{{ cart_tipo_pagamento }}">{{ label_button_completa }}</a>
+			</div>	
+		</div>
+	
+	</div>
+	</div>
+	</div>
+	{% if not(_h.context.isApp()) %}
+	{% include _h.template('cart/checkout/block/_faq.html') %}
+	{% endif %}
+</div>
+	{% if not(_h.context.isApp()) %}
+	<div class="checkout-footer clear">
+	<a href="javascript:void(0)" title="{{ _lblc.btn_precedente }}" class="button-prev action-prev-page">{{ _lblc.btn_precedente }}</a>
+	</div>
+	{% endif %}
+{% else %}
+	<div class="action-esegui-pagamento" data-pagamento="{{cart_tipo_pagamento}}"></div>
+</div>
+{% endif %}

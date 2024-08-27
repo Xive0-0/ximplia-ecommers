@@ -1,0 +1,8 @@
+{% set _lblm = _h.labels.get('my') %}
+{% set _lblf = _h.labels.get('form') %}
+
+<h2>{{ _lblm.title_elimina_account }}</h2>
+<p>{{ _lblm.descr_procedere_eliminazione_account }}</p>
+<p>{{ _lblm.descr_elimina_account_3 }}</p>
+<p>&nbsp;</p>
+<p><a class="button-red button" href="{{ _h.url('account/my/esegui-elimina-account') }}" title="{{ _lblf.btn_elimina_account }}"><span>{{ _lblf.btn_elimina_account }}<span></a></p>

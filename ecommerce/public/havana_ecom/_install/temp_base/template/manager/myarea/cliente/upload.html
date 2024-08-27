@@ -1,0 +1,39 @@
+{% import _h.template('manager/_macro.html') as mc %}
+
+{% set lang = _h.input('lang', _h.config('default_language', 'it')) %}
+
+{{ mc.slideBoxHeader(_h, 'Carica da File clienti') }}
+<p class="field-line-label">
+	Import dei clienti, sono supportati solo i seguenti formati: <strong>.xls, .xlsx</strong>
+</p>
+<div class="field-line-label" style="margin-top: 10px;">
+	Se l'utente è già presente a parità di e-mail gli altri dati vengono aggiornati, la password non viene modificata.<br>
+	La prima riga del file viene considerata come intestazioni, i nomi delle colonne (anche non in ordine) da utilizzare:
+	<ul style="margin-top: 10px; margin-left: 20px;">
+		<li><strong>LINGUA</strong>, lingua di riferimento dell'utente, se non presente viene preso l'italiano</li>
+		<li><strong>E_MAIL</strong>, e-mail dell'utente, campo obbligatorio</li>
+		<li><strong>NOME</strong>, nome dell'utente</li>
+		<li><strong>COGNOME</strong>, cognome dell'utente</li>
+		<li><strong>PASSWORD</strong>, password assegnata all'utente, viene utilizzata solo se l'utente NON è già presente in arcivhio, al primo accesso da parte dell'utente viene richiesta la modifica della password, se non presente per i nuovi utenti per default viene inserita: Password1!</li>
+		<li><strong>GRUPPO</strong>, elenco dei gruppi da abbinare, separare con virgola i nomi, se un gruppo non è presente viene creato, i gruppi associati si aggiungono a quelli già presenti</li>
+		<li><strong>SESSO</strong>, sesso dell'utente M per machio, F per femmina</li>
+		<li><strong>ANNO_NASCITA</strong>, anno di nascita</li>
+		<li><strong>DATA_NASCITA</strong>, data di nascita nel formato gg/mm/aaaa</li>
+		<li><strong>B2B</strong>, impostare "si" se cliente di tipo B2B</li>
+	</ul>
+</div>
+
+<fieldset class="fieldset-box">
+	<div class="field-line field-line-file" data-file="">
+		<input type="hidden" name="file_data" class="field-file valida-required" value="">
+		<input type="hidden" name="file_data_name" class="field-file-name">
+		<label>File (.xls, .xlsx) <span>*</span></label>
+		<div class="field-anteprima"></div>
+		<div class="field-button">
+			<a class="h-bar-button h-bar-button-blu h-action-upload-file" data-action='{"url": "{{ _h.url('manager/myarea/upload-temp-file') }}", "fileType": ["xls","xlsx"]}'>carica file</a>
+			<a class="h-bar-button h-bar-button-gray h-action-upload-file-reset">Cancella</a>
+		</div>
+		<div class="clear"></div>
+	</div>
+</fieldset>
+{{ mc.slideBoxFooter(_h, _h.url('manager/myarea/cliente/ex-upload'), '"none": true') }}	
